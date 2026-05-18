@@ -1,0 +1,59 @@
+{
+  "benchmark_slug": "search-docs-of-crs-agent",
+  "suite_id": "real_image_augmented_single_turn",
+  "layer": "component",
+  "source_files": [
+    "sample/benchmark_excel_template.xlsx"
+  ],
+  "case_count": 3,
+  "cases": [
+    {
+      "case_id": "case_000002",
+      "layer": "component",
+      "input_modality": "image_text",
+      "question_text": "这个板子资料是哪个，带计量单元2线的云内发动机",
+      "question_images": [
+        "sample/这个板子资料是哪个，带计量单元2线的云内发动机.jpg"
+      ],
+      "vehicle_info": null,
+      "benchmark_track": "chat_completions",
+      "preprocess_strategy": "ocr_then_context_injection",
+      "request_context": {},
+      "notes": "图文 case 需先完成图片识别并把结果注入 ChatRequest.context；当前 fixture 先保留空 request_context。",
+      "teacher_reply": null,
+      "question_type": "找资料"
+    },
+    {
+      "case_id": "case_000007",
+      "layer": "component",
+      "input_modality": "image_text",
+      "question_text": "老师这个整车电路图资料有吗，我看平台只有液压板的针脚",
+      "question_images": [
+        "sample/94716f3e052b9b9cc002e92ba0da3450.jpg"
+      ],
+      "vehicle_info": null,
+      "benchmark_track": "chat_completions",
+      "preprocess_strategy": "ocr_then_context_injection",
+      "request_context": {},
+      "notes": "图文 case 需先完成图片识别并把结果注入 ChatRequest.context；当前 fixture 先保留空 request_context。",
+      "teacher_reply": null,
+      "question_type": "找资料"
+    },
+    {
+      "case_id": "case_000010",
+      "layer": "component",
+      "input_modality": "image_text",
+      "question_text": "老师。麻烦查下这板子的资料",
+      "question_images": [
+        "sample/81e8e3ee90703fcee053ac5a7358d2c2.jpg"
+      ],
+      "vehicle_info": null,
+      "benchmark_track": "chat_completions",
+      "preprocess_strategy": "ocr_then_context_injection",
+      "request_context": {},
+      "notes": "图文 case 需先完成图片识别并把结果注入 ChatRequest.context；当前 fixture 先保留空 request_context。",
+      "teacher_reply": null,
+      "question_type": "找资料"
+    }
+  ]
+}

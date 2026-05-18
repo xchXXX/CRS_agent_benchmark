@@ -1,0 +1,3272 @@
+[
+  {
+    "case_id": "real_train_0001",
+    "room_id": "wr7pwYBwAApRYkegyB8ijs5VpgjTf-Dw",
+    "opening_id": 226738,
+    "messages": [
+      {
+        "id": 226738,
+        "chat_from": "wm7pwYBwAACtvCBT3hvaVT9ljhHixjzw",
+        "msg_date": "2026-04-25 13:06:08",
+        "msgtype": "text",
+        "content": "{\"content\":\"江淮瑞风M4，装EDC17.c81板子，EGR阀12伏供电没有，有电路图吗\"}",
+        "path_url": null
+      },
+      {
+        "id": 226908,
+        "chat_from": "wm7pwYBwAAi3wGEjzDcmnKcrkTGRMeGA",
+        "msg_date": "2026-04-25 13:26:19",
+        "msgtype": "text",
+        "content": "{\"content\":\"问一下师傅们，神算子能匹配德龙X5000遥控器钥匙吗？\"}",
+        "path_url": null
+      },
+      {
+        "id": 226914,
+        "chat_from": "GongGui02",
+        "msg_date": "2026-04-25 13:26:56",
+        "msgtype": "text",
+        "content": "{\"content\":\"不行\"}",
+        "path_url": null
+      },
+      {
+        "id": 226922,
+        "chat_from": "wm7pwYBwAAi3wGEjzDcmnKcrkTGRMeGA",
+        "msg_date": "2026-04-25 13:27:23",
+        "msgtype": "text",
+        "content": "{\"content\":\"好的，谢谢\"}",
+        "path_url": null
+      },
+      {
+        "id": 226933,
+        "chat_from": "wm7pwYBwAAmfWjrXlZSqP9dgQUqJHDpQ",
+        "msg_date": "2026-04-25 13:28:16",
+        "msgtype": "text",
+        "content": "{\"content\":\"「A任师汽车维修.电器配件.风帆电瓶：\\n江淮瑞风M4，装EDC17.c81板子，EGR阀12伏供电没有，有电路图吗」\\n- - - - - - - - - - - - - - -\\n平台上搜，报的什么故障码？\"}",
+        "path_url": null
+      },
+      {
+        "id": 227112,
+        "chat_from": "wm7pwYBwAAxmRe_03GrVYttCs-Y7J3xw",
+        "msg_date": "2026-04-25 13:50:03",
+        "msgtype": "text",
+        "content": "{\"content\":\"@金工-技术工程师 金工，找个原厂数据吧\"}",
+        "path_url": null
+      },
+      {
+        "id": 227116,
+        "chat_from": "wm7pwYBwAAxmRe_03GrVYttCs-Y7J3xw",
+        "msg_date": "2026-04-25 13:50:13",
+        "msgtype": "image",
+        "content": "{\"md5sum\":\"f89c4d5921878c5299ff787c26861add\",\"filesize\":400390,\"sdkfileid\":\"CoMEKjEqSHRKUjBGaDR1ZWpMT3NGZTJDTUlnN1lIUHJxa0JJZkJRQTNVK0w4STgzTFBhNnY4ditRM1EvTmw5MDI1SjVkQllobHdlM2FzOSt5TzdwUDk5dEtCSW5oSTVIUXMzenBiWXRqamtMSys2dE5qZnl1NnB2dGNvSWxqRGRMdnpEUXJGMnVncUNWQU9ORW5zcStZVWx6YTBpYTFUTTZJUjJPTi9vY0NVZHlxbGIrWTNxUlJFQlpPTXBQYTJjM2IvVVc5VEw5VmJEQTI0Q2IvTzc5YWdXbW90cS9qc0krZlJGT3llTW5pTk1Nc01wTzFNYWFIRlh5bW9LeExyZFBFRThUd2V4MHN0aDBLelNMcFBuU1BwMncwbzRZVW9QZWQ0bTBnam9oL2oxK2VpUTFBZ2pBbjRZb3pJVS9nTnNTeVc5WkJBS0JzUGx1cWNXbUFJaE0yUDM4UlZTRDZKNFFiR2pNbjkxVitvbUdsTGw0NzNEK0FFQmFBS2NxeWF3YWR4Wk5mZUs3OFI4T2JKR1czZFVnbVdzSnRmYWpJYmxRd2pNNElGYldrcEQyVzRmZmZyKzYrYkZXY2VNQ2J5b01BSytCVUtrMkd1b3dnSVd4TkJTRjM4c2djaFZPOTJtM2dwSzVTMjk3UFd2bHdlWmMwdGE3ZXZOVlA1N2hLaDJRZ0ZHWGsSOE5EZGZOemc0TVRNd016WXpOamt5TkRRMU5GOHhNRFU0T0RjNU9UTXhYekUzTnpjd09UWXlNVGM9GiA4Mjc2ZWI0NDIyOWM1MTYzOWIyNjE2NzczYTBiNDgzOQ==\"}",
+        "path_url": "http://static2.51gonggui.com/8604055548856794600_1777096217219_external933d0971-3e7b-4aad-9686-6d8acc9b0e1d_0"
+      },
+      {
+        "id": 227118,
+        "chat_from": "wm7pwYBwAAxmRe_03GrVYttCs-Y7J3xw",
+        "msg_date": "2026-04-25 13:50:28",
+        "msgtype": "image",
+        "content": "{\"md5sum\":\"8e36a703c4e43e0b426101c33d9e5364\",\"filesize\":326226,\"sdkfileid\":\"CoMEKjEqRmRZQmNqWWxrWGlNdXlPSkZOaGp1RHBMOHV2aURRMnhSdktrdmFYeHhTRzd2K1VJNlYvdm1IdU0xcXlySWRSdFM2T0I0YWlQcVBRejZocmg1REt4Tko0S1RnWmIzZWp5ZTAzajVVbU9ZWHVWUkdrcmd4NDMvcUlnaUx1U08xMFFmKzllOUNlbUNCdzJjbGg2bEZiUTd2MlVxTTAvTWgwWGdqbE94MExVS0NzOUNhTjhaZUxYdExGNmZwejY2SnBPSzFFcDd2dEtpU3YrbzNST2FuYnJiaGFKeGlCRUZLdmJVVERXa1E0ZWdTWmtKbldXS0U1K09CTmlzY04ydjJOeFAwbVhxck9WSWZFN05URlJkcEtnSUw5R2RaanNrUmNxNlN0MmlPdTNHdXlyaWhCdmYwUS8wdXB6c0tFclBua0EwcUpFRHAyM2Jtd0xyeEF1VzVtUEJUWktXYzZqaVhQczdyKzBHOXZudEhEbHRnVTVhR2ZhdFZnM24vNWpxYXIwZG1zU3lEK3BTZ0doeUdXNWZxVFBQRzdrZVo5emI1RzZsMkR5VE8yNUREckdiNVVmMnVQYng5ZXVob1NJSWF3V3dRNk1wakdOUW9KQXk1Sm1wbTh1TVpIbk5IYyt4aEJQNHQyYm9LbmZjRk8xbDhqN05CNHpkTzlOUmw1ZDBqS0cSOE5EZGZOemc0TVRNd016WXpOamt5TkRRMU5GODNOVFV4TkRNeU56WmZNVGMzTnpBNU5qSXpNZz09GiAzNWFlYjU0ODdmOTA0OTFkMzI0MGEyY2FiOWI2YmUxMQ==\"}",
+        "path_url": "http://static2.51gonggui.com/16284774869502282422_1777096232340_external411097f2-c084-4074-9c2b-170f09569c7a_0"
+      },
+      {
+        "id": 227122,
+        "chat_from": "GongGui02",
+        "msg_date": "2026-04-25 13:51:14",
+        "msgtype": "text",
+        "content": "{\"content\":\"没有这个\"}",
+        "path_url": null
+      },
+      {
+        "id": 227143,
+        "chat_from": "ZhuYang_1",
+        "msg_date": "2026-04-25 13:54:49",
+        "msgtype": "text",
+        "content": "{\"content\":\" 勇勇 \\n\\n欢迎加入神算子AI技术交流群！\\n\\n本群邀请了技术研发团队、售后专家，陈强、许跃、张健、许搏文，艾超等多位技术老师以及修车行业内的众多代表入驻。无论您在使用设备过程中遇到任何问题，都欢迎随时反馈，我们将全力为您提供支持。\\n\\n· 神算子PC版本，下载链接 2.2.15版本\\n\\nhttp://mft-software.oss-cn-shanghai.aliyuncs.com/software/testsoft/100_CRSFPC_2.2.15.exe\\n\\n · 神算子手机/平板，下载链接 （复制到浏览器点开）\\n\\nhttp://mft-static.51gonggui.com/alidata1/static/prd/railtool/download/20240117171033410_original_202401171710.apk\\n\\n· 神算子绑定视频：https://weixin.qq.com/sph/AG2K6ub8w\\n\\n· 神算子使用视频 ：https://weixin.qq.com/sph/AWxLok5Ca\\n\\n3年共轨之家平台会员未到账的加我好友，或者私聊专属\\n\\n感谢您的加入与支持\"}",
+        "path_url": null
+      },
+      {
+        "id": 227175,
+        "chat_from": "wm7pwYBwAAxqY6zoO03DqERPDR3b-Sdg",
+        "msg_date": "2026-04-25 14:08:08",
+        "msgtype": "text",
+        "content": "{\"content\":\"之前一直用的好好的，今天突然打不开了\"}",
+        "path_url": null
+      },
+      {
+        "id": 227176,
+        "chat_from": "wm7pwYBwAAxqY6zoO03DqERPDR3b-Sdg",
+        "msg_date": "2026-04-25 14:08:11",
+        "msgtype": "image",
+        "content": "{\"md5sum\":\"b6d4ccb1c0fc527d349dac8b4acaeaf9\",\"filesize\":697493,\"sdkfileid\":\"CoMEKjEqdmlMdGU0aU1XOS9WQzVPWi9aWjdGbWhRZkRVZUFKb3JwNVdqVUVnT0pwWFZxdTEvQVU2bDNwTk8yYXk4bHZVNCt1UUYvc2FuaTBPeEdsUHU5ZHczYTQ5N0lTditKSkdGeGxSK2FSVUpFSjJwWVZVTXE0YmlPMHplWUxnZHRaNExJYk8vS2pRY2ZNN1FvT0FlRG1zTUUwVkw5UG90OEtEdjRhclpmQ3lpTVRvaVFISHJBNDcwbG94dE9kVEJNMXVMNlNMWUhvRkwwdFhEUFUvOWd5WlpNR2dDSGNQR1hhN1VhTnRjTSt6Z1NUODY0WkpXUGVHUU91R0pQQmtlYWxTdGh2cmVZcUdGUERubE5Nb3d3MUpWTHFUNllVaTVvK1RIdWVCeEhqbHZmbzFOR1l3VXZYbnBiaEJmaGFEVXVwM25QS29OUDROTnR1d0x3ZTFOMGNRUmJSaG1yOW11cG9lV0c4bWlyOGJXaFVVRmVBalcrOGZaZjA4aHJERHE5eVJOSlVyWjd3bkRFbFJvMXJHNkVYeittajZLNVBzaXlPTFkxWFhHMGExZWZjcFNNTlIxN01RL1BtWDllTC9XbkQveGZObXZNOGdPM1VYQWpQNDhNMlcxYlZIZWsrRkZHcjNvZEhTbkM1UExHMWhYbGlmZjA0QytITHBMUGpkajdmMlESOE5EZGZOemc0TVRNd01qSXhPRGszTURnNU4xOHhOalF3TXpnMU1EVXdYekUzTnpjd09UY3lPVFk9GiAxZTc4N2E3MDZkM2U4NDA3NDFkOTZmM2NkNjllYjg5OA==\"}",
+        "path_url": "http://static2.51gonggui.com/1525250171690476911_1777097295490_externald854302b-48e0-472e-a633-17461f15f388_0"
+      },
+      {
+        "id": 227177,
+        "chat_from": "wm7pwYBwAAxqY6zoO03DqERPDR3b-Sdg",
+        "msg_date": "2026-04-25 14:08:17",
+        "msgtype": "text",
+        "content": "{\"content\":\"老师帮忙看看\"}",
+        "path_url": null
+      },
+      {
+        "id": 227180,
+        "chat_from": "GongGui02",
+        "msg_date": "2026-04-25 14:09:20",
+        "msgtype": "text",
+        "content": "{\"content\":\"打开远程\"}",
+        "path_url": null
+      },
+      {
+        "id": 227185,
+        "chat_from": "wm7pwYBwAAxqY6zoO03DqERPDR3b-Sdg",
+        "msg_date": "2026-04-25 14:10:17",
+        "msgtype": "image",
+        "content": "{\"md5sum\":\"8e00677bdc04a5cf2bd743b6604de565\",\"filesize\":820451,\"sdkfileid\":\"CoMEKjEqdmlMdGU0aU1XOS9WQzVPWi9aWjdGbWhRZkRVZUFKb3JwNVdqVUVnT0pwWFZxdTEvQVU2bDNwTk8yYXk4bHZVNCt1UUYvc2FuaTBPeEdsUHU5ZHczYTg2WjJ1dHNkRVQ3YnRpcEp5dzM0TE1XWTVwd0JCejRKUFF6VmZnS3JacmVRZU52KytreWp3QkNzVXY3SG95ajNLZWxiaUk1YzIwZVBjbzFjak9RT3FraDE0a0psaVhkWjl4RkFtYnNVTTVsQ1N3L05zWTE5VXBJZDBueElQU0NaTjRuVS9WeC80RkU5b3lVelZ2NTE5RGZXbXYxWGQ0WjhtZEEreFNhK25EY1duNzNDYzA0bFFJQ1lrNUJDYjAyVmdKRytFL3U1akh0SGR2TkFuQ1RQSjhmNmpOZjlEbnZ5dEJBYnFFZmpaR3FZcnlTYXJ2VWQ1bjdxVytUdXd5V0VsUnVYOXJNcjZnTnJWK0p2bDh1ajVwUzJzM3NLV2xudkNxRTBIZ3IxdkhxUFdRNVRjQjdhTUVkWmFKUXAzVmY4Zno2QTRBRmVUM2NyZmxxU2V2WE5uQnFHeXJYekF4VDdkZUpZRGhVUkNJbXNSZmsydWZDTFltM0dYZk4vSTFEU2xpSU8vTjF6QTFuZGwyQzNQVmhmTTI3akpDQnNHTXlJaUROTHJNbjN3aGQSOE5EZGZOemc0TVRNd01qSXhPRGszTURnNU4xOHhNamd4TmpnNE1EVTVYekUzTnpjd09UYzBNakk9GiA3MmQ4NzExODYxZWQxYzlmYzY1MmU0MTU1N2E2M2M0YQ==\"}",
+        "path_url": "http://static2.51gonggui.com/200151353553405881_1777097421425_external6f18a02e-2ec5-4709-bd4a-ba7d873b508b_0"
+      },
+      {
+        "id": 227189,
+        "chat_from": "GongGui02",
+        "msg_date": "2026-04-25 14:10:42",
+        "msgtype": "text",
+        "content": "{\"content\":\"点接受\"}",
+        "path_url": null
+      },
+      {
+        "id": 227239,
+        "chat_from": "wm7pwYBwAA3AcfAcNcgZbSg2Z_qLvnwg",
+        "msg_date": "2026-04-25 14:18:51",
+        "msgtype": "text",
+        "content": "{\"content\":\"神算子能检测新能源重卡吗？\"}",
+        "path_url": null
+      },
+      {
+        "id": 227241,
+        "chat_from": "wm7pwYBwAA3AcfAcNcgZbSg2Z_qLvnwg",
+        "msg_date": "2026-04-25 14:18:59",
+        "msgtype": "text",
+        "content": "{\"content\":\"@AI神算子-金工 ？\"}",
+        "path_url": null
+      },
+      {
+        "id": 227260,
+        "chat_from": "GongGui02",
+        "msg_date": "2026-04-25 14:20:19",
+        "msgtype": "text",
+        "content": "{\"content\":\"不能\"}",
+        "path_url": null
+      },
+      {
+        "id": 227280,
+        "chat_from": "wm7pwYBwAA3AcfAcNcgZbSg2Z_qLvnwg",
+        "msg_date": "2026-04-25 14:22:05",
+        "msgtype": "text",
+        "content": "{\"content\":\"有新能源检测仪吗\"}",
+        "path_url": null
+      },
+      {
+        "id": 227338,
+        "chat_from": "wm7pwYBwAAxqY6zoO03DqERPDR3b-Sdg",
+        "msg_date": "2026-04-25 14:26:41",
+        "msgtype": "text",
+        "content": "{\"content\":\"电脑坏了吗，上次一起发过来的\"}",
+        "path_url": null
+      },
+      {
+        "id": 227342,
+        "chat_from": "wm7pwYBwAAxqY6zoO03DqERPDR3b-Sdg",
+        "msg_date": "2026-04-25 14:27:01",
+        "msgtype": "text",
+        "content": "{\"content\":\"C月刚买回来\"}",
+        "path_url": null
+      },
+      {
+        "id": 227362,
+        "chat_from": "wm7pwYBwAAxqY6zoO03DqERPDR3b-Sdg",
+        "msg_date": "2026-04-25 14:28:34",
+        "msgtype": "text",
+        "content": "{\"content\":\"2月\"}",
+        "path_url": null
+      },
+      {
+        "id": 227364,
+        "chat_from": "wm7pwYBwAAxqY6zoO03DqERPDR3b-Sdg",
+        "msg_date": "2026-04-25 14:28:47",
+        "msgtype": "revoke",
+        "content": "{\"pre_msgid\":\"7302041888605828770_1777098425388_external\"}",
+        "path_url": null
+      },
+      {
+        "id": 227370,
+        "chat_from": "wm7pwYBwAAxqY6zoO03DqERPDR3b-Sdg",
+        "msg_date": "2026-04-25 14:29:01",
+        "msgtype": "text",
+        "content": "{\"content\":\"买的\"}",
+        "path_url": null
+      },
+      {
+        "id": 227540,
+        "chat_from": "wm7pwYBwAANAVjf73FrdX980jne9MUYg",
+        "msg_date": "2026-04-25 14:44:12",
+        "msgtype": "image",
+        "content": "{\"md5sum\":\"da77a9e91878d8c0b88a68f2c62da73a\",\"filesize\":357339,\"sdkfileid\":\"CoMEKjEqdmlMdGU0aU1XOS9WQzVPWi9aWjdGbWhRZkRVZUFKb3JwNVdqVUVnT0pwVlRFaTVvWSt6SFZTdXRSWXc2UFhYa2d1RWRHZjd4MDFPSktCS2k2SytFUlY0Ny9FamRNcS9mcnFNT1NqS0h1bmx2NzJQQWJlaWcxL3k4M0ErcHh3R1MwQS9FcWl0bEFaVm1kZk42UFRRam53cTgrUG5XYUxLOXlCdE1TSy9UWG1tUEpnNlpURUdhWVduelYyd2YxWThVKzJrQWVrRzVmNHhSMEpKTjBCeFgrR056aVJtU3FGTEM5ajgzZFM2UEROVFdOTzhyb1JVNTJkSUROMy9qUXNJR0MvdTZwUnZ2TFhzREV5RmpMOWpOOGtBOTVacmZEVzJDeWtwd2QrdzlVS01OZTZFU3BiaGZrQitCNUF6eU5jaXlINkFlTlVXQ2d6L2dsaFh5M0JhZnZhbDZrc1FQSk0wT2RwcHpXQk9SSCtTK1E0L2JoSVBMRGQvancrbGRhaC9DM0RvY09uNXZrOEVPMnVHMExDQms0Nk9hZHB3RWM3WFhlK3dLRTJ4cEoxN2UzWDVQT0hMdEFhVTBpSmpUb2dZc0VSRU85bFJtdGx3aWpvalZ2YitvZFlGZzBDWTFzd3RScERPVVVIbkl6OURSU1RseVpBWUdhS1Vqc1JMTFpGTUgSOE5EZGZOemc0TVRNd01ERXpOREUzT1RJeE1sOHlNek00TURJNE9ESmZNVGMzTnpBNU9UUTFOZz09GiAzN2IwYzIzYjA1YjhjMmNjNjU3ZjE3MGU2ZWQxZmVkNQ==\"}",
+        "path_url": "http://static2.51gonggui.com/9825489142512519447_1777099456400_external6fa85925-1dd6-4731-8535-3896da253ab2_0"
+      },
+      {
+        "id": 227542,
+        "chat_from": "wm7pwYBwAANAVjf73FrdX980jne9MUYg",
+        "msg_date": "2026-04-25 14:44:35",
+        "msgtype": "text",
+        "content": "{\"content\":\"清灰后报这个故障\"}",
+        "path_url": null
+      },
+      {
+        "id": 227544,
+        "chat_from": "wm7pwYBwAANAVjf73FrdX980jne9MUYg",
+        "msg_date": "2026-04-25 14:44:45",
+        "msgtype": "text",
+        "content": "{\"content\":\"各位\"}",
+        "path_url": null
+      },
+      {
+        "id": 227550,
+        "chat_from": "wm7pwYBwAANAVjf73FrdX980jne9MUYg",
+        "msg_date": "2026-04-25 14:45:08",
+        "msgtype": "text",
+        "content": "{\"content\":\"帮看看那点有鬼\"}",
+        "path_url": null
+      },
+      {
+        "id": 227589,
+        "chat_from": "wm7pwYBwAASXotQd9LbDUCCrSJH_4Iww",
+        "msg_date": "2026-04-25 14:50:25",
+        "msgtype": "text",
+        "content": "{\"content\":\"看牙查\"}",
+        "path_url": null
+      },
+      {
+        "id": 227590,
+        "chat_from": "wm7pwYBwAASXotQd9LbDUCCrSJH_4Iww",
+        "msg_date": "2026-04-25 14:50:29",
+        "msgtype": "text",
+        "content": "{\"content\":\"压差\"}",
+        "path_url": null
+      },
+      {
+        "id": 227593,
+        "chat_from": "wm7pwYBwAASXotQd9LbDUCCrSJH_4Iww",
+        "msg_date": "2026-04-25 14:50:43",
+        "msgtype": "text",
+        "content": "{\"content\":\"能不能做再生\"}",
+        "path_url": null
+      },
+      {
+        "id": 227709,
+        "chat_from": "GongGui02",
+        "msg_date": "2026-04-25 15:04:36",
+        "msgtype": "text",
+        "content": "{\"content\":\"@勇勇 重启后 再打开远程\"}",
+        "path_url": null
+      },
+      {
+        "id": 227732,
+        "chat_from": "GongGui02",
+        "msg_date": "2026-04-25 15:09:34",
+        "msgtype": "text",
+        "content": "{\"content\":\"@勇勇 重启后 再打开远程\"}",
+        "path_url": null
+      },
+      {
+        "id": 227750,
+        "chat_from": "wm7pwYBwAAxqY6zoO03DqERPDR3b-Sdg",
+        "msg_date": "2026-04-25 15:11:03",
+        "msgtype": "text",
+        "content": "{\"content\":\"好的谢谢\"}",
+        "path_url": null
+      },
+      {
+        "id": 227769,
+        "chat_from": "GongGui02",
+        "msg_date": "2026-04-25 15:13:03",
+        "msgtype": "text",
+        "content": "{\"content\":\"重启了没有\"}",
+        "path_url": null
+      },
+      {
+        "id": 227770,
+        "chat_from": "GongGui02",
+        "msg_date": "2026-04-25 15:13:07",
+        "msgtype": "text",
+        "content": "{\"content\":\"@勇勇 \"}",
+        "path_url": null
+      },
+      {
+        "id": 227775,
+        "chat_from": "wm7pwYBwAAxqY6zoO03DqERPDR3b-Sdg",
+        "msg_date": "2026-04-25 15:13:32",
+        "msgtype": "image",
+        "content": "{\"md5sum\":\"341de70285f4fb38223fd9091fde267a\",\"filesize\":481898,\"sdkfileid\":\"CoMEKjEqdTNXMmsvMis3VGlnRjNpZU0ySllXYURSaHhYMmhyeGRObzZMVndsT0hNaGFMejZ4d0FYQWFwc0tnci9pcTJYMFdZZldFNU1XUmJnS2xLQXEvWlExSzcxRzdCT1dqQU9HbFI0K2RLZ3RybUd3S0NZMWhhQmNDZWVKQ2J2N1QwNHNGUXFaOVZRRWNVbUM1clFIeDNTZ3JBMzBWMG5tVU1BQm1BNDBnSEdnem1LUnhESDRuelJXazd2aGhjR012UWZwRFNDL0d5YjVmSkJ6VGtJeVpzcytYeFBjNFZ0RTJRSUdFZytMaThDOHVBcW51ejBvOWtJQkk0Tll4Snpaek0vVUprKzN5V2ZpMVJMbW9LZnJnTWFqcFk5Yjh6a05QTys3TEUvdUsyYUlhOXFoVlAyU0JSTXBwR0VwaW94NTFkbEwvcEk5QkV6ZWREVC91bzFhZDI2OUNreDdUTHRGdmxiWG5pOWttYlh3UUpoVXpDREM0UXVtZjZtTWJCOG1DQ2ZnUzR6QzN3UkdKRTd3QmE0M3R5V0hZZlN2aEZxeDFwaGMvd1dndkVXemkwMkZQVnNYbFArRmtXaDZRU2hseCtMVHZ0MEl0SnRHZVVVeDlTYlY0SnpmRE8xTlRzRm16dlhEMWVCYXMrUVRPa3M2eE5WSzJwU3VKcjF1NGR1Y3NlTFoSOE5EZGZOemc0TVRNd01qSXhPRGszTURnNU4xOHhNekV4T0RFM016Y3hYekUzTnpjeE1ERXlNVFk9GiAxNmI4MTRiMTlkYmJmOTFlYzRjZjJkYWFkNmY1OGVlYQ==\"}",
+        "path_url": "http://static2.51gonggui.com/17082229757753360135_1777101216407_externalbd53d802-3347-43b4-af32-8af73c28d6bd_0"
+      },
+      {
+        "id": 227791,
+        "chat_from": "GongGui02",
+        "msg_date": "2026-04-25 15:21:01",
+        "msgtype": "text",
+        "content": "{\"content\":\"扫码登录\"}",
+        "path_url": null
+      },
+      {
+        "id": 227811,
+        "chat_from": "GongGui02",
+        "msg_date": "2026-04-25 15:27:49",
+        "msgtype": "image",
+        "content": "{\"md5sum\":\"a53e452fd4a29a1fb402d71658951079\",\"filesize\":598052,\"sdkfileid\":\"CtoBMzA2YjAyMDEwMjA0NjQzMDYyMDIwMTAwMDIwNDdhOTE5MjQ1MDIwMzBmNDI0MTAyMDRjZmMxNmViNDAyMDQ2OWVjNmNmNDA0MjQ2MzYxNjMzODM4MzEzMDM4MmQ2NTYzNjMzMDJkMzQ2MjM2MzAyZDM4MzEzOTM2MmQ2MTMwMzQzMzMwMzYzNzYzMzYzNjYxMzQwMjAzMTAyODAwMDIwMzA5MjAzMDA0MTBhNTNlNDUyZmQ0YTI5YTFmYjQwMmQ3MTY1ODk1MTA3OTAyMDEwMTAyMDEwMDA0MDASOE5EZGZNVFk0T0RnMU5qSXhNVFU1TVRjME9WOHhNRGt3TlRneU5ERXdYekUzTnpjeE1ESXdOek09GiBiYjkxNzc4NzIzMmRmZGVhZWZhNTIwMGNmMTQ2MDVjOQ==\"}",
+        "path_url": "http://static2.51gonggui.com/2091765822950018418_1777102073507_external7ed3edb3-0e91-4d3c-af23-f42ceee72d8b_0"
+      }
+    ]
+  },
+  {
+    "case_id": "real_train_0002",
+    "room_id": "wr7pwYBwAAgsQRpULWy-zGZyuAYv-bpw",
+    "opening_id": 327564,
+    "messages": [
+      {
+        "id": 327564,
+        "chat_from": "wm7pwYBwAA8Tay0yZdlEzU6TJ3PYmj0Q",
+        "msg_date": "2026-05-11 17:44:25",
+        "msgtype": "text",
+        "content": "{\"content\":\"天锦国六的Can拓扑图有吗？\"}",
+        "path_url": null
+      },
+      {
+        "id": 327567,
+        "chat_from": "wm7pwYBwAA8Tay0yZdlEzU6TJ3PYmj0Q",
+        "msg_date": "2026-05-11 17:44:58",
+        "msgtype": "text",
+        "content": "{\"content\":\"仪表CAn线进24V电了\"}",
+        "path_url": null
+      },
+      {
+        "id": 327577,
+        "chat_from": "wm7pwYBwAA1jxe5oI6BQYl430-PIXAVQ",
+        "msg_date": "2026-05-11 17:45:58",
+        "msgtype": "video",
+        "content": "{\"md5sum\":\"4387f70208293376563eade0da3bda3d\",\"filesize\":3787751,\"play_length\":18,\"sdkfileid\":\"CoMEKjEqSmZMdy85bU00WjZJZUw4c1RjT3RhelJiOEUyNVdhWFVaek5CeTBDM3lQMHZDdmVKdGFUOFg4Q1dYRGhRNGxXOGJ1ZnpVYmxWcDgvMUhLM2g1RkhWWXl4QW9yRmp0bWNRNkdHN3gvNDhvTHFQRThLMTdPVFhaOUVRNjhoQnVxbmk0Rk1tdXdaTWhOT05hTWhHWDFyUjlrTUNXWVZHQzFNNTAzMkVrbG5jMnFaTW5FZjRDVjkrQi9ZL3ZGUU5aK0h1YlppS0FnUEJqaU05TkJBa3lXbTJMYjRub0ZtYlFQZWwzR3M4UktHSFVkQXEwaGY0RlRWYm9NMmF5a0dQK0N0SlJZdlBmZlRXWkUzUzY2S0E2Y25tQVNOQ21ENFAwM2RYaFl2cjkzNTY1MnN4cW1CTGFOcHg0cmQ1aGhJNktCMnhMNEtxSHAydzN4SVF5eE9vMHF4VkJ6dEI3U0NKQlRSTGhNK093VkpLMDR3UmV0RW9OU1RaQ0xwc0VOOHJaWHZJR1BnSTVTTWRJNFZOQnNSM2dRL252RnNkVW9sRWxrK1FrM0FGaVorZDdsTUM0TW1kMmowZXhuUXkyeG1jU0YyUDhjYVNYcDR6VnJtVys0eUtjaWwxYUs4ckZpaVNJUUdmZy80S0xtRzYvZlk2NEZHQVdtdStteW5BbGdvQXQ2U1ESOE5EZGZOemc0TVRNd01ETTBOekF3TURFeE5sODNPREUzT0RJM01UTmZNVGMzT0RRNU1qYzJOUT09GiA1ZjBkODlkZjllYjEzM2NmMDQxNGM5YjIxNTE5Y2UxZQ==\"}",
+        "path_url": null
+      },
+      {
+        "id": 327871,
+        "chat_from": "wm7pwYBwAAmfWjrXlZSqP9dgQUqJHDpQ",
+        "msg_date": "2026-05-11 18:09:52",
+        "msgtype": "text",
+        "content": "{\"content\":\"「五福临门：\\n天锦国六的Can拓扑图有吗？」\\n- - - - - - - - - - - - - - -\\n平台上搜\"}",
+        "path_url": null
+      },
+      {
+        "id": 328141,
+        "chat_from": "wm7pwYBwAAGplY6SwLRBS9X-WA7IQCZg",
+        "msg_date": "2026-05-11 18:40:40",
+        "msgtype": "image",
+        "content": "{\"md5sum\":\"051cd9c91dfec0dfc38eb43e3d7dee29\",\"filesize\":2982552,\"sdkfileid\":\"CoMEKjEqSmZMdy85bU00WjZJZUw4c1RjT3RhelJiOEUyNVdhWFVaek5CeTBDM3lQM2tWVjRkcnAzVE1qVVMwWDJ5QW9yQUorb2IwaDJEQzkySWFBUTB1RHVoTW90TEw2QlRlVkVnTnpXK2FmUVVidFhSeHBkK2YzUU5xNUs5bXVYUXllZjhoTmlvSS9UeDI0aElwL0U4am96Z2FaaVF0VTdBdmRSWW9FMmRpU3d1UVpieHJzS3Q4dGFGY0Z0TzdhOVBqcEpjV3dBQmw0b1ovQ2tqeHZ3WHk2dkVDRG5pQm9xTDBrYVptZVl6YVVQUGV6YVlkYlduQmNRMGRBeXE4OG1lSUJRSzFsRkNVUmlXRHpFaXcxYXExY254eFNnQXdlbVhPanEwODBJTmx5bUwzOGhpaGs4dkNhWU1kQVVDWDdMOXdTR1B3QWtYVHpQa1FKczZoVjhQNFhiOWw1NWJCTW1iQWpzMVFVME1iQWM5RXZoVE9NUXowU09lU0NFMXM5ZG4yTFVMUDB5QXBKQmFFQ2lOc0JqN01vRkR2NkczVVEvRHNyUEtQemFzY0d3MWFXZEwrbmxCUExJZEhXak91UHhSUXNqOUxySldXWlJmRC9nbE10aExCaFZQMnp3YzgxcGNZeWozb2Vra2xCUzVBeTBPRnNmeUxqbkRWWEFSdFJ0M0Y0ZXQSOE5EZGZOemc0TVRNd016TTRNRGt4TWpZMU1GOHhPVFExT0RFeU56RXhYekUzTnpnME9UWXdORFU9GiA3NzBlY2MxNzkyMjIwNmY4YWIyOWM0ZGQ3MDY4ODY2OA==\"}",
+        "path_url": "http://static2.51gonggui.com/8285514860571091140_1778496044419_externala12529e0-e758-4d50-8977-281df268800d_0"
+      },
+      {
+        "id": 328144,
+        "chat_from": "wm7pwYBwAAGplY6SwLRBS9X-WA7IQCZg",
+        "msg_date": "2026-05-11 18:40:41",
+        "msgtype": "image",
+        "content": "{\"md5sum\":\"2010a8abbb660ea9036f4e91268bf3d2\",\"filesize\":1631257,\"sdkfileid\":\"CoMEKjEqdmlMdGU0aU1XOS9WQzVPWi9aWjdGbWhRZkRVZUFKb3JwNVdqVUVnT0pwVXVranN5ZzlsbWFUaWIrM2MrZGp2aVZPdUEveDYyc1VVU1k4WU1ZbXIrN0cyVHpXNzlyS1VnUVZiQ2srbFpocCtpQVlJcWpLNjQyV0I4WHZraUs1NVRZekVsMHFKeCs4RWZ2aWJMVjBSTCtGbm84dkZQcVFNMDE2SEVTeXNoRHg0VEhYSzFYU2VIVnFWaUdQN1Q2WlpKVW9nRmt0enphb3Z0a3ByeHhMd0JnTnVBM1A3VTRyS1NUcElXelVMQmVlUFYyQ202NGdiS1lnQitKNTdOd0JHcXFZbVRBekZqNU5uZ1dSdVJzL2IyMms5RzgvektzZGx5TFNsYnllQzlnejNDL1hUdlZWVDVINmFLQkJ3YzhBRlIyS1pGQTB6Y1VEYTYzeCtIYXpvbXo0U0tDWENSdEx1OTdJUE8veUE0OEZSaE9BNFBGV0tPNmRqSFlUT0pnTmh3QXZ2Q2JEZHJkQTlicFRadmNXb1phajdjcW5NRGJDM1JiR1d3NWhwWG1VdzZIT1hFUXdTbDlMd2Fpb3AxNjRCSXhLY1RQVDJhSWI4OUc4WDN3NWNSYnZ4RGFaNHRvUE5PdTdlSkpiOFg5b3ZpcWU3czMrODFuVWh6amZZRU1aU1gSOE5EZGZOemc0TVRNd016TTRNRGt4TWpZMU1GOHpNakExTURrd05qUmZNVGMzT0RRNU5qQTBPQT09GiA5ZTQ0ZmU3ZTcwMzVlMjY1NGI4MWMwNmI2YjUzYTRmZA==\"}",
+        "path_url": "http://static2.51gonggui.com/6254170425062954976_1778496046374_externale3b17cdb-fe86-42ad-a8b2-e13996c1e77f_0"
+      },
+      {
+        "id": 328145,
+        "chat_from": "wm7pwYBwAAGplY6SwLRBS9X-WA7IQCZg",
+        "msg_date": "2026-05-11 18:40:43",
+        "msgtype": "image",
+        "content": "{\"md5sum\":\"478d21dd78cc3813f74df0e6af3fa313\",\"filesize\":2075279,\"sdkfileid\":\"CoMEKjEqdmlMdGU0aU1XOS9WQzVPWi9aWjdGbWhRZkRVZUFKb3JwNVdqVUVnT0pwVXVranN5ZzlsbWFUaWIrM2MrZGp2aVZPdUEveDYyc1VVU1k4WU1ZbXIrN0liMC9SZHBadXdkajNjL0hmOTZhVWh5SHFOYWtwdHpFZGgzMFd3OUhmVVZxTmRScmY5MHVienVTVW5Sdy9TeEdUOEk5dWFoYWlLY2EweUNEMnRMVUNvQXU2SHQ2S3J3WWk2cXhETXc2ZlpoTTVUZnBuR3p2cUNoamlFcC9Sakx2cTNhalcyeVdDemRCTnluOFVQQno4bEx2M0ZDdjhDdmlOZGxxeS83T3FOWVVOd2lXdTB6S1Jzc2Q0RytvbE16OHkxTzl0Nmh6NHFHOWdvVnZXOHhSVnJ5MFZXNHVoS3ZwblBHTHZUT0h6S3hKdVpZbUtsbEU3UE5pRHBtS3dDQnNvZHNieXlHOHN5eUl6NFg5UmMvb0Vta1NWdGRSSFBCcW5GVnhPZWdMelQzR3BVeU1mVXIzRk5NdytOck8yVCtEZHhGZ205ek1zQWN4ejcxNHpXUEJENXFOOGZoMThYUGkrZGNSbENHRjJZWnEwSzUwall6a1R3M0N4bkV3ZWIwT1lhYm5zb3RHbktpMjZGT1AwMlZ0QmRsUUpTV0JkMmtOMnJiVXFJRCtYV0ISOE5EZGZOemc0TVRNd016TTRNRGt4TWpZMU1GODROemM1TmpFM01EQmZNVGMzT0RRNU5qQTBPUT09GiAxNmFiOTQ4MGVkYmIyODNlZTBlOTkxYjE0Yzk3MTU2Yg==\"}",
+        "path_url": "http://static2.51gonggui.com/8691039831015182132_1778496047290_external241b9810-6e7c-4c68-933e-c2ae01eb322b_0"
+      },
+      {
+        "id": 328146,
+        "chat_from": "wm7pwYBwAAGplY6SwLRBS9X-WA7IQCZg",
+        "msg_date": "2026-05-11 18:40:45",
+        "msgtype": "image",
+        "content": "{\"md5sum\":\"05dd9143b81d2b51b693eb204e515efa\",\"filesize\":1708889,\"sdkfileid\":\"CoMEKjEqdmlMdGU0aU1XOS9WQzVPWi9aWjdGbWhRZkRVZUFKb3JwNVdqVUVnT0pwVXVranN5ZzlsbWFUaWIrM2MrZGp2aVZPdUEveDYyc1VVU1k4WU1ZbXIrN01Da09lNHZyN2w2c1pxcTNKRVJQV0ZSOEl2d3BEQnBWaGRTdWtjOTdIdEFoaUUzZWdTVytxZjVDMEJKUWVNcXNlemhXYktuK0FNQjZEZk4rQklla1pBUFdIWlgxaFBrZXV0ZUZEUU5UT3F0eElma2p5S1dRMGNpUmQrN091Mkh4OUc5MVpidjdzSjVGeG5hZnJEMEtIQlZxUmJyczVIOE1SVzNoTjk3dmZXc0NiQTBJaVVMQ0txRTZIMkhySjl2THU0RGo0N1NESlhmSU5jZHhoRVYzSGVnVytoc1ZxazBIbVFLZmd5d2hIODJ5d2V6RFl1TytFdzZsMWh6ejJmbDA5UmI3NDlIc3lZcXIvODA2cTc1UmFDYXpBZ1REQ1N4Q09LdGVRREV0ZEQ1V2UvVnBiL3Ryb0ZpU05pa3NZQndZak44VjVKY2FKbWJmby9GVGdhbnhiSGZoTlVWQkZjZERUeXE2YjhOZzNINmt3WWdFVGIyUVpxZmpPRW1MMkFnMkptQXI0aEpuR0ovWWhNRHExOFZ0VVZBa2p5NXc2QjVESEt4YzNOL3ZXNmISOE5EZGZOemc0TVRNd016TTRNRGt4TWpZMU1GOHhOelF4T0RnNE9ERTRYekUzTnpnME9UWXdOVEE9GiAwYzliZjdjODRlZjhlYWFhOGIzOTUxYTkyYWQ3NTUzMA==\"}",
+        "path_url": "http://static2.51gonggui.com/16572349910519720185_1778496049319_externalfc092fce-5cd6-43a2-8dc6-2b91bedf6f58_0"
+      },
+      {
+        "id": 328147,
+        "chat_from": "wm7pwYBwAAGplY6SwLRBS9X-WA7IQCZg",
+        "msg_date": "2026-05-11 18:40:49",
+        "msgtype": "image",
+        "content": "{\"md5sum\":\"c6cc01d28d027c820bbac8e2e5dbcd3a\",\"filesize\":3070203,\"sdkfileid\":\"CoMEKjEqSmZMdy85bU00WjZJZUw4c1RjT3RhelJiOEUyNVdhWFVaek5CeTBDM3lQM2tWVjRkcnAzVE1qVVMwWDJ5QW9yQUorb2IwaDJEQzkySWFBUTB1RHVoTXR6Ti94QkZVYUkxR1hCQ09sYmNYWlcxYzZ0VGRsdXVjVXdDRldpL3RYUmFzdU1UTisrODRwYkRRUEVoaEpXU0VLUW4zMVROY2NmQmg1dHVRTi9ZdnFzdi9YOXp4V0o2SmEyQnd6US9pYkdQbkZxMVJEZDFuMGFGTzNoSE9xN3RCZDUzbFFlLzRZTkI0UHJLeE1XY3EyQVgveE52MDdZZ3UrTGU2VGwrL3N0djVDSDVBb1JKZE9mdWErODF4cE5qMC9SNlg2UDhEK0NWTnVVd2pqZi8wdUJSRVdCRU1GY1BDM1JoWHJMMk94cTBmVmhxMUw4bFNEY2tvTThPdWlOU0l2OXlZb3V4YnBPNjU4S08vbmJqZjlqeVpsYUtHbG1sWEMxYVZTbFNlaGhSZHJiTVBKY0NiWEt5d0tneSt4NkFvaEdaNXFubXdDKzVFbitjNEhPNkZiS3dDRUZPcGRjRlpOb0t5VTZ1UkI5VDJoTEhqT3BMMU1La0FIM2pJQ3luMURPU1NOdTZyZEl2cnJ4Wk92enptWldxVDBkWXJGeU9vb0IyVmZaZithNWcSOE5EZGZOemc0TVRNd016TTRNRGt4TWpZMU1GOHhNRGd4TmpjMk9EZ3hYekUzTnpnME9UWXdOVFU9GiA0NWY3NGJjYjYyNWIyYjYyNTIzNTgwODhiY2UxMGEwMw==\"}",
+        "path_url": "http://static2.51gonggui.com/3923124991010356096_1778496053405_external59ebdfbf-cf05-4e35-ab83-fc6011f22e0d_0"
+      },
+      {
+        "id": 328148,
+        "chat_from": "wm7pwYBwAAGplY6SwLRBS9X-WA7IQCZg",
+        "msg_date": "2026-05-11 18:40:50",
+        "msgtype": "image",
+        "content": "{\"md5sum\":\"7eb7cec16af7e5b52871c0b8bf1b7eec\",\"filesize\":1552232,\"sdkfileid\":\"CoMEKjEqdmlMdGU0aU1XOS9WQzVPWi9aWjdGbWhRZkRVZUFKb3JwNVdqVUVnT0pwVXVranN5ZzlsbWFUaWIrM2MrZGp2aVZPdUEveDYyc1VVU1k4WU1ZbXIrN1BraUJiSkpyYzRZQ2dxZkQzOTFIU0ZEbFh1cmVvMDFZT250UXlEY1hkMlpiWUJoNklJQWlsa2dmWWhPblZOTDdJeThCR21VVjdaMHNUak45amtyMmRJcmlxOHMyaldUNmEyb0E1T1dSV2ZINUE4OEFXTTlaL2NSRVBHVjZCaEJjU0x0c05DSTJPSXh4dHdSU3hBdEl1NjhoT2xCcXd2ZGtOekp0VzRVbXcrTi9zSjBaOGR0bXpqR3R1dE40QmJlbCtzdzRqdnp4Vmg1MWlOTFBER1QvcUdSQ2UrU3c0LzlzdHlzT1RCRFRyWTRqd2MwcEhIVXk2cVJ6c3FwS2UvcUptdkNLeVRrK2tMSS9yTGV0MC9KSkVJRFdlVTNrY1EvaFVnZFk3aXRpY0FnVXFIK291c2tMZTBYaEIxcnZBMDFsZlptMTZ0bjVVbDBmR3RmZkJURWtFNFdtVTVSdGZCd0VPbXhsK0hOVlVzalpRak1STEZ5dHZ4Q3ZWQjNIVXhTRnp1OVhyWHd4eVQ1Z0FrL0VIMXJvVW4yd0VUVU5XNmYzK0N3WldmVkJhV3YSOE5EZGZOemc0TVRNd016TTRNRGt4TWpZMU1GODNORGd6TmpZek56SmZNVGMzT0RRNU5qQTFOUT09GiAyYTFkMTQ5NmY3OWNhNTkxYmI3NDhiMWQ1MmM3NGY0YQ==\"}",
+        "path_url": "http://static2.51gonggui.com/16706781290265744218_1778496054382_externalb0c60bd8-8674-40c9-b895-ce72ff04dca5_0"
+      },
+      {
+        "id": 328149,
+        "chat_from": "wm7pwYBwAAGplY6SwLRBS9X-WA7IQCZg",
+        "msg_date": "2026-05-11 18:40:54",
+        "msgtype": "image",
+        "content": "{\"md5sum\":\"d662cedbf50dd4f1bafcf22b6ac92178\",\"filesize\":3722609,\"sdkfileid\":\"CoMEKjEqdmlMdGU0aU1XOS9WQzVPWi9aWjdGbWhRZkRVZUFKb3JwNVdqVUVnT0pwVXVranN5ZzlsbWFUaWIrM2MrZGp2aVZPdUEveDYyc1VVU1k4WU1ZbXIrN0NOWW9qOEgvWjVIQm5tWC9JVzQycGVWQ3FGZzFUTXZlaEJZTGVnZk85L3VNN092VWtsK2JndjM2RGMzL1llT2drY2lMWXBwMWJLcGNtaFZVa2gwUXY1MGpXeVBOdkg4UUwxeWFFZ2VIY3dUQUQ3MlFHNUdVbDROZ3NTY0o1R3Fpclh2eWNkWktwTUlGVjFRWUwxUXVMQ01nUVhMdDZxR043ZXAxYlNUbUFyUHc4Y2Q1RmMweTdxcnlYZ3NuYkJWYzJUV0tnRkNKRTg1eEpLN0NvOWU4RmhuNHphRk1BOXFrb3pxbUl4cHVhZThpeldVRE14Y0NHeVoyWHlHdnBMYXJhbU1jemt6bDdmMDFrUE1ZRHRhMFpNT2YwZ0NXZExyQnNFSXpQTFJwOHFMMm16MFJyTUNhcmFHU1RJUGhsZzdBaklhUENvelhZWENsNWZsL2l3S243WFUyRTAzY2hWbFo0ZXpEMDdVZnBJSFI2VktVeXNVWWI0QVhrcitwVGZJenE4RE10MzJoUDdGVWpWaTl1YlRQL0hDOTdReHlWSjZpWDRoSStENDF0TWsSOE5EZGZOemc0TVRNd016TTRNRGt4TWpZMU1GOHhOelU0TkRNM016VTFYekUzTnpnME9UWXdOakE9GiBmNjVmMWQzY2NiNDM1N2U0MjczZGFhMzhiNzZhODA4Ng==\"}",
+        "path_url": "http://static2.51gonggui.com/6723173908696728389_1778496058425_externalb70bf77a-ce89-4860-842a-85d13c35222d_0"
+      },
+      {
+        "id": 328150,
+        "chat_from": "wm7pwYBwAAGplY6SwLRBS9X-WA7IQCZg",
+        "msg_date": "2026-05-11 18:40:58",
+        "msgtype": "image",
+        "content": "{\"md5sum\":\"13d4843a2e8f160df8c4149c86050cdb\",\"filesize\":291506,\"sdkfileid\":\"CoMEKjEqdTNXMmsvMis3VGlnRjNpZU0ySllXYURSaHhYMmhyeGRObzZMVndsT0hNaWxCT21ReXhKaVlzZ0hPQmc0R1NDQ0ZMUnUvLzhxaDdqMGxOVnY5QmpBTkwzNFZOWnVFOGMzZHFvUEc5dG9OVHV1Yzh4MGp5dmlKRlpwZ0hZRGtVVWFIUFIzUFV5MC9qYVB1NmtHMGdaSU5MU3hWbnRNWmJmYlhuUENQQi84aG5oVUhnczJvTzhJMGpuL1R1V3hxdlFlUENHMW5qQjBOOHRRei9zdERiTU1PSSs4UDVsbnNuTGtSRFQ2MVBHS0R3Qk5IZzQ1OTliNU5Sc1pEMjNGL2FOZGZoNXA2MUhKTytGMEIvZC9sVlh3VHB0YVp5aHZkSG4vMVBGZWswQUpWTE1rWkFpaHZYZTR6ak5kV2pOc01vd3ptdGJWNGtpZTFXempuZkpHV1N3N3RuY3VvMEJudE1DUDgyNXRiK0RzcFJ6M1hIMkdOMU90MjBFLzVxcUhpTnM3OFdjbExFNFJqQllZck84SnBIRGZUOWtxTzMxVjdpV3YrakhmWUNyc1RVbnZ6MEJtME9WTTkyem56cHo5SUlDdUxJYkh4eHNEYzBlaHM1bTIzMG5JQllvelpCekZiV0EyS2NYbUFZWi9rS1orSEFaMWtDWEZSZHo0UnRVcXB4djgSNE5EZGZOemc0TVRNd016TTRNRGt4TWpZMU1GODJPVGMxTkRFNU4xOHhOemM0TkRrMk1EWXkaIDBmYzkzNDgzNDI4YjBiODZlYWNiNzAwNmY0YWJlMDE0\"}",
+        "path_url": "http://static2.51gonggui.com/10163278525736620855_1778496062288_external168c3bdf-01fb-4710-b6a2-78e685ebfcd1_0"
+      },
+      {
+        "id": 328151,
+        "chat_from": "wm7pwYBwAAGplY6SwLRBS9X-WA7IQCZg",
+        "msg_date": "2026-05-11 18:40:57",
+        "msgtype": "image",
+        "content": "{\"md5sum\":\"1a97f55e1ac815d5434b3c11c31d5119\",\"filesize\":3799314,\"sdkfileid\":\"CoMEKjEqdmlMdGU0aU1XOS9WQzVPWi9aWjdGbWhRZkRVZUFKb3JwNVdqVUVnT0pwVXVranN5ZzlsbWFUaWIrM2MrZGp2aVZPdUEveDYyc1VVU1k4WU1ZbXIrN0oxak9oSUhBNlVaTGN3L1lRdXNBYml1aTNVejZrck9Vc0JHVVROZXNwQytXN0VwUzlnaUxXNnZib05EbmVZQnlsTjFuajFITTNRaSthQmhYdzM3L204TGVNeWkwWVhQUGl0cEl1Vy9hdmhGNGducGc5b0VkRHpsNFhZU0dha05vTk1PUC80dUt1UE1uazNsMVBPQksxSkJ0RXRUelJBanhrZ2l4eEplWnN2WVRMWDJuSGk0OENzdUh3MkJlcFBwYXB5bmM0UlFKYW8rNXBUMWl6Sk1tR3ZGNi9LUmFnY05vNjlTMWVCcmJWUGQyMW9sMVhwZTFlL1F1dXA1ZEpmUVFTWFBJWUxrVkRLdXVUYStsaTFUV0R3TTNXME1hL0JpSVd6WjErRGtNdDlmRTlKczZveXgwUVJRVlpuVExlaWN3dmR5d0gxdGQvSUpUcmM4YnJIVGhJSWZyckhSMk5zNk9ZT0VyaTlHL3dTTVpzekx0SGVlMWt0bGMramFqUkl0OU0yL2JEdVl4cUN4N09MMjhYUkRrb2hJM240MFBYK0puYkVDQUN6c2g1bGQSOE5EZGZOemc0TVRNd016TTRNRGt4TWpZMU1GOHhPVFkwTmpReU5UVTNYekUzTnpnME9UWXdOakk9GiBhNjEwYTU3ODA3MmNjYTIxMWI2YTRlZmNmZWMwNzExMw==\"}",
+        "path_url": "http://static2.51gonggui.com/13878741443750317510_1778496061356_external5f6276b3-0e97-4542-be93-078a00e01ed2_0"
+      },
+      {
+        "id": 328152,
+        "chat_from": "wm7pwYBwAAGplY6SwLRBS9X-WA7IQCZg",
+        "msg_date": "2026-05-11 18:41:25",
+        "msgtype": "text",
+        "content": "{\"content\":\"天龙旗舰KⅩ，\\n有时手刹无法解除\"}",
+        "path_url": null
+      },
+      {
+        "id": 328154,
+        "chat_from": "wm7pwYBwAAmfWjrXlZSqP9dgQUqJHDpQ",
+        "msg_date": "2026-05-11 18:41:32",
+        "msgtype": "text",
+        "content": "{\"content\":\"先去查一下aebs的供电和打铁\"}",
+        "path_url": null
+      },
+      {
+        "id": 328155,
+        "chat_from": "wm7pwYBwAATxZnDp2Cze0Km9qA91QP6A",
+        "msg_date": "2026-05-11 18:41:36",
+        "msgtype": "text",
+        "content": "{\"content\":\"不用发，也没人会给你说，他们也没几个人修过赢彻的智驾，\"}",
+        "path_url": null
+      },
+      {
+        "id": 328157,
+        "chat_from": "wm7pwYBwAATxZnDp2Cze0Km9qA91QP6A",
+        "msg_date": "2026-05-11 18:41:45",
+        "msgtype": "text",
+        "content": "{\"content\":\"这是智驾的，\"}",
+        "path_url": null
+      },
+      {
+        "id": 328159,
+        "chat_from": "wm7pwYBwAATxZnDp2Cze0Km9qA91QP6A",
+        "msg_date": "2026-05-11 18:42:07",
+        "msgtype": "text",
+        "content": "{\"content\":\"自己能研究明白就研究，研究不明白建议放手，\"}",
+        "path_url": null
+      },
+      {
+        "id": 328160,
+        "chat_from": "wm7pwYBwAAnnitz7BB464TQkacxq1mWw",
+        "msg_date": "2026-05-11 18:42:22",
+        "msgtype": "text",
+        "content": "{\"content\":\"哈哈哈\"}",
+        "path_url": null
+      },
+      {
+        "id": 328165,
+        "chat_from": "wm7pwYBwAATxZnDp2Cze0Km9qA91QP6A",
+        "msg_date": "2026-05-11 18:42:35",
+        "msgtype": "text",
+        "content": "{\"content\":\"第一你没设备，第二你没培训过，第三你没资料\"}",
+        "path_url": null
+      },
+      {
+        "id": 328169,
+        "chat_from": "wm7pwYBwAAGplY6SwLRBS9X-WA7IQCZg",
+        "msg_date": "2026-05-11 18:42:47",
+        "msgtype": "text",
+        "content": "{\"content\":\"哪个故障引起的[捂脸]\"}",
+        "path_url": null
+      },
+      {
+        "id": 328170,
+        "chat_from": "wm7pwYBwAATxZnDp2Cze0Km9qA91QP6A",
+        "msg_date": "2026-05-11 18:42:58",
+        "msgtype": "text",
+        "content": "{\"content\":\"这个赢彻当时我培训，去了三次，花了四万多块钱，\"}",
+        "path_url": null
+      },
+      {
+        "id": 328171,
+        "chat_from": "wm7pwYBwAAnnitz7BB464TQkacxq1mWw",
+        "msg_date": "2026-05-11 18:42:58",
+        "msgtype": "text",
+        "content": "{\"content\":\"所以没得休。\"}",
+        "path_url": null
+      },
+      {
+        "id": 328174,
+        "chat_from": "wm7pwYBwAAnnitz7BB464TQkacxq1mWw",
+        "msg_date": "2026-05-11 18:43:14",
+        "msgtype": "text",
+        "content": "{\"content\":\"话说这玩意儿真的能自驾\\n吗？\"}",
+        "path_url": null
+      },
+      {
+        "id": 328196,
+        "chat_from": "wm7pwYBwAATxZnDp2Cze0Km9qA91QP6A",
+        "msg_date": "2026-05-11 18:50:17",
+        "msgtype": "text",
+        "content": "{\"content\":\"可以啊，\"}",
+        "path_url": null
+      },
+      {
+        "id": 328198,
+        "chat_from": "wm7pwYBwAATxZnDp2Cze0Km9qA91QP6A",
+        "msg_date": "2026-05-11 18:50:42",
+        "msgtype": "text",
+        "content": "{\"content\":\"「不靠谱客户指导18574551905：话说这玩意儿真的能自驾\\n吗？」\\n- - - - - - - - - - - - - - -\\n本来就是智能驾驶，\"}",
+        "path_url": null
+      },
+      {
+        "id": 328213,
+        "chat_from": "wm7pwYBwAAnnitz7BB464TQkacxq1mWw",
+        "msg_date": "2026-05-11 18:55:20",
+        "msgtype": "text",
+        "content": "{\"content\":\"你们那边都有这个吗？\"}",
+        "path_url": null
+      },
+      {
+        "id": 328282,
+        "chat_from": "wm7pwYBwAAGplY6SwLRBS9X-WA7IQCZg",
+        "msg_date": "2026-05-11 19:06:27",
+        "msgtype": "image",
+        "content": "{\"md5sum\":\"71a565eccb3d2f6df3d76cdb004d956e\",\"filesize\":188412,\"sdkfileid\":\"CoMEKjEqdmlMdGU0aU1XOS9WQzVPWi9aWjdGbWhRZkRVZUFKb3JwNVdqVUVnT0pwVXVranN5ZzlsbWFUaWIrM2MrZGp2aVZPdUEveDYyc1VVU1k4WU1ZbXIrN1BLU2VPWjhyOVY0QkRURHJmSDVoTEJKanRzd0FDU1BldS9oTjhsUE85NVNsWVlzOTIybENXYkhoSzhCWHl1OWJWMHpJeWNGd2h3WGU0V1VzOXNtNFhlaExTaTU4Y2xRdTJ1RW0wbFR5SG94N1RTbDhjVm5mWEhpcVdUZnlocExzS1BkQVh1TlRGNXNuVHdDUHBnc1VhMDRqMzFUREorVVo2ZnEySExObEVLaG1HUjZNcXczdUNkNmVVL09mM0dnTFEvaHFVZ3ZIaUE2ZlZsNkhucXcydnI5djZraE1HLzBWVHhiZkFYVWJ1dWRkRmpVR0J5VUNHY1JJeGVSNUxQWUM3clVBVmdRZDIrQnZnZUo2b2pRRGNMemhlRGJTQTNFckViUjc0bWtJTlhoUERkMktCbUhacHVOQVpQc2NSdDEzU0hPeC9jV29UZnJpRTIrQzM2ZC9GaXZxdmFINEI4Y1QyRUxJZXI5Wm1pdjZ3L25OUTBoRFoxQWZKNzg0Ui84emY1OEl2YmYvY1JWQ0x2Z2ZCTm9QMTY5d0lKK3E5YTlqU3RvUjg4SERwdjYSNE5EZGZOemc0TVRNd016TTRNRGt4TWpZMU1GODBOVGcyTkRBek1GOHhOemM0TkRrM05Ua3kaIDM2NWE4YjY5NWYyNmE0ZmY4ZjYxMTExMzlhZmJkYjJm\"}",
+        "path_url": "http://static2.51gonggui.com/826883784282233160_1778497591449_externala83ebdb2-853f-4ee6-a26a-bb5521a338d1_0"
+      },
+      {
+        "id": 328285,
+        "chat_from": "GongGuiZhiJia",
+        "msg_date": "2026-05-11 19:07:19",
+        "msgtype": "text",
+        "content": "{\"content\":\"盒子断电 重新插一下\"}",
+        "path_url": null
+      },
+      {
+        "id": 328287,
+        "chat_from": "GongGuiZhiJia",
+        "msg_date": "2026-05-11 19:07:25",
+        "msgtype": "text",
+        "content": "{\"content\":\"软件重启一下\"}",
+        "path_url": null
+      },
+      {
+        "id": 328292,
+        "chat_from": "wm7pwYBwAAGplY6SwLRBS9X-WA7IQCZg",
+        "msg_date": "2026-05-11 19:08:02",
+        "msgtype": "text",
+        "content": "{\"content\":\"这个车2670的也进不去，\\n司机讲，智驾已拆了两年了，\\n现在出现手刹无法解除的情况\"}",
+        "path_url": null
+      },
+      {
+        "id": 328333,
+        "chat_from": "wm7pwYBwAATxZnDp2Cze0Km9qA91QP6A",
+        "msg_date": "2026-05-11 19:14:35",
+        "msgtype": "text",
+        "content": "{\"content\":\"「不靠谱客户指导18574551905：你们那边都有这个吗？」\\n- - - - - - - - - - - - - - -\\n有，\"}",
+        "path_url": null
+      },
+      {
+        "id": 328339,
+        "chat_from": "wm7pwYBwAAGplY6SwLRBS9X-WA7IQCZg",
+        "msg_date": "2026-05-11 19:15:33",
+        "msgtype": "text",
+        "content": "{\"content\":\"@AI神算子-苗工 ，\\n断电，重启，反复插拔还是进不去[破涕为笑]\"}",
+        "path_url": null
+      },
+      {
+        "id": 328341,
+        "chat_from": "wm7pwYBwAATxZnDp2Cze0Km9qA91QP6A",
+        "msg_date": "2026-05-11 19:15:50",
+        "msgtype": "text",
+        "content": "{\"content\":\"你进不去，\"}",
+        "path_url": null
+      },
+      {
+        "id": 328343,
+        "chat_from": "wm7pwYBwAATxZnDp2Cze0Km9qA91QP6A",
+        "msg_date": "2026-05-11 19:15:55",
+        "msgtype": "text",
+        "content": "{\"content\":\"这就是通讯干扰，\"}",
+        "path_url": null
+      },
+      {
+        "id": 328349,
+        "chat_from": "GongGuiZhiJia",
+        "msg_date": "2026-05-11 19:16:23",
+        "msgtype": "text",
+        "content": "{\"content\":\"手动选康明斯节点\"}",
+        "path_url": null
+      },
+      {
+        "id": 328354,
+        "chat_from": "wm7pwYBwAAGplY6SwLRBS9X-WA7IQCZg",
+        "msg_date": "2026-05-11 19:16:41",
+        "msgtype": "text",
+        "content": "{\"content\":\"能识别康明斯系统，\\n但进一半就失败\"}",
+        "path_url": null
+      },
+      {
+        "id": 328368,
+        "chat_from": "wm7pwYBwAAGplY6SwLRBS9X-WA7IQCZg",
+        "msg_date": "2026-05-11 19:17:52",
+        "msgtype": "image",
+        "content": "{\"md5sum\":\"c52c4020bedd1483f2cc63242d5f7745\",\"filesize\":147767,\"sdkfileid\":\"CoMEKjEqdmlMdGU0aU1XOS9WQzVPWi9aWjdGbWhRZkRVZUFKb3JwNVdqVUVnT0pwVXVranN5ZzlsbWFUaWIrM2MrZGp2aVZPdUEveDYyc1VVU1k4WU1ZbXIrN0RjRWV5aFRaZVBNM1cxc1h2WmNlYU1IZ0kraTNEQTdFTDhlNzVsRU1QK3dNMUlnUFA4YlNmM3RVNGJWNWwyRWhidHB5c04zOHVmZEEvRmlBQXBHdHNMNGFmdUlmdGwyanhwZ2E3c3ZwS2dHK0paS1VBdnRKRngzR1hzbmlEbDdmUXg0NlRKWCsvNFNwYXBZQnEyTHdwZUlxdWVjZXNSNWw2THo1bnFPN1kycm5rWnVXY3RhMnRJOHdrYlFRdVRwWUtlRzhWWUVsdGEyVDNOQXR3Sy92anBlZHY3Z1ptUmFqMVFwNFNZT0YvWHJaajNZMG5la1FkQjBGc2hjYkwyZzJXcU5CWXZ2U0VNSFZabFZFQ09ma3k2MWpPajNyOVpiY3Y3VGk1Q0xKUmswRElhVTZPTnZ3R29oL3FERllDNmh1dUVmQWxkTjdSTitVYkk2eUpzTU1JZzZQamJFdDBUQTN6dEtxc0oySVNteDlyUVpZbEMrVE5Lb3NlS1J5Rzhsb0Vsb0pMVW4rd0d0d1FKQ3lhQ01YU0g3THFBRktaWEczamM2UUIxTThpbXQSOE5EZGZOemc0TVRNd016TTRNRGt4TWpZMU1GOHhNekk0TXpBNU1qa3hYekUzTnpnME9UZ3lOelk9GiAxNTQxYmVhODkyNTQ3MDg0MzkxNjhjZTI0NGEyZjNlZA==\"}",
+        "path_url": "http://static2.51gonggui.com/14145929427808350696_1778498276443_external27022249-bdae-486f-9f6a-932ea921f143_0"
+      },
+      {
+        "id": 328400,
+        "chat_from": "GongGuiZhiJia",
+        "msg_date": "2026-05-11 19:22:05",
+        "msgtype": "text",
+        "content": "{\"content\":\"这三个节点都试一下\"}",
+        "path_url": null
+      },
+      {
+        "id": 328401,
+        "chat_from": "GongGuiZhiJia",
+        "msg_date": "2026-05-11 19:22:05",
+        "msgtype": "image",
+        "content": "{\"md5sum\":\"c9c77d6ebd46fdaa8b2b5ee0be1c376a\",\"filesize\":53313,\"sdkfileid\":\"CtoBMzA2YjAyMDEwMjA0NjQzMDYyMDIwMTAwMDIwNGNhZjlhZTIwMDIwMzBmNDI0MTAyMDRjODNiNjZiNDAyMDQ2YTAxYmJkYzA0MjQzNzM0MzIzMDMwMzgzOTY1MmQzMjM3MzMzNDJkMzQzNjM2MzgyZDM5NjE2MjYxMmQzNDMzNjUzMjM4Mzg2MTMwMzg2MzMyNjUwMjAzMTAzODAwMDIwMzAwZDA1MDA0MTBjOWM3N2Q2ZWJkNDZmZGFhOGIyYjVlZTBiZTFjMzc2YTAyMDEwMTAyMDEwMDA0MDASOE5EZGZNVFk0T0RnMU56VTJNRFU1TVRrd05GOHhOemN6T0RZME56WTJYekUzTnpnME9UZzFNams9GiA3YWQzNGM4OGE1YTExODlmMTgzNDc5MGIzMTI3N2VlNg==\"}",
+        "path_url": "http://static2.51gonggui.com/6155499106714328375_1778498529436_external9f52aade-1532-4495-8760-c58e611ac48d_0"
+      }
+    ]
+  },
+  {
+    "case_id": "real_train_0003",
+    "room_id": "wr7pwYBwAApoK7Byk-dFgX_paMmmFxuw",
+    "opening_id": 308042,
+    "messages": [
+      {
+        "id": 308042,
+        "chat_from": "wm7pwYBwAAe8zF3EPHq3SL0XA5WhuZiw",
+        "msg_date": "2026-05-09 00:59:10",
+        "msgtype": "text",
+        "content": "{\"content\":\"大哥们有没有德龙X3000的整车电路图？\"}",
+        "path_url": null
+      },
+      {
+        "id": 308043,
+        "chat_from": "wm7pwYBwAATxZnDp2Cze0Km9qA91QP6A",
+        "msg_date": "2026-05-09 01:00:42",
+        "msgtype": "text",
+        "content": "{\"content\":\"这不是人手一份么，[吃瓜]\"}",
+        "path_url": null
+      },
+      {
+        "id": 308044,
+        "chat_from": "wm7pwYBwAATxZnDp2Cze0Km9qA91QP6A",
+        "msg_date": "2026-05-09 01:00:58",
+        "msgtype": "text",
+        "content": "{\"content\":\"当年村头发的时候你没去领？\"}",
+        "path_url": null
+      },
+      {
+        "id": 308045,
+        "chat_from": "wm7pwYBwAATxZnDp2Cze0Km9qA91QP6A",
+        "msg_date": "2026-05-09 01:01:56",
+        "msgtype": "text",
+        "content": "{\"content\":\"@因太帅被逼婚，在逃彭于晏河南分晏 \"}",
+        "path_url": null
+      },
+      {
+        "id": 308046,
+        "chat_from": "wm7pwYBwAAe8zF3EPHq3SL0XA5WhuZiw",
+        "msg_date": "2026-05-09 01:02:56",
+        "msgtype": "text",
+        "content": "{\"content\":\"村里刚通网\"}",
+        "path_url": null
+      },
+      {
+        "id": 308047,
+        "chat_from": "wm7pwYBwAAe8zF3EPHq3SL0XA5WhuZiw",
+        "msg_date": "2026-05-09 01:03:06",
+        "msgtype": "text",
+        "content": "{\"content\":\"大哥发我一份@孟德 \"}",
+        "path_url": null
+      },
+      {
+        "id": 308048,
+        "chat_from": "wm7pwYBwAATxZnDp2Cze0Km9qA91QP6A",
+        "msg_date": "2026-05-09 01:03:17",
+        "msgtype": "text",
+        "content": "{\"content\":\"求我，[吃瓜]\"}",
+        "path_url": null
+      },
+      {
+        "id": 308049,
+        "chat_from": "wm7pwYBwAATxZnDp2Cze0Km9qA91QP6A",
+        "msg_date": "2026-05-09 01:04:12",
+        "msgtype": "weapp",
+        "content": "{\"title\":\"共轨之家\",\"description\":\"共轨之家\",\"username\":\"gh_e35143657ab1@app\",\"displayname\":\"共轨之家\",\"appid\":\"wxfdbc453cab0440a6\",\"pagepath\":\"material-subpackage/pages/result.html?no=hu0t3p2v&name=%E5%BE%B7%E9%BE%99X3000&isNew=1&fullPath=1693%7C1812%7C1838%7C1889\"}",
+        "path_url": null
+      },
+      {
+        "id": 308050,
+        "chat_from": "wm7pwYBwAAe8zF3EPHq3SL0XA5WhuZiw",
+        "msg_date": "2026-05-09 01:04:16",
+        "msgtype": "emotion",
+        "content": "{\"type\":2,\"width\":180,\"height\":180,\"imagesize\":1007249,\"md5sum\":\"6d0d81e4b53c870166cfc8f070dd545d\",\"sdkfileid\":\"CoMEKjEqRmRZQmNqWWxrWGlNdXlPSkZOaGp1RHBMOHV2aURRMnhSdktrdmFYeHhTRUlpNDdLNVpTZkVnUUdpcmVtRGtRbTZXV2R5VmV5SGordGIyTHJoOVo3RWhKcGZUZDA1eEpDRmNDMzR2V2c5RlNCUllQRFlScEdMcjNYa0xNejhTaWVJTGFYVUQwS0N3bC9LaXNuaWhhMmtNQksrUDBJQ2FPV0F2QU1jQzBoQUtiTC80S1REdEFROEw3VnN3VUo1MnhldnRPanVmMXBmeXlKaHEyenVVdzBuSk5WQjUwN0E4S3R4QUxvVEtHYzlZSTcrYnlHdDVTWit0ajJwd0pZNktBbXpxanJMU2FMVnA3amlTeFZuOVljcGhGQ09Bbi95YzRIc0RNaXAxT1NzZHJidHp4M0FydW4yU09TLzJ4WkNNZ1hVVlEwRW91NVJaQXlOYTV6YzI4Y3dCV1ZTQ1BXcFZGV0h6QzVpMkJid1d1RVIzSzExeDdTOTFHM1dWMXZPMCtycGNHTWdlVVF0YjVpTUhnQTZaVHBXejBQSmRCNFQ2VUxkVEtMUVpNaSt3dHZjTHkzVExnV3RtL0ppeDZQNThtSHJyelZxeDJQektHbi9tZ0JhNzUyZUIrdWxPZDZFb1dsYXJzRDhuSS9uMmxTOU13OHZKOW54OWxDbU4zUG5QTkgSOE5EZGZOemc0TVRNd01qSXlNREF3TVRnNU1GODRNVGd5TnpNNE1EbGZNVGMzT0RJMU9UZzJNQT09GiA3MDZiNmU2Mjc2Njk2YzcxNzQ2YzZhNjc3MTY1NmI2Yw==\"}",
+        "path_url": "http://static2.51gonggui.com/1364183773444153622_1778259860344_external50425dd3-1695-4bf4-ae18-c730fb819863_0"
+      },
+      {
+        "id": 308051,
+        "chat_from": "wm7pwYBwAAe8zF3EPHq3SL0XA5WhuZiw",
+        "msg_date": "2026-05-09 01:04:22",
+        "msgtype": "revoke",
+        "content": "{\"pre_msgid\":\"1364183773444153622_1778259860344_external\"}",
+        "path_url": null
+      },
+      {
+        "id": 308052,
+        "chat_from": "wm7pwYBwAAe8zF3EPHq3SL0XA5WhuZiw",
+        "msg_date": "2026-05-09 01:04:44",
+        "msgtype": "emotion",
+        "content": "{\"type\":2,\"width\":363,\"height\":363,\"imagesize\":615262,\"md5sum\":\"194432753586cda5d01a3199481d533a\",\"sdkfileid\":\"CoMEKjEqSHRKUjBGaDR1ZWpMT3NGZTJDTUlnN1lIUHJxa0JJZkJRQTNVK0w4STgzS2p1OTFMcS9HYlcyNHp3T2k1VFpBYWNhZEhabWJVdGk1bzBSN0FMMCtyV0U4bzEyQSs3VTZ6VGE0UGxYREo3WlJKZHliSjBlcmRicnJhVTlidzE1WFFmVVBteXpCaEo1WmtxTmM4OHB1OGlYdXdYVFZmRk5UTnJYNnRZM21ZdVVVdk95b1NHSjEzdEhReXlsb21icHJqdzE2Rm5tLzFrZ0RYTWdHaXJrN0F5eGJPbE5RVWlOYythZk5RY2l4b284V3dqQ0lmUjZSTHhxODlPRTJoOXVESWtqdmN5ZDBqblFSeGt6WVJ1c0ZQU0RZL3pQV0wzU0VhcUxsUjlDOVRidUFpM2gyN3RLWnFWdWduUEZyMDhtSVZmTlVWM2pSYUNZdHYyQngyNWtNVzRncXFweExXcXB3WHozeTU1Tk9xbEp1WFFXbzQ2VGVQbXQyeVVnL2MxTUcrSEZGMThEWkpDNmEzemxHc2F1QmpPSTg1dDN2TVdNeGN6bTlocUhDNkJKbHdEWmhwVGtOSHlUVnJueDAxVTRzWWZiaFdIQkU0VzVKOE1LRmpZeFIyLzZDVTcraGdML3R0Q1NLam14Ky9rY29hdDczbTRJODVNaktPWjZydGxDUmESOE5EZGZOemc0TVRNd01qSXlNREF3TVRnNU1GODFNVEU1TkRJMU16SmZNVGMzT0RJMU9UZzRPQT09GiA2Mjc2NzM2ODcwN2E2NDc2NmE2MjZlNjk3NDZmN2E3Mg==\"}",
+        "path_url": "http://static2.51gonggui.com/13421521585194964200_1778259888300_externalce610c1c-2ab6-4626-aca5-c4fdd0623293_0"
+      },
+      {
+        "id": 308053,
+        "chat_from": "wm7pwYBwAATxZnDp2Cze0Km9qA91QP6A",
+        "msg_date": "2026-05-09 01:05:19",
+        "msgtype": "text",
+        "content": "{\"content\":\"还不快谢我，[抠鼻]\"}",
+        "path_url": null
+      },
+      {
+        "id": 308054,
+        "chat_from": "wm7pwYBwAAe8zF3EPHq3SL0XA5WhuZiw",
+        "msg_date": "2026-05-09 01:05:50",
+        "msgtype": "text",
+        "content": "{\"content\":\"大哥有没有pdf文件啊大哥\"}",
+        "path_url": null
+      },
+      {
+        "id": 308055,
+        "chat_from": "wm7pwYBwAAe8zF3EPHq3SL0XA5WhuZiw",
+        "msg_date": "2026-05-09 01:06:26",
+        "msgtype": "text",
+        "content": "{\"content\":\"小程序没有文件扒拉着舒服[让我看看]\"}",
+        "path_url": null
+      },
+      {
+        "id": 308056,
+        "chat_from": "wm7pwYBwAATxZnDp2Cze0Km9qA91QP6A",
+        "msg_date": "2026-05-09 01:06:27",
+        "msgtype": "text",
+        "content": "{\"content\":\"你先看看，具体哪种配置，[吃瓜]\"}",
+        "path_url": null
+      },
+      {
+        "id": 308057,
+        "chat_from": "wm7pwYBwAATxZnDp2Cze0Km9qA91QP6A",
+        "msg_date": "2026-05-09 01:06:58",
+        "msgtype": "text",
+        "content": "{\"content\":\"13个图，\"}",
+        "path_url": null
+      },
+      {
+        "id": 308058,
+        "chat_from": "wm7pwYBwAAe8zF3EPHq3SL0XA5WhuZiw",
+        "msg_date": "2026-05-09 01:07:32",
+        "msgtype": "emotion",
+        "content": "{\"type\":1,\"width\":640,\"height\":640,\"imagesize\":186494,\"md5sum\":\"59ce328313d6c1772c5756c877da028e\",\"sdkfileid\":\"CoMEKjEqRmRZQmNqWWxrWGlNdXlPSkZOaGp1RHBMOHV2aURRMnhSdktrdmFYeHhTRUlpNDdLNVpTZkVnUUdpcmVtRGtRbTZXV2R5VmV5SGordGIyTHJoOVo3RXZBRk1KOU9DOW9MNmQvNUtjRUs4K2dZNVpZK0lTNFNSZ0ZlNUI4SXdJR1ZpUGpRbGpRM2N1aWg4eDFEU1ZuQWp5Q2ZveTVNV0hiSGUvSUZVcEN1b0syS0ptYjJNaWFvZDJ0V0c5T0oyZFFCSC9vL1I0Z3dlQW9SSVRxaHByVmRRNHQ5NjhPQjFoUzNKa2RLUDFjS21FbVdyRWJ6b1BSSXNHdGVVbUkxWE1Ic0oyU1BIMzhsTjl3RmVHSVMycWtZcWpTOFpMSytjcTNmeDYxSkFpQVptR1VxQk5uR2pJVithT3M4UGh2R1FkeVNNRHdUMVNLazlrbG5WOW1WSWNhMTd4Y2RVL2pRU1lVQjZ2OWFVQm1RREFCMDRJdlZKd3ptYWV4NEQvaWVRV1MxUTVPek5xWWdYQUxYM3pTK3NPZFBpWDNVelcvUzVNNDRXMXk2QU9Tc1lLTWVMTXhXRjhvU09nT1RwdkVtQTlxSDhJbk96UlpUYkVSSENrOGhmVDg5RGR5a1VvWThWMDZaTm5sbnNHM0g3dGdyajlyQ1NmMkVrZitjYy82RmpCMG4SOE5EZGZOemc0TVRNd01qSXlNREF3TVRnNU1GOHhNVFF6TlRjd016QTRYekUzTnpneU5qQXdOVFk9GiA2ZTc5NzE3OTc1NmY2NjY2NzY2ZjZlNjM2ZDczNmU2YQ==\"}",
+        "path_url": "http://static2.51gonggui.com/11167481281068455342_1778260056265_external390066eb-0e71-44f5-a142-cd55c32aec29_0"
+      },
+      {
+        "id": 308059,
+        "chat_from": "wm7pwYBwAAe8zF3EPHq3SL0XA5WhuZiw",
+        "msg_date": "2026-05-09 01:07:46",
+        "msgtype": "emotion",
+        "content": "{\"type\":2,\"width\":640,\"height\":640,\"imagesize\":45163,\"md5sum\":\"9bb2f2258b2c6b7578c65759cc912687\",\"sdkfileid\":\"CoMEKjEqdmlMdGU0aU1XOS9WQzVPWi9aWjdGbWhRZkRVZUFKb3JwNVdqVUVnT0pwV001cStWbGlDVVV6bUZYZFJRclhjNEIwcm9Na3NYN0JSVW1KT1I4V1lwT01QZ1ZCN2dTS0hxOUVLd2FOMXpUV3B0cmdxVDR5WEhFTWU4SEFMdXBqS0tjdXlRNTVqc1RSYVJzQk1xbWhjWlhZaVNwV0hOWUhiSDR1Q3J1YUlVbk1meG9HZG1Fa003Ukc1VWFNaWFEUjRhd0JHNzY3QjljMThDNmpFWVFqUmRRa0hmb04ycG9GU1pPUUJhTmpCUHdYRjlSdWpwdFJ3Y1paaWdoNzBVcFYwd2laVENzNnNnODVjUUlpN0gzTzFNTERPcHhNSGJKd0hRTkxDaUtSQ1VIbjJwWWkwZktScTNGNGpub05aNmR1cERHU01yR0MxOEtPeUkwWHordnBtenBnSCt0L3NoUVk1ZHhPVEl4VG9obWlyYmxOWXhOU01DWndVYWNQd29YRXVmbmFWc0ZNaEJMaG5oUlBLSHgxTUtjelREQ045NklhMVhPVWk5NDlCbGozRjRWWHZVM1J1MUJWWUlCeG1QUnREVUI3MDAvVFdTZEw5ZFB4K3VUOTlGN0xHdllkQlFBd1hnVVE4aTJuQUVHQ1RndE1Gc1ZJQjdJeGVIZmZ3bVVIZ1kSOE5EZGZOemc0TVRNd01qSXlNREF3TVRnNU1GODJPRGM0T1RFeU9USmZNVGMzT0RJMk1EQTNNQT09GiA2YTY3Nzc3NzYyNzU2ZTYzNzQ2MTY3Nzg2YjZjNzU3Mg==\"}",
+        "path_url": "http://static2.51gonggui.com/7311079559475840442_1778260070246_external752efdd2-6810-4431-b539-f30765b123e3_0"
+      },
+      {
+        "id": 308060,
+        "chat_from": "wm7pwYBwAAe8zF3EPHq3SL0XA5WhuZiw",
+        "msg_date": "2026-05-09 01:08:17",
+        "msgtype": "text",
+        "content": "{\"content\":\"都想要\"}",
+        "path_url": null
+      },
+      {
+        "id": 308061,
+        "chat_from": "wm7pwYBwAAe8zF3EPHq3SL0XA5WhuZiw",
+        "msg_date": "2026-05-09 01:08:19",
+        "msgtype": "emotion",
+        "content": "{\"type\":2,\"width\":197,\"height\":200,\"imagesize\":34788,\"md5sum\":\"782562a398cc3fc5bbff3b9a7611f431\",\"sdkfileid\":\"CoMEKjEqRmRZQmNqWWxrWGlNdXlPSkZOaGp1RHBMOHV2aURRMnhSdktrdmFYeHhTRUlpNDdLNVpTZkVnUUdpcmVtRGtRbTZXV2R5VmV5SGordGIyTHJoOVo3RXBmYjJESUh1dWpDSGc1VEsxM2ZqQUluSWs2SjA4aTNwbzhtc0tWZUM0UHhJa1pZamNLRmRRWEt0ZStkYkZRNXJGS0FYcGxXckRTREhWaHA1VVBIeWtMeDhPblVaVjFiUWJ3N1NWZ3l0Ym9hWC9nTGhOdGJaQkg1aExFVnNMbXl6ejVmYjUxMXlrSjIrVlBFTTJkRnpoekJhb2tVODloUitZaHBxR1lUNUpJWGZhc1dkbDBrU1lZMndSdm5kYWNZUmEzT1dUa0swTmhHb0NnM0hpeWdFUEQvelVROWpNbVhIdjQ5MVFkQ0hnbjU3NHZzN2UxcXFLUXlCNGo0dHROejZjd09HNjBUS2ROa1AvdFA5WitiUW5zbEFkTjRWUERwbnZRclNmdFA3SzJKRUhSMUoybXNoQWU2aGJLQXZpQ3dDTXlEVHo4Um4wdDE1NHcrbWlkdERsWmZnTHp5RG9NU2lkTjFTRzNJbk5DcVdKTTJERFFwdFRhSWFvV3Z1bTdKRDU5eDBSZU9ueE8wd3BBYWRVQ3RKMHdYa1pYMG5Lb1RmbC9HWmhjaUVpRVMSOE5EZGZOemc0TVRNd01qSXlNREF3TVRnNU1GODFNemd4TlRjNE9EUmZNVGMzT0RJMk1ERXdNdz09GiA2MjZjNmE3Mzc1NmM2NjYzNmE3MjY5NzE3MDc3NjQ2OA==\"}",
+        "path_url": "http://static2.51gonggui.com/16728243361251699771_1778260103309_external46ff2ac7-f230-495a-9b07-d47d1b9331f2_0"
+      },
+      {
+        "id": 308062,
+        "chat_from": "wm7pwYBwAATxZnDp2Cze0Km9qA91QP6A",
+        "msg_date": "2026-05-09 01:08:43",
+        "msgtype": "text",
+        "content": "{\"content\":\"毛线，\"}",
+        "path_url": null
+      },
+      {
+        "id": 308063,
+        "chat_from": "wm7pwYBwAATxZnDp2Cze0Km9qA91QP6A",
+        "msg_date": "2026-05-09 01:08:53",
+        "msgtype": "text",
+        "content": "{\"content\":\"「孟德：[小程序]共轨之家」\\n- - - - - - - - - - - - - - -\\n这13个图都有了，[抠鼻]\"}",
+        "path_url": null
+      },
+      {
+        "id": 308064,
+        "chat_from": "wm7pwYBwAATxZnDp2Cze0Km9qA91QP6A",
+        "msg_date": "2026-05-09 01:09:31",
+        "msgtype": "text",
+        "content": "{\"content\":\"他这个图没法单独分享，[吃瓜]\"}",
+        "path_url": null
+      },
+      {
+        "id": 308065,
+        "chat_from": "wm7pwYBwAAe8zF3EPHq3SL0XA5WhuZiw",
+        "msg_date": "2026-05-09 01:09:43",
+        "msgtype": "text",
+        "content": "{\"content\":\"潍柴通用版的就行\"}",
+        "path_url": null
+      },
+      {
+        "id": 308066,
+        "chat_from": "wm7pwYBwAAe8zF3EPHq3SL0XA5WhuZiw",
+        "msg_date": "2026-05-09 01:09:45",
+        "msgtype": "emotion",
+        "content": "{\"type\":2,\"width\":408,\"height\":640,\"imagesize\":43795,\"md5sum\":\"358c9003af14e66e2d719b5cabc95e48\",\"sdkfileid\":\"CoMEKjEqdmlMdGU0aU1XOS9WQzVPWi9aWjdGbWhRZkRVZUFKb3JwNVdqVUVnT0pwV001cStWbGlDVVV6bUZYZFJRclhjNEIwcm9Na3NYN0JSVW1KT1I4V1lwT0RSaHRhTWo4YnRIenNyNUJ2dUlqSUsyZ2FqNzlVeVJwQVFKVlVJWVAyREYxTE5sdFNYVmQxS1VuM2VmL1V5NlZxUlBVWUxpRmpLdnV4dkYydTRuSnc2eVZ4bmw1VG9oNDNZVUkrTE11RzFHUDNLcVdPaVBxTDRZb0hBQ1BtTDZQNFFXQk4rZmpuMTZUeEhoVU92dG9ROXROZDg0LzJvVUdpaVQrN1g1K1orOHFReWVrLzVTUXBibTNsK3pGTkV0aGczR09FclZ3Vm1RcEF4M25FWlVaWTE1VHdWN3BLc1VucGdLTlVnNldoR0ZXbWZBVWhXbjB6djZ0RWIrSE91aTJld2tRZ2c3OVcvVWJYajl3RXhpeUxJN3JCUjhhTURQRzNGa2RlZCtNNWtQakdCaU84MGhpbjRZY1REYk9hMHYxS2JYQmRTc3ZTYWFhcDhVWThlSnpDM0tOYkhHWEhHQTlxOWpuZ3FYQUxUNlY5YXdMK1I5M2FqMzkrUlFzYVlaOTM5WDREMWg4MlkyNnh6VmYwMlZscGFYblkxRjFQaFdHbFZJd0U4eVJ5NCsSOE5EZGZOemc0TVRNd01qSXlNREF3TVRnNU1GOHhNemMzTlRZMU9UQTVYekUzTnpneU5qQXhPRGs9GiA3NTdhNjI2NTcxNmQ2NDZlNjk2Mjc0Nzk3OTZjNjM3YQ==\"}",
+        "path_url": "http://static2.51gonggui.com/6115905401988297005_1778260189291_external098da0e0-c20b-424b-abfa-dfb6cbbd4dd2_0"
+      },
+      {
+        "id": 308067,
+        "chat_from": "wm7pwYBwAAe8zF3EPHq3SL0XA5WhuZiw",
+        "msg_date": "2026-05-09 01:14:19",
+        "msgtype": "file",
+        "content": "{\"md5sum\":\"9bff74d7d7dcbeeaf890349b912529fe\",\"filename\":\"c09a16ef4ce08a145a1eac623f8ac6ae.pdf\",\"fileext\":\"pdf\",\"filesize\":1899977,\"sdkfileid\":\"CoMEKjEqdmlMdGU0aU1XOS9WQzVPWi9aWjdGbWhRZkRVZUFKb3JwNVdqVUVnT0pwV001cStWbGlDVVV6bUZYZFJRclhjNEIwcm9Na3NYN0JSVW1KT1I4V1lwT0hUZ2ZtRDFONjhlek1yU24xcGlsWUpKRkhpVXdDakFKem9Oa3Y1YVo0VTJydGNTQjRqOWJDVHVVQXM1L1hLVktlQjI1RVJsUWFsclJlUlVsZ1h5alMxOWRoaDljc0VvMkIyNE5MNVVFc2krTTZHd3N5Z0JwNE0vSmtldTZZTS9DbjVBTmJvV3p3OG45cmt3eGpSUUF3YjROWk9oVWsvQUo1S2dWdHBWU3lBRjluUjc5RzRUK1psYyt1NmlmMzJ1UWNrMnhCUGJqbzBNdi9ZZlZjRUVVUXFBWUVXdE4rUVVkdlY0d0JrK1VCOGI5MGxwaTRvSENrUkloNk1xTldISkNKaUxBM0VJM3ltMG8rSWcwZmFxOE5tTGtOZmVTSXliMWlSUDVxTjI2L1NlajV2TEdnQjBDYlE0L2c5bFdPWCsxME5LZ2pyZmpGY3N2Zkcxb2pOYmNySmtmL2x6aXBVNWJLdU5wSzVKU1FFdGtJRFZRaDArQmNuL1U1c1E2L2pnRFVwRTlBL0x3U1l0REROVkMyWk4rM015MElBQzJhc2VkZWZwNVNWSEdxekYSOE5EZGZOemc0TVRNd01qSXlNREF3TVRnNU1GOHlNVEF5TXpVeE16UTVYekUzTnpneU5qQTBOalE9GiA3YjBiYzYxY2I0MzVmMGU1OTg0NmRmNjJjMTgxYWM4Yg==\"}",
+        "path_url": "http://static2.51gonggui.com/13673001882433778611_1778260463383_external8b2f1916-3ec9-4621-85d3-98de110bfe5e_0.pdf"
+      },
+      {
+        "id": 308068,
+        "chat_from": "wm7pwYBwAAe8zF3EPHq3SL0XA5WhuZiw",
+        "msg_date": "2026-05-09 01:14:49",
+        "msgtype": "text",
+        "content": "{\"content\":\"像这种的有没有啊大哥，这种手机好扒拉\"}",
+        "path_url": null
+      },
+      {
+        "id": 308069,
+        "chat_from": "wm7pwYBwAAmfWjrXlZSqP9dgQUqJHDpQ",
+        "msg_date": "2026-05-09 06:48:04",
+        "msgtype": "text",
+        "content": "{\"content\":\"还想要自行车？\"}",
+        "path_url": null
+      },
+      {
+        "id": 308070,
+        "chat_from": "wm7pwYBwAASXotQd9LbDUCCrSJH_4Iww",
+        "msg_date": "2026-05-09 07:24:32",
+        "msgtype": "text",
+        "content": "{\"content\":\"你还挑三拣四\"}",
+        "path_url": null
+      },
+      {
+        "id": 308071,
+        "chat_from": "wm7pwYBwAASXotQd9LbDUCCrSJH_4Iww",
+        "msg_date": "2026-05-09 07:24:59",
+        "msgtype": "text",
+        "content": "{\"content\":\"有看就不错了\"}",
+        "path_url": null
+      },
+      {
+        "id": 310701,
+        "chat_from": "wm7pwYBwAAIrnR9587IRX3kUOGuigyeQ",
+        "msg_date": "2026-05-09 13:01:24",
+        "msgtype": "text",
+        "content": "{\"content\":\"请问一下玉柴EDC7UC31咋进不去系统\"}",
+        "path_url": null
+      },
+      {
+        "id": 310709,
+        "chat_from": "wm7pwYBwAAIrnR9587IRX3kUOGuigyeQ",
+        "msg_date": "2026-05-09 13:02:12",
+        "msgtype": "video",
+        "content": "{\"md5sum\":\"d816f3a262ad9be1d82e3cae52e9af8d\",\"filesize\":1288731,\"play_length\":14,\"sdkfileid\":\"CoMEKjEqdTNXMmsvMis3VGlnRjNpZU0ySllXYURSaHhYMmhyeGRObzZMVndsT0hNaXFjeWtvNkNOV3VBOHREcmlpOWYxU3RBbS9CS1ZRa2s0R0luOFphTW02ZXc3WmVDK01URUJIUnBqN01uS3MzSHNkUnFmQW8rbXpVU05xOWtqVjRreCtXWWtiaUpxck1ObnVCZ01ZL1lTZEk5UDR2QnFscWVaNWhNL1JsUld5TDBhb2FWdEpGWFc4cFQxak1lcjhralFyLzhtRzJXQVJub3hKMlNNbi9UYmk5UlBxbVZlTlFyOU8zNlB0UGgzYXpySDNKR2RmUzhoUVVhT3VzUWhyVHdsZzVjUGtUeTNxQllkbUttOFo5WFpPanBqeHVaNDlreFMwZlMyUXp2S1RHTkl2MVkwV2JlVUg0R3NORDk0a3JRVlZ2QWNOanRmMkNmMWcyeTdOd3djcm0wbGQzZS9KcEhVUVM3OUJiYlRCd1B6U0w0YVN5dURJOXlTd3BDK0VDR3J6TXd4MzIzWEU0WjNqK3VwTDRuOExsMlg4TTV5RUhOalQzSHFJNGpaNXhrRnBaM0c4ZDZ1SFplL0pTR3h2QkFaeVFwYU02Nk9McDVXNUZsd2VMcEZWYnQzQzU4NWpIMTVKd1pPMHcySWRQS1p3UHB2VUZFejVIOUdxajBuc2gxQ20SOE5EZGZOemc0TVRJNU9Ua3pOVGt6T0RJek1WOHhNVE0yTXpFME56SXhYekUzTnpnek1ESTVNemc9GiAyZjQ4ZDFkYTczZDBhODUxODdlOWU4ZTMwZmViM2FhYw==\"}",
+        "path_url": "http://static2.51gonggui.com/2108264938187324343_1778302936775_externald6a5aec5-0f9a-4b30-93b7-4c79246e35dd_0.mp4"
+      },
+      {
+        "id": 310710,
+        "chat_from": "wm7pwYBwAAIrnR9587IRX3kUOGuigyeQ",
+        "msg_date": "2026-05-09 13:02:19",
+        "msgtype": "image",
+        "content": "{\"md5sum\":\"26f3263f9b38eea7a799ea7f2fae37ef\",\"filesize\":121086,\"sdkfileid\":\"CoMEKjEqdmlMdGU0aU1XOS9WQzVPWi9aWjdGbWhRZkRVZUFKb3JwNVdqVUVnT0pwWFpERUUrOFlPNkd3Y3Nqb0U1MzlsZ013ampuN09tQ04wV0Y4U2Y4dXRMRmM5ZWpJeEp4VVZGbXlRc0xIVkJrM0JkNlNPNzlMQzZxZGFaYXdOeXpNdzI1eE5GdmkrQ01iWlRJQ0xJclUraFNCVzlrODVNUFN1QWVrOERUM3pOcUkrNzMwTjRYcHl5T2Znd0ZQYUpmUXJZOHZ3YWZjWHJISlZpWVZJWDc3aURMTWhNeE5PMDloWXMxKy9wSFRKQzFIY3ZMVm9vV1pyNEc0aEFGd1pHZmR3aEN1Snh2V3BtcWsySDlZTDRBS1BHeEtJMVNndXdLOHJvTUVoTnFKSzR3MVZyYXFxbGZuaUxtL2p6Yzl3UEZRVGtieFRobkNGK094Qy8wQ2YvS1JqdksyUEQ1cFlwS0RwaVcrVjJnT2xGTTJmOGV3VEFvN3YxMyt5aEVrUGpnblN6M3VMWFI0STAzR0lRQkQ4VnZzS3R4SVdCWEc5NEtKVDhZVmRwYmEzWjBBZHlJTE5QS2xJZUdib05jMEpYYW84WFo4ditaNzJHL2xOYVpFNGRxODVrSy9lM0pOcWZIeGtxczVFeG92T284WWdydXdITlorNG1VaGM5N01FeitJSE0SOE5EZGZOemc0TVRJNU9Ua3pOVGt6T0RJek1WODVPRGd5T0RRM05UUmZNVGMzT0RNd01qazBNdz09GiAzYjJkNTJmMmVjMTA5YjRlMzcyNjJhMWRjOGYwYjljYw==\"}",
+        "path_url": "http://static2.51gonggui.com/4361466415846320925_1778302943348_external84a85571-61d8-449b-9312-5efc9688d62a_0"
+      },
+      {
+        "id": 310711,
+        "chat_from": "wm7pwYBwAAIrnR9587IRX3kUOGuigyeQ",
+        "msg_date": "2026-05-09 13:02:29",
+        "msgtype": "text",
+        "content": "{\"content\":\"K线也能扫描到\"}",
+        "path_url": null
+      },
+      {
+        "id": 310712,
+        "chat_from": "wm7pwYBwAAIrnR9587IRX3kUOGuigyeQ",
+        "msg_date": "2026-05-09 13:02:36",
+        "msgtype": "image",
+        "content": "{\"md5sum\":\"ce039e3530746d89dfd79e8841a2a3cb\",\"filesize\":111997,\"sdkfileid\":\"CoMEKjEqdmlMdGU0aU1XOS9WQzVPWi9aWjdGbWhRZkRVZUFKb3JwNVdqVUVnT0pwWFpERUUrOFlPNkd3Y3Nqb0U1MzlsZ013ampuN09tQ04wV0Y4U2Y4dXRMRlQvWnQwT05SWG1nUUI1UXQ5T0lnZzR6d2NpeHpuTVN5YW9hOGkxbzN3L1VjaURrYlBhaHlOeDYrSEhFYnoxQkxjaC9RM1FaM21XeTR4ZmZVZ1lFYlFOUU9ydWhtbi9zL0NwWXNtUG1KODlhTU1Yb2xBaTJTQ090NkJsRUVtejNaREdHdWR0dml0VXZWblYwMTFMczRUdmllU05LOEdWNzdlUEdsaVhOR3ZSU2VSbXgyWkJmcE5GbDBnN2lqTjVJOXhGTUVkdzk1ZWpsREdDeVFrdzBnaXNrN0pCZWxNMjAxVmtVRjQ4U294L3VFc0xaTVgzczJUbUdZcXFBakpUTkQzSnU0MUpCU3IyMjMrcEhwV1JRTGpYdks4Qnd2aVdYUkI1eXpxS0NUb3Z1NnJrZVFuM2tvVzZnNXRVL1drVDduU1NJeWwzWncxTytrUDAyeXN5R3FGZXY3VjRFSVhkSEhNSEs1RjBHMEVpeitZK2ZVVXYrZHlIQUlaSnp4eCtTT1oyRCtrUld2Z1NhVzlIb3hYM25xMWp1cW1kK2I0aW5MR3dEWWFxTk1XNHkSOE5EZGZOemc0TVRJNU9Ua3pOVGt6T0RJek1WOHpOVEF4TkRJNU5qRmZNVGMzT0RNd01qazJNQT09GiA4YzNhODFkZjgxYzIxNjJlMDI1NWIzZDYyOTBjNTBiYg==\"}",
+        "path_url": "http://static2.51gonggui.com/2642293010569374483_1778302960324_external1e89c19a-c5c8-4f90-b456-8c230d0dc2ab_0"
+      },
+      {
+        "id": 310723,
+        "chat_from": "wm7pwYBwAAIrnR9587IRX3kUOGuigyeQ",
+        "msg_date": "2026-05-09 13:03:16",
+        "msgtype": "text",
+        "content": "{\"content\":\"有老师在吗\"}",
+        "path_url": null
+      },
+      {
+        "id": 310750,
+        "chat_from": "wm7pwYBwAArhH96nYMnVtYrg6D1wy_mg",
+        "msg_date": "2026-05-09 13:05:41",
+        "msgtype": "text",
+        "content": "{\"content\":\"就是k\"}",
+        "path_url": null
+      },
+      {
+        "id": 310752,
+        "chat_from": "wm7pwYBwAAIrnR9587IRX3kUOGuigyeQ",
+        "msg_date": "2026-05-09 13:05:53",
+        "msgtype": "text",
+        "content": "{\"content\":\"那这个咋回事啊\"}",
+        "path_url": null
+      },
+      {
+        "id": 310757,
+        "chat_from": "wm7pwYBwAArhH96nYMnVtYrg6D1wy_mg",
+        "msg_date": "2026-05-09 13:06:46",
+        "msgtype": "text",
+        "content": "{\"content\":\"钥匙开了么\"}",
+        "path_url": null
+      },
+      {
+        "id": 310758,
+        "chat_from": "wm7pwYBwAAIrnR9587IRX3kUOGuigyeQ",
+        "msg_date": "2026-05-09 13:06:52",
+        "msgtype": "text",
+        "content": "{\"content\":\"开了\"}",
+        "path_url": null
+      }
+    ]
+  },
+  {
+    "case_id": "real_train_0004",
+    "room_id": "wr7pwYBwAABrdQi5WeQWqGZOsyzC_K5A",
+    "opening_id": 244849,
+    "messages": [
+      {
+        "id": 244849,
+        "chat_from": "wm7pwYBwAAcm94GRlQfqakNR19UPllZg",
+        "msg_date": "2026-04-28 11:07:05",
+        "msgtype": "text",
+        "content": "{\"content\":\"请问老师，这个全柴ECU电路图有吗？\"}",
+        "path_url": null
+      },
+      {
+        "id": 244860,
+        "chat_from": "wm7pwYBwAArhH96nYMnVtYrg6D1wy_mg",
+        "msg_date": "2026-04-28 11:07:25",
+        "msgtype": "text",
+        "content": "{\"content\":\"app里面有\"}",
+        "path_url": null
+      },
+      {
+        "id": 244871,
+        "chat_from": "wm7pwYBwAAcm94GRlQfqakNR19UPllZg",
+        "msg_date": "2026-04-28 11:07:48",
+        "msgtype": "text",
+        "content": "{\"content\":\"是不是和CV54一样\"}",
+        "path_url": null
+      },
+      {
+        "id": 244873,
+        "chat_from": "wm7pwYBwAAdTkuD8PfgFEVBHJxH9fobA",
+        "msg_date": "2026-04-28 11:07:51",
+        "msgtype": "weapp",
+        "content": "{\"title\":\"共轨之家\",\"description\":\"共轨之家\",\"username\":\"gh_e35143657ab1@app\",\"displayname\":\"共轨之家\",\"appid\":\"\",\"pagepath\":\"pages/home/home.html?\"}",
+        "path_url": null
+      },
+      {
+        "id": 245021,
+        "chat_from": "wm7pwYBwAAcm94GRlQfqakNR19UPllZg",
+        "msg_date": "2026-04-28 11:17:47",
+        "msgtype": "text",
+        "content": "{\"content\":\"怎么查不到呢？\"}",
+        "path_url": null
+      },
+      {
+        "id": 245191,
+        "chat_from": "wm7pwYBwAAcm94GRlQfqakNR19UPllZg",
+        "msg_date": "2026-04-28 11:28:57",
+        "msgtype": "image",
+        "content": "{\"md5sum\":\"ee9927aeb7a13fecce1b59318e696d1a\",\"filesize\":407348,\"sdkfileid\":\"CoMEKjEqdmlMdGU0aU1XOS9WQzVPWi9aWjdGbWhRZkRVZUFKb3JwNVdqVUVnT0pwVXgwT3JLM1VETkN2OU5xK1VsVTFwSDBSUTZ0bXR6Q2lUMmtHMjFPRnRCYjhNWnROaXpDeEwwT050ZkpWYnpCb05TemIyZE9NRXVjNTl5bXJ3U2g2OVZRZDZZNGxkdk1oY01TcklveXY4TE12TFhKa1hteWNzNDNIUlUwemVPTVhzWHFvbUdlcmRpcFliemFHbm04T0ZSUkZ0K1V0SmlWVGkxWnpxVVFrVkFHaXVucU1ucTQ0Q0tlczBRNDNCY3BhTUFFU3FhZ3JLeDRDWWk4S1dLZWJOZW9tU2lqYWdXTVJxUUdTRnByRUlrWlRkY2lWcU94NTRqQ09Zb2NYV0NqSU1rbXVNbWVoelNvT2p0M3pSV1pMM0p6Qld6R09GYmhMS1d6NFdxRFEwV3JsUkYyTHZuT1ZnYk1vTUQ0MldhYVQzSTBiTVNFd0dXRWthUnlRVHJXTFppOC9JK1VLbUVNV29VMDZ4aDFIMVVNS3h4SVZuV1RPUHhSMU51bk1mVFRCaTVnaklMUm9SaFZmMGF2VVg3N0FkZWl2Q0xleE9NVCtFVS9rWTdBNTdSd0lXSUNOanVtUzRWaXlRYnRQSnkrZHkzK3Jkbi9hWGRBTUVId2xhajhUMEESOE5EZGZOemc0TVRNd01UYzRPVGt5TVRNek9GOHhPRFEyTnpReU9UVXlYekUzTnpjek5EWTVOREk9GiBhOTVlODVjODQwYTgwM2I3MjI3YTExNjg2MjgzZTZkZQ==\"}",
+        "path_url": "http://static2.51gonggui.com/1765460790612776578_1777346941514_external40296ce5-73bf-4d90-b78f-4c4dd67b6b5b_0"
+      },
+      {
+        "id": 245204,
+        "chat_from": "wm7pwYBwAAcm94GRlQfqakNR19UPllZg",
+        "msg_date": "2026-04-28 11:30:43",
+        "msgtype": "text",
+        "content": "{\"content\":\"科锐ECR54\"}",
+        "path_url": null
+      },
+      {
+        "id": 245259,
+        "chat_from": "wm7pwYBwAAdTkuD8PfgFEVBHJxH9fobA",
+        "msg_date": "2026-04-28 11:34:44",
+        "msgtype": "image",
+        "content": "{\"md5sum\":\"b5ba7e346d66ea30df84268ed53c6cfd\",\"filesize\":86049,\"sdkfileid\":\"CoMEKjEqdTNXMmsvMis3VGlnRjNpZU0ySllXYURSaHhYMmhyeGRObzZMVndsT0hNaGxGZmFwOWlQMUdHVlA3eGEyNzRRbVpuWUVGUWUwMVRxMTBjaFk4TzdGZ09GcFZFZWU3WDF3YmNkdjFZelYwWlZkeHZNemlxdnhoZmRVVlFkRjkwRW1QTG5tZkJMTEpuUEp5Q1lWaDdZVWhNWlp2S2YrRW5lZjBmbHVZdUFmd1VyeHFsMksyZGR2dWNGUW5qMXdYVUJSRFBpSEVPeHJkY0EvVFk5MzF5a2orVFZPeU14Mm9razR1Snc1RU10UDd3bGtTclFybGhNSmtsVGIvUmVzT3pjZmlpRm9pdU9yTkppNnJsOGl6MVB6K2ZleDFTNFJjbWFPVU5iMEdnZm1OZ0hSWW0xOGFTaDdtcUsrWUkrclNvOEFveW5vYnRhNmNCNEZ2VENSa3BrUjlHZ1BtU3FrcjlNdWZvYmZoR1VtbmJBWjlZUkh3WHE2Mzh3cHBhM09mSW5MdmRITjZpK0R0dVFDNjd1eEJNQVZhSzV6c2ZMSytIWDJsS2czaFBnSnZoYmtISFdYV1VEZ1g1R1dJZHJGVG9NTU1ROGV5ZUIwSlc5OStLRjNZOGpWTzVsNkVjN1phTTBzVko1TG5UeFEvMDJuZkVWdkdEODMxVGRiVGxiRHQ4MUISOE5EZGZOemc0TVRNd016QTRNREUwT1RFd00xOHhNREV5TlRnMk1EUTNYekUzTnpjek5EY3lPRGs9GiBmZjI1MjE1ZWU3ZThhYjAzYjdkZjBlOTkzYzIwZDZhZg==\"}",
+        "path_url": "http://static2.51gonggui.com/4398588935448577832_1777347289366_external24abc0e4-943b-48f9-bfe0-f15a666eeb71_0"
+      },
+      {
+        "id": 245366,
+        "chat_from": "wm7pwYBwAAcm94GRlQfqakNR19UPllZg",
+        "msg_date": "2026-04-28 11:42:09",
+        "msgtype": "text",
+        "content": "{\"content\":\"OK谢谢，已经查到了[微笑]\"}",
+        "path_url": null
+      },
+      {
+        "id": 246424,
+        "chat_from": "wm7pwYBwAAQ8UjgzU4xRzbehpUcwij4g",
+        "msg_date": "2026-04-28 13:50:57",
+        "msgtype": "image",
+        "content": "{\"md5sum\":\"8b537e5094bf00f921b7fb25e34b5e0c\",\"filesize\":608638,\"sdkfileid\":\"CoMEKjEqdmlMdGU0aU1XOS9WQzVPWi9aWjdGbWhRZkRVZUFKb3JwNVdqVUVnT0pwVXNjejh1cVV4U1BCSmwySXVMMWN5UTltYmVzOGd1SEF2VDh5N0s5bDFuaE5rTGc4aFAzUjY3R3ZwM0thdWxHQUl5Zk9iNCtnQU1XZU83TUFYZ2d4Qm9SL3pXYmdqNXlGRXV6N05GK0hLVU5GM1JPZjk1MmFMcGZGbVlrNWZlNVhnVC9yK2FtQ2dnOSttMkYrc0xBMlp2SnJsQkdFN0orcUlhUWFVd2FxZVVmYzIzOGZkaHJtb0IzdE5qWnB5NUUvaWNiL21aeFo2cHNTblMwYWdOTVN2c0xEOUxTQzFwb3k2UjdHNSs5ODRXVHM4ZlY2V2xRS3gwV01JNWJpUWpPWUl5MW51dXVpUi9IbFR0TzB5YThkYXdDc0F3djA4bEZWNzBHaENWTXdCNVR6RUhnOEVXRUhkMXlSTmhGREdYQTNOVEhraXAwTjhCNXhHYklrMWFxWnR1U1hrcUYzTlhWS1Z3SlhTdUYrY1RMYVRCeENoUjNFc1dENWUweWRtNURFalBiQVpaSXc1WFlxM0RvZkVHd1VzSWU0a1VvVytnMWZoeVB0WXlvYklnZkRPbmErWHhETEdxYmpFZXJLVkJhSmpTTWJObTNTR21UMXFlK1FxM0duYzgSOE5EZGZOemc0TVRNd01qWXlNamsxTXpBeU4xODRORGd4TVRreE1EUmZNVGMzTnpNMU5UUTJNUT09GiA5NjcwMGIwN2EwYWI2Y2RjNzM4N2ZjZTg1MTA5YzcyZg==\"}",
+        "path_url": "http://static2.51gonggui.com/1440612451593893545_1777355461391_external137eb58a-f85a-44c1-ba67-614cd5fd8bed_0"
+      },
+      {
+        "id": 246425,
+        "chat_from": "wm7pwYBwAAQ8UjgzU4xRzbehpUcwij4g",
+        "msg_date": "2026-04-28 13:51:17",
+        "msgtype": "text",
+        "content": "{\"content\":\"各位大师这个是什么原因\"}",
+        "path_url": null
+      },
+      {
+        "id": 246905,
+        "chat_from": "wm7pwYBwAABpnT4ETdMrXKhbGgOsw7-A",
+        "msg_date": "2026-04-28 14:51:55",
+        "msgtype": "image",
+        "content": "{\"md5sum\":\"fc654abb89c8e2001e5f6b8bd346191a\",\"filesize\":872745,\"sdkfileid\":\"CoMEKjEqdmlMdGU0aU1XOS9WQzVPWi9aWjdGbWhRZkRVZUFKb3JwNVdqVUVnT0pwWFVHYUpTbXZCVnBZUy80WVh6UzEyanBpc0czUlRiSVlIcHBxYXVhSHliSW1WUlNzZS9zWENiMzRQUy9YVVNOQ1BSektGMmhXdGU5YUhoN2NjVXR1MFNpaUhVNm0weitJZG0xdVJ3c0VWV0JSSEFxbzRaMUJOTXQ5SlROcVAyTkd4azUzY1BLUEd2NFMxeWp5aTgvSmFzNC8wZ045dkh3d3o4REdNTis4eHpoR3hmUGZrWXNMZnM1RXFkVFNWUmdRUDB2RnJCRHhGR2FMMSthYXd4aURVRFl1aUJVQnZsSS8vUmdwampKVW8yWGlCSy9ZM0hDb0c2dHJ6RGtxZnNCeHF1YWh4c2JEcHg3Q3VwcnFQRTJZOU1TRDBlN0taRlR6cWVLMkZQLzRnMzQzelhqZUxzTXpTY3hGa2hVTTdxcWcrUkhMK0FjeTVFT3QxdDA0RjlvSHVMN2d6TUtKbzkwTDRMTHJwdWhUcXRRbDBLTUJXUGtkN0lYM0dsV0kxZmovaFdId1NmNnZ1d1VNTlNSalRXVUFRbjRtZ3RTd3R4M1BTdmpRME1Td29ZSllaVkpIRkg1MGxnbkI3T3hjdmZnc0FCL1JjWUNPbEJuS1FUV0txZ3NVVW8SOE5EZGZOemc0TVRNd01UUTJOakEwTkRBM01sODJOemN3TWpjM01UWmZNVGMzTnpNMU9URXlNQT09GiA3NTY4YmJjNTQxODM2M2U5MGFiMmU0ZGIwM2Q3NGUzZA==\"}",
+        "path_url": "http://static2.51gonggui.com/13358531073052914947_1777359119762_external3043dba5-43c9-4e27-a82c-d9dd09c05c83_0"
+      },
+      {
+        "id": 246906,
+        "chat_from": "wm7pwYBwAABpnT4ETdMrXKhbGgOsw7-A",
+        "msg_date": "2026-04-28 14:51:59",
+        "msgtype": "text",
+        "content": "{\"content\":\"这是什么情况\"}",
+        "path_url": null
+      },
+      {
+        "id": 246907,
+        "chat_from": "wm7pwYBwAABpnT4ETdMrXKhbGgOsw7-A",
+        "msg_date": "2026-04-28 14:52:12",
+        "msgtype": "text",
+        "content": "{\"content\":\"页面都没有\"}",
+        "path_url": null
+      },
+      {
+        "id": 246909,
+        "chat_from": "wm7pwYBwAA-pwVZ0ix2bgWw_J8cz56YQ",
+        "msg_date": "2026-04-28 14:52:18",
+        "msgtype": "text",
+        "content": "{\"content\":\"联网\"}",
+        "path_url": null
+      },
+      {
+        "id": 246910,
+        "chat_from": "wm7pwYBwAA-pwVZ0ix2bgWw_J8cz56YQ",
+        "msg_date": "2026-04-28 14:52:26",
+        "msgtype": "text",
+        "content": "{\"content\":\"上面不是显示吗？当前无网\"}",
+        "path_url": null
+      },
+      {
+        "id": 246913,
+        "chat_from": "wm7pwYBwAA-pwVZ0ix2bgWw_J8cz56YQ",
+        "msg_date": "2026-04-28 14:52:43",
+        "msgtype": "text",
+        "content": "{\"content\":\"「小张电瓶电喷电路维修尿素泵后处理：\\n各位大师这个是什么原因」\\n- - - - - - - - - - - - - - -\\n进气漏，增压器坏\"}",
+        "path_url": null
+      },
+      {
+        "id": 246916,
+        "chat_from": "wm7pwYBwAABpnT4ETdMrXKhbGgOsw7-A",
+        "msg_date": "2026-04-28 14:53:02",
+        "msgtype": "text",
+        "content": "{\"content\":\"没网就不能用吗\"}",
+        "path_url": null
+      },
+      {
+        "id": 246951,
+        "chat_from": "wm7pwYBwAA-pwVZ0ix2bgWw_J8cz56YQ",
+        "msg_date": "2026-04-28 14:55:54",
+        "msgtype": "text",
+        "content": "{\"content\":\"你连个网有那么难吗？\"}",
+        "path_url": null
+      },
+      {
+        "id": 246970,
+        "chat_from": "wm7pwYBwAAnnitz7BB464TQkacxq1mWw",
+        "msg_date": "2026-04-28 14:57:16",
+        "msgtype": "text",
+        "content": "{\"content\":\"不连网能更新？\"}",
+        "path_url": null
+      },
+      {
+        "id": 246974,
+        "chat_from": "wm7pwYBwAAnnitz7BB464TQkacxq1mWw",
+        "msg_date": "2026-04-28 14:57:26",
+        "msgtype": "text",
+        "content": "{\"content\":\"能用新功能？\"}",
+        "path_url": null
+      },
+      {
+        "id": 246981,
+        "chat_from": "wm7pwYBwAA-pwVZ0ix2bgWw_J8cz56YQ",
+        "msg_date": "2026-04-28 14:57:55",
+        "msgtype": "text",
+        "content": "{\"content\":\"就相当于一个软件，它没有联网，数据库加载不出来\"}",
+        "path_url": null
+      },
+      {
+        "id": 246984,
+        "chat_from": "wm7pwYBwAA-pwVZ0ix2bgWw_J8cz56YQ",
+        "msg_date": "2026-04-28 14:58:12",
+        "msgtype": "text",
+        "content": "{\"content\":\"又不是说一直都得联网使用，\"}",
+        "path_url": null
+      },
+      {
+        "id": 247017,
+        "chat_from": "wm7pwYBwAABpnT4ETdMrXKhbGgOsw7-A",
+        "msg_date": "2026-04-28 15:00:53",
+        "msgtype": "text",
+        "content": "{\"content\":\"[捂脸]\"}",
+        "path_url": null
+      },
+      {
+        "id": 247020,
+        "chat_from": "wm7pwYBwAABpnT4ETdMrXKhbGgOsw7-A",
+        "msg_date": "2026-04-28 15:01:00",
+        "msgtype": "text",
+        "content": "{\"content\":\"多谢\"}",
+        "path_url": null
+      },
+      {
+        "id": 247393,
+        "chat_from": "wm7pwYBwAANehpOZh6_1ObXRwDVIp5Dw",
+        "msg_date": "2026-04-28 15:37:16",
+        "msgtype": "image",
+        "content": "{\"md5sum\":\"fb840ffd0c2737dcf4189d32a8c5cbff\",\"filesize\":933456,\"sdkfileid\":\"CoMEKjEqdTNXMmsvMis3VGlnRjNpZU0ySllXYURSaHhYMmhyeGRObzZMVndsT0hNaGJiazBiSWRQNzZvMEhJdHZpQzJ3TytkUGpxd2hsTUdDbms0d3pybEU0dEVyUUJ5VTUwM00ybVRRVjcvcU5FZjdIUWFMTXdwUmRkMnBJREZEV0lRbDc0SmZ0SGV1QVpPNC9iVjMrVkdVYjYzY04zdWZ4VUtrcUVGSVRVYzNGcWpYODgwYkI5UVBlMnp6WVpOUGJaRFpHMkE5ZjdOUDhuQ3FobmljekluWnVqaEpkWkJ3RDFQY2VBd0xpcE1NWU96UE1IS2xDYlp1Y2xvUEVVZDFPSks1VFFMdmpuVU45UDhLcmNHbENQS0dBL0hqRnQ0cURyR2dDZHJiN1RaRUlLREtnTll4ZWRrL1RGcktmU3UvM1B0VmFtVEZEOUNoSHFLR2d4Qk9OVWl6M3lMN0wzVWpuMFl3SnE3eStDclFSUUhaMFprcDhuakNaQ2E1N2lqRC9XUG9rQ04xTGw0OEkyMlA5d0hEL05aWEs5YktuOHo5bUFubXdLd2xsMnM2REJ2Y2hmMEdGckxzRDVuSWxsUGZKc3g4VHhlMVhIYzY0RW4vNDBqSGt5K0JjMGp0dDNBTE1Ib1d1b2lNZkdITjRlUTltSmNGQjJGUGNUR1BSUWwxLzVDTWMSOE5EZGZOemc0TVRNd01EQXlPVE0wTXpjeE1GOHhOakV4TURVeU9UQXdYekUzTnpjek5qRTROREk9GiA2NDU1ODI1MDExYzIxYWE2NmIzODQ2ZjJhODcxOWE0NA==\"}",
+        "path_url": "http://static2.51gonggui.com/16662225230999490750_1777361841386_external3f9b7fdc-14f8-4f09-8abd-3eace846cb2f_0"
+      },
+      {
+        "id": 247507,
+        "chat_from": "wm7pwYBwAAnnitz7BB464TQkacxq1mWw",
+        "msg_date": "2026-04-28 15:50:29",
+        "msgtype": "text",
+        "content": "{\"content\":\"六哥这是\"}",
+        "path_url": null
+      },
+      {
+        "id": 247508,
+        "chat_from": "wm7pwYBwAAnnitz7BB464TQkacxq1mWw",
+        "msg_date": "2026-04-28 15:50:34",
+        "msgtype": "text",
+        "content": "{\"content\":\"骚蛋？\"}",
+        "path_url": null
+      },
+      {
+        "id": 247730,
+        "chat_from": "wm7pwYBwAAHRCEGEB-0SWg5qVd9rA0vg",
+        "msg_date": "2026-04-28 16:08:54",
+        "msgtype": "text",
+        "content": "{\"content\":\"六哥说蛋定\"}",
+        "path_url": null
+      },
+      {
+        "id": 250104,
+        "chat_from": "wm7pwYBwAANehpOZh6_1ObXRwDVIp5Dw",
+        "msg_date": "2026-04-28 19:45:42",
+        "msgtype": "image",
+        "content": "{\"md5sum\":\"91df81ef2df4c6956c019343f3b8494e\",\"filesize\":494955,\"sdkfileid\":\"CoMEKjEqdmlMdGU0aU1XOS9WQzVPWi9aWjdGbWhRZkRVZUFKb3JwNVdqVUVnT0pwVXhkMFNidldJUmtZYys2b1Q4dXBpWWU1ZXc5aDJMYStDcGVyVE0ydWtHaTRESWQ1eU5ZVWNqTVZwTTlQVHk0bHlGK3NCMDJvR002bXpPdUxsRENzSlFwcmoyM29KWGtoenJReTBFOVg4WmZUVm9wNjMrSHFIV1lXdWJ4ZGppRVV3TWFDcmxOMVdndkVXNi9sbEFwR21Kckp3Q1ZYcm5Ncm05K0pIaE1MZElkSEwrM2ZoWkJMUkJ3MWg4bENTZWJ1Qlp4VEtqVGtWbCt6TEpsMjcxZXdKNzVtTHltNC83dXpKb0xnQTg2K2s2YzFtcVBOODE0NHpJOXE5Ym9jeEJrWXh0NmwrVWhWa3RJT1g2T0J1YnMxSlNiQU5LTTRGejFkbnVRa2pTVE5xVERzRlFFeVU4Q0VxRThrY01nckxkdHhKa3hSZjl5cXFQWU5rL3JHcE5EMHVrS1FhMnhSbHF3eVhqNitzYUxZeFY2L3dCUGdwbnFnb0NaKzBBWlA4YUZDeVV6S3VnMEF6M3ZrMEtFYnhaR0w2bmEzSnh4R0VMR2NjLzlxdmRRckN4cjRPWkF4Uk4wYXBJQUVpd1RlSVpKMlIyclgzczR6YlNGMjFEZUJHeUFZbTgSOE5EZGZOemc0TVRNd01EQXlPVE0wTXpjeE1GOHhNVFV4TmpBM05EQTNYekUzTnpjek56WTNORFk9GiBmNzU3NzUyYmQ2YmZiYTgyNzRlODZlMjE1N2Q1MTdlYQ==\"}",
+        "path_url": "http://static2.51gonggui.com/17441136955160941565_1777376746345_externalf295dac1-b444-4542-84f6-a5595bfbf70c_0"
+      },
+      {
+        "id": 250121,
+        "chat_from": "wm7pwYBwAAmfWjrXlZSqP9dgQUqJHDpQ",
+        "msg_date": "2026-04-28 19:47:03",
+        "msgtype": "text",
+        "content": "{\"content\":\"前天两个蛋，今天变成三个蛋\"}",
+        "path_url": null
+      },
+      {
+        "id": 250150,
+        "chat_from": "wm7pwYBwAAOuMZf1PwS-DZC6mXKLpVlA",
+        "msg_date": "2026-04-28 19:49:25",
+        "msgtype": "text",
+        "content": "{\"content\":\"吃啥补啥\"}",
+        "path_url": null
+      },
+      {
+        "id": 250155,
+        "chat_from": "wm7pwYBwAAmfWjrXlZSqP9dgQUqJHDpQ",
+        "msg_date": "2026-04-28 19:50:12",
+        "msgtype": "text",
+        "content": "{\"content\":\"@眼镜重汽维修 自动挡 液缓维修 这两天你多吃金钱肉\"}",
+        "path_url": null
+      },
+      {
+        "id": 250168,
+        "chat_from": "wm7pwYBwAAOuMZf1PwS-DZC6mXKLpVlA",
+        "msg_date": "2026-04-28 19:52:24",
+        "msgtype": "text",
+        "content": "{\"content\":\"「客户代表徐振亮：\\n@眼镜重汽维修 自动挡 液缓维修 这两天你多吃金钱肉」\\n- - - - - - - - - - - - - - -\\n[捂脸]，这几天支出大于收入\"}",
+        "path_url": null
+      },
+      {
+        "id": 250210,
+        "chat_from": "wm7pwYBwAAmfWjrXlZSqP9dgQUqJHDpQ",
+        "msg_date": "2026-04-28 19:58:11",
+        "msgtype": "text",
+        "content": "{\"content\":\"还想白嫖吗？\"}",
+        "path_url": null
+      },
+      {
+        "id": 250220,
+        "chat_from": "wm7pwYBwAAOuMZf1PwS-DZC6mXKLpVlA",
+        "msg_date": "2026-04-28 19:59:44",
+        "msgtype": "text",
+        "content": "{\"content\":\"「客户代表徐振亮：\\n还想白嫖吗？」\\n- - - - - - - - - - - - - - -\\n你不想白嫖，我咋不信呢\"}",
+        "path_url": null
+      },
+      {
+        "id": 250224,
+        "chat_from": "wm7pwYBwAAOuMZf1PwS-DZC6mXKLpVlA",
+        "msg_date": "2026-04-28 20:00:07",
+        "msgtype": "text",
+        "content": "{\"content\":\"白嫖的才香[坏笑]\"}",
+        "path_url": null
+      },
+      {
+        "id": 250235,
+        "chat_from": "wm7pwYBwAAmfWjrXlZSqP9dgQUqJHDpQ",
+        "msg_date": "2026-04-28 20:01:57",
+        "msgtype": "emotion",
+        "content": "{\"type\":1,\"width\":300,\"height\":300,\"imagesize\":12951,\"md5sum\":\"bc061cc6dfd0963af39b852f19a13e0d\",\"sdkfileid\":\"CoMEKjEqSHRKUjBGaDR1ZWpMT3NGZTJDTUlnN1lIUHJxa0JJZkJRQTNVK0w4STgzSTZQU3VveGFVSzh2TktCaEZxMjFoL1N0MzB4emtwVkZ5THEzREJ3U2RpdGlGK05nQWQzR3FhWm0vTVV0eVIzSFNRc3psUHF5UW10Q296cmtZV0RJWmtMd3N2L282UUFwWkZGaEU1alEzbXU4YzR2clM4U2lMMU5ralhNdWZOUVZzS1dPdnhKMW9uSEdtL1kzQjBiTEpwcWsvSm42cUQ1eE0zUUN4NFFXK0s0RlgzalJSVU1QWGhmNjRKaEozRitQUCtWQ1Q3UmJucFgxSE4yVE1rNzNnbDZPNlNHUVEzWE1YOXIwelJxSXVYZU4xQnAweGFMNTFaeFFMMGJnamtIaTYvVE5aOGVGazk0SGxBNEJwajBuUUxVZVlndGxIYXdGc1RSOTY5dWVqN2R5cnJGUjJFQlk0Qm01NmxEVGszMk9zbzVKYTNUanAzZDVBUlluN0xiMWxLalNTZGRLS0RHUXN6TnlPbDVlUEVjY0hNc2NySm1LRkRaNkRpRW01NEFjOUdKZ3RYVEpwNlhYa3NJZy9Cak9BK29jdlRqZklJWXRHcWdaQWhLSHdJdE5WcGtNaDh5dUdtSXlUbHNRdFF4alNMd010ZU1iMUp1T1ozbUMzYkJjWWQSOE5EZGZOemc0TVRNd01qWTJOekEwTkRRME5sOHhOalkyTmpReE1UTXpYekUzTnpjek56YzNNakk9GiA2ZDY1NmQ2YjY5NmQ3YTc4NmU2NzcyNmE3NDZhNzk3Mw==\"}",
+        "path_url": "http://static2.51gonggui.com/15878011287357981016_1777377722481_externalc79a111c-ea02-4b54-8681-055393766bde_0"
+      },
+      {
+        "id": 250244,
+        "chat_from": "wm7pwYBwAAOuMZf1PwS-DZC6mXKLpVlA",
+        "msg_date": "2026-04-28 20:03:10",
+        "msgtype": "text",
+        "content": "{\"content\":\"沃日，你这几天这么忙，赶紧出去放放毒\"}",
+        "path_url": null
+      },
+      {
+        "id": 250249,
+        "chat_from": "wm7pwYBwAAmfWjrXlZSqP9dgQUqJHDpQ",
+        "msg_date": "2026-04-28 20:04:04",
+        "msgtype": "text",
+        "content": "{\"content\":\"瞎忙，\"}",
+        "path_url": null
+      }
+    ]
+  },
+  {
+    "case_id": "real_train_0005",
+    "room_id": "wr7pwYBwAAjMw_B-Mpp9-I1pa9YtLetg",
+    "opening_id": 218038,
+    "messages": [
+      {
+        "id": 218038,
+        "chat_from": "wm7pwYBwAAshsdPLy__cQr7gv0gMRszg",
+        "msg_date": "2026-04-24 10:43:47",
+        "msgtype": "text",
+        "content": "{\"content\":\"上汽大通V80的，这个针脚电路图有吗\"}",
+        "path_url": null
+      },
+      {
+        "id": 218069,
+        "chat_from": "wm7pwYBwAATxZnDp2Cze0Km9qA91QP6A",
+        "msg_date": "2026-04-24 10:46:14",
+        "msgtype": "text",
+        "content": "{\"content\":\"089\"}",
+        "path_url": null
+      },
+      {
+        "id": 218073,
+        "chat_from": "wm7pwYBwAA3_RDcfGrFLUxA67MEM-saA",
+        "msg_date": "2026-04-24 10:46:29",
+        "msgtype": "text",
+        "content": "{\"content\":\"App上面有\"}",
+        "path_url": null
+      },
+      {
+        "id": 218466,
+        "chat_from": "wm7pwYBwAAshsdPLy__cQr7gv0gMRszg",
+        "msg_date": "2026-04-24 11:31:34",
+        "msgtype": "text",
+        "content": "{\"content\":\"这个电脑版的CAN通信电压是多少\"}",
+        "path_url": null
+      },
+      {
+        "id": 218468,
+        "chat_from": "wm7pwYBwAAshsdPLy__cQr7gv0gMRszg",
+        "msg_date": "2026-04-24 11:32:08",
+        "msgtype": "text",
+        "content": "{\"content\":\"CAN高3.2  CAN低1.89正常吗\"}",
+        "path_url": null
+      },
+      {
+        "id": 218469,
+        "chat_from": "wm7pwYBwAATxZnDp2Cze0Km9qA91QP6A",
+        "msg_date": "2026-04-24 11:32:11",
+        "msgtype": "text",
+        "content": "{\"content\":\"2.4/2.6 2.3/2.7  2.2/2.8  2.1/2.9\"}",
+        "path_url": null
+      },
+      {
+        "id": 218472,
+        "chat_from": "wm7pwYBwAATxZnDp2Cze0Km9qA91QP6A",
+        "msg_date": "2026-04-24 11:32:30",
+        "msgtype": "text",
+        "content": "{\"content\":\"3.0/2.0  3.1/1.9 3.2/1.8\"}",
+        "path_url": null
+      },
+      {
+        "id": 218473,
+        "chat_from": "wm7pwYBwAATxZnDp2Cze0Km9qA91QP6A",
+        "msg_date": "2026-04-24 11:32:33",
+        "msgtype": "text",
+        "content": "{\"content\":\"这都可以，\"}",
+        "path_url": null
+      },
+      {
+        "id": 218474,
+        "chat_from": "wm7pwYBwAATxZnDp2Cze0Km9qA91QP6A",
+        "msg_date": "2026-04-24 11:33:07",
+        "msgtype": "text",
+        "content": "{\"content\":\"取决于你用啥万用表，你挂了多少个模块，模块是全速率广播，还是静默广播，\"}",
+        "path_url": null
+      },
+      {
+        "id": 218475,
+        "chat_from": "wm7pwYBwAA3_RDcfGrFLUxA67MEM-saA",
+        "msg_date": "2026-04-24 11:33:10",
+        "msgtype": "text",
+        "content": "{\"content\":\"关掉电源测量CAN上面没电压时，测量电阻\"}",
+        "path_url": null
+      },
+      {
+        "id": 218501,
+        "chat_from": "wm7pwYBwAAshsdPLy__cQr7gv0gMRszg",
+        "msg_date": "2026-04-24 11:35:47",
+        "msgtype": "text",
+        "content": "{\"content\":\"&#127542;电阻，\"}",
+        "path_url": null
+      },
+      {
+        "id": 218504,
+        "chat_from": "wm7pwYBwAAshsdPLy__cQr7gv0gMRszg",
+        "msg_date": "2026-04-24 11:35:49",
+        "msgtype": "text",
+        "content": "{\"content\":\"120\"}",
+        "path_url": null
+      },
+      {
+        "id": 218513,
+        "chat_from": "wm7pwYBwAAshsdPLy__cQr7gv0gMRszg",
+        "msg_date": "2026-04-24 11:36:29",
+        "msgtype": "text",
+        "content": "{\"content\":\"电脑出来的CAN高和低，都有电压，OBD这里没电压\"}",
+        "path_url": null
+      },
+      {
+        "id": 218573,
+        "chat_from": "wm7pwYBwAATxZnDp2Cze0Km9qA91QP6A",
+        "msg_date": "2026-04-24 11:40:46",
+        "msgtype": "text",
+        "content": "{\"content\":\"网关到OBD的线断了，\"}",
+        "path_url": null
+      },
+      {
+        "id": 218821,
+        "chat_from": "wm7pwYBwAAshsdPLy__cQr7gv0gMRszg",
+        "msg_date": "2026-04-24 12:05:13",
+        "msgtype": "text",
+        "content": "{\"content\":\"网管出来的是1.56\"}",
+        "path_url": null
+      },
+      {
+        "id": 218825,
+        "chat_from": "wm7pwYBwAAshsdPLy__cQr7gv0gMRszg",
+        "msg_date": "2026-04-24 12:05:29",
+        "msgtype": "text",
+        "content": "{\"content\":\"can高和低都是1.56\"}",
+        "path_url": null
+      },
+      {
+        "id": 218847,
+        "chat_from": "wm7pwYBwAAshsdPLy__cQr7gv0gMRszg",
+        "msg_date": "2026-04-24 12:06:45",
+        "msgtype": "text",
+        "content": "{\"content\":\"网管的CAN电阻62对吗\"}",
+        "path_url": null
+      },
+      {
+        "id": 218858,
+        "chat_from": "wm7pwYBwAATxZnDp2Cze0Km9qA91QP6A",
+        "msg_date": "2026-04-24 12:07:55",
+        "msgtype": "text",
+        "content": "{\"content\":\"对的，\"}",
+        "path_url": null
+      },
+      {
+        "id": 218864,
+        "chat_from": "wm7pwYBwAAshsdPLy__cQr7gv0gMRszg",
+        "msg_date": "2026-04-24 12:08:59",
+        "msgtype": "text",
+        "content": "{\"content\":\"CAN高电压对吗\"}",
+        "path_url": null
+      },
+      {
+        "id": 218865,
+        "chat_from": "wm7pwYBwAAshsdPLy__cQr7gv0gMRszg",
+        "msg_date": "2026-04-24 12:09:08",
+        "msgtype": "text",
+        "content": "{\"content\":\"现在电脑诊断进不去\"}",
+        "path_url": null
+      },
+      {
+        "id": 218866,
+        "chat_from": "wm7pwYBwAATxZnDp2Cze0Km9qA91QP6A",
+        "msg_date": "2026-04-24 12:09:18",
+        "msgtype": "text",
+        "content": "{\"content\":\"「ᰔᩚ.北京时间ꦿ：can高和低都是1.56」\\n- - - - - - - - - - - - - - -\\n不对，\"}",
+        "path_url": null
+      },
+      {
+        "id": 218867,
+        "chat_from": "wm7pwYBwAATxZnDp2Cze0Km9qA91QP6A",
+        "msg_date": "2026-04-24 12:09:31",
+        "msgtype": "text",
+        "content": "{\"content\":\"相间短路，\"}",
+        "path_url": null
+      },
+      {
+        "id": 218940,
+        "chat_from": "wm7pwYBwAAshsdPLy__cQr7gv0gMRszg",
+        "msg_date": "2026-04-24 12:20:06",
+        "msgtype": "text",
+        "content": "{\"content\":\"都是2.44V了\"}",
+        "path_url": null
+      },
+      {
+        "id": 218943,
+        "chat_from": "wm7pwYBwAAmfWjrXlZSqP9dgQUqJHDpQ",
+        "msg_date": "2026-04-24 12:22:08",
+        "msgtype": "text",
+        "content": "{\"content\":\"剪断cAN线测量\"}",
+        "path_url": null
+      },
+      {
+        "id": 218961,
+        "chat_from": "wm7pwYBwAAshsdPLy__cQr7gv0gMRszg",
+        "msg_date": "2026-04-24 12:27:24",
+        "msgtype": "text",
+        "content": "{\"content\":\"剪短了，1.2和2.7\"}",
+        "path_url": null
+      },
+      {
+        "id": 218963,
+        "chat_from": "wm7pwYBwAAmfWjrXlZSqP9dgQUqJHDpQ",
+        "msg_date": "2026-04-24 12:27:40",
+        "msgtype": "text",
+        "content": "{\"content\":\"不对\"}",
+        "path_url": null
+      },
+      {
+        "id": 218964,
+        "chat_from": "wm7pwYBwAAshsdPLy__cQr7gv0gMRszg",
+        "msg_date": "2026-04-24 12:28:24",
+        "msgtype": "text",
+        "content": "{\"content\":\"从网管直接出来的电压\"}",
+        "path_url": null
+      },
+      {
+        "id": 218967,
+        "chat_from": "wm7pwYBwAAshsdPLy__cQr7gv0gMRszg",
+        "msg_date": "2026-04-24 12:28:29",
+        "msgtype": "text",
+        "content": "{\"content\":\"是不是网管坏了\"}",
+        "path_url": null
+      },
+      {
+        "id": 218969,
+        "chat_from": "wm7pwYBwAAmfWjrXlZSqP9dgQUqJHDpQ",
+        "msg_date": "2026-04-24 12:28:49",
+        "msgtype": "text",
+        "content": "{\"content\":\"断电重启再量\"}",
+        "path_url": null
+      },
+      {
+        "id": 218979,
+        "chat_from": "wm7pwYBwAATxZnDp2Cze0Km9qA91QP6A",
+        "msg_date": "2026-04-24 12:33:45",
+        "msgtype": "text",
+        "content": "{\"content\":\"「ᰔᩚ.北京时间ꦿ：剪短了，1.2和2.7」\\n- - - - - - - - - - - - - - -\\n这个没问题，\"}",
+        "path_url": null
+      },
+      {
+        "id": 219049,
+        "chat_from": "wm7pwYBwAAshsdPLy__cQr7gv0gMRszg",
+        "msg_date": "2026-04-24 12:49:24",
+        "msgtype": "text",
+        "content": "{\"content\":\"CAN线电压都正常了，诊断仪进不去\"}",
+        "path_url": null
+      },
+      {
+        "id": 219058,
+        "chat_from": "wm7pwYBwAAmfWjrXlZSqP9dgQUqJHDpQ",
+        "msg_date": "2026-04-24 12:50:26",
+        "msgtype": "text",
+        "content": "{\"content\":\"跳下进入试一下\"}",
+        "path_url": null
+      },
+      {
+        "id": 219077,
+        "chat_from": "wm7pwYBwAAshsdPLy__cQr7gv0gMRszg",
+        "msg_date": "2026-04-24 12:53:55",
+        "msgtype": "text",
+        "content": "{\"content\":\"直接跳也进不去\"}",
+        "path_url": null
+      },
+      {
+        "id": 219078,
+        "chat_from": "wm7pwYBwAAshsdPLy__cQr7gv0gMRszg",
+        "msg_date": "2026-04-24 12:54:18",
+        "msgtype": "text",
+        "content": "{\"content\":\"我量通断，有4个CAN线都是通的\"}",
+        "path_url": null
+      },
+      {
+        "id": 219079,
+        "chat_from": "wm7pwYBwAAshsdPLy__cQr7gv0gMRszg",
+        "msg_date": "2026-04-24 12:54:35",
+        "msgtype": "text",
+        "content": "{\"content\":\"网管上有6根CAN线\"}",
+        "path_url": null
+      },
+      {
+        "id": 219094,
+        "chat_from": "wm7pwYBwAAshsdPLy__cQr7gv0gMRszg",
+        "msg_date": "2026-04-24 12:56:28",
+        "msgtype": "text",
+        "content": "{\"content\":\"这个诊断OBD和网管一个直连的吗\"}",
+        "path_url": null
+      },
+      {
+        "id": 219098,
+        "chat_from": "wm7pwYBwAAshsdPLy__cQr7gv0gMRszg",
+        "msg_date": "2026-04-24 12:56:39",
+        "msgtype": "text",
+        "content": "{\"content\":\"还跟其他的链接吗\"}",
+        "path_url": null
+      },
+      {
+        "id": 219177,
+        "chat_from": "wm7pwYBwAAshsdPLy__cQr7gv0gMRszg",
+        "msg_date": "2026-04-24 13:02:50",
+        "msgtype": "text",
+        "content": "{\"content\":\"这个CAN电压一会有一会没有\"}",
+        "path_url": null
+      },
+      {
+        "id": 220213,
+        "chat_from": "wm7pwYBwAAnvbzmg3LlIUOo7Lh0Z2Dpw",
+        "msg_date": "2026-04-24 14:33:51",
+        "msgtype": "text",
+        "content": "{\"content\":\"挖掘机大于300-7。  干干活突然转速1700转  往下调油门开关也没反应  是线路打铁了么\"}",
+        "path_url": null
+      },
+      {
+        "id": 221199,
+        "chat_from": "wm7pwYBwAAmfWjrXlZSqP9dgQUqJHDpQ",
+        "msg_date": "2026-04-24 15:58:14",
+        "msgtype": "text",
+        "content": "{\"content\":\"[疑问]\"}",
+        "path_url": null
+      }
+    ]
+  },
+  {
+    "case_id": "real_train_0006",
+    "room_id": "wr7pwYBwAApRYkegyB8ijs5VpgjTf-Dw",
+    "opening_id": 234144,
+    "messages": [
+      {
+        "id": 234144,
+        "chat_from": "wm7pwYBwAA5k53M7mrUv3m0qwMXu0QPg",
+        "msg_date": "2026-04-26 16:25:56",
+        "msgtype": "text",
+        "content": "{\"content\":\"那位师傅有康明斯2220A国四发动机电路图\"}",
+        "path_url": null
+      },
+      {
+        "id": 234152,
+        "chat_from": "wm7pwYBwAA5k53M7mrUv3m0qwMXu0QPg",
+        "msg_date": "2026-04-26 16:27:10",
+        "msgtype": "text",
+        "content": "{\"content\":\"重汽豪沃轻卡车\"}",
+        "path_url": null
+      },
+      {
+        "id": 234153,
+        "chat_from": "GongGuiZhiJiaJiShu-QiuLingTong",
+        "msg_date": "2026-04-26 16:27:18",
+        "msgtype": "text",
+        "content": "{\"content\":\"平台上搜索\"}",
+        "path_url": null
+      },
+      {
+        "id": 234155,
+        "chat_from": "wm7pwYBwAA5k53M7mrUv3m0qwMXu0QPg",
+        "msg_date": "2026-04-26 16:27:37",
+        "msgtype": "text",
+        "content": "{\"content\":\"好\"}",
+        "path_url": null
+      },
+      {
+        "id": 234168,
+        "chat_from": "wm7pwYBwAAcm4uW6KTYzltdswcIIK7_g",
+        "msg_date": "2026-04-26 16:31:43",
+        "msgtype": "image",
+        "content": "{\"md5sum\":\"b448673a3967f834a412ad14967fd573\",\"filesize\":306064,\"sdkfileid\":\"CoMEKjEqdmlMdGU0aU1XOS9WQzVPWi9aWjdGbWhRZkRVZUFKb3JwNVdqVUVnT0pwVjhxa2thY2NBY0J3SHF4aE55U3pDZWR5N0ZuemFBQ1gxVHp3MXJnSjYxVVBEWlIzdnM2Z3dhbHlEUnp5TllTOU5DR2s4U0dqQXFXWk03MkNSSFZta0Jpdkd1S1JYSzZVcjJkdUNDU0tOdVQyVnhRUFc5dFFZcVVORHVSMVNtNnhwS214TEkyQjVoM295UHg4cUNvT3B1dEN1VVJla0hidm5Kc2ZzVEVTYXFOdTQyaklnUW5jenJ5cmdMVE56N3ZMY1V6NGdMMWI0amJuMjdJUEsvMzZDRkJiVGljeTB2dXlRV2Y2dktQY2RnK016aFhyMDRXMUVYZlQzeTZ5amVOLzRwYXR2ODUvQ0ZCMkdDODdHQUhvMlVEUWFBNUFCQUJnTDhtd0tjZWI0dXdnc1Zuc0xCTlJySzNKZGN3QmlhTGxaR0R4OGxNa0ZGc0xnZmRSUnhrWmQ0cmFGRDEzNVlOOWFrVXNKY3UyZEJIQ0lqQ3JKay9URUlFcEtIZnJMaXUxeXMxand3bTdkWmFCUmduaS9DMFdvcTNEY0Nod1hFTERBRmsxSnNIK3dMZkdUV2pCM3ZET1RFMHlIMzM3U2pqdDYzWEl4bUR3dDU0Q21Dbi8ya3FjZFYSOE5EZGZOemc0TVRNd01ESXpNRE14T0RVMU5GODNOVGMwTVRNeU9ESmZNVGMzTnpFNU1qTXdPQT09GiA3ZDk5ZTFhMDlkYjk3NmQxMTI3OTA0MTUxYmNmMWQwNg==\"}",
+        "path_url": "http://static2.51gonggui.com/11396547997868669453_1777192308369_external0a256763-9408-432a-9536-f1c86d6ae1ed_0"
+      },
+      {
+        "id": 234171,
+        "chat_from": "GongGuiZhiJiaJiShu-QiuLingTong",
+        "msg_date": "2026-04-26 16:31:56",
+        "msgtype": "text",
+        "content": "{\"content\":\"笔记本用数据线\"}",
+        "path_url": null
+      },
+      {
+        "id": 234175,
+        "chat_from": "wm7pwYBwAAcm4uW6KTYzltdswcIIK7_g",
+        "msg_date": "2026-04-26 16:32:26",
+        "msgtype": "text",
+        "content": "{\"content\":\"工程师麻烦远程一下，蓝牙连接不上\"}",
+        "path_url": null
+      },
+      {
+        "id": 234182,
+        "chat_from": "GongGui02",
+        "msg_date": "2026-04-26 16:34:25",
+        "msgtype": "text",
+        "content": "{\"content\":\"打开远程\"}",
+        "path_url": null
+      },
+      {
+        "id": 234186,
+        "chat_from": "wm7pwYBwAAcm4uW6KTYzltdswcIIK7_g",
+        "msg_date": "2026-04-26 16:34:43",
+        "msgtype": "text",
+        "content": "{\"content\":\"好\"}",
+        "path_url": null
+      },
+      {
+        "id": 234189,
+        "chat_from": "wm7pwYBwAAcm4uW6KTYzltdswcIIK7_g",
+        "msg_date": "2026-04-26 16:35:05",
+        "msgtype": "image",
+        "content": "{\"md5sum\":\"ed3e86d97ced98ff4137ff90ec65fb15\",\"filesize\":604074,\"sdkfileid\":\"CoMEKjEqdmlMdGU0aU1XOS9WQzVPWi9aWjdGbWhRZkRVZUFKb3JwNVdqVUVnT0pwVjhxa2thY2NBY0J3SHF4aE55U3pDZWR5N0ZuemFBQ1gxVHp3MXJnSjYxVVBpZXQ0NjNCK0VXdkZaVUkxYVh5NE94T0dnWllYWmJKSG8xWTZkelJ5VUkzaytvK2NBNUJRNHVDc25TSEQ2cWgvaFRjUjk3ZE1WQU1pUWtsMjI5OHBnYXRUVW1NZ0xZcW9rd2gydXpKUjBNM0pUcVlKYjdqTkxWcTBvbVp6OHBGbU0zSmc2L1Mzb3hFNnVEbXNRcTEzMU10QlFjV3pNaTZtZGNkZ2l5azdIa3dvdStUN1Q3YjZ6eVNsd0g5YjQydDZvQi9MZmtvZWtNbGZsVnVlbGVxay9SZExBcXZtc3pVL2FEd2Y0eUxrTmg1Z3JzWTNZV0laZER5R3BjL0hRWWNSeElaMHQyS1VBYjg3T295UGVrMGdYSkhWMVIvTkhxTkJobXBzQjhsV0o4Q1VINHZUdmNXMW9QMXZHcGdyUC83YlpJNHJoNWgvTmVOQ1BnQ0F5UFZibEdCa0N1clpSNzJ3R2d3em81bEpZejF5NklmWWtFaVpzMEtTaC9sVTQwUTlBY29UT1JONTZXd0x0YnhhNkE4cjZRVnZQRVB0YTNHNi9DZlZGLzUyeGMSNE5EZGZOemc0TVRNd01ESXpNRE14T0RVMU5GODFOVGM1TXpZek9GOHhOemMzTVRreU5UQTUaIDk3NDNjZWZkM2Q4Y2UyNDAxYzc3NjQ1M2RhNTAzODlh\"}",
+        "path_url": "http://static2.51gonggui.com/17499639924069177957_1777192509288_externalfc43c55e-696b-4144-9b46-2cd50da6e181_0"
+      },
+      {
+        "id": 234223,
+        "chat_from": "GongGui02",
+        "msg_date": "2026-04-26 16:38:41",
+        "msgtype": "text",
+        "content": "{\"content\":\"你电脑蓝牙驱动都没有\"}",
+        "path_url": null
+      },
+      {
+        "id": 234245,
+        "chat_from": "wm7pwYBwAAcm4uW6KTYzltdswcIIK7_g",
+        "msg_date": "2026-04-26 16:40:11",
+        "msgtype": "text",
+        "content": "{\"content\":\"是误删了，上午还用着里\"}",
+        "path_url": null
+      },
+      {
+        "id": 234265,
+        "chat_from": "wm7pwYBwAAAF8n2ttiLdbSVHxMhEE-Lg",
+        "msg_date": "2026-04-26 16:41:53",
+        "msgtype": "image",
+        "content": "{\"md5sum\":\"4da8c690c4490c94c29cbdd7034a5c79\",\"filesize\":760301,\"sdkfileid\":\"CoMEKjEqdTNXMmsvMis3VGlnRjNpZU0ySllXYURSaHhYMmhyeGRObzZMVndsT0hNZ0U2MWYzdXVVZ2FkNDhicmdoUzlPTTY3MnUzbUN4d0ZjYXJOL2hhNWUzYU1XQ2cyMlZPclQ2YU9CMHRvWU1UY2xxVjQwWlpIYUEwQ1VFVXdFVG9MWjNXa2NDWUVHeVRoOXVIc0sxb0t5dmpiYVN3dGx1T1lab0ljeFcrM29wKzNBWG1WOU52MzQrSDVDSzZyUkdTUndCS0ZRWkZ0TlVnQSt3M1AyVUV3Y296OHMveGRRa0p2bnZPQTJ4MU01clpZUExVNDY0cXRaRUgxcmtjejc5MStZOUZOWCttYUMwaE5MQVc3TjZGYzluYjBZYVg4cUR3OHRBRllSZXJzSGFlUkhWb256REZLY0pxcHNDL2NsSTlYZWdWRXlzZm5uMmc5VWNtQjduRXowakQ0Sm4rOXREbGkxa0RjckZmUXN6TXRVdmI1cldaK2tBTnk0MnF3ZW1MbHVMdmM3TS85TVV5NUovMGZrdXhQK2swenFSSTlqTFNkQkthQmxRdE13aWZmSFRuUStQeWFLb1NkY3A2Tnk0dHR1U2hrQm1SZGhudHhQNTU1RVBaeHZJQjUySE9KQnQ1elFqbmRPVDBmMHdFRC9pbXkvRnBkSVJ3QUZvMnlDWDlkMlcSOE5EZGZOemc0TVRNd016TTBNemt6TlRVME1GODBOVFkwT1RZM05UTmZNVGMzTnpFNU1qa3hPQT09GiAzZDIyMzRjODgwNTI2NmZhYjBhZWE3ZTJjODIwOWQ1NQ==\"}",
+        "path_url": "http://static2.51gonggui.com/9723842980220833357_1777192917350_external717ed55f-f8ec-43b1-a460-dd69e9004861_0"
+      },
+      {
+        "id": 234266,
+        "chat_from": "GongGui02",
+        "msg_date": "2026-04-26 16:42:00",
+        "msgtype": "text",
+        "content": "{\"content\":\"盒子断电 再上电@A田东河南宏达调油泵15277667121 \"}",
+        "path_url": null
+      },
+      {
+        "id": 234272,
+        "chat_from": "wm7pwYBwAAAF8n2ttiLdbSVHxMhEE-Lg",
+        "msg_date": "2026-04-26 16:42:13",
+        "msgtype": "text",
+        "content": "{\"content\":\"放在这里做再生，怎么自己都掉线了呢\"}",
+        "path_url": null
+      },
+      {
+        "id": 234275,
+        "chat_from": "wm7pwYBwAAcm4uW6KTYzltdswcIIK7_g",
+        "msg_date": "2026-04-26 16:42:23",
+        "msgtype": "text",
+        "content": "{\"content\":\"好\"}",
+        "path_url": null
+      },
+      {
+        "id": 234283,
+        "chat_from": "wm7pwYBwAAAF8n2ttiLdbSVHxMhEE-Lg",
+        "msg_date": "2026-04-26 16:42:38",
+        "msgtype": "video",
+        "content": "{\"md5sum\":\"f32b29d7555c503caf867e301a31b817\",\"filesize\":2509110,\"play_length\":12,\"sdkfileid\":\"CoMEKjEqSmZMdy85bU00WjZJZUw4c1RjT3RhelJiOEUyNVdhWFVaek5CeTBDM3lQMmhubkJTbDhnOVVDU1g4Zi9ubkNEakRnbzl1bUxONDN2czJaMGVuUzdiandFNXN1MnZlNHk3Yk5nVEp1a2M5dTYzMVA2cDRaYjdoTC80UVhOL1JoOWVzSW8wanJTdEJsbkRBNERiMWdSYWMrQ1o5TUhuaVAxMTNEZGREZ1NxdjBTQmRhNTdrZHN3U3BwYXhMVGYyc2cwM1ljZ0x5dGhTMWJDZWFydTM3K3RIREpIMTZ1bHQ3aGl2R2pUMEFib2dOQjhnMTFBZ0hldjFWbFhGV1RXQ1Vra29iZDBxaHpzamV0a2VZVVFJUGxFbHExVUx4T0xnR1p1YWYxRXJIekF6ZWdMU1RmM043KzVjNzBGWkllSUZRMjVVbk13MVplRHJaSXJNZ0dBT2dNNDJBK1Z4Nko1UzdLMVlTYUFZZTExeGxwbU43Q24rM2pHZE1aZ29lbmxoVUM1Qi81aTNkTWRKS0JiSHhOR053Q0tsRFZDbW1JQkMxYTlCMFFYL21nR0pBZlIxUkpkOGhGSDlqK1kyWklVaDQxbWh0TU5PNVloVGJTUDJvVTdDSTY5V2JGTm53VXdHZ2E0cUtoVjJvVld5c2VJUjdQTlk3VGhOakp2ZEFFVENvOWISNE5EZGZOemc0TVRNd016TTBNemt6TlRVME1GODNNalUzTkRNd09GOHhOemMzTVRreU9UWTEaIGMzNTZmZmM3MDJkYTU2ZWE1MThlYjFiNTlmZDczNzI2\"}",
+        "path_url": "http://static2.51gonggui.com/6950209740789702616_1777192963262_external241b9613-f43f-4122-aa9a-df41ca6e2da2_0.mp4"
+      },
+      {
+        "id": 234284,
+        "chat_from": "wm7pwYBwAAAF8n2ttiLdbSVHxMhEE-Lg",
+        "msg_date": "2026-04-26 16:42:42",
+        "msgtype": "text",
+        "content": "{\"content\":\"再进也进不去了\"}",
+        "path_url": null
+      },
+      {
+        "id": 234293,
+        "chat_from": "GongGui02",
+        "msg_date": "2026-04-26 16:42:58",
+        "msgtype": "text",
+        "content": "{\"content\":\"@A田东河南宏达调油泵15277667121 重新上电没有\"}",
+        "path_url": null
+      },
+      {
+        "id": 234298,
+        "chat_from": "wm7pwYBwAAcm4uW6KTYzltdswcIIK7_g",
+        "msg_date": "2026-04-26 16:43:16",
+        "msgtype": "text",
+        "content": "{\"content\":\"上电了\"}",
+        "path_url": null
+      },
+      {
+        "id": 234300,
+        "chat_from": "wm7pwYBwAAAF8n2ttiLdbSVHxMhEE-Lg",
+        "msg_date": "2026-04-26 16:43:24",
+        "msgtype": "text",
+        "content": "{\"content\":\"@AI神算子-金工 \"}",
+        "path_url": null
+      },
+      {
+        "id": 234309,
+        "chat_from": "wm7pwYBwAAAF8n2ttiLdbSVHxMhEE-Lg",
+        "msg_date": "2026-04-26 16:43:46",
+        "msgtype": "text",
+        "content": "{\"content\":\"平板都关机了，盒子的蓝牙还在闪，咋回事\"}",
+        "path_url": null
+      },
+      {
+        "id": 234311,
+        "chat_from": "wm7pwYBwAAAF8n2ttiLdbSVHxMhEE-Lg",
+        "msg_date": "2026-04-26 16:43:53",
+        "msgtype": "image",
+        "content": "{\"md5sum\":\"b92044394ac94c58423120f39b929c0f\",\"filesize\":889444,\"sdkfileid\":\"CoMEKjEqdmlMdGU0aU1XOS9WQzVPWi9aWjdGbWhRZkRVZUFKb3JwNVdqVUVnT0pwVk5rUHAwS2hvNWtVOVUzYTZidExKMDBoejkzOWFGaVdMc0pqNTAxTDZPaVFSQXYyV1B6WmZ2RngrRDlOR21qNk9adTBnc2xGUitIOGFHVDRScDI0cnVya0U4SW1rV2UwUjZYZVFGUDZ3UEt1Q2FUaDFhWkZoSkNURStjeEZPVkg1cThuWmZUL1dKSENnc3lNZm1HSmdlWXFHZlVUeHNHQlBZY1I1eThRQUw1eHR0ZmN3bU1xL05idW4zb3JzTWJVVzMyL2h1cFIyQ2tuRGpDRVd3cWFQM05jVE1hMGExQVA0ZnA0aHNRUlh5alV0eDJJbnIvRmx3ZWpXWkdkNXIvNTdIZ1pGWGVyZCtFSnh4YWRHdmNvTmNCWDZZQk9jTDEvakVuc01vUFdCdGRrNmdseFJnSjlXZHpCaSsvVGRCNW1zZWNXNlk5Wk0wQVRvZ1ZLNEV4MGhhR05MaDRYQkdObU1SNnhXYXFNVFVKMUd0WnZlUVZJbjduT3d1ZS9JemNQdVpzR2NORFFJN0ZMb1ArQWxpM3VheVNjV09YNWZvbnN0UjlyYlEwbm15czY0Vk4xaHNWMHRxajgyR1NoMEU5ZC8xbnE4SmREQ09rOGYvaFgzdzJpOUISOE5EZGZOemc0TVRNd016TTBNemt6TlRVME1GOHhNall4TlRNeU5UUTBYekUzTnpjeE9UTXdNemM9GiAwZWIyY2I0MTliNjhiOWMwNDQ4ZmRhNGNkYzM3OWU0Yw==\"}",
+        "path_url": "http://static2.51gonggui.com/5572227886423703670_1777193037306_external5d040c6a-842e-425b-bd54-b311cce2918d_0"
+      },
+      {
+        "id": 234320,
+        "chat_from": "GongGuiZhiJiaJiShu-QiuLingTong",
+        "msg_date": "2026-04-26 16:44:30",
+        "msgtype": "text",
+        "content": "{\"content\":\"断电\"}",
+        "path_url": null
+      },
+      {
+        "id": 234321,
+        "chat_from": "GongGui02",
+        "msg_date": "2026-04-26 16:44:31",
+        "msgtype": "text",
+        "content": "{\"content\":\" 盒子断电 再上电@李华锋\\n李大泵 \"}",
+        "path_url": null
+      },
+      {
+        "id": 234323,
+        "chat_from": "GongGuiZhiJiaJiShu-QiuLingTong",
+        "msg_date": "2026-04-26 16:44:37",
+        "msgtype": "text",
+        "content": "{\"content\":\"重新进下\"}",
+        "path_url": null
+      },
+      {
+        "id": 234331,
+        "chat_from": "wm7pwYBwAAAF8n2ttiLdbSVHxMhEE-Lg",
+        "msg_date": "2026-04-26 16:45:06",
+        "msgtype": "text",
+        "content": "{\"content\":\"确实把盒子断了又进去了\"}",
+        "path_url": null
+      },
+      {
+        "id": 234335,
+        "chat_from": "GongGui02",
+        "msg_date": "2026-04-26 16:45:13",
+        "msgtype": "text",
+        "content": "{\"content\":\"@A田东河南宏达调油泵15277667121 驱动不完整 连不了蓝牙\"}",
+        "path_url": null
+      },
+      {
+        "id": 234341,
+        "chat_from": "wm7pwYBwAAAF8n2ttiLdbSVHxMhEE-Lg",
+        "msg_date": "2026-04-26 16:45:22",
+        "msgtype": "text",
+        "content": "{\"content\":\"关键放在那里也没动啊\"}",
+        "path_url": null
+      },
+      {
+        "id": 234347,
+        "chat_from": "GongGui02",
+        "msg_date": "2026-04-26 16:45:35",
+        "msgtype": "text",
+        "content": "{\"content\":\"通讯不稳定 就会断开\"}",
+        "path_url": null
+      },
+      {
+        "id": 234350,
+        "chat_from": "wm7pwYBwAAcm4uW6KTYzltdswcIIK7_g",
+        "msg_date": "2026-04-26 16:45:39",
+        "msgtype": "text",
+        "content": "{\"content\":\"下载一个驱动\"}",
+        "path_url": null
+      },
+      {
+        "id": 234352,
+        "chat_from": "GongGui02",
+        "msg_date": "2026-04-26 16:45:44",
+        "msgtype": "text",
+        "content": "{\"content\":\"把盒子拔了 重新插上 再去进\"}",
+        "path_url": null
+      },
+      {
+        "id": 234356,
+        "chat_from": "wm7pwYBwAAAF8n2ttiLdbSVHxMhEE-Lg",
+        "msg_date": "2026-04-26 16:45:58",
+        "msgtype": "image",
+        "content": "{\"md5sum\":\"37b63b7116e2c97380c291fa7faf825c\",\"filesize\":854961,\"sdkfileid\":\"CoMEKjEqdmlMdGU0aU1XOS9WQzVPWi9aWjdGbWhRZkRVZUFKb3JwNVdqVUVnT0pwVk5rUHAwS2hvNWtVOVUzYTZidExKMDBoejkzOWFGaVdMc0pqNTAxTDZPaWUvdEkyN1hlc3ljK0xDdzBuWTZIZnltK1V6TEU1amNIVUtMTTVlNG9taitoVzVLRFU4OHVLbnowVFhqMDQ3UHlqckNYRTJJQVNTZkE0ZzJyd1EzRVVjVUZKK25hbHFIckZHWG9ZU3oxTTNtWjdtdGthOXQrWk9hYVl3THhzZjdoSVV6K3lGSnFsdytPZEVGOENzczVpUXBxZ0xkRW0wZjEwcmpSdklhSGIyRlJLWjdMNGNvUXVzSXo2STJFKys3ZW5NVEdIQnU0ckpkdUZiUUtXSCtCVTVYL1hwMVNJUXpKMTRwRW5rNktkd1YrMzFHKzluUXI1WlFMbkY0S0pYekZ0TVBrOTNzdUVwUWZxNG5hR3VQa1pSL2l5ZWl4UWJQZ3hCTUlVdWdpVVdLVm55S3U2QUUzOUF5ZFMya3UzVGo2aWszRmJwcVdvcTlsQ1NMeXdVQ09sWlM2L2g3UEJtbUFEZ3dUZTN2Nm5LdXM1OVJiRFFaNjZCYUhSanRPeHpwT1I1Q2FBaW53Q3B5di9RWDlCMVR3SnpNQUJVdVgyWmVDTVJhejVIM1BLTmkSOE5EZGZOemc0TVRNd016TTBNemt6TlRVME1GOHhOek0wTkRBNE5UQXlYekUzTnpjeE9UTXhOak09GiBhYTU5NzFiZTM3ZjZhOWQ4NTY2ZDI1OWEwZjM4N2Y2Zg==\"}",
+        "path_url": "http://static2.51gonggui.com/13584224573487015261_1777193162316_external6c7d1393-b34d-4847-aa96-73ba35eca620_0"
+      },
+      {
+        "id": 234357,
+        "chat_from": "GongGui02",
+        "msg_date": "2026-04-26 16:46:08",
+        "msgtype": "text",
+        "content": "{\"content\":\"@A田东河南宏达调油泵15277667121 远程我关了。你连上USB用吧。或者自己装一下驱动看看。\"}",
+        "path_url": null
+      },
+      {
+        "id": 234361,
+        "chat_from": "wm7pwYBwAAAF8n2ttiLdbSVHxMhEE-Lg",
+        "msg_date": "2026-04-26 16:46:22",
+        "msgtype": "text",
+        "content": "{\"content\":\"这么近都不稳定，是盒子问题还是平板问题呢\"}",
+        "path_url": null
+      },
+      {
+        "id": 234362,
+        "chat_from": "wm7pwYBwAAcm4uW6KTYzltdswcIIK7_g",
+        "msg_date": "2026-04-26 16:46:21",
+        "msgtype": "text",
+        "content": "{\"content\":\"好\"}",
+        "path_url": null
+      },
+      {
+        "id": 234364,
+        "chat_from": "GongGui02",
+        "msg_date": "2026-04-26 16:46:40",
+        "msgtype": "text",
+        "content": "{\"content\":\"通讯不稳定 不仅仅是蓝牙信号\"}",
+        "path_url": null
+      },
+      {
+        "id": 234366,
+        "chat_from": "GongGui02",
+        "msg_date": "2026-04-26 16:46:48",
+        "msgtype": "text",
+        "content": "{\"content\":\"还有可能是OBD\"}",
+        "path_url": null
+      },
+      {
+        "id": 234367,
+        "chat_from": "GongGui02",
+        "msg_date": "2026-04-26 16:46:54",
+        "msgtype": "text",
+        "content": "{\"content\":\"你是所有车都这样 \"}",
+        "path_url": null
+      },
+      {
+        "id": 234368,
+        "chat_from": "GongGui02",
+        "msg_date": "2026-04-26 16:46:58",
+        "msgtype": "text",
+        "content": "{\"content\":\"还是就现在这样\"}",
+        "path_url": null
+      }
+    ]
+  },
+  {
+    "case_id": "real_train_0007",
+    "room_id": "wr7pwYBwAADAG7eeZGB70SEHDhD1PWjQ",
+    "opening_id": 241607,
+    "messages": [
+      {
+        "id": 241607,
+        "chat_from": "wm7pwYBwAAUF8qb6lpOcPmy6HDnYcEhA",
+        "msg_date": "2026-04-27 17:22:53",
+        "msgtype": "text",
+        "content": "{\"content\":\"能发个欧曼GTL仪表针脚定义吗，\"}",
+        "path_url": null
+      },
+      {
+        "id": 241608,
+        "chat_from": "wm7pwYBwAArhH96nYMnVtYrg6D1wy_mg",
+        "msg_date": "2026-04-27 17:22:55",
+        "msgtype": "text",
+        "content": "{\"content\":\"给我美刀\"}",
+        "path_url": null
+      },
+      {
+        "id": 241611,
+        "chat_from": "wm7pwYBwAArhH96nYMnVtYrg6D1wy_mg",
+        "msg_date": "2026-04-27 17:23:02",
+        "msgtype": "text",
+        "content": "{\"content\":\"刀了\"}",
+        "path_url": null
+      },
+      {
+        "id": 241613,
+        "chat_from": "wm7pwYBwAAUF8qb6lpOcPmy6HDnYcEhA",
+        "msg_date": "2026-04-27 17:23:04",
+        "msgtype": "image",
+        "content": "{\"md5sum\":\"5368cdb2da58a013e6eb45ea246a8bf8\",\"filesize\":164129,\"sdkfileid\":\"CoMEKjEqRmRZQmNqWWxrWGlNdXlPSkZOaGp1RHBMOHV2aURRMnhSdktrdmFYeHhTSHJsQUpkRnV4bTNFVUJ0K2tNZ016WkVDUmszNXR2eG90SUZRc245MzRCQkRSZjJFY25TV3BxNVhjU3NvMkg1WkdkSnFZbUFUWm1QdjUrYnI0NGJlWi9uTHBrZ1k1UVFXYmY1dDRucVRyYkRBN3RJUm5VNm8ya2tkVWlwejNQTnptSkU2NkFhbzdQb2xZd3crZk82aHpIUUIxUlZWK285ai92TkFkMHRlbEpFcGx3UWZtZzR5SEhNSFZDQkhYY0pVcm5SSkl4czYyUjRYU09GaG5wbTVvanZQa3k2Q0JtckhyYmFuanZVUjQ1WUtsbkhCSG4wbUFhanl2N2s3TlFDUHM0aHdzY3R6OWE2SzBRaDRRRVg2Vm96aXJlVFAxU1JXM3pCaVZ5UzFFMDJZdFJ0TEhUdXdKSWtYRndwWjVoVHdTOS9xcmQ5T3V3Um5Xbi9yczdxRmwrWFRsSkg3ZEk3cWhheWFFaG1lOWFVdXY1S0hkaTR1NUNTdWVpa1NVT1llenc2OFcrK2YzaWhDN1lLUGszb2ZTcEgzS2ttRHNqakVvaDVZS3hiQlA5OVdKMkFrckhCNk1PQkxvWDJzekdNaCtVUm1rNEtvekRqUjBCUmhUeU1ETmwSOE5EZGZOemc0TVRNd016TXlOVEEwTkRRek0xOHhOekU1TmpBMk56UTVYekUzTnpjeU9ERTNPRGc9GiA4MDg3YWFkMjE3YTA3YzJmYTY3MGQ4NmZlN2Q5MTFiYg==\"}",
+        "path_url": "http://static2.51gonggui.com/8188296086369852262_1777281788350_external2bb71517-915a-40cc-824e-b127eb0f52f4_0"
+      },
+      {
+        "id": 241615,
+        "chat_from": "wm7pwYBwAATxZnDp2Cze0Km9qA91QP6A",
+        "msg_date": "2026-04-27 17:23:09",
+        "msgtype": "text",
+        "content": "{\"content\":\"「A汽车电控，电喷，后处理维修：能发个欧曼GTL仪表针脚定义吗，」\\n- - - - - - - - - - - - - - -\\n哥太累哪一款，\"}",
+        "path_url": null
+      },
+      {
+        "id": 241620,
+        "chat_from": "wm7pwYBwAArhH96nYMnVtYrg6D1wy_mg",
+        "msg_date": "2026-04-27 17:23:18",
+        "msgtype": "text",
+        "content": "{\"content\":\"你找数据，你提供一下相关的信息\"}",
+        "path_url": null
+      },
+      {
+        "id": 241623,
+        "chat_from": "wm7pwYBwAArhH96nYMnVtYrg6D1wy_mg",
+        "msg_date": "2026-04-27 17:23:23",
+        "msgtype": "text",
+        "content": "{\"content\":\"保证能给你找来，不管啥时候\"}",
+        "path_url": null
+      },
+      {
+        "id": 241644,
+        "chat_from": "wm7pwYBwAAUF8qb6lpOcPmy6HDnYcEhA",
+        "msg_date": "2026-04-27 17:24:38",
+        "msgtype": "image",
+        "content": "{\"md5sum\":\"c1cc9655aed94e0188e4f5cf601c2e1d\",\"filesize\":1093568,\"sdkfileid\":\"CoMEKjEqdTNXMmsvMis3VGlnRjNpZU0ySllXYURSaHhYMmhyeGRObzZMVndsT0hNalZuRkQ0QTFJZjhWNjQ1L2hDZ0VuRFpudDNER25XM2lJL1prUkgxdTcwbUVtVkhyRmZGTmQ4Qjl5NkxtMGlNSHVQbVY5ZnpnK3FrUzBLODhMMUREZ1VoNU1ISUhpMlFMdkxLbWZzNU5VY0hmaEhhMFpsL0ovbFR0OS9ncm5xUnBFdUplZzJFMnpBbmQ0c1QzWk9ZMGNOTVhvODJNbGtUK1A0ZDBVRVhlaFFhczREYnluNWNqVDJ4WWpnWFpHS3RyM1RRWXFEOHBjZmlTcXpYRlkxNHArVllXTFNXcW1HVVFzdm9KdkdnRndRdEw3SjVXL1lHQTJHcjdMSnNvM1JzUU8rZW1lcy8rS3BjSjhVY1BhS0dQNXE3K2xpa3I5LzFUY09OZjc2VWIweWxWUEs1aDkvMDdzNHcyYVh0MURBTzFwbDlabzJXSDdISWQ3M3lOeDIwUXEvUDBBeUZnbVh6NHFIUUFna1NwUGhBbm10VWdQdmMvM0IwTmh1Q0xBRTRGQXVBNWtiU21ucG9rQ2pzNUpDS3g5VDBaN2ZhRlh6dEw1WGt3U1d5WUZoVUFKMDVQVUVOSTczaE9aeFBoTUp2YW1HOVk0MEJNRjhvWlc1YjVoeHo3VG4SOE5EZGZOemc0TVRNd016TXlOVEEwTkRRek0xODVOall4TmpnNE5EQmZNVGMzTnpJNE1UZzRNdz09GiBkZTU3MTgzMzVlNmU3NGQzNjI3YjJjMmRkOTU1MzhiNA==\"}",
+        "path_url": "http://static2.51gonggui.com/13609402724517885408_1777281882388_externale1b08cbc-f1b7-405e-be5e-103d9d175a7e_0"
+      },
+      {
+        "id": 241645,
+        "chat_from": "wm7pwYBwAATxZnDp2Cze0Km9qA91QP6A",
+        "msg_date": "2026-04-27 17:24:46",
+        "msgtype": "text",
+        "content": "{\"content\":\"@A汽车电控，电喷，后处理维修 告诉我哪一款，\"}",
+        "path_url": null
+      },
+      {
+        "id": 241646,
+        "chat_from": "wm7pwYBwAAUF8qb6lpOcPmy6HDnYcEhA",
+        "msg_date": "2026-04-27 17:24:49",
+        "msgtype": "text",
+        "content": "{\"content\":\"看看这个仪表\"}",
+        "path_url": null
+      },
+      {
+        "id": 241647,
+        "chat_from": "wm7pwYBwAATxZnDp2Cze0Km9qA91QP6A",
+        "msg_date": "2026-04-27 17:24:50",
+        "msgtype": "text",
+        "content": "{\"content\":\"我不认识仪表，\"}",
+        "path_url": null
+      },
+      {
+        "id": 241648,
+        "chat_from": "wm7pwYBwAATxZnDp2Cze0Km9qA91QP6A",
+        "msg_date": "2026-04-27 17:24:55",
+        "msgtype": "text",
+        "content": "{\"content\":\"你直接说哪一款，\"}",
+        "path_url": null
+      },
+      {
+        "id": 241661,
+        "chat_from": "wm7pwYBwAAUF8qb6lpOcPmy6HDnYcEhA",
+        "msg_date": "2026-04-27 17:25:28",
+        "msgtype": "image",
+        "content": "{\"md5sum\":\"4ceded7b54318e56d09bece24cdc697d\",\"filesize\":1028150,\"sdkfileid\":\"CoMEKjEqdmlMdGU0aU1XOS9WQzVPWi9aWjdGbWhRZkRVZUFKb3JwNVdqVUVnT0pwV1B3ZEoyZFZobHdiWFM1NituTS9mQ3VrY1lWZEZDMjZOWG9DR3B5STBJUE9DQUhIdUNzaThGa3Y0RFJSRGJLTkp2MXlWZnR1VUJEZFdWQy84T3JqeHQrd2M5alU0YXdua24yM2RCWVpLREFpN1BwNWpCdWlsSmZ6SzU4bmN5bnUzbnlzdHhxa09XckpUMVRWL1dpMzM1VU50eUF2L0tLaTA0QktDbjVzYVp0TTl6Y1Z6bDgyRUt6R2VSd2tkc2NoZVg1Qkc1d2YzSDE1SGpySitMSUZqY2JMQUJ2UlRoMUJWbFUrWXBxdktOaEU1dlZ0cFIxbVBLZ3IveEd2bzBBWWUwWjFxdDA2alFqdEpJMkdONk9aTU1ka3VmMmdYaDFhdzNneGUyU05odkViYmFYTndnMjF2QXRSSGVNeC9KYXk3eGNmVGp6dXBLVUFqNDhqYmNTamtBNWZGeU1vR3d5ZUI4TXc1M1AxWHlwR25XN2x2Y0NISTQ5QVVCb0lCVWl5VVhhTHZQZHFwZVRiQVo5T0FNcTVIbkpOVVI2Rkp3NlZUeWMxc3lYaFVLbC9QdGNuTnU2UVZscmFJNlBEeDVIeEVTbFNLdEtqMXVuMHlxckZwU3ljTUMSOE5EZGZOemc0TVRNd016TXlOVEEwTkRRek0xODFORGcwTmpnd056QmZNVGMzTnpJNE1Ua3pOQT09GiBlM2E5Zjg4ZDFlMzI4ZTdkMzExZWI5Mzg5MmQ4NDc3Ng==\"}",
+        "path_url": "http://static2.51gonggui.com/8602364705750920937_1777281933321_externalbae21e6f-b047-4b52-a9c0-9088ef5171e8_0"
+      },
+      {
+        "id": 241665,
+        "chat_from": "wm7pwYBwAAUF8qb6lpOcPmy6HDnYcEhA",
+        "msg_date": "2026-04-27 17:25:39",
+        "msgtype": "image",
+        "content": "{\"md5sum\":\"8b2fcc61d15109e1be984c39835c9882\",\"filesize\":956918,\"sdkfileid\":\"CoMEKjEqdmlMdGU0aU1XOS9WQzVPWi9aWjdGbWhRZkRVZUFKb3JwNVdqVUVnT0pwV1B3ZEoyZFZobHdiWFM1NituTS9mQ3VrY1lWZEZDMjZOWG9DR3B5STBJUEtVajQ5Sm1CVHppWHpNOHRua1RoMFpxc0hJckU4OW1mYm91S0kxZUIvQno5TU9TckI4V01XcWJGVVhncWI1OEF1bFZBN1JQaEEvN3lXWnlDZ0VwUlpuL01pSFVIb3Nza0g3a2tPUktoaWx0dFczMG1nTTdPa2MranZJWi8vNjYxVFBib2xMWjhocTJJWUtCUFh1RlVKY1F0SWlIdk42d1gxNkcxamE5cXBYQU1UU1lhM1QyOTQ5SzZ6U3IweGpERlB2bXJvWmdvMzRUNEVmNkpaVTNXVDJoaDA5RmlJQTYrZGJGYlgvaHZIVUk3djQ0bHhjdFlpWjFzUmJLZGhWaGhEL3gyZjRzSHdNS3lWRHBwVVoybHVpSWZLRzdmcjhuemxNVDVXeGRsTmpVREhpeFV4MUxsODYwczk5d3FKUzJnY1hjK2N4QlFhSkc5bzY3Q2R0MVpudXNQME5scXVZNnJqTVRQRzNnVFFsejFNd3NHYkVzS3B1NTZFemF4YjhzbEgxVE1Ta09zSk1pTm41TzdBWlAwb1VtSzM4UjJYM21RQ2pSVFhodlczR2wSOE5EZGZOemc0TVRNd016TXlOVEEwTkRRek0xOHpPVFl6TURZek1UZGZNVGMzTnpJNE1UazBOQT09GiBiNDQ0MzRmM2E2YTc5ZWNlNzE4NTAzZGQ2ZTYxOWYzMg==\"}",
+        "path_url": "http://static2.51gonggui.com/5329686871716477595_1777281943371_externalb32e5b7c-db31-4e78-955f-a009526cc965_0"
+      },
+      {
+        "id": 241669,
+        "chat_from": "wm7pwYBwAAUF8qb6lpOcPmy6HDnYcEhA",
+        "msg_date": "2026-04-27 17:25:59",
+        "msgtype": "image",
+        "content": "{\"md5sum\":\"8be5e2bfd22f0e09cb1fda0edf4ca094\",\"filesize\":750215,\"sdkfileid\":\"CoMEKjEqdmlMdGU0aU1XOS9WQzVPWi9aWjdGbWhRZkRVZUFKb3JwNVdqVUVnT0pwV1B3ZEoyZFZobHdiWFM1NituTS9mQ3VrY1lWZEZDMjZOWG9DR3B5STBJUEtSS3ZXQ0NyRExFTXJHMHB1dEE4OTRMWU5XM2VzNTd2Y2V6bGFDMnh6QlZRSzhxbDZRRHhwYXRBcXFnYVRoUmpPaFlseGJwM1lzd2YvcFJ1OGgrVUErYUgzK21OZCtEYlRrOFdkWDZ2a2Roc3Roa3cvaUZhNitlOVpxNE1lV0J3cm5ZZzBSa0dxeUZwREMzakhCZkczYzNvUWFETUNFQ2I4Mmh1Z1V3aGVFZkUvVEI3YkxCMGVHWmFzeHhaZy9xTThYWkF6eDZhRGtPaG9RUVVTVDZzZUk5NTdhbFZ5OFAxZkI4bEFKV25VMVhGbEJ2WFpFKy85MGlWYWhGc3R3ZXVTb1NxUmxzcTFRaEJmdUxReGVBb0t5L1JlVGZxVm9TbGJZVUN5ekJ4ZDNDemc1TzZuSnpGUWFRZVpNa1ZuV2ZUbTU3VjBwSnZBdGpLWnFiVmtMd05yVEZ0cDlWcEVybVJVSU5sUVY1dHFXckxqVU1aWXhLQ2E1ckE3VFREdW5DUFNNbEZCSnJORFFHSzRZRzkxdTB0ck9JZm1SNXdIWXZwYjRYV0ZGN3RLREwSOE5EZGZOemc0TVRNd016TXlOVEEwTkRRek0xODBPRGN6T1RReU9EQmZNVGMzTnpJNE1UazJOQT09GiBmMTIzOTE3NWU0NmY4NzI5YzNiZmExNzJiNjBmNmJhNg==\"}",
+        "path_url": "http://static2.51gonggui.com/3444660234515993875_1777281963303_external4596eb4e-fc9e-4186-b506-53bee40fe2b5_0"
+      },
+      {
+        "id": 241683,
+        "chat_from": "wm7pwYBwAATxZnDp2Cze0Km9qA91QP6A",
+        "msg_date": "2026-04-27 17:26:40",
+        "msgtype": "text",
+        "content": "{\"content\":\"哪一款？\"}",
+        "path_url": null
+      },
+      {
+        "id": 241686,
+        "chat_from": "wm7pwYBwAATxZnDp2Cze0Km9qA91QP6A",
+        "msg_date": "2026-04-27 17:26:45",
+        "msgtype": "text",
+        "content": "{\"content\":\"给我画出来，\"}",
+        "path_url": null
+      },
+      {
+        "id": 241687,
+        "chat_from": "wm7pwYBwAATxZnDp2Cze0Km9qA91QP6A",
+        "msg_date": "2026-04-27 17:26:48",
+        "msgtype": "text",
+        "content": "{\"content\":\"我来给你发，\"}",
+        "path_url": null
+      },
+      {
+        "id": 241688,
+        "chat_from": "wm7pwYBwAATxZnDp2Cze0Km9qA91QP6A",
+        "msg_date": "2026-04-27 17:26:48",
+        "msgtype": "image",
+        "content": "{\"md5sum\":\"ff6ef7e410fecb9d79d211adb70fd0c6\",\"filesize\":953268,\"sdkfileid\":\"CoMEKjEqdmlMdGU0aU1XOS9WQzVPWi9aWjdGbWhRZkRVZUFKb3JwNVdqVUVnT0pwVXFJdFpUcTh5RytwY2YrT0xjY1QyZXE1VGxGYzhncnh5RXJZNS9UQUV3RUk4ZVFhME5KcjJEaU1TOHMxVmNEMzdzTFptUmcxZWh4TjNiZThmb3NYVGF0a2VJWFdrR1pRZEx0ZWp3Wjl2b0M5ZjEybVNMRm13Q2pIUjVQdGdndTBWOEtnczR1U0g4cEF6eWU5SEg2K1hRalk4RjFsVUhRR1YyV1ptYnpLU0dmbitlV0JjS25iU3dmWVhvQ1I4M0tRcWlSOHZYQnN3U0hZNU9rV1gxdjlIL2xaY0V4YzhCNWNYYXhTQjFTeEpUVG0vcjZ1SVdjdGNsR3B2d3RLL0ZiSUF4OW1abDFOT1Z2U2ZHYkl5SUFFUHFTbmFvdVl1RXZtcGRWNE1QSXVlaGFzbzFBdWZXUlBkRk84aDZCeFFJRkdjcFJkTHh4VHM4MTFVdXZyREpOSEh2N3hMejg5dXY1ZkZBOVQvUEFIYUJoTTc5WFJVaFA4Rmc5UVpnQUE1OEhsZE1BWDFxazdjSU1RZFVwZnJXWWFUL3JGRDRxdTdPTGM0V0pxOEgrWEFjMVZ0SVZlTEJqY2RuMkpVNVhQSHB4MUJLR1VtUjY5alRvbS8yWHpyN2c5RGsSOE5EZGZOemc0TVRNd01EazFOakE0T0RjM09GOHhOell5TkRFeE1Ea3dYekUzTnpjeU9ESXdNVE09GiBjODg3Nzg2ZDZhODI5NTA0ZjcwZjQ4ZGYxMjg5YmU4Yw==\"}",
+        "path_url": "http://static2.51gonggui.com/3096952671998758945_1777282012433_externalda359979-eb31-4fbd-b4bd-50d0126225e8_0"
+      },
+      {
+        "id": 241693,
+        "chat_from": "wm7pwYBwAAnnitz7BB464TQkacxq1mWw",
+        "msg_date": "2026-04-27 17:27:05",
+        "msgtype": "text",
+        "content": "{\"content\":\"哈哈啊\"}",
+        "path_url": null
+      },
+      {
+        "id": 241702,
+        "chat_from": "wm7pwYBwAATxZnDp2Cze0Km9qA91QP6A",
+        "msg_date": "2026-04-27 17:27:44",
+        "msgtype": "text",
+        "content": "{\"content\":\"@A汽车电控，电喷，后处理维修 \"}",
+        "path_url": null
+      },
+      {
+        "id": 241709,
+        "chat_from": "wm7pwYBwAAUF8qb6lpOcPmy6HDnYcEhA",
+        "msg_date": "2026-04-27 17:28:04",
+        "msgtype": "image",
+        "content": "{\"md5sum\":\"0b42d0f232f822c94f6f5695869642b9\",\"filesize\":793954,\"sdkfileid\":\"CoMEKjEqdmlMdGU0aU1XOS9WQzVPWi9aWjdGbWhRZkRVZUFKb3JwNVdqVUVnT0pwV1B3ZEoyZFZobHdiWFM1NituTS9mQ3VrY1lWZEZDMjZOWG9DR3B5STBJUEF0SU1KdzYvNnk2c0RWZ2tvQk91WGxQckdJeUI5dXZ4MW8wZm9ENDlweit5bzZXaXBUUmNrZG9oR2p4SEdBQWlKaHFaYnRJU1VNVDd4cGthVmFaYXhtQ0w2UXA0Z3RsbTBjQnMwZVJ3UUJtMW1lTml0djBLQnQzc0dlVVVRQnQ5d1dxaW0vcXI4dWc3bTk2QUhhaVRMVUFyV1FCRWt4VlRFRUFPcjFYWU4vMlBnaXE4S3ZLVG9QV1ZUR3phUWc0S3NiaWRMNkt4eVFKQlhaeUZ6NnljbVpJOWNUYmsweElUSmI5SjB6QUJjemk2NGdFYWh3cnAvQW1wRlFoLzdiL0Q3RXZmelJBRzdXc3d2bzAya2RlekRJK3d4MkhBdjhNaTBJRmdnazUzWnQ1ejc4R2FrWm43WHdSZGFNdUdoeWZWcy9wNkRDbGFUY3ZlZWtTRllPY21tWmcrN2xlcDZYTCs5c1NIMVl3QnhCN2UyQmp3NERyUU53Y3hKanhPd2tlTXh2OTR4M2h4VHRUaGpKZzVqTHRGQ3MvUTBsM1RpWGJwRmM5OXBadFc4MFUSOE5EZGZOemc0TVRNd016TXlOVEEwTkRRek0xOHlNVEkxTURjeE9UTTJYekUzTnpjeU9ESXdPRGs9GiAzZTVlZDU4Nzk2ZDhhNTRmOWExM2UyMzdmZDFkNmEwMg==\"}",
+        "path_url": "http://static2.51gonggui.com/3300570889401729013_1777282088478_external847f6919-8c2b-441f-a0d6-2f5ed3b476b0_0"
+      },
+      {
+        "id": 241713,
+        "chat_from": "wm7pwYBwAAUF8qb6lpOcPmy6HDnYcEhA",
+        "msg_date": "2026-04-27 17:28:15",
+        "msgtype": "text",
+        "content": "{\"content\":\"我也不知道是哪一款\"}",
+        "path_url": null
+      },
+      {
+        "id": 241714,
+        "chat_from": "wm7pwYBwAATxZnDp2Cze0Km9qA91QP6A",
+        "msg_date": "2026-04-27 17:28:16",
+        "msgtype": "text",
+        "content": "{\"content\":\"画出来，\"}",
+        "path_url": null
+      },
+      {
+        "id": 241716,
+        "chat_from": "wm7pwYBwAATxZnDp2Cze0Km9qA91QP6A",
+        "msg_date": "2026-04-27 17:28:20",
+        "msgtype": "text",
+        "content": "{\"content\":\"你别发这些，\"}",
+        "path_url": null
+      },
+      {
+        "id": 241720,
+        "chat_from": "wm7pwYBwAATxZnDp2Cze0Km9qA91QP6A",
+        "msg_date": "2026-04-27 17:28:28",
+        "msgtype": "text",
+        "content": "{\"content\":\"我不修欧曼，我也不认识，\"}",
+        "path_url": null
+      },
+      {
+        "id": 241722,
+        "chat_from": "wm7pwYBwAATxZnDp2Cze0Km9qA91QP6A",
+        "msg_date": "2026-04-27 17:28:37",
+        "msgtype": "text",
+        "content": "{\"content\":\"你知己找好了，告诉我，我给你发图，\"}",
+        "path_url": null
+      },
+      {
+        "id": 241728,
+        "chat_from": "wm7pwYBwAAUF8qb6lpOcPmy6HDnYcEhA",
+        "msg_date": "2026-04-27 17:28:49",
+        "msgtype": "text",
+        "content": "{\"content\":\"好的\"}",
+        "path_url": null
+      },
+      {
+        "id": 241734,
+        "chat_from": "wm7pwYBwAAnnitz7BB464TQkacxq1mWw",
+        "msg_date": "2026-04-27 17:29:00",
+        "msgtype": "text",
+        "content": "{\"content\":\"「东风曹15294004735：[图片]」\\n- - - - - - - - - - - - - - -\\n这我还真分不清\"}",
+        "path_url": null
+      },
+      {
+        "id": 241736,
+        "chat_from": "wm7pwYBwAATxZnDp2Cze0Km9qA91QP6A",
+        "msg_date": "2026-04-27 17:29:08",
+        "msgtype": "text",
+        "content": "{\"content\":\"我也不知道，\"}",
+        "path_url": null
+      },
+      {
+        "id": 241738,
+        "chat_from": "wm7pwYBwAATxZnDp2Cze0Km9qA91QP6A",
+        "msg_date": "2026-04-27 17:29:10",
+        "msgtype": "text",
+        "content": "{\"content\":\"嗯，\"}",
+        "path_url": null
+      },
+      {
+        "id": 241823,
+        "chat_from": "wm7pwYBwAArhH96nYMnVtYrg6D1wy_mg",
+        "msg_date": "2026-04-27 17:34:16",
+        "msgtype": "text",
+        "content": "{\"content\":\"@啊浩 \"}",
+        "path_url": null
+      },
+      {
+        "id": 241824,
+        "chat_from": "wm7pwYBwAArhH96nYMnVtYrg6D1wy_mg",
+        "msg_date": "2026-04-27 17:34:19",
+        "msgtype": "text",
+        "content": "{\"content\":\"那个屌毛不是找数据吗？\"}",
+        "path_url": null
+      },
+      {
+        "id": 241826,
+        "chat_from": "wm7pwYBwAArhH96nYMnVtYrg6D1wy_mg",
+        "msg_date": "2026-04-27 17:34:23",
+        "msgtype": "text",
+        "content": "{\"content\":\"你提供版本信息啊，提供机器铭牌\"}",
+        "path_url": null
+      },
+      {
+        "id": 241827,
+        "chat_from": "wm7pwYBwAArhH96nYMnVtYrg6D1wy_mg",
+        "msg_date": "2026-04-27 17:34:26",
+        "msgtype": "text",
+        "content": "{\"content\":\"我靠，你还找不找了？你个屌毛\"}",
+        "path_url": null
+      },
+      {
+        "id": 241829,
+        "chat_from": "wm7pwYBwAArhH96nYMnVtYrg6D1wy_mg",
+        "msg_date": "2026-04-27 17:34:30",
+        "msgtype": "text",
+        "content": "{\"content\":\"你是不是又捅人家dpf去了？\"}",
+        "path_url": null
+      },
+      {
+        "id": 241831,
+        "chat_from": "wm7pwYBwAALgqWwosC4S0k4fRZtOdQbQ",
+        "msg_date": "2026-04-27 17:34:40",
+        "msgtype": "image",
+        "content": "{\"md5sum\":\"015fb2dc2ab08c77abd78912b5245262\",\"filesize\":644615,\"sdkfileid\":\"CoMEKjEqdmlMdGU0aU1XOS9WQzVPWi9aWjdGbWhRZkRVZUFKb3JwNVdqVUVnT0pwVkdiYWdmTE5QUVJlOUVxVjJPR2F3UDV3SURqNUJMc3U2a21WWlNsVitySG9SZnhqRXZkYlU1SC8yYmNnb1o4emNsbTRRNGJjcXptV2lxdEd2MGhocHJoSE03Vno2VlRKdHB1NStkWTBHUTJ5ZmMxY2hJb0tFaGdhTWlXU0ljeENiL2Jkb0R5amdoekZZSUd2SDVQNExQMjZzcXlKT0xJZW1iWHp5NjRNdDg5b3JSdmJIbHdBR1lDYVQ2Z2hyY1loWFdyZDRTTUw0MTVKY05uNitkWUE1WVhBdUo1dUozMEdRQUhydlJ2Nldxb25xQS8wOFhxeDRSZGxoWGpySHlaU1l4Nlh3ejF4MERoUVNodWRlYjBhRFgrNysrTkptRGJPZnJFTVNORE9MdmFCajIyTjN1UzZqRzF6SGlrWEtlWm1kelpPV2hpcENzRWZLSzg0R0VUUGZ2YmNodGlJci9GQ2hMQ3EwM29VNjRUK2lqMWFINjRJUkd5ZFlBYktYREQ4TUpKUzJMSis5c21KUHBoTlV0aTFHWWhkWk5mQ29zc1AwNzFJbjY1cXVBZDJRbXRvU3dGRjNXZmV4MDVLVnZJUktrSGExSFNHcGtFeWN2L254WGVxRFQSOE5EZGZOemc0TVRNd01ETXhOekEwTURnME5WOHhORGMzTWprM056TTJYekUzTnpjeU9ESTBPRFU9GiA4MDZmMmYyYWIwNmQ0YWVlMTkxN2RlNTMyMmM2MzY0Yw==\"}",
+        "path_url": "http://static2.51gonggui.com/7766884088773797541_1777282484425_externalc1c71d14-2987-4793-a27d-7d5a7eff582b_0"
+      },
+      {
+        "id": 241834,
+        "chat_from": "wm7pwYBwAALgqWwosC4S0k4fRZtOdQbQ",
+        "msg_date": "2026-04-27 17:34:44",
+        "msgtype": "text",
+        "content": "{\"content\":\"@老中医数据调校未就绪13772197292 大哥啊\"}",
+        "path_url": null
+      },
+      {
+        "id": 241839,
+        "chat_from": "wm7pwYBwAALgqWwosC4S0k4fRZtOdQbQ",
+        "msg_date": "2026-04-27 17:34:50",
+        "msgtype": "text",
+        "content": "{\"content\":\"我得上电啊\"}",
+        "path_url": null
+      },
+      {
+        "id": 241841,
+        "chat_from": "wm7pwYBwAALgqWwosC4S0k4fRZtOdQbQ",
+        "msg_date": "2026-04-27 17:34:53",
+        "msgtype": "image",
+        "content": "{\"md5sum\":\"0bbfd85a4225aaf4eb003f4490fb1bfd\",\"filesize\":990435,\"sdkfileid\":\"CoMEKjEqdmlMdGU0aU1XOS9WQzVPWi9aWjdGbWhRZkRVZUFKb3JwNVdqVUVnT0pwVkdiYWdmTE5QUVJlOUVxVjJPR2F3UDV3SURqNUJMc3U2a21WWlNsVitySHZQK2VHR212eTRTVGtoSndrQy82RFZkMFB1bzVZVUxPWnlwTFJEa2NkUDFoLzN5QzZpdFlvVjRtT0wzWkxqVFJKTVREby80NG92RmY3VzQ5MjExa0x3OHp6L01KMjQvNi94emtkUDN5YWlkT1VNNXp4WnFXVEU2SndqVUNBK1cwNTl5TEpPOFRqeXJ5WU5FMHFQYTUyNGZCdUJ6Z0NYNm5oZElqMkpFYkFoRlQyelFvcUFPVG9JMS9RcXVIT053emlvZTNlMmNjZnJvVFMwM2tuSzloVEIxTFdOZG5JQmlsK2dpbHM4WElINVdNZ05mTnFCU1VOMjhYak9ZTEx6eS9EWHVQODh2RjlMc05VN1E3NkVWK2dFYjFTdklDV0tVTDNOdVRVSlZpdjM1cDZadXFGTys1RmNtcjF1Q3ovK0V3dGxnZ0RaVzlUQkZ3UEI1V3ZiSGo4UWx1dTBFN2xPUk1nTjhhNjRGMTcxaTQxRlRoQUdaVkdMRGN0TE1IRjNxWDBVYTdzMzFXR3luOG5mNzhCOEVnbjVsdkZEU1NxOGdFdTgxcTFqNk5DYi8SOE5EZGZOemc0TVRNd01ETXhOekEwTURnME5WOHhPRGt5TWpjNE1qVXhYekUzTnpjeU9ESTBPVGc9GiA3OWQ3MDA5MDk2ZThhMzVjMTM5MDZjNzQ3N2QxNjk0Yw==\"}",
+        "path_url": "http://static2.51gonggui.com/733131898266209620_1777282497381_externala31e8b25-2824-4bb4-8b0b-c051ea890717_0"
+      }
+    ]
+  },
+  {
+    "case_id": "real_train_0008",
+    "room_id": "wr7pwYBwAAgbI-vujAROjqmU7NUmFMBA",
+    "opening_id": 239384,
+    "messages": [
+      {
+        "id": 239384,
+        "chat_from": "wm7pwYBwAA1heTTMmopg4em3OR9nUx-A",
+        "msg_date": "2026-04-27 13:58:28",
+        "msgtype": "text",
+        "content": "{\"content\":\"德龙K300电路图谁有\"}",
+        "path_url": null
+      },
+      {
+        "id": 239386,
+        "chat_from": "wm7pwYBwAAlFau1Jobj7jwlBLw8Ib1mg",
+        "msg_date": "2026-04-27 13:58:41",
+        "msgtype": "text",
+        "content": "{\"content\":\"模拟到多少也不行\"}",
+        "path_url": null
+      },
+      {
+        "id": 239398,
+        "chat_from": "wm7pwYBwAAlFau1Jobj7jwlBLw8Ib1mg",
+        "msg_date": "2026-04-27 14:00:11",
+        "msgtype": "text",
+        "content": "{\"content\":\"这个EGR阀驱动电压是多少伏，量着是2.5伏和2.5伏\"}",
+        "path_url": null
+      },
+      {
+        "id": 239406,
+        "chat_from": "wm7pwYBwAA_HIfCEZUW1WxZpuP2LNpaA",
+        "msg_date": "2026-04-27 14:01:09",
+        "msgtype": "image",
+        "content": "{\"md5sum\":\"d3b97189c3dca8ae72c197fa06aa71a6\",\"filesize\":1004154,\"sdkfileid\":\"CoMEKjEqdmlMdGU0aU1XOS9WQzVPWi9aWjdGbWhRZkRVZUFKb3JwNVdqVUVnT0pwVmVWa1l1Qk5RTnVrNG5abkcyWTZSVEx0eXBwL2UxN2ZVSVMvd1lmNFBFeDlOa1dBVWVIWmJUK1JTTzZkRW5DT1dsMStPK1JYNDhHdldkaXN5NnZoS2s3SUpodWlGSnl0NmtrVnY1UGFIYUFXNEJhZHlzd1VDMFFBaHF4eE94Zmh4aXhDMGl4a2UvbHZLYnA0RUZ0c0RtcDVVK25xdWt2aXZ2VVZ4OXdzTGM5NDFidkZ3ZnByeUFNK2JSc1JZZVc1UDlaSEhuRHNqZXJZZzViU2hJdWloVUR1ZkRYTTBORUltM29WenR3YWJLWlhpMk5PSGtHQzI1eDdaOERNUDhNUlR0TktxNVhkU1RURWsyQ3FJb0R0K1FFbXBiZjZ1L3UxcWh1aGlmQjhEUXhqRHJFR1dSUFNmS3dGeWUzeEpEZStYbmhLY01kTnZtNC9lWjJ5Z3I3MytSdGMrb3p6SWdrNXdockxOb2MzWVB0M2szNUVsVEtJbVB5WGd5blcyN0s1N013cU0ySFE3WWs2djVzZTdkYmFkTGRjY1pQdU1hU3ZmUEJpUDk4dG8vaG40aFMrR1AzaEY3NjVIOVRKMEs2akRKSGtYWjF4UHp4dVZPZkdQZDJEZG0SOE5EZGZOemc0TVRNd01qRTFPREF5TVRneE9GODNNems1TVRFd056TmZNVGMzTnpJMk9UWTNOQT09GiBlYzgxNjc3ZjQ3M2MyZjVkZTNmOTAyMWE4OGJiYWIxOA==\"}",
+        "path_url": "http://static2.51gonggui.com/8567382059569756645_1777269673261_external09269818-450b-4689-8cd8-e7e57aae4c3a_0"
+      },
+      {
+        "id": 239408,
+        "chat_from": "wm7pwYBwAA_HIfCEZUW1WxZpuP2LNpaA",
+        "msg_date": "2026-04-27 14:01:39",
+        "msgtype": "image",
+        "content": "{\"md5sum\":\"988dfc33c35073a01edb92e5bf9e4e2c\",\"filesize\":739259,\"sdkfileid\":\"CoMEKjEqdmlMdGU0aU1XOS9WQzVPWi9aWjdGbWhRZkRVZUFKb3JwNVdqVUVnT0pwVmVWa1l1Qk5RTnVrNG5abkcyWTZSVEx0eXBwL2UxN2ZVSVMvd1lmNFBFeDY0eTBFK01neDdscG05ZHlQMnJEME5ucG96VlR1ZGF4bXpNdGxTbmF5Zi8vYUp4TXp4QlRia28vK2xZWXNQVHh1T1B6c0RnbmszSXl5Ly9lV1VmTVgvaGxIQTc0ZlNEcXRJUUFaRDcweHdiaGFUaW5zaHlCNjBPUVdSREE3dStUdStQNHBDdjAxNVZmd2xkaG1XSi8wRk9VSmtCS2VyazAzSnY0UlNMQit4QTRDcURmYW5saEwycWQ2VVprSlp6TFBqdHJlMDhvSGVjTHF4K085ejM1eldEV3VMeWhwbXUxSW1NdkxpQ1JQVm9KQ1p3TlhGS292RnFZeGdlVm1JTG9lQWZna1hwTDZCRjZZbzZibGhnamI1Q0x3OEZoZkJtWG1LcWUrcGFMK1QzYUxaWWVLNTlXMmNqWVRSRmg0M2ZreDd3MWRuV25jdEpOR0ZvZXY0RUlmdjlIQnpDVjFmKzcxTFA4a0lWNFUzUmJ1RmJabkdQMy9NYmRabmtRTTR1VzNVZlZldnhMSE5PYmlHYXZITmFZTHZMR0RiRWJJb3RWdVB6ZEdLWUNwcXgSOE5EZGZOemc0TVRNd01qRTFPREF5TVRneE9GOHhNVFUwT0Rnek5UVTRYekUzTnpjeU5qazNNRFE9GiAyNzVmZTE5ZDk3NmVhZjBmZGNmNjlhYTQwNmZmZDExYg==\"}",
+        "path_url": "http://static2.51gonggui.com/8721531381773754269_1777269703363_external0c606c13-e1f8-429d-a661-67e4d5b18791_0"
+      },
+      {
+        "id": 239422,
+        "chat_from": "wm7pwYBwAA_HIfCEZUW1WxZpuP2LNpaA",
+        "msg_date": "2026-04-27 14:03:00",
+        "msgtype": "text",
+        "content": "{\"content\":\"有没有这个原厂数据\"}",
+        "path_url": null
+      },
+      {
+        "id": 239424,
+        "chat_from": "GongGuiZhiJiaJiShu-QiuLingTong",
+        "msg_date": "2026-04-27 14:03:12",
+        "msgtype": "text",
+        "content": "{\"content\":\"行驶证\"}",
+        "path_url": null
+      },
+      {
+        "id": 239432,
+        "chat_from": "wm7pwYBwAA_HIfCEZUW1WxZpuP2LNpaA",
+        "msg_date": "2026-04-27 14:04:17",
+        "msgtype": "image",
+        "content": "{\"md5sum\":\"9cf1152afc37eda5d6a04a7d46c096a4\",\"filesize\":1189745,\"sdkfileid\":\"CoMEKjEqdTNXMmsvMis3VGlnRjNpZU0ySllXYURSaHhYMmhyeGRObzZMVndsT0hNaWVYWFIzQXVHdHZuTzdTbkdnQ0h6ampkd1VPeUNzZUFleWd1RXAxTzNHeDF1d3pjLzFmL3RDclJnQkgvQXUwZks4TG5IT2NtZEJ3Y0I5YjVkSjlTSGhXem45Z2pmZWF1SzF1azNWT1JCM0s1ZzFDQ2tMeVpOeWdveFJhb1lsUzg0MGRVRGlJZ2cwTThDek9adGJmU01UaGk2UFdENlBhSXRzQXM2Tk1FbENCN2JaUzFpNVNHMzlYL2d3cXFkeDVaVmJTTmdRbUdxUkczcFZkOXg3YytreU5SaHdZZGVuUE1nWFhzUWUzNWR4M1c5TDJMSWJQRGdEczBJTitKaTQ2WTFUNFJTMGRQMUhQSTBLUUUyZGI3QWlBK1VEMVpuQytMdGlXMUpwczRxeVlackNSK01idjdRVEp2SjRtRzNVUHhsWFpPY200KytUVXFlVTc5TEZlQjk3YTNpWi9jeDNWOHJUcHNlY0wxSFF6K3lSdExnQmw3SUt4SVA1b09aekswdVRrcGgvNEZvWUVqK2JibkhGbERKd3dWNytheVgzalhvL3pyUkhoMmRBbHRxbnFCZyttZlljQVljMWtmdG1xRDd2bXZZMjgvQ0NVRFFCa1VKdXpOeUsSOE5EZGZOemc0TVRNd01qRTFPREF5TVRneE9GOHhNVGt5T1RjeE9EaGZNVGMzTnpJMk9UZzJNUT09GiAwZTIzOWExNjM5OWYzNWQ1MTU5OWNhYWE1ZmQyYzM4Ng==\"}",
+        "path_url": "http://static2.51gonggui.com/12867608746943154853_1777269861261_externale29de683-f0ac-4ac4-a60e-cd7b31ad53bc_0"
+      },
+      {
+        "id": 239439,
+        "chat_from": "GongGuiZhiJiaJiShu-QiuLingTong",
+        "msg_date": "2026-04-27 14:05:16",
+        "msgtype": "file",
+        "content": "{\"md5sum\":\"0acc7be673ee8d483d1d2bd4e86a2769\",\"filename\":\"KC3601611H79R_D.eol\",\"fileext\":\"eol\",\"filesize\":1785913,\"sdkfileid\":\"CtoBMzA2YjAyMDEwMjA0NjQzMDYyMDIwMTAwMDIwNDc5YWU0YTUyMDIwMzBmNDI0MTAyMDQzNzk4NmViNDAyMDQ2OWVlZmM5YjA0MjQ2MzM2Mzk2NjM5NjI2NjY0MmQ2NTMzMzMzMjJkMzQzNzM5MzEyZDM4NjIzODM5MmQzNDYyMzYzMjYyNjE2NjYxMzE2NjY1MzUwMjAzMTAwMDA1MDIwMzFiNDA0MDA0MTAwYWNjN2JlNjczZWU4ZDQ4M2QxZDJiZDRlODZhMjc2OTAyMDEwNTAyMDEwMDA0MDASOE5EZGZNVFk0T0RnMU5qRTVOalk1TmpZMU9GOHhOelF3TURFd056Z3pYekUzTnpjeU5qazVNakE9GiAzNTM0MzUzMzYzMzYzNDM4MzAzMTM0MzQzOTMzNjEzMQ==\"}",
+        "path_url": "http://static2.51gonggui.com/10562413449673880390_1777269920304_external62259918-320d-4bc8-aa0c-32a3e992bfeb_0.eol"
+      },
+      {
+        "id": 239471,
+        "chat_from": "wm7pwYBwAA_HIfCEZUW1WxZpuP2LNpaA",
+        "msg_date": "2026-04-27 14:10:17",
+        "msgtype": "text",
+        "content": "{\"content\":\"现在数据还刷不了\"}",
+        "path_url": null
+      },
+      {
+        "id": 239511,
+        "chat_from": "wm7pwYBwAAVwrpgsqauSUtPM0ShfFcZg",
+        "msg_date": "2026-04-27 14:13:29",
+        "msgtype": "text",
+        "content": "{\"content\":\"用云端模式\"}",
+        "path_url": null
+      },
+      {
+        "id": 239512,
+        "chat_from": "wm7pwYBwAAVwrpgsqauSUtPM0ShfFcZg",
+        "msg_date": "2026-04-27 14:13:31",
+        "msgtype": "text",
+        "content": "{\"content\":\"@小吴19356429212 \"}",
+        "path_url": null
+      },
+      {
+        "id": 239524,
+        "chat_from": "wm7pwYBwAA_HIfCEZUW1WxZpuP2LNpaA",
+        "msg_date": "2026-04-27 14:15:23",
+        "msgtype": "image",
+        "content": "{\"md5sum\":\"6411e0e6e1c3847bcc051bdd7f23a8a2\",\"filesize\":554610,\"sdkfileid\":\"CoMEKjEqdmlMdGU0aU1XOS9WQzVPWi9aWjdGbWhRZkRVZUFKb3JwNVdqVUVnT0pwVmVWa1l1Qk5RTnVrNG5abkcyWTZSVEx0eXBwL2UxN2ZVSVMvd1lmNFBFeHkydVFZazJONERuWU8xY3VaS1Qyd2RLSkdIdFN3c015SjZ5RkpxdGlmd0hLM1VleFV4eEtFenhRQlN6NnVwRTdncE5xOXo0RVRmV1pXYWlja1FvMGoyYjkrTUMwQ1VkSlZUaUJxOUNWUFhtMnpqRTNjRTVLd1dSVkpaUXF6aTdWc001dGJpOGtMMk9UeXJzemw4Ym02ck96WldqZ040RHB0RWg0QUJqNmN3NWxxVXpNTUlMYWxneVVMUHFGWndDQ3Y2MkE4cHVWQUtxalJiSDVuS2Z3c1g3OWNKZU1HUHZlRlo1QlpZcXc3UGIwRWFJRDdmSHg2VGNsS1UySi9Lc3R1WnRpZVJnNFdjajZyOXJXQ3dKWmxTOUsyT2M0UUd2bHpJRkFhakFuOVJJMHBZeG4zd0o5NmdqRDVJNTUxdC9YcWdqcU9EWGhDZGFUSlFFTEI2OUVYaU9xMWpxbzdIdm9pZkJta3ZsdmJNVi8wYmtoWjdiNjc1NWEyY0pISWF4Zml3QnYzdGc0S0xKdzdncFFZR1JnQW1mbkdVNUJjZTlDTmtFOGJXWW1Oc3YSOE5EZGZOemc0TVRNd01qRTFPREF5TVRneE9GODBOelUxTXpZek1EWmZNVGMzTnpJM01EVXlOdz09GiAwNGNiYzE5YTNhYjNmMzA4Y2JkZmYyYTdlMzVlNzg2NQ==\"}",
+        "path_url": "http://static2.51gonggui.com/8624240471963972500_1777270527390_external943cd70e-3378-4947-809a-040dd7f69ba0_0"
+      },
+      {
+        "id": 239532,
+        "chat_from": "GongGuiZhiJiaJiShu-QiuLingTong",
+        "msg_date": "2026-04-27 14:16:09",
+        "msgtype": "text",
+        "content": "{\"content\":\"表层\"}",
+        "path_url": null
+      },
+      {
+        "id": 239533,
+        "chat_from": "wm7pwYBwAA_HIfCEZUW1WxZpuP2LNpaA",
+        "msg_date": "2026-04-27 14:16:23",
+        "msgtype": "text",
+        "content": "{\"content\":\"正在上传数据\"}",
+        "path_url": null
+      },
+      {
+        "id": 239542,
+        "chat_from": "wm7pwYBwAA_HIfCEZUW1WxZpuP2LNpaA",
+        "msg_date": "2026-04-27 14:17:19",
+        "msgtype": "text",
+        "content": "{\"content\":\"这个车读取故障码的时候特别慢，要1分钟才能看到，什么意思？\"}",
+        "path_url": null
+      },
+      {
+        "id": 239546,
+        "chat_from": "GongGuiZhiJiaJiShu-QiuLingTong",
+        "msg_date": "2026-04-27 14:17:45",
+        "msgtype": "text",
+        "content": "{\"content\":\"等等\"}",
+        "path_url": null
+      },
+      {
+        "id": 239788,
+        "chat_from": "wm7pwYBwAA_HIfCEZUW1WxZpuP2LNpaA",
+        "msg_date": "2026-04-27 14:33:32",
+        "msgtype": "image",
+        "content": "{\"md5sum\":\"a5594b1afdaa787e6a24dd9eddcb1fe1\",\"filesize\":732837,\"sdkfileid\":\"CoMEKjEqdTNXMmsvMis3VGlnRjNpZU0ySllXYURSaHhYMmhyeGRObzZMVndsT0hNaWVYWFIzQXVHdHZuTzdTbkdnQ0h6ampkd1VPeUNzZUFleWd1RXAxTzNHeDBwQUJ5Nk9MY2dEVStJc0k2dlJ3eitrcHVSYk0vWUl6ZlhXRjZzRHpFWU43NEVsbkZQblJRMlV4QmxETUtBZGhIb01PNzhOR1dTb1pTRW93RWdub2dtS0xFbHduK3ZGWWNIa041bnhjRkhvUW0wVWZOS0UxMCs3RzQwNXo1ZFBWZmg2d0c5SkpGdzAvN2NBZUUyZW5UOGNqMmhzSEVURWZOdjUweXlVbmFUeXduS0pveXZPZDVURlVCTC9WV3dPWDBGMEc3R2wxcWJPMDl4VDROV1pLY2lxdEJJZ0xSS2tTRFpNVmFwZStSMFpSNlBkMTFwc0YyYWZUdk5lT1ZweTRRa0FXTTRYS2VOeG0wY0wxSEc1cUN6YkxPKzBFUGMzQXhaNHlLa1p6QmtXYzl4Z1o3TC81b0JRWlhvTHBWTDVLT3VQZHp3cm9IQTM0QjJzd0NsRlBMU0Uwbms4VU5sdUJ6cFZXSmIxdFVGZ2Zjc2xQSFlsbTZlSEt2WHg3c3RLcGdDUnRzOXV4RE5NeForMDFTMzV2OHQxRVQ4Y1Z5MU9HaWlQMmRXeGZldkQSOE5EZGZOemc0TVRNd01qRTFPREF5TVRneE9GOHhNekE1T0RJd01qQTRYekUzTnpjeU56RTJNVGM9GiA4Zjk3ZGY1ZWQzOTNlYmNhNmVhYzk4MWQ5NGM5ZjM2MA==\"}",
+        "path_url": "http://static2.51gonggui.com/2092927891783791750_1777271616450_external68e6837a-70ea-4cee-a49a-c206b963dbb2_0"
+      },
+      {
+        "id": 239913,
+        "chat_from": "wm7pwYBwAA_HIfCEZUW1WxZpuP2LNpaA",
+        "msg_date": "2026-04-27 14:44:50",
+        "msgtype": "text",
+        "content": "{\"content\":\"咋就多出来这么多故障\"}",
+        "path_url": null
+      },
+      {
+        "id": 239922,
+        "chat_from": "GongGuiZhiJiaJiShu-QiuLingTong",
+        "msg_date": "2026-04-27 14:46:01",
+        "msgtype": "text",
+        "content": "{\"content\":\"原厂数据\"}",
+        "path_url": null
+      },
+      {
+        "id": 239923,
+        "chat_from": "GongGuiZhiJiaJiShu-QiuLingTong",
+        "msg_date": "2026-04-27 14:46:14",
+        "msgtype": "text",
+        "content": "{\"content\":\"有问题就修\"}",
+        "path_url": null
+      },
+      {
+        "id": 240352,
+        "chat_from": "wm7pwYBwAAgzOJ_mJWigMR4mfWK5I32A",
+        "msg_date": "2026-04-27 15:34:39",
+        "msgtype": "text",
+        "content": "{\"content\":\"@邱灵通 \"}",
+        "path_url": null
+      },
+      {
+        "id": 240353,
+        "chat_from": "wm7pwYBwAAgzOJ_mJWigMR4mfWK5I32A",
+        "msg_date": "2026-04-27 15:34:48",
+        "msgtype": "image",
+        "content": "{\"md5sum\":\"49fbdc242fd8a75111eedf25c16d73a6\",\"filesize\":430428,\"sdkfileid\":\"CoMEKjEqdmlMdGU0aU1XOS9WQzVPWi9aWjdGbWhRZkRVZUFKb3JwNVdqVUVnT0pwVSt2N2lGR1NQdm04d3Y3emF4YUhxVU9tNXJsUXp5SGJXYk5BMlFLaW9ZTkc2R3BDSk1OVk5WRTNXQTlZdWwyMGN0SUVhb0dkeHJjNlMwc2lpZ0pCZUxYaklIY0t3OVdUZlREaWRLdnMyMERPcWlLamdTTy9McHlFa0Y5cEJXemw1akZKN2kzeGEzNUlGSHRzcDUydU4reHFUdi9ycFpkU01PMVhHeC84ek1jdmE5WTVCUzRBR3kvVDF3Y21wS0tsWWYvK2JyVW4ySGVjZXdKaCt6RzhvNS9xWFV4b3FKQnBJY0x4K3NnZElSbEV2cTc2UFJScXExS1BTWXQvUzhZT3UvSmNpZHhNQzFTRFU3QUFZY2pzL2dTU1VNd1lTVGh3dkhZZ3pleEttWEFLT1NHa3Qwa2NVREp0Rk1YKzJJOFNiR2FZKzBHNkVOd3g5dFl2MFFFTGllZ242YXlJK3k4N2tLU0FYV3ptZVpTaERXOEF6d2oxZkwxRWdyVVZuZ3Zja1BDa0llQ0MrQnpGL3lHdEtnZStpY0h0VXBSTy9EYk15VjEvZzJVWFhISTVUKy9XWlFXcWNENjBDQUxxR0VTRzcwT0xUSzQzakhFdUFwNFU2U21JbUMSOE5EZGZOemc0TVRNd01qQXdNRGs1TmpFd05WOHhOelkwTmpBeU5EZGZNVGMzTnpJM05USTVNZz09GiBlMzFmZWU5NGVkMzAxN2M2Njg5YzExNjM3MmY2YmFhNA==\"}",
+        "path_url": "http://static2.51gonggui.com/7853952632849929729_1777275292374_externalb09701f7-b2bc-4539-abc3-5c29cdbd9142_0"
+      },
+      {
+        "id": 240354,
+        "chat_from": "wm7pwYBwAAgzOJ_mJWigMR4mfWK5I32A",
+        "msg_date": "2026-04-27 15:34:49",
+        "msgtype": "image",
+        "content": "{\"md5sum\":\"310e192c2235644d79bcf519d7b60df3\",\"filesize\":389813,\"sdkfileid\":\"CoMEKjEqdmlMdGU0aU1XOS9WQzVPWi9aWjdGbWhRZkRVZUFKb3JwNVdqVUVnT0pwVSt2N2lGR1NQdm04d3Y3emF4YUhxVU9tNXJsUXp5SGJXYk5BMlFLaW9ZTkZoQzdRMElYYlNVMVI0SW5iM0dHaHlYTERiS21oZ0ZTdTEyU1JZcVoyQ0FRYldESUN2ZjhHbVkzZWc0bW5SREZvVnVWM3g0MzBoL2JLUjFrRW5TdGpiUHBTVjhwQ1ZsanQxaUd1dlFxK3JKMjZjclV1d09BTmppSnNFV3hpQkVPWkwzTzhuVzUybmRyQi8xNi9rUmtUYkpmdVJpRzdXRlZnNkdZcnVsOVhxaFQ1OXNzSjQycFNqWDdaQUpQVjRyaGdBaGdlK1RnVTlVcHo1UGRYRnhSYmZEekUyZXBYVWNGaGhPc3RKMHJ4Z3FXVjNqT2hyTUo1VWJrZXlvZjZGS0w5ZUZaNEQ4T2ZTQjBOK0lSRlhJQTNYTDNsaXNhSVc4SXdzak02L21pcjVWWDloZUF6YVMxbGhTQUVJZ054VVhsUjBCZEdNeFdubDVvV1lFc2pIZFowS3daTVBFejZNVUdueDUxaXRQSVI2LzU1K3BmYWo0TWdjSm5tdWhqeWxubFNoRjBhNXFaQnFHUUZhRkkrL2hsYkhKVTBabmtXQjdBdHRlTk9sbmdDb2ISOE5EZGZOemc0TVRNd01qQXdNRGs1TmpFd05WOHhNak01TmpVMk5qRXhYekUzTnpjeU56VXlPVFE9GiA0ZTk4ZGU5YjU0ZDVmNTYyMzNmOGYyZDc5NmE3ZDJiMg==\"}",
+        "path_url": "http://static2.51gonggui.com/147754367416869568_1777275294322_external28476bea-83e4-42ac-9c03-2f275083f5cc_0"
+      },
+      {
+        "id": 240355,
+        "chat_from": "wm7pwYBwAAgzOJ_mJWigMR4mfWK5I32A",
+        "msg_date": "2026-04-27 15:34:50",
+        "msgtype": "image",
+        "content": "{\"md5sum\":\"4db22a0037dbb48c5ab864d2a087f543\",\"filesize\":293858,\"sdkfileid\":\"CoMEKjEqdmlMdGU0aU1XOS9WQzVPWi9aWjdGbWhRZkRVZUFKb3JwNVdqVUVnT0pwVSt2N2lGR1NQdm04d3Y3emF4YUhxVU9tNXJsUXp5SGJXYk5BMlFLaW9ZTk9TWjNXTEFma0V3bEpiU2pqZkFYQUNyZ3F0YnJ4dDUxTVNpcWdpR255WmRHb3BJSkdQVllBd3JrR3IyOVNaajM2QzFaa3A1N1VaRmJ3WFdHTmF0ZjVlT3BXU3hIdGJuVHlNMVNjWHM0MVYycWpXdkQxdW05Uy93VTVGUndqeVZlVWhmYVVFS2taUXR6SkN3U3g1eCtXekRvVS9oS2w3TTVjSlhCZ3lRdGM3MVNuMkhJK1k1WE9iaWpQRU0wMG1JRG9ka3hEaHpXdDJPREdGNHYvck5KaG50Q29ZNDlDMXVQZzNmQW1HSCsxVExVZHhFdUI2aTNqTk9GU2hPVTBxaEd5eklXck5XSWVVd0RDR04yWDJ4cnBSQ3dpNnBKdHhWZ2RwNjk4RDdKK0hKbzRUMm9nM1RjUjd3akFlRHR3SXN2ZXlOY1ZoN2plNmVoQXFpQU5XK0NDcmRGV2dMenlGQTVKSlY4azRoM3lsc2w2a212QTBxZnhkSW1HZkg5UHNRZDJoS2tpUVpXa1BtVSs4b1hpSVpkd0lpTjh5dlp0NlZQZU9waVpRNkZJNjESOE5EZGZOemc0TVRNd01qQXdNRGs1TmpFd05WOHhNakU0T0RBMU1qYzBYekUzTnpjeU56VXlPVFk9GiBiODBkY2NkNzQwOWI2NzVkMzJkZDgxYTBjYWI1YmUwOA==\"}",
+        "path_url": "http://static2.51gonggui.com/3406337370943034089_1777275295416_externalb75049da-2438-4a09-8b39-478ef51e5c86_0"
+      },
+      {
+        "id": 240357,
+        "chat_from": "wm7pwYBwAAgzOJ_mJWigMR4mfWK5I32A",
+        "msg_date": "2026-04-27 15:35:06",
+        "msgtype": "text",
+        "content": "{\"content\":\"来个原厂数据\"}",
+        "path_url": null
+      },
+      {
+        "id": 240365,
+        "chat_from": "GongGuiZhiJiaJiShu-QiuLingTong",
+        "msg_date": "2026-04-27 15:36:22",
+        "msgtype": "text",
+        "content": "{\"content\":\"行驶证\"}",
+        "path_url": null
+      },
+      {
+        "id": 240367,
+        "chat_from": "wm7pwYBwAAgzOJ_mJWigMR4mfWK5I32A",
+        "msg_date": "2026-04-27 15:36:52",
+        "msgtype": "image",
+        "content": "{\"md5sum\":\"9adbff4c102d3ef30138be57e6f4cd6a\",\"filesize\":958662,\"sdkfileid\":\"CoMEKjEqdmlMdGU0aU1XOS9WQzVPWi9aWjdGbWhRZkRVZUFKb3JwNVdqVUVnT0pwVSt2N2lGR1NQdm04d3Y3emF4YUhxVU9tNXJsUXp5SGJXYk5BMlFLaW9ZTk5OeStRcElmTWhoT0VxVy9HVGN6ampGVFdSMzUrZ25aTi9KQXQ4YUFxa0xBYUFrTEluUTBhVUtwMnh4bk8ra2VjOEdPSXg2amdlaXNyeXVXdk5zZTEyT1pEN3VtVXAxbG52d0lIMXJNMjM1NEVVNE44cFhkcWgvQkUzSTBvTVE0U1BHa2s5VmkvKzdCMEZmQmd1R0w0dExCY3FXdGZqNVN1Y21abk5rUHROTFg3aStxRHF4ckZKQnFJY1B2bmJyZDNiZGwxQ3VYVXZwQ2syYXN5dHEyVzVuMmZmbStwV2V4WGZwdWNlYTBDa1QrcGFBUlVxQStkNG15L2xPQ2V3KzBLbTJYK3MrNVg1NEQwdWFHMDVlYzZab2NyMWxhUFZ0UGhybVdYdnZUVkNxL1hiL0ZiOGRJSVdER0d6ZEhEQkJDZWkyaGs3MWJ3WWNEdjY0Q3F6UVhlSGFNTWRGV00zSGZydEgzSHYxMzc1VlJpWTdpVEdoV01MdC84UldKdEQ2UG5aS21PSXRUYzJWYVZsNjVzNkM2VkdUSXZuci81cURkbW9SR2pmRkN2WG8SOE5EZGZOemc0TVRNd01qQXdNRGs1TmpFd05WOHhNREE1TWpjMk5qSTJYekUzTnpjeU56VTBNVGM9GiAxYzg2ZTVjZTBiZjk1NjdiODM0MDM1OTI0YWU1ZTYwOA==\"}",
+        "path_url": "http://static2.51gonggui.com/7260569304312124715_1777275416435_externala44006fd-294b-4c65-827c-b9b4e5021356_0"
+      },
+      {
+        "id": 240376,
+        "chat_from": "GongGuiZhiJiaJiShu-QiuLingTong",
+        "msg_date": "2026-04-27 15:38:00",
+        "msgtype": "file",
+        "content": "{\"md5sum\":\"5d377c73659fc9856d2893389be61714\",\"filename\":\"KC3601611N75H_A.eol\",\"fileext\":\"eol\",\"filesize\":1376333,\"sdkfileid\":\"CtoBMzA2YjAyMDEwMjA0NjQzMDYyMDIwMTAwMDIwNDc5YWU0YTUyMDIwMzBmNDI0MTAyMDQzNzk4NmViNDAyMDQ2OWVmMTI1NzA0MjQzNDM2NjU2NDM0MzkzMDYzMmQzNDM4NjE2NTJkMzQzNTM3NjEyZDM4NjIzOTMyMmQ2MTM3NjEzMTM3NjMzMDYyNjIzNTMyNjQwMjAzMTAwMDA1MDIwMzE1MDA1MDA0MTA1ZDM3N2M3MzY1OWZjOTg1NmQyODkzMzg5YmU2MTcxNDAyMDEwNTAyMDEwMDA0MDASOE5EZGZNVFk0T0RnMU5qRTVOalk1TmpZMU9GOHhNVGd4T0RFNU1qVXhYekUzTnpjeU56VTBPRFE9GiAzMTM2MzczNDY1MzMzMTMxMzczOTY2NjQ2MzM5NjIzMA==\"}",
+        "path_url": "http://static2.51gonggui.com/2556038356666610687_1777275484372_external62d175d6-3030-4c81-936b-01120be042de_0.eol"
+      },
+      {
+        "id": 240381,
+        "chat_from": "wm7pwYBwAAgzOJ_mJWigMR4mfWK5I32A",
+        "msg_date": "2026-04-27 15:38:17",
+        "msgtype": "text",
+        "content": "{\"content\":\"谢谢老师\"}",
+        "path_url": null
+      },
+      {
+        "id": 240951,
+        "chat_from": "wm7pwYBwAAHPrYoK2fqwXIcOD8kteBLA",
+        "msg_date": "2026-04-27 16:29:58",
+        "msgtype": "image",
+        "content": "{\"md5sum\":\"fe70ba6748a2219166db30ffdaef77fd\",\"filesize\":775797,\"sdkfileid\":\"CoMEKjEqdmlMdGU0aU1XOS9WQzVPWi9aWjdGbWhRZkRVZUFKb3JwNVdqVUVnT0pwVjRKY3EvM2s2Q05xVjJWWmI4RnZDcGp6MnlrNFZsN0dreDdmVXNHMm1HcUV2V3c4TmRnWjJXRllMNHRTTEd4d1pDVWlQQlM0azlTK05DN2FQRm1QaVNCSEdJaG91REJidFNxekxsQUZ3YkJDMktQSzJVM2xzVW0wWU8vTTU0TTd4bi9KWlpDazg4dE11RzlOVGsvUzl4aVFRamtzUnhPMUxzdUIwSnhMTlNWVi9Ea29hc3FFVEg0SWxXbksycCt3Z1BWZGNLdG1VUkMxdzRjalN2K3ZFQ1Y5YlZSaS9WUWZ6N0lHUi9ndGs4d1ZSTm9WVi9FVFdnZklvZFlLVS9BUXlaUHZHcnIyb2JyOGF2MUVVVWZkaTdJMnB1Rkl6Y254aGZWZkIyNEVkRmh5VlhoRW1YLytNa2JMb0xuZE5BOHcwMTEvUklPZEpsUktQdmxRU29zRTQ4YXlXWS92amRyMUd2Z0dwVnNXQ0QrSHl1OENxQmZBRm9PeEVwTWVTTUh6UkgxTnBJTDJKUjZqdWxQMHhmNFRqNjFNNC81eStsUmhRd3JsNEUyTktGNXlJKy9VQXpVdVZlS2hXckdNdHpuUFV2MHRsV2tKUHh4ekp2RUYxd3hEL0gSOE5EZGZOemc0TVRNd01qWTVNakE1TlRRMk1sODNPREkyT1Rnd01EQmZNVGMzTnpJM09EWXdNdz09GiAzNTdjNGIyZTlmMmVmNzRjM2M4OGM0OGI4NDJlMGQ5Nw==\"}",
+        "path_url": "http://static2.51gonggui.com/12878983057825796279_1777278602342_externalde796477-60d5-47ed-a746-5d67f2e2f348_0"
+      },
+      {
+        "id": 240952,
+        "chat_from": "wm7pwYBwAAHPrYoK2fqwXIcOD8kteBLA",
+        "msg_date": "2026-04-27 16:30:04",
+        "msgtype": "text",
+        "content": "{\"content\":\"读不了怎么回事\"}",
+        "path_url": null
+      },
+      {
+        "id": 240954,
+        "chat_from": "GongGuiZhiJiaJiShu-QiuLingTong",
+        "msg_date": "2026-04-27 16:30:12",
+        "msgtype": "text",
+        "content": "{\"content\":\"免拆读\"}",
+        "path_url": null
+      },
+      {
+        "id": 240975,
+        "chat_from": "wm7pwYBwAAHPrYoK2fqwXIcOD8kteBLA",
+        "msg_date": "2026-04-27 16:32:05",
+        "msgtype": "image",
+        "content": "{\"md5sum\":\"1cbf685fb309b8b14d2cbb206c7a9117\",\"filesize\":893784,\"sdkfileid\":\"CoMEKjEqdmlMdGU0aU1XOS9WQzVPWi9aWjdGbWhRZkRVZUFKb3JwNVdqVUVnT0pwVjRKY3EvM2s2Q05xVjJWWmI4RnZDcGp6MnlrNFZsN0dreDdmVXNHMm1HcUcvUzVpRGltb1dwZzllNGJFUUFRN0NycXRsWUNId094M2o1VGdHOEg5SXVVbVgwMEV5SHJpMUQwWUcxdUU0ajVKbmtvYWh0czZvSVhTaW5KOVo1a1VrYmlteC8xL3oxZEJMR1J1enFSRkxIYWVLbGxnK2FLS3RMUk5sTGVMTXd4MG9tL2JaQ1BjdndMSGF4VS9Uc2xDVEhtbldDWjErczZOZEFzYWhBTVpweE1TNXZSSVMwMDE3WFNTTGJzczN2RENFVUhXaytJN3g2VkxOb2lTbGFWanY0cEdDVU5IQ0FnRm52ZUVEMzlQQmlnSDBqa3R2am91OG9laEg2Q2F6Q2pzaHdlTXVGcExiSGRZMDFYZlZNRmJtMUxZZHgwVkJkUis2VzFYK0hpSXVMb2lUNk4yamxsS1BNNXZHUEo3QTNkejIydTZDYUdMSjhGNU9PSFNDajVpWS9BQjRvNEE0ZTVaRitLeEJjYVNYS3J0OTVxRDBqV0dmWElKNk53VWc1RDhlOVJvaXZPb1puM01wKys1NEtpeHd0M2lZcVhRMUx1aWJ3MjcvWGdxcUsSOE5EZGZOemc0TVRNd01qWTVNakE1TlRRMk1sODFPRGN3TnpZNU5qVmZNVGMzTnpJM09EY3pNQT09GiAzNTYyN2FmNzBjMGY2ZWEyMTliZGNlYWUzYjI3MmQ3Yg==\"}",
+        "path_url": "http://static2.51gonggui.com/10417802604884082537_1777278729360_external12551ceb-d303-43ec-9e34-b38a0787bef4_0"
+      },
+      {
+        "id": 240977,
+        "chat_from": "wm7pwYBwAAHPrYoK2fqwXIcOD8kteBLA",
+        "msg_date": "2026-04-27 16:32:22",
+        "msgtype": "image",
+        "content": "{\"md5sum\":\"e7eb89899cf0321dfe6a3aa60af33438\",\"filesize\":786968,\"sdkfileid\":\"CoMEKjEqdmlMdGU0aU1XOS9WQzVPWi9aWjdGbWhRZkRVZUFKb3JwNVdqVUVnT0pwVjRKY3EvM2s2Q05xVjJWWmI4RnZDcGp6MnlrNFZsN0dreDdmVXNHMm1HcUwrTE9TNHk3R2xVQjFxNW5HN0NGVzdiQ0xMdEE1OEpaRjJPNk5oQTN0bmd0WmpUeTJxRm5EQTROZlZIMDVOQ1llQXk1amhQR1VqNlVJKys5N21OSzR3Syt1SHBVLzZVZkpobllTSDYzZ3F3clE0YkhSbmFRRDAzZmZBUCtYa1hDMDVRdEtCYmRUTTNadHlqR2s2anBJdmtFZVF0cHVpdUIvVy9mZUE0ZlEvYUJ2Ly8wQWg5eE9XcFdFNGsvUjQ3N2tlUEM0VDFxY1hhS0pBTmtCbXdXWVo0eTBJeGlpaDcydTU4NXE4cUZrMHIyc3hoRkZRMmM5OEx6OTF1bFdsdkNFaUcxTXhWajhBUVhvMXIwRHFPVGsyKy9Nay9kc1graDhSUG0vbUExajhSVy83ZzlMUFUxMEVkQ1kzWkl3UmZPRHVsRlloRzV6SzlVS2ZhL2ovK2hCc2tGcTRFT2dkQlEvU1dVODR1dm9HSWY1N0ZJYm9Rc0c3NXpxVFczdWozN1VJVXUzYTczT2lFdlAwdldETWZxOGVmMzhyZlFJeUJaTXk3aVhNeWtRV2oSOE5EZGZOemc0TVRNd01qWTVNakE1TlRRMk1sOHlNREE1TVRRME1EZ3lYekUzTnpjeU56ZzNORGc9GiA2MDc2ZGQ5YjYwMzlmMmYyYzkyNzBiM2Y3MWVmNTdmMQ==\"}",
+        "path_url": "http://static2.51gonggui.com/1743762305712242662_1777278747340_externalb1d80bc6-8f14-41b8-90dc-875002db34ee_0"
+      },
+      {
+        "id": 240978,
+        "chat_from": "wm7pwYBwAAVwrpgsqauSUtPM0ShfFcZg",
+        "msg_date": "2026-04-27 16:32:27",
+        "msgtype": "text",
+        "content": "{\"content\":\"联网\"}",
+        "path_url": null
+      },
+      {
+        "id": 240984,
+        "chat_from": "wm7pwYBwAAHPrYoK2fqwXIcOD8kteBLA",
+        "msg_date": "2026-04-27 16:33:16",
+        "msgtype": "text",
+        "content": "{\"content\":\"@小王电喷电路后处理 [偷笑][强][强]\"}",
+        "path_url": null
+      },
+      {
+        "id": 240986,
+        "chat_from": "wm7pwYBwAAHPrYoK2fqwXIcOD8kteBLA",
+        "msg_date": "2026-04-27 16:33:32",
+        "msgtype": "image",
+        "content": "{\"md5sum\":\"a271a19df4b32923e742ba8e7fbc4e93\",\"filesize\":879571,\"sdkfileid\":\"CoMEKjEqdmlMdGU0aU1XOS9WQzVPWi9aWjdGbWhRZkRVZUFKb3JwNVdqVUVnT0pwVjRKY3EvM2s2Q05xVjJWWmI4RnZDcGp6MnlrNFZsN0dreDdmVXNHMm1HcUx3MDBVZzFYYjNYN2hMMWpzdGl5TDZVdnducG5pdEpDT2pSb1hqVlFnbkw3aWhpRitMTWsrL3VxSGVOSndaNzJHT3EyOUlMM0lkVWpDR1MybnNWNDAvTWFxZDRTbjJzdDZ4eGYyd1RiSERzd25pTjg3UUxEby9XTXpkekkrSHJNVkNxa2Nic2g0eUZHRjRTcHg4N2xHNThpLy9NZ3Z3bHBsMDhtWktGRStBZk1vMldiK1R6WkZVNFJuNFQ5RENiWXlxNXNjVkdpdHpOTmdKRjJOYzNRWVAvcTBjUTJNU2daVDdDVlM4Mk1qTDc0Rk9xMWpFRFVhZTU4Yjl3RFhsODdnVUV0dGR2Mm5tQ05VMW9mYmg4UllpMXo3SjI2SDBpWnZvd3VHanl5THdwQXdOZ21aYyt4dXZnTjdpYWN4OHNWcnN2djdiVU9meWUyWHZDWTJBcll4TjFmb045cjY5UHBjZDlrTXhIVllNc0hHcnlkeUhQbXVGUXRFOEQxV01XU1hNY1ZmZ2d1ajN1dTFOaWlhcnN6bnZWUTQ2d0RhbXlaRHZHUEZKWTZZNW8SOE5EZGZOemc0TVRNd01qWTVNakE1TlRRMk1sODFPVEkyTXpjM056WmZNVGMzTnpJM09EZ3hOZz09GiBhM2EwOTY2ZWM0MTk4MTViYzY4ZmYyOGExNWU0MjdiMg==\"}",
+        "path_url": "http://static2.51gonggui.com/17058354614170948642_1777278816368_externalca291039-b678-4ba7-81c2-2184f877e2d3_0"
+      },
+      {
+        "id": 240990,
+        "chat_from": "GongGuiZhiJiaJiShu-QiuLingTong",
+        "msg_date": "2026-04-27 16:33:57",
+        "msgtype": "text",
+        "content": "{\"content\":\"免拆刷写\"}",
+        "path_url": null
+      },
+      {
+        "id": 240991,
+        "chat_from": "GongGuiZhiJiaJiShu-QiuLingTong",
+        "msg_date": "2026-04-27 16:33:59",
+        "msgtype": "text",
+        "content": "{\"content\":\"车下跳线\"}",
+        "path_url": null
+      }
+    ]
+  },
+  {
+    "case_id": "real_train_0009",
+    "room_id": "wr7pwYBwAAWks--CKtebUR1yott8QavA",
+    "opening_id": 203856,
+    "messages": [
+      {
+        "id": 203856,
+        "chat_from": "wm7pwYBwAAKevKpqbf1ltpj2ZX3RwDZw",
+        "msg_date": "2026-04-21 19:01:13",
+        "msgtype": "text",
+        "content": "{\"content\":\"有没有解放轻卡j6F的仪表针脚图？\"}",
+        "path_url": null
+      },
+      {
+        "id": 203866,
+        "chat_from": "GongGui02",
+        "msg_date": "2026-04-21 19:02:29",
+        "msgtype": "text",
+        "content": "{\"content\":\"@程工 待会重启后 打开远程\"}",
+        "path_url": null
+      },
+      {
+        "id": 203869,
+        "chat_from": "wm7pwYBwAAKevKpqbf1ltpj2ZX3RwDZw",
+        "msg_date": "2026-04-21 19:02:59",
+        "msgtype": "text",
+        "content": "{\"content\":\"有没有解放轻卡j6F的仪表针脚图？\"}",
+        "path_url": null
+      },
+      {
+        "id": 203871,
+        "chat_from": "wm7pwYBwAAmfWjrXlZSqP9dgQUqJHDpQ",
+        "msg_date": "2026-04-21 19:03:17",
+        "msgtype": "text",
+        "content": "{\"content\":\"平台上搜一下。\"}",
+        "path_url": null
+      },
+      {
+        "id": 203874,
+        "chat_from": "wm7pwYBwAAKevKpqbf1ltpj2ZX3RwDZw",
+        "msg_date": "2026-04-21 19:03:28",
+        "msgtype": "text",
+        "content": "{\"content\":\"没有\"}",
+        "path_url": null
+      },
+      {
+        "id": 203902,
+        "chat_from": "GongGui02",
+        "msg_date": "2026-04-21 19:06:29",
+        "msgtype": "text",
+        "content": "{\"content\":\"@程工 待会重启后 打开远程\"}",
+        "path_url": null
+      },
+      {
+        "id": 203915,
+        "chat_from": "wm7pwYBwAAcf4CPiiKH80QVHIi7NpfIA",
+        "msg_date": "2026-04-21 19:09:19",
+        "msgtype": "text",
+        "content": "{\"content\":\"好\"}",
+        "path_url": null
+      },
+      {
+        "id": 203937,
+        "chat_from": "GongGui02",
+        "msg_date": "2026-04-21 19:13:29",
+        "msgtype": "text",
+        "content": "{\"content\":\"还没重启好吗\"}",
+        "path_url": null
+      },
+      {
+        "id": 203938,
+        "chat_from": "GongGui02",
+        "msg_date": "2026-04-21 19:13:33",
+        "msgtype": "text",
+        "content": "{\"content\":\"@程工 \"}",
+        "path_url": null
+      },
+      {
+        "id": 203951,
+        "chat_from": "wm7pwYBwAA2qw4_VkN0RNr1AvFdtPmhg",
+        "msg_date": "2026-04-21 19:15:24",
+        "msgtype": "weapp",
+        "content": "{\"title\":\"共轨之家\",\"description\":\"\",\"username\":\"gh_e35143657ab1@app\",\"displayname\":\"共轨之家\",\"appid\":\"wxfdbc453cab0440a6\",\"pagepath\":\"pages/webView/webView.html?src=https%3A%2F%2Fwx.51gonggui.com%2Fv2%2Fshopping%2FcourseLiveNew%3FcourseId%3D2979\"}",
+        "path_url": null
+      },
+      {
+        "id": 203999,
+        "chat_from": "wm7pwYBwAAcf4CPiiKH80QVHIi7NpfIA",
+        "msg_date": "2026-04-21 19:22:38",
+        "msgtype": "image",
+        "content": "{\"md5sum\":\"d4b31ba291840d0c0c062e02722b225a\",\"filesize\":686525,\"sdkfileid\":\"CoMEKjEqdmlMdGU0aU1XOS9WQzVPWi9aWjdGbWhRZkRVZUFKb3JwNVdqVUVnT0pwVW1YOTBEQ3d2eE5pUHR1bkpkZmtzYXRnYUkzNC9lU3lRSFFxTVltWk9Wc3pGNERnMURVV0dwYTBJK051dE9HQmsrQ0V2L2hxcGZvcVJzNk9qTDdQZFNLUHhhMi9zRGN5enBUMXR5NGFNSXk0TGZ3U0pKLytXNWJ1UXVkS05Ebno5aTRtWWJNUDBaVVZKdG1GSndDUUxNZ3BHRVhNSXdQcWV3elFXd3k0WG5yOXpweitueU03UzREcTdFM1M3aXJVVmtJeXZFM3ZtOE1BbzVHeDlTWlVOamYwSlI5TERHWkI4aW05aUdod3VEclhtb1c5VmI4WVBmNnpjcmVjWFVXeG9NOXF3N1kxTzNiTjkxUUc5a1pWbnZvVmRuVEpidnpxYTVDaUtleVFhVlJBNmVrWGdzTko4YzdOa2NTK3UxRit3d09adTVKR0kzT1VlckVDZmthR3lXQlYySkdwenFTK1hNNldsRmFwbGdTQXE4NGVqWmZtWVo4RTBkcFdadlhrcS9IV0tacEYxbk5LMi9nMFppUk94Qm0rMjR6Q1dpZGV4ZXZxc1I5N2x4Z0NZZUYrdXZ2Y0o2bjZGaDN2MDdrbFFVc2ppWkhGSFZRWVZkZ3hFSWd0KzgSOE5EZGZOemc0TVRNd016RTVNamsyTVRZME9GOHhNak00TXpneU56UTRYekUzTnpZM056QTFOak09GiAyM2RkMzU5Nzc4ZDUwMDQyOThhOTI2ODg0YTdmNGEyYQ==\"}",
+        "path_url": "http://static2.51gonggui.com/18072699777588049377_1776770562296_external561fa398-9a0b-49db-a223-661cd6c9f977_0"
+      },
+      {
+        "id": 204004,
+        "chat_from": "wm7pwYBwAAcf4CPiiKH80QVHIi7NpfIA",
+        "msg_date": "2026-04-21 19:22:54",
+        "msgtype": "text",
+        "content": "{\"content\":\"@AI神算子-金工 \"}",
+        "path_url": null
+      },
+      {
+        "id": 204006,
+        "chat_from": "GongGui02",
+        "msg_date": "2026-04-21 19:23:01",
+        "msgtype": "text",
+        "content": "{\"content\":\"点接受\"}",
+        "path_url": null
+      },
+      {
+        "id": 204036,
+        "chat_from": "GongGui02",
+        "msg_date": "2026-04-21 19:28:25",
+        "msgtype": "text",
+        "content": "{\"content\":\"扫码登录\"}",
+        "path_url": null
+      },
+      {
+        "id": 204037,
+        "chat_from": "GongGui02",
+        "msg_date": "2026-04-21 19:28:27",
+        "msgtype": "text",
+        "content": "{\"content\":\"@程工 \"}",
+        "path_url": null
+      },
+      {
+        "id": 204043,
+        "chat_from": "GongGui02",
+        "msg_date": "2026-04-21 19:29:28",
+        "msgtype": "text",
+        "content": "{\"content\":\"你现在要刷什么\"}",
+        "path_url": null
+      },
+      {
+        "id": 204045,
+        "chat_from": "GongGui02",
+        "msg_date": "2026-04-21 19:29:31",
+        "msgtype": "text",
+        "content": "{\"content\":\"ECU和DCU妈\"}",
+        "path_url": null
+      },
+      {
+        "id": 204049,
+        "chat_from": "wm7pwYBwAAcf4CPiiKH80QVHIi7NpfIA",
+        "msg_date": "2026-04-21 19:29:43",
+        "msgtype": "text",
+        "content": "{\"content\":\"都刷\"}",
+        "path_url": null
+      },
+      {
+        "id": 204050,
+        "chat_from": "GongGui02",
+        "msg_date": "2026-04-21 19:29:43",
+        "msgtype": "text",
+        "content": "{\"content\":\"DCU上的白色标签发来\"}",
+        "path_url": null
+      },
+      {
+        "id": 204052,
+        "chat_from": "GongGui02",
+        "msg_date": "2026-04-21 19:29:53",
+        "msgtype": "image",
+        "content": "{\"md5sum\":\"1c20ac3d5bd68abd990ab3b37f72c81a\",\"filesize\":6449402,\"sdkfileid\":\"CtoBMzA2YjAyMDEwMjA0NjQzMDYyMDIwMTAwMDIwNDdhOTE5MjQ1MDIwMzBmNDI0MTAyMDQ5MGQzNjZiNDAyMDQ2OWU3NWZiMDA0MjQ2MzMwMzgzOTMzMzU2MzMwMmQzMjMxMzEzODJkMzQ2NDM2MzcyZDM5NjYzNzMyMmQ2NjY2MzA2NTMzMzIzODMyMzczNzMwMzcwMjAzMTAzODAwMDIwMzYyNjkwMDA0MTAxYzIwYWMzZDViZDY4YWJkOTkwYWIzYjM3ZjcyYzgxYTAyMDEwMTAyMDEwMDA0MDASOE5EZGZNVFk0T0RnMU5qSXhNVFU1TVRjME9WOHlNRE01TURVek16a3dYekUzTnpZM056QTVPVGM9GiAxMDgzMjg0NjI1Njk3NDJlNGI3MzhmYjNlYTM1MzJlOA==\"}",
+        "path_url": "http://static2.51gonggui.com/10698609559972755122_1776770997375_external526d9cd1-f90d-4438-980f-a7c6a0f1eeac_0"
+      },
+      {
+        "id": 204053,
+        "chat_from": "wm7pwYBwAAcf4CPiiKH80QVHIi7NpfIA",
+        "msg_date": "2026-04-21 19:30:00",
+        "msgtype": "image",
+        "content": "{\"md5sum\":\"90d759a46d044ed76eba566b6b50d42b\",\"filesize\":372124,\"sdkfileid\":\"CoMEKjEqdmlMdGU0aU1XOS9WQzVPWi9aWjdGbWhRZkRVZUFKb3JwNVdqVUVnT0pwVW1YOTBEQ3d2eE5pUHR1bkpkZmtzYXRnYUkzNC9lU3lRSFFxTVltWk9WczIwS0FZVkl6Wmc4cWpKamtYemVhTGxoSUtRbzNXZi9rVUsxbko3ZkVIWnBYNjVwZENnVTFuajl1R2xsMW4xTWlQQTJXSGRtOUpoSzU1VnM5aEJrRHlCelZpRHhVek12L05idS9yYS9YbUptUkxDZmtLdFY3UjNFQ2NhOCs2NEFCNkR3L1NvZy80TmVXZCtzenFwaCt3bTNySlJNQ2RLRGtRYk5NS0NwaUdDR2M2UUdFeitCRFhOTjIxeUJPZ2N1UnYvcXV2LzVrZkoyUThsOWk2UkhOYkU5R09sTkFQa2xrTi9xMytZUzBrQlM4YklpQWw5RjRzWEtPWWdSZFk3V2hnRzhyZkZOdExuY3loYmVSOUovWndiMTRWNDNHZWtFSDZmOTYzMXZqaVFLdVdya09jK1JjOEFmOFFkaXpub2k1RjU4KzA0Y0cveGd6Q0dhcEhrbWg1T3lGdUs2TEh6dW5ycXUzVkpxUllyWm5LTjRBRW0xVXUrR09EZWdidmpkWSs4SEs4clo3aVg3K3Bxem1PNTJLYjNsbmYzNWNvYUg4UTh0ejZDZmxaOE8SOE5EZGZOemc0TVRNd016RTVNamsyTVRZME9GOHhOell5TkRrME5EZzJYekUzTnpZM056RXdNRFE9GiBiYjQxNDk0MGQwZjA3MDUzMjQwNTcxNjI0NTNjNGZiMg==\"}",
+        "path_url": "http://static2.51gonggui.com/6826273395451911083_1776771004242_external2392c0be-a884-4055-a0fd-3858cb1356e6_0"
+      },
+      {
+        "id": 204054,
+        "chat_from": "GongGui02",
+        "msg_date": "2026-04-21 19:30:01",
+        "msgtype": "image",
+        "content": "{\"md5sum\":\"240baa0e1f8ee99e46240148af282766\",\"filesize\":593780,\"sdkfileid\":\"CtoBMzA2YjAyMDEwMjA0NjQzMDYyMDIwMTAwMDIwNDdhOTE5MjQ1MDIwMzBmNDI0MTAyMDQ5MGQzNjZiNDAyMDQ2OWU3NWZiODA0MjQzNDM3MzMzNDY0NjE2NjMzMmQ2NDMyNjM2MTJkMzQzNTM3MzEyZDM5MzEzODMzMmQzNTMwMzU2NjYxNjE2NjM1NjMzNDY1MzUwMjAzMTAzODAwMDIwMzA5MGY4MDA0MTAyNDBiYWEwZTFmOGVlOTllNDYyNDAxNDhhZjI4Mjc2NjAyMDEwMTAyMDEwMDA0MDASOE5EZGZNVFk0T0RnMU5qSXhNVFU1TVRjME9WOHhPRGN6TkRFd056RTBYekUzTnpZM056RXdNRFU9GiAwOTA4YWQ0OTllYjM0MjFhNmQ3NTRkNzM1OGFmYTVjYQ==\"}",
+        "path_url": "http://static2.51gonggui.com/6223581458080344160_1776771005322_external5ca28e24-473f-45b1-9cea-8474608a748f_0"
+      },
+      {
+        "id": 204056,
+        "chat_from": "GongGui02",
+        "msg_date": "2026-04-21 19:30:04",
+        "msgtype": "text",
+        "content": "{\"content\":\"这种\"}",
+        "path_url": null
+      },
+      {
+        "id": 204058,
+        "chat_from": "GongGui02",
+        "msg_date": "2026-04-21 19:30:09",
+        "msgtype": "image",
+        "content": "{\"md5sum\":\"240baa0e1f8ee99e46240148af282766\",\"filesize\":593780,\"sdkfileid\":\"CtoBMzA2YjAyMDEwMjA0NjQzMDYyMDIwMTAwMDIwNDdhOTE5MjQ1MDIwMzBmNDI0MTAyMDQ5MGQzNjZiNDAyMDQ2OWU3NWZjMDA0MjQzMzYzMzkzMjY2MzY2NjYyMmQ2MTM1MzU2MTJkMzQzNTMyMzUyZDYxMzMzNjMwMmQ2MjM1MzAzNDY2MzYzMTMzMzMzOTMyMzgwMjAzMTAzODAwMDIwMzA5MGY4MDA0MTAyNDBiYWEwZTFmOGVlOTllNDYyNDAxNDhhZjI4Mjc2NjAyMDEwMTAyMDEwMDA0MDASOE5EZGZNVFk0T0RnMU5qSXhNVFU1TVRjME9WOHhOekkxT0RBNU1qSTJYekUzTnpZM056RXdNVE09GiBlZjk0Mzg2YjE1YzI1ODhkNDEwMDJhMTYwNGIzNjMxOA==\"}",
+        "path_url": "http://static2.51gonggui.com/15224904924851312656_1776771013320_external6f76e3f5-c061-4800-bb64-b06d4373c11d_0"
+      },
+      {
+        "id": 204062,
+        "chat_from": "wm7pwYBwAAcf4CPiiKH80QVHIi7NpfIA",
+        "msg_date": "2026-04-21 19:31:03",
+        "msgtype": "video",
+        "content": "{\"md5sum\":\"127e6d263ba1b3d694d60922d501be6c\",\"filesize\":1288540,\"play_length\":6,\"sdkfileid\":\"CoMEKjEqdmlMdGU0aU1XOS9WQzVPWi9aWjdGbWhRZkRVZUFKb3JwNVdqVUVnT0pwVW1YOTBEQ3d2eE5pUHR1bkpkZmtzYXRnYUkzNC9lU3lRSFFxTVltWk9Wcy9MVlo1YXBmVUlzdHFEaDNkbDAyQTdzd2d0Y3FxbTdNbkh2TTl3bGRiN3Fjc3o3OEMyejZOUXFZbVdPRXp0ZW9MR0JPYk1rVGFJYVl6dHJZa1QvbjBnMTR4cUtJN0RuVjV1WXo5R0hPbldmM1hPbXpycUtubGRna3gwOXFsZ1lvaE1SYjdwdEtUM3ZkQnh2ZzdveEh2aVU5MjBXQkhxMFhEa1cxbXNkMDM4R2ZCN3Q0dFFxSFRpNUJGeU1RWjM4S0RXODMybVBLc00rOXRBd1pCMDNnT05Ib3RlVEVIV2xzU0hGVnE0K0tzTkRvSkt3VnNBK1pJRDRXY0dpaEpNdDdpNGR1d2o1aEdibVpMWmppQTh1ZFAvOW1saUZxMVA0SXBCVlZha1JOTmVrTjhhaU1EU2ZCMHAvRTVJL0VkODlMWG9tZi9tR2R0VENvT0ZnZUk5MXV5Zm55aXFEbEEzSlZhcjREcm50dTVzRjhtQy9mYTBOblh4dUI3OE5zK2Z0UDB5S1l1OHhWRVg3aHhBZ3FwVGpId0k0SU0rZ3VKcCtRRkVoekFhOXV3MXcSOE5EZGZOemc0TVRNd016RTVNamsyTVRZME9GOHhOREUxTWpNMk5qZGZNVGMzTmpjM01UQTJPQT09GiAzYmFkY2I2NjBkZGIzMzRiNWJlMTkwODE3MzBkMDU5YQ==\"}",
+        "path_url": "http://static2.51gonggui.com/6408378617103320479_1776771067518_externalea0b5b51-8e86-4afb-8412-9f7b6fb07c0c_0.mp4"
+      },
+      {
+        "id": 204064,
+        "chat_from": "wm7pwYBwAAcf4CPiiKH80QVHIi7NpfIA",
+        "msg_date": "2026-04-21 19:31:28",
+        "msgtype": "text",
+        "content": "{\"content\":\"这是DCU的\"}",
+        "path_url": null
+      },
+      {
+        "id": 204065,
+        "chat_from": "GongGui02",
+        "msg_date": "2026-04-21 19:31:30",
+        "msgtype": "text",
+        "content": "{\"content\":\"没有这个白色标签 找不到DCU数据\"}",
+        "path_url": null
+      },
+      {
+        "id": 204068,
+        "chat_from": "GongGui02",
+        "msg_date": "2026-04-21 19:31:35",
+        "msgtype": "text",
+        "content": "{\"content\":\"只能刷ECU了\"}",
+        "path_url": null
+      },
+      {
+        "id": 204070,
+        "chat_from": "wm7pwYBwAAcf4CPiiKH80QVHIi7NpfIA",
+        "msg_date": "2026-04-21 19:32:05",
+        "msgtype": "text",
+        "content": "{\"content\":\"那就刷EcU\"}",
+        "path_url": null
+      },
+      {
+        "id": 204071,
+        "chat_from": "GongGui02",
+        "msg_date": "2026-04-21 19:32:24",
+        "msgtype": "image",
+        "content": "{\"md5sum\":\"7cbe235a0445c2a64fae8ca23cfe7b87\",\"filesize\":20425,\"sdkfileid\":\"CtgBMzA2YTAyMDEwMjA0NjMzMDYxMDIwMTAwMDIwNDdhOTE5MjQ1MDIwMzBmNDI0MTAyMDQ5MGQzNjZiNDAyMDQ2OWU3NjA0ODA0MjQ2MTMyMzIzNzYzNjQ2NTY0MmQzNzM4MzAzNTJkMzQzMTM2NjMyZDYyNjEzOTM2MmQzODM1NjY2MjYzMzEzNjMxMzY2NjMyNjQwMjAzMTAzODAwMDIwMjRmZDAwNDEwN2NiZTIzNWEwNDQ1YzJhNjRmYWU4Y2EyM2NmZTdiODcwMjAxMDEwMjAxMDAwNDAwEjhORGRmTVRZNE9EZzFOakl4TVRVNU1UYzBPVjh6TkRnNE9URTRNelJmTVRjM05qYzNNVEUwT0E9PRogNGYzOTFmMmE0NTI0MWU3YmRjYmM1NzgxMDFiNWFmYTE=\"}",
+        "path_url": "http://static2.51gonggui.com/14636368541216425497_1776771148306_external633eea08-5628-4293-b504-68b459535327_0"
+      },
+      {
+        "id": 204072,
+        "chat_from": "GongGui02",
+        "msg_date": "2026-04-21 19:32:24",
+        "msgtype": "text",
+        "content": "{\"content\":\"等更新完\"}",
+        "path_url": null
+      },
+      {
+        "id": 204073,
+        "chat_from": "wm7pwYBwAAcf4CPiiKH80QVHIi7NpfIA",
+        "msg_date": "2026-04-21 19:32:36",
+        "msgtype": "text",
+        "content": "{\"content\":\"好\"}",
+        "path_url": null
+      },
+      {
+        "id": 204142,
+        "chat_from": "GongGui02",
+        "msg_date": "2026-04-21 19:47:34",
+        "msgtype": "text",
+        "content": "{\"content\":\"现在插车上吗\"}",
+        "path_url": null
+      },
+      {
+        "id": 204144,
+        "chat_from": "GongGui02",
+        "msg_date": "2026-04-21 19:47:43",
+        "msgtype": "text",
+        "content": "{\"content\":\"@程工 \"}",
+        "path_url": null
+      },
+      {
+        "id": 204145,
+        "chat_from": "wm7pwYBwAAcf4CPiiKH80QVHIi7NpfIA",
+        "msg_date": "2026-04-21 19:47:55",
+        "msgtype": "text",
+        "content": "{\"content\":\"插上了\"}",
+        "path_url": null
+      },
+      {
+        "id": 204151,
+        "chat_from": "wm7pwYBwAAcf4CPiiKH80QVHIi7NpfIA",
+        "msg_date": "2026-04-21 19:48:04",
+        "msgtype": "text",
+        "content": "{\"content\":\"点火开关打开了\"}",
+        "path_url": null
+      },
+      {
+        "id": 204168,
+        "chat_from": "GongGui02",
+        "msg_date": "2026-04-21 19:54:38",
+        "msgtype": "image",
+        "content": "{\"md5sum\":\"ff405791b63b5b32fd9780b3c5f9bc8a\",\"filesize\":181525,\"sdkfileid\":\"CtoBMzA2YjAyMDEwMjA0NjQzMDYyMDIwMTAwMDIwNDdhOTE5MjQ1MDIwMzBmNDI0MTAyMDQzN2MxNmViNDAyMDQ2OWU3NjU3ZDA0MjQzNzMyMzA2NDM2NjQ2MTY2MmQ2NDM5NjE2MjJkMzQzOTY1MzUyZDYxMzQzODM5MmQzODM2NjYzMTY0MzczNzYxMzEzMjM3MzIwMjAzMTAyODAwMDIwMzAyYzUyMDA0MTBmZjQwNTc5MWI2M2I1YjMyZmQ5NzgwYjNjNWY5YmM4YTAyMDEwMTAyMDEwMDA0MDASOE5EZGZNVFk0T0RnMU5qSXhNVFU1TVRjME9WODNOell5TkRBd056RmZNVGMzTmpjM01qUTRNZz09GiBiNDJkMTJiYzMwN2UwMDJjYTg1MjQ1ODk0ZGE1YWVkNQ==\"}",
+        "path_url": "http://static2.51gonggui.com/10990813603501926632_1776772482344_external85e47a35-d8e3-4d22-8e09-5cbc271716ba_0"
+      },
+      {
+        "id": 204169,
+        "chat_from": "GongGui02",
+        "msg_date": "2026-04-21 19:54:42",
+        "msgtype": "text",
+        "content": "{\"content\":\"好了\"}",
+        "path_url": null
+      },
+      {
+        "id": 204170,
+        "chat_from": "wm7pwYBwAAgfHzjmwuknPAlhJ49PokvQ",
+        "msg_date": "2026-04-21 19:54:52",
+        "msgtype": "image",
+        "content": "{\"md5sum\":\"a416433c1a09a7bd9cc51328c3ab9cd3\",\"filesize\":561122,\"sdkfileid\":\"CoMEKjEqdTNXMmsvMis3VGlnRjNpZU0ySllXYURSaHhYMmhyeGRObzZMVndsT0hNajIvcU9LZi9mcDBDM0J3WDFTMldRNXR2TnVBczF4U2x3eDBsRzlpVEVUVXFYWVFRMmVhSDl2UU9teGVFMXpMbmJFYXp1QXM0bmpaYlNDemdRcUluT1lpZDRnTjlhU3hxamZpWkIyN0JVZVVzYkY1TzAzQXd5a1JjRUJ5OGUxVWlneG1ocWJWUGI0dDBSbUd6VjNDS3ROOUZqK2hpZDlXYTZJZTdNWXZoMmFJNml2dVQra2xNQ1d1L2xsNklmSmh6WGRoUjVYR3l3WklScStLa0ROdUZkTVNsc2UyRUYwYllEVnJqd0FCZlQwUWZuQnhrdytIV2Q1dXR0ZDM1Ykkxdi9wQWJuQTl4dkdjeHZvWFBTQWNJWlpORHUyR0E0T3RhQVc5d1Z0RVJqQkU4MkhEZUVTQm41NExYa05iZVJNdGIrd013dUtOeDkwZUlVK3VYYXkzaWUvM2lXOVlVT0tTN01BSTg2emdyLy9qQWNNeFpsRkNhckQ1VXFuYURHbCs5YTVSNFNBL1dZMVZxWkdLMGhER0tORVVEZGNPa2RZSnlVOHgxSXlwYkYvVTZGbkVObFZWWmZkTlM1VG1aeFRtampjSi9lakpia3lINnRoSnlJeDhQNVcSOE5EZGZOemc0TVRJNU9UZzVOakF5TlRnMk1sOHhNelV3T0RjNE9EQTNYekUzTnpZM056STBPVGc9GiBlYzAyNjkxNjI4NTFkNmIwODlkZWY4NmJkNmYwNzNkZA==\"}",
+        "path_url": "http://static2.51gonggui.com/1321907872405945901_1776772497512_external7b1bc186-b5c4-4ee0-b082-df4d1601b883_0"
+      },
+      {
+        "id": 204171,
+        "chat_from": "wm7pwYBwAAgfHzjmwuknPAlhJ49PokvQ",
+        "msg_date": "2026-04-21 19:54:58",
+        "msgtype": "text",
+        "content": "{\"content\":\"这个什么情况\"}",
+        "path_url": null
+      }
+    ]
+  },
+  {
+    "case_id": "real_train_0010",
+    "room_id": "wr7pwYBwAAN1LLLptxu5xAd6LuOWlJWQ",
+    "opening_id": 189208,
+    "messages": [
+      {
+        "id": 189208,
+        "chat_from": "wm7pwYBwAARUudXy7g_0QuHrLvaqeffQ",
+        "msg_date": "2026-04-19 18:16:00",
+        "msgtype": "text",
+        "content": "{\"content\":\"凯普特ev350整车电路图\"}",
+        "path_url": null
+      },
+      {
+        "id": 189209,
+        "chat_from": "GongGuiZhiJiaJiShu-QiuLingTong",
+        "msg_date": "2026-04-19 18:16:04",
+        "msgtype": "text",
+        "content": "{\"content\":\"用手机看\"}",
+        "path_url": null
+      },
+      {
+        "id": 189210,
+        "chat_from": "wm7pwYBwAARUudXy7g_0QuHrLvaqeffQ",
+        "msg_date": "2026-04-19 18:16:09",
+        "msgtype": "text",
+        "content": "{\"content\":\"app\"}",
+        "path_url": null
+      },
+      {
+        "id": 189211,
+        "chat_from": "wm7pwYBwAARUudXy7g_0QuHrLvaqeffQ",
+        "msg_date": "2026-04-19 18:16:14",
+        "msgtype": "text",
+        "content": "{\"content\":\"我就是手机看的\"}",
+        "path_url": null
+      },
+      {
+        "id": 189213,
+        "chat_from": "GongGuiZhiJiaJiShu-QiuLingTong",
+        "msg_date": "2026-04-19 18:16:22",
+        "msgtype": "text",
+        "content": "{\"content\":\"可以放大啊\"}",
+        "path_url": null
+      },
+      {
+        "id": 189214,
+        "chat_from": "wm7pwYBwAARUudXy7g_0QuHrLvaqeffQ",
+        "msg_date": "2026-04-19 18:16:27",
+        "msgtype": "text",
+        "content": "{\"content\":\"不放大也看不清\"}",
+        "path_url": null
+      },
+      {
+        "id": 189217,
+        "chat_from": "wm7pwYBwAARUudXy7g_0QuHrLvaqeffQ",
+        "msg_date": "2026-04-19 18:16:37",
+        "msgtype": "text",
+        "content": "{\"content\":\"我给你录个屏你看一下\"}",
+        "path_url": null
+      },
+      {
+        "id": 189226,
+        "chat_from": "wm7pwYBwAARUudXy7g_0QuHrLvaqeffQ",
+        "msg_date": "2026-04-19 18:17:54",
+        "msgtype": "text",
+        "content": "{\"content\":\"您看下\"}",
+        "path_url": null
+      },
+      {
+        "id": 189229,
+        "chat_from": "wm7pwYBwAARUudXy7g_0QuHrLvaqeffQ",
+        "msg_date": "2026-04-19 18:18:00",
+        "msgtype": "video",
+        "content": "{\"md5sum\":\"8831176dab7dee9dcf4b0fe0f7051d90\",\"filesize\":2410817,\"play_length\":32,\"sdkfileid\":\"CoMEKjEqSmZMdy85bU00WjZJZUw4c1RjT3RhelJiOEUyNVdhWFVaek5CeTBDM3lQMFpId3MvN1hKNndMN2ZIeVdSUlRyeVJRUytvYVVEMTJqK0s0bGxwN0FXQ3dWWGpyZWFrWE5kd3A3OWV6eTJBVUNZbDk2blhhNEI0dlJvN1p3NmV0dkFpdmRObm9MaUVLZHIwSk1EMDU5eWN5WVZxb1M3akw4WVRrZ0I3SUREcm1IMVFhMCtWNXNqenB2ZkpkMjc5ck9xdEdFZnpacTFGRHBKU2doZDVoSmM3UDU3dUxQM1R4WVhidXN2T3Y0UmxFeU9zY2RPRm1Yd2Fkd3NRSVlDaTJ3TStHSnV3WXczSEVqT3JYUzl0YUVmQkJWRlBKR0ZNaWJXWWRwQW1MejN1WDdBRnp5S29HbzFBb3I4bmlrU2tteEFOVHBIdnNkeWFHWC8wRFloMUk1NFpjUEliVVhFeGZZNEt5d1dxUWRpbHBCa2JmMkVkdXJIcFl0TUE3dkpBUWJBbTB1cmdMZ0dDMUJFL0hIdWFha015M20wMG1zUEJ0VXBoU0crRXhzS2F3WDE3UXE1MGsrNmJmV2RJSEkzSzdQRjA1VFR4bzNLQ3MrNmxXRHByQjJnLzQ5K0dBb0hUcE1uQWJyYWlwQ2NhWEUxaTF1WEtMT1JMbGI4VGVUcmRTTnESOE5EZGZOemc0TVRNd01UTTJNVGsyTURVeU9WOHhOalF6TVRrNE56ZzBYekUzTnpZMU9UTTRPRGs9GiA1MTZhMDk0NDU2YjQyZTBhMzA3ODVjNTRhOGZmN2RmMQ==\"}",
+        "path_url": "http://static2.51gonggui.com/574834210778236568_1776593884343_external0bc57f62-edf4-4755-9d4d-84c9345fbe1c_0.mp4"
+      },
+      {
+        "id": 189253,
+        "chat_from": "wm7pwYBwAARUudXy7g_0QuHrLvaqeffQ",
+        "msg_date": "2026-04-19 18:20:39",
+        "msgtype": "text",
+        "content": "{\"content\":\"@AI神算子-邱工 \"}",
+        "path_url": null
+      },
+      {
+        "id": 189254,
+        "chat_from": "wm7pwYBwAARUudXy7g_0QuHrLvaqeffQ",
+        "msg_date": "2026-04-19 18:20:47",
+        "msgtype": "text",
+        "content": "{\"content\":\"这个有高清图吗\"}",
+        "path_url": null
+      },
+      {
+        "id": 189318,
+        "chat_from": "wm7pwYBwAARUudXy7g_0QuHrLvaqeffQ",
+        "msg_date": "2026-04-19 18:28:45",
+        "msgtype": "text",
+        "content": "{\"content\":\"没有人了吗\"}",
+        "path_url": null
+      },
+      {
+        "id": 189531,
+        "chat_from": "GongGuiZhiJiaJiShu-QiuLingTong",
+        "msg_date": "2026-04-19 18:59:17",
+        "msgtype": "text",
+        "content": "{\"content\":\"什么车\"}",
+        "path_url": null
+      },
+      {
+        "id": 189532,
+        "chat_from": "GongGuiZhiJiaJiShu-QiuLingTong",
+        "msg_date": "2026-04-19 18:59:19",
+        "msgtype": "text",
+        "content": "{\"content\":\"@A000老三汽配13439387689 \"}",
+        "path_url": null
+      },
+      {
+        "id": 189535,
+        "chat_from": "wm7pwYBwAARUudXy7g_0QuHrLvaqeffQ",
+        "msg_date": "2026-04-19 18:59:37",
+        "msgtype": "text",
+        "content": "{\"content\":\"东风\"}",
+        "path_url": null
+      },
+      {
+        "id": 189536,
+        "chat_from": "GongGuiZhiJiaJiShu-QiuLingTong",
+        "msg_date": "2026-04-19 18:59:38",
+        "msgtype": "text",
+        "content": "{\"content\":\"还有没有其他选项\"}",
+        "path_url": null
+      },
+      {
+        "id": 189537,
+        "chat_from": "wm7pwYBwAARUudXy7g_0QuHrLvaqeffQ",
+        "msg_date": "2026-04-19 18:59:49",
+        "msgtype": "text",
+        "content": "{\"content\":\"没有了\"}",
+        "path_url": null
+      },
+      {
+        "id": 189540,
+        "chat_from": "GongGuiZhiJiaJiShu-QiuLingTong",
+        "msg_date": "2026-04-19 18:59:58",
+        "msgtype": "text",
+        "content": "{\"content\":\"东风什么车\"}",
+        "path_url": null
+      },
+      {
+        "id": 189541,
+        "chat_from": "GongGuiZhiJiaJiShu-QiuLingTong",
+        "msg_date": "2026-04-19 19:00:00",
+        "msgtype": "text",
+        "content": "{\"content\":\"具体些\"}",
+        "path_url": null
+      },
+      {
+        "id": 189543,
+        "chat_from": "wm7pwYBwAARUudXy7g_0QuHrLvaqeffQ",
+        "msg_date": "2026-04-19 19:00:15",
+        "msgtype": "text",
+        "content": "{\"content\":\"凯普特ev350\"}",
+        "path_url": null
+      },
+      {
+        "id": 189573,
+        "chat_from": "GongGuiZhiJiaJiShu-QiuLingTong",
+        "msg_date": "2026-04-19 19:04:05",
+        "msgtype": "weapp",
+        "content": "{\"title\":\"共轨之家\",\"description\":\"共轨之家\",\"username\":\"gh_e35143657ab1@app\",\"displayname\":\"共轨之家\",\"appid\":\"\",\"pagepath\":\"pages/wps/wps.html?fileNo=26096\"}",
+        "path_url": null
+      },
+      {
+        "id": 189574,
+        "chat_from": "GongGuiZhiJiaJiShu-QiuLingTong",
+        "msg_date": "2026-04-19 19:04:12",
+        "msgtype": "text",
+        "content": "{\"content\":\"我放大是清晰的\"}",
+        "path_url": null
+      },
+      {
+        "id": 189678,
+        "chat_from": "wm7pwYBwAARUudXy7g_0QuHrLvaqeffQ",
+        "msg_date": "2026-04-19 19:25:35",
+        "msgtype": "text",
+        "content": "{\"content\":\"那您看看能不能给我截个图，我就要bcm的\"}",
+        "path_url": null
+      },
+      {
+        "id": 189679,
+        "chat_from": "wm7pwYBwAARUudXy7g_0QuHrLvaqeffQ",
+        "msg_date": "2026-04-19 19:25:40",
+        "msgtype": "text",
+        "content": "{\"content\":\"谢谢\"}",
+        "path_url": null
+      },
+      {
+        "id": 189802,
+        "chat_from": "GongGuiZhiJiaJiShu-QiuLingTong",
+        "msg_date": "2026-04-19 19:44:56",
+        "msgtype": "text",
+        "content": "{\"content\":\"bcm这边确实我看下比较模糊  \"}",
+        "path_url": null
+      },
+      {
+        "id": 189803,
+        "chat_from": "GongGuiZhiJiaJiShu-QiuLingTong",
+        "msg_date": "2026-04-19 19:45:10",
+        "msgtype": "text",
+        "content": "{\"content\":\"我反馈给研发那边看下\"}",
+        "path_url": null
+      },
+      {
+        "id": 189836,
+        "chat_from": "wm7pwYBwAARUudXy7g_0QuHrLvaqeffQ",
+        "msg_date": "2026-04-19 19:53:08",
+        "msgtype": "text",
+        "content": "{\"content\":\"好的，我这车今天修半天了，明天得交车呢[捂脸]\"}",
+        "path_url": null
+      },
+      {
+        "id": 189839,
+        "chat_from": "GongGuiZhiJiaJiShu-QiuLingTong",
+        "msg_date": "2026-04-19 19:54:16",
+        "msgtype": "text",
+        "content": "{\"content\":\"已反馈\"}",
+        "path_url": null
+      },
+      {
+        "id": 191191,
+        "chat_from": "wm7pwYBwAA8tGCj6-9EAWJaRdsHUOVfA",
+        "msg_date": "2026-04-20 10:06:52",
+        "msgtype": "text",
+        "content": "{\"content\":\"哪位老师给找个原厂数据，汉威400国五，DHH10Q0684\"}",
+        "path_url": null
+      },
+      {
+        "id": 191193,
+        "chat_from": "wm7pwYBwAA8tGCj6-9EAWJaRdsHUOVfA",
+        "msg_date": "2026-04-20 10:07:03",
+        "msgtype": "text",
+        "content": "{\"content\":\"在线里没有\"}",
+        "path_url": null
+      },
+      {
+        "id": 191229,
+        "chat_from": "GongGuiZhiJiaJiShu-QiuLingTong",
+        "msg_date": "2026-04-20 10:10:12",
+        "msgtype": "text",
+        "content": "{\"content\":\"版本信息\"}",
+        "path_url": null
+      },
+      {
+        "id": 191299,
+        "chat_from": "GongGuiZhiJiaJiShu-QiuLingTong",
+        "msg_date": "2026-04-20 10:14:28",
+        "msgtype": "text",
+        "content": "{\"content\":\"@王海云校泵\"}",
+        "path_url": null
+      },
+      {
+        "id": 191300,
+        "chat_from": "GongGuiZhiJiaJiShu-QiuLingTong",
+        "msg_date": "2026-04-20 10:14:30",
+        "msgtype": "file",
+        "content": "{\"md5sum\":\"7c58fb7cc89422234bb5df9ee078ec9c\",\"filename\":\"潍柴自主WISEC15 P270-V137 DHH10Q0684     20211228_062715_.HEX\",\"fileext\":\"HEX\",\"filesize\":9962508,\"sdkfileid\":\"CtwBMzA2YzAyMDEwMjA0NjUzMDYzMDIwMTAwMDIwNDc5YWU0YTUyMDIwMzBmNDI0MTAyMDRkYjMwNjZiNDAyMDQ2OWU1OGMwNDA0MjQ2MzY2NjQ2NTM1MzA2NTMyMmQzNjMzMzEzNTJkMzQ2NTMzMzIyZDYxMzA2NjYyMmQzNDMwNjMzMzMwNjMzMDM5MzU2NDM1NjIwMjAzMTAwMDA1MDIwNDAwOTgwNDEwMDQxMDdjNThmYjdjYzg5NDIyMjM0YmI1ZGY5ZWUwNzhlYzljMDIwMTA1MDIwMTAwMDQwMBI4TkRkZk1UWTRPRGcxTmpFNU5qWTVOalkxT0Y4Mk9UTXpOamczTURGZk1UYzNOalkxTVRJM05BPT0aIDM5MzYzOTYyMzAzNTYxMzQzOTMzMzM2MTYyMzUzNjYx\"}",
+        "path_url": "http://static2.51gonggui.com/3547984190885039276_1776651274282_externalaab686d5-d01d-4f86-ba39-9ddb359f71e5_0.HEX"
+      },
+      {
+        "id": 191307,
+        "chat_from": "wm7pwYBwAA8tGCj6-9EAWJaRdsHUOVfA",
+        "msg_date": "2026-04-20 10:14:49",
+        "msgtype": "text",
+        "content": "{\"content\":\"好的\"}",
+        "path_url": null
+      },
+      {
+        "id": 192113,
+        "chat_from": "wm7pwYBwAAhmAr34CjEbE0h8p649vblw",
+        "msg_date": "2026-04-20 11:24:58",
+        "msgtype": "text",
+        "content": "{\"content\":\"文建汽车电器总部\\n因业务发展招学徒一到两名，待遇优厚，十里春风，只为聘你。万事俱备，只等你来共创辉煌。不重文凭，重人品，不求学厉，求能力，你未必出类拔萃，但一定以众不同。\\n地址，富管营村13785688169，15076609591\"}",
+        "path_url": null
+      },
+      {
+        "id": 193891,
+        "chat_from": "wm7pwYBwAA2ugtUkRrI7-WCjAnWfqHyg",
+        "msg_date": "2026-04-20 15:16:00",
+        "msgtype": "image",
+        "content": "{\"md5sum\":\"2a2785543bace82ec8e858c841b5e416\",\"filesize\":398177,\"sdkfileid\":\"CoMEKjEqdmlMdGU0aU1XOS9WQzVPWi9aWjdGbWhRZkRVZUFKb3JwNVdqVUVnT0pwVlF2OGcvNVkvbXZ6b3dOR2xVRDlVSDB3N0xwMWh3WFZRYW04UFZRajFZV0huenFXekJVK3NUWDdtZi9nbTNzUUc2UHp5dmtjdWVVYkdKTmNLNVMwZnFkZ2srLzgzWFJpY3piZXRLWVZSdHhZNGk1c0JxN2U0ZjlPZU1GWXdTTVhkTnU1SFJEeU5SVjBxOVZOQnBkTzVkMnF1eXZrQXppQllISlRheU5ZRit3TFhOVTB0T3hON0g4VnpGY0J4czdKbFkwWVcxYTRRZks5bVdvdWdySDNvNGRWeDlndWkrZmJIZ0FxUHNBVm5BdW1DWTBvTStGazhrWXhycWZ0UXBEYkJjY1VrRWpmNUNSL3pacGpzNWZuWVFNQlB4TDd4cUVURzgyZjhrUjllNDMzeStFQTMydGwxNGFUOUZsem1NM3NERG5zUFpHRG1iQ1FJWWt3Y3c4aTlGS1ZoQks3L2k2d0lWWk84YXFjRjJoQlNjYjI5SUVIdy9ZTmJGR3J5aCtXWDBKRU01c3oxSHROMEpzMm9EWjJsaEkyU0QwNldWdkF5TEJVTGZmRmlDdm1ZVmVwTHVnZmFvbWN1RWpudXRiZmxKZUpXdEVBZzJQOUNkb010SmhvcEgSOE5EZGZOemc0TVRNd01ERTFOakF4TlRReU9GODBORGd6TVRrMk9EaGZNVGMzTmpZMk9UTTJOUT09GiBkN2RhYzk3ZjY4NjFmYTk2NDVhM2JmNjA3YWQ5MDc2Ng==\"}",
+        "path_url": "http://static2.51gonggui.com/15707503626080504036_1776669365382_external4cc84d56-2d24-4dd3-999c-f66916339afa_0"
+      },
+      {
+        "id": 193893,
+        "chat_from": "wm7pwYBwAA2ugtUkRrI7-WCjAnWfqHyg",
+        "msg_date": "2026-04-20 15:16:15",
+        "msgtype": "text",
+        "content": "{\"content\":\"需要原厂数据谢谢！\"}",
+        "path_url": null
+      },
+      {
+        "id": 193915,
+        "chat_from": "wm7pwYBwAA2ugtUkRrI7-WCjAnWfqHyg",
+        "msg_date": "2026-04-20 15:17:55",
+        "msgtype": "text",
+        "content": "{\"content\":\"谁帮我找一下原厂数据谢谢！\"}",
+        "path_url": null
+      },
+      {
+        "id": 193922,
+        "chat_from": "GongGuiZhiJiaJiShu-QiuLingTong",
+        "msg_date": "2026-04-20 15:18:42",
+        "msgtype": "text",
+        "content": "{\"content\":\"发动机铭牌\"}",
+        "path_url": null
+      },
+      {
+        "id": 193929,
+        "chat_from": "wm7pwYBwAA2ugtUkRrI7-WCjAnWfqHyg",
+        "msg_date": "2026-04-20 15:19:47",
+        "msgtype": "text",
+        "content": "{\"content\":\"稍等\"}",
+        "path_url": null
+      }
+    ]
+  }
+]

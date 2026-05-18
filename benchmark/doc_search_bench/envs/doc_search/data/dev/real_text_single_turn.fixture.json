@@ -1,0 +1,58 @@
+{
+  "benchmark_slug": "search-docs-of-crs-agent",
+  "suite_id": "real_text_single_turn",
+  "layer": "component",
+  "source_files": [
+    "sample/benchmark_excel_template.xlsx"
+  ],
+  "case_count": 1,
+  "cases": [
+    {
+      "case_id": "case_000003",
+      "layer": "component",
+      "input_modality": "text",
+      "question_text": "老师，请问三一55C挖机电路图有嘛",
+      "question_images": [],
+      "vehicle_info": null,
+      "benchmark_track": "chat_completions",
+      "preprocess_strategy": "none",
+      "request_context": {},
+      "notes": null,
+      "teacher_reply": null,
+      "question_type": "找资料",
+      "interaction_mode": "multi_turn",
+      "max_turns": 8,
+      "case_repeat_count": 5,
+      "initial_user_message": "老师，请问三一55C挖机电路图有嘛",
+      "user_simulation_config": {
+        "driver": "ai",
+        "scenario": "normal",
+        "rollback_intent_mode": "none",
+        "rollback_min_round_gap": 0
+      },
+      "user_profile": {
+        "persona": "cooperative_vague",
+        "goal": "找三一55C挖机资料",
+        "known_items": [
+          "三一",
+          "55C",
+          "挖机",
+          "电路图"
+        ],
+        "uncertain_items": [],
+        "aliases": {
+          "电路图": [
+            "线路图",
+            "整车电路图"
+          ],
+          "55C": [
+            "SY55",
+            "55C"
+          ]
+        },
+        "correction_style": "delayed",
+        "notes": "用户不是维修资料专家，术语可能不稳定。"
+      }
+    }
+  ]
+}

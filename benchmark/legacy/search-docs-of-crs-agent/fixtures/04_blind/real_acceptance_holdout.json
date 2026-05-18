@@ -1,0 +1,43 @@
+{
+  "benchmark_slug": "search-docs-of-crs-agent",
+  "suite_id": "real_acceptance_holdout",
+  "layer": "blind",
+  "source_files": [
+    "sample/benchmark_excel_template.xlsx"
+  ],
+  "case_count": 2,
+  "cases": [
+    {
+      "case_id": "case_000004",
+      "layer": "blind",
+      "input_modality": "text",
+      "question_text": "老师，麻烦帮忙找下国六红岩杰狮H6 BCM的针脚定义图",
+      "question_images": [],
+      "vehicle_info": null,
+      "benchmark_track": "chat_completions",
+      "preprocess_strategy": "none",
+      "request_context": {},
+      "notes": null,
+      "teacher_reply": null,
+      "question_type": "找资料"
+    },
+    {
+      "case_id": "case_000009",
+      "layer": "blind",
+      "input_modality": "image_text",
+      "question_text": "这个电路图有没老师",
+      "question_images": [
+        "sample/wecom-temp-297860-15e0b4612904b5a77ae1e224b887791d.jpg",
+        "sample/wecom-temp-404398-4164a857a0d363c04e9232103419c433.jpg",
+        "sample/wecom-temp-565930-d6399ecc0983bc629c3cba5d4cf1673e.jpg"
+      ],
+      "vehicle_info": null,
+      "benchmark_track": "chat_completions",
+      "preprocess_strategy": "ocr_then_context_injection",
+      "request_context": {},
+      "notes": "图文 case 需先完成图片识别并把结果注入 ChatRequest.context；当前 fixture 先保留空 request_context。",
+      "teacher_reply": null,
+      "question_type": "找资料"
+    }
+  ]
+}

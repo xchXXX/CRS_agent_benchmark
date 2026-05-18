@@ -1,0 +1,132 @@
+.documents-page {
+  padding: 0;
+}
+
+.page-header {
+  margin-bottom: 24px;
+}
+
+.page-header h2 {
+  font-size: 24px;
+  font-weight: 600;
+  color: #e6e6e6;
+  margin: 0 0 8px 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.page-header p {
+  color: #8a94a6;
+  margin: 0;
+  font-size: 14px;
+}
+
+.toolbar-card {
+  background: linear-gradient(135deg, rgba(26, 31, 46, 0.9) 0%, rgba(20, 25, 38, 0.95) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  padding: 16px 20px;
+  margin-bottom: 20px;
+}
+
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.search-input {
+  width: 320px;
+}
+
+.toolbar-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.table-card {
+  background: linear-gradient(135deg, rgba(26, 31, 46, 0.9) 0%, rgba(20, 25, 38, 0.95) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.import-section {
+  padding: 4px 0;
+}
+
+.import-block {
+  margin-bottom: 8px;
+}
+
+.import-block-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #e6e6e6;
+  margin-bottom: 10px;
+}
+
+.import-hint {
+  color: #8a94a6;
+  font-size: 12px;
+  margin-top: 8px;
+}
+
+.import-divider {
+  margin: 18px 0;
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.import-mapping-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px 18px;
+  margin-bottom: 12px;
+}
+
+.import-mapping-label {
+  color: #b8c0cf;
+  font-size: 12px;
+  margin-bottom: 6px;
+}
+
+.import-options {
+  margin: 10px 0 14px 0;
+  color: #b8c0cf;
+}
+
+.import-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.import-meta {
+  color: #8a94a6;
+  font-size: 12px;
+}
+
+.import-preview-table {
+  margin-top: 10px;
+}
+
+.import-status-line {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  color: #b8c0cf;
+  font-size: 12px;
+  margin-top: 8px;
+}
+
+.import-errors {
+  margin-top: 12px;
+}
+
+.import-finish-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 12px;
+}

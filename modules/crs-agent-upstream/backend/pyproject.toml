@@ -1,0 +1,48 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "crs-agent-backend"
+version = "0.1.0"
+description = "Backend skeleton for CRS Agent"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi>=0.135.0",
+    "uvicorn[standard]>=0.42.0",
+    "pydantic>=2.12.0",
+    "pydantic-settings>=2.13.0",
+    "pydantic-ai-slim[openrouter]>=1.70.0",
+    "pydantic-graph>=1.70.0",
+    "langgraph",
+    "langgraph-cli[inmem]",
+    "langchain-openrouter",
+    "logfire-api>=4.29.0",
+    "redis>=5.0.0",
+    "httpx>=0.28.0",
+    "python-multipart>=0.0.9",
+    "anyio>=4.4.0",
+    "sqlalchemy>=2.0.23",
+    "pymysql>=1.1.0",
+    "pypinyin>=0.50.0",
+    "python-jose[cryptography]>=3.3.0",
+    "passlib>=1.7.4",
+    "bcrypt>=4.0.0",
+    "openpyxl>=3.1.0",
+    "genai-prices>=0.0.55",
+    "griffe>=2.0.0",
+    "typing-inspection>=0.4.0",
+    "pytest>=8.0.0",
+]
+
+[tool.setuptools]
+package-dir = {"" = "."}
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["app*"]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]

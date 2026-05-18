@@ -1,0 +1,10 @@
+{
+  "benchmark_slug": "search-docs-of-crs-agent",
+  "suite_id": "real_acceptance_holdout",
+  "layer": "blind",
+  "source_files": [
+    "sample/benchmark_excel_template.xlsx"
+  ],
+  "case_count": 0,
+  "cases": []
+}

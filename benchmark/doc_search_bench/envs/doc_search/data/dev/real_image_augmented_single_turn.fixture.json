@@ -1,0 +1,142 @@
+{
+  "benchmark_slug": "search-docs-of-crs-agent",
+  "suite_id": "real_image_augmented_single_turn",
+  "layer": "component",
+  "source_files": [
+    "sample/benchmark_excel_template.xlsx"
+  ],
+  "case_count": 3,
+  "cases": [
+    {
+      "case_id": "case_000002",
+      "layer": "component",
+      "input_modality": "image_text",
+      "question_text": "这个板子资料是哪个，带计量单元2线的云内发动机",
+      "question_images": [
+        "sample/这个板子资料是哪个，带计量单元2线的云内发动机.jpg"
+      ],
+      "vehicle_info": null,
+      "benchmark_track": "chat_completions",
+      "preprocess_strategy": "ocr_then_context_injection",
+      "request_context": {},
+      "notes": "图文 case 需先完成图片识别并把结果注入 ChatRequest.context；当前 fixture 先保留空 request_context。",
+      "teacher_reply": null,
+      "question_type": "找资料",
+      "interaction_mode": "multi_turn",
+      "max_turns": 8,
+      "case_repeat_count": 5,
+      "initial_user_message": "这个板子资料是哪个，带计量单元2线的云内发动机",
+      "user_simulation_config": {
+        "driver": "ai",
+        "scenario": "normal",
+        "rollback_intent_mode": "none",
+        "rollback_min_round_gap": 0
+      },
+      "user_profile": {
+        "persona": "term_confused",
+        "goal": "找这块云内发动机控制板的资料",
+        "known_items": [
+          "板子资料",
+          "计量单元2线",
+          "云内发动机"
+        ],
+        "uncertain_items": [],
+        "aliases": {
+          "板子资料": [
+            "电路图",
+            "针脚图",
+            "电脑板资料"
+          ]
+        },
+        "correction_style": "delayed",
+        "notes": "用户能描述板子线索，但不一定知道正式资料名。"
+      }
+    },
+    {
+      "case_id": "case_000007",
+      "layer": "component",
+      "input_modality": "image_text",
+      "question_text": "老师这个整车电路图资料有吗，我看平台只有液压板的针脚",
+      "question_images": [
+        "sample/94716f3e052b9b9cc002e92ba0da3450.jpg"
+      ],
+      "vehicle_info": null,
+      "benchmark_track": "chat_completions",
+      "preprocess_strategy": "ocr_then_context_injection",
+      "request_context": {},
+      "notes": "图文 case 需先完成图片识别并把结果注入 ChatRequest.context；当前 fixture 先保留空 request_context。",
+      "teacher_reply": null,
+      "question_type": "找资料",
+      "interaction_mode": "multi_turn",
+      "max_turns": 8,
+      "case_repeat_count": 5,
+      "initial_user_message": "老师这个整车电路图资料有吗，我看平台只有液压板的针脚",
+      "user_simulation_config": {
+        "driver": "ai",
+        "scenario": "normal",
+        "rollback_intent_mode": "none",
+        "rollback_min_round_gap": 0
+      },
+      "user_profile": {
+        "persona": "cooperative_vague",
+        "goal": "找这个现代挖机相关的电路资料",
+        "known_items": [
+          "整车电路图",
+          "液压板",
+          "针脚"
+        ],
+        "uncertain_items": [],
+        "aliases": {
+          "液压板": [
+            "液压电脑板",
+            "液压板针脚"
+          ]
+        },
+        "correction_style": "delayed",
+        "notes": "用户一开始会把整车资料和板卡针脚资料混着说。"
+      }
+    },
+    {
+      "case_id": "case_000010",
+      "layer": "component",
+      "input_modality": "image_text",
+      "question_text": "老师。麻烦查下这板子的资料",
+      "question_images": [
+        "sample/81e8e3ee90703fcee053ac5a7358d2c2.jpg"
+      ],
+      "vehicle_info": null,
+      "benchmark_track": "chat_completions",
+      "preprocess_strategy": "ocr_then_context_injection",
+      "request_context": {},
+      "notes": "图文 case 需先完成图片识别并把结果注入 ChatRequest.context；当前 fixture 先保留空 request_context。",
+      "teacher_reply": null,
+      "question_type": "找资料",
+      "interaction_mode": "multi_turn",
+      "max_turns": 8,
+      "case_repeat_count": 5,
+      "initial_user_message": "老师。麻烦查下这板子的资料",
+      "user_simulation_config": {
+        "driver": "ai",
+        "scenario": "normal",
+        "rollback_intent_mode": "none",
+        "rollback_min_round_gap": 0
+      },
+      "user_profile": {
+        "persona": "cooperative_vague",
+        "goal": "找这块 ECU 板子的资料",
+        "known_items": [
+          "板子资料"
+        ],
+        "uncertain_items": [],
+        "aliases": {
+          "板子资料": [
+            "ECU资料",
+            "ECU电路图"
+          ]
+        },
+        "correction_style": "delayed",
+        "notes": "用户知道是 ECU 板，但不一定记得完整文件名。"
+      }
+    }
+  ]
+}

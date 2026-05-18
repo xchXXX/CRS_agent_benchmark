@@ -1,0 +1,903 @@
+{
+  "benchmark_slug": "search-docs-of-crs-agent",
+  "suite_id": "real_world_wecom_train",
+  "layer": "atomic",
+  "source_files": [
+    "资料树节点及关联文件(添加52份解放相关电路图搜索关键词语).xls",
+    "ggzj_work_wx_chat_content",
+    "benchmark_excel_template.xlsx"
+  ],
+  "case_count": 13,
+  "cases": [
+    {
+      "case_id": "real_train_0001",
+      "layer": "atomic",
+      "input_modality": "text",
+      "question_text": "老师博世878云内的电脑板供电模块有吗",
+      "question_images": [],
+      "vehicle_info": null,
+      "benchmark_track": "chat_completions",
+      "preprocess_strategy": "none",
+      "request_context": {},
+      "notes": "人工筛选的真实企业微信找文件 case；room_id=wr7pwYBwAAs6cb-jRCgXfvd0JukHTeDw；chat_from=LiGuang；opening_message_id=125536；answer_message_id=125611；唯一答案来自黄县华截图红框标题。",
+      "source_file": "ggzj_work_wx_chat_content",
+      "interaction_mode": "multi_turn",
+      "max_turns": 8,
+      "case_repeat_count": 3,
+      "initial_user_message": "博世878云内的电脑板供电模块有吗。",
+      "user_simulation_config": {
+        "driver": "ai",
+        "scenario": "term_confused",
+        "rollback_intent_mode": "none",
+        "rollback_min_round_gap": 0
+      },
+      "user_profile": {
+        "persona": "term_confused",
+        "goal": "找到博世878云内电脑板供电模块相关资料。",
+        "known_items": [
+          "博世878",
+          "云内",
+          "电脑板",
+          "供电模块"
+        ],
+        "uncertain_items": [],
+        "aliases": {},
+        "correction_style": "delayed",
+        "notes": "用户文本里只明确提到博世878、云内、电脑板和供电模块，不补入最终答案中的正式型号或资料类型。"
+      },
+      "metadata": {
+        "room_id": "wr7pwYBwAAs6cb-jRCgXfvd0JukHTeDw",
+        "chat_from": "LiGuang",
+        "opening_message_id": 125536,
+        "transcript": [
+          {
+            "id": 125536,
+            "chat_from": "LiGuang",
+            "msg_date": "2026-04-10 14:45:46",
+            "msgtype": "text",
+            "text": "老师博世878云内的电脑板供电模块有吗",
+            "path_url": null
+          },
+          {
+            "id": 125611,
+            "chat_from": "HuangXianHua",
+            "msg_date": "2026-04-10 14:51:37",
+            "msgtype": "mixed",
+            "text": "这个板子还没有画原创图：需要自行查找供电模块，但是电脑板一样供电模块对应的针脚一样，指向的部件可能不一样，参考左边的供电模块针脚，在找对应的云内电脑板电路图确认具体对应的部件",
+            "path_url": "http://static2.51gonggui.com/11827330924008826760_17758039012150c32a44c-9e54-415b-85d2-4c91bcdddf0d_0"
+          }
+        ],
+        "evidence_source": "db_room_export",
+        "chat_trace_status": "db_verified"
+      },
+      "question_type": "找资料"
+    },
+    {
+      "case_id": "real_train_0002",
+      "layer": "atomic",
+      "input_modality": "text",
+      "question_text": "老师好，麻烦帮忙查一下  重汽汕德卡G7驾驶室升降电路图",
+      "question_images": [],
+      "vehicle_info": null,
+      "benchmark_track": "chat_completions",
+      "preprocess_strategy": "none",
+      "request_context": {},
+      "notes": "人工筛选的真实企业微信找文件 case；room_id=wr7pwYBwAAs6cb-jRCgXfvd0JukHTeDw；chat_from=FengZhiQiang；opening_message_id=159483；answer_message_id=159508；唯一答案来自黄县华截图红框标题。",
+      "source_file": "ggzj_work_wx_chat_content",
+      "interaction_mode": "multi_turn",
+      "max_turns": 8,
+      "case_repeat_count": 3,
+      "initial_user_message": "重汽汕德卡G7驾驶室升降这部分，想找对应的整车电路图。",
+      "user_simulation_config": {
+        "driver": "ai",
+        "scenario": "normal",
+        "rollback_intent_mode": "none",
+        "rollback_min_round_gap": 0
+      },
+      "user_profile": {
+        "persona": "normal",
+        "goal": "找到重汽汕德卡G7驾驶室升降对应的整车电路图。",
+        "known_items": [
+          "重汽",
+          "汕德卡",
+          "G7",
+          "整车电路图",
+          "驾驶室升降"
+        ],
+        "uncertain_items": [],
+        "aliases": {},
+        "correction_style": "immediate",
+        "notes": "仅整理聊天记录中明确出现的信息。"
+      },
+      "metadata": {
+        "room_id": "wr7pwYBwAAs6cb-jRCgXfvd0JukHTeDw",
+        "chat_from": "FengZhiQiang",
+        "opening_message_id": 159483,
+        "transcript": [
+          {
+            "id": 159483,
+            "chat_from": "FengZhiQiang",
+            "msg_date": "2026-04-15 15:18:07",
+            "msgtype": "text",
+            "text": "老师好，麻烦帮忙查一下  重汽汕德卡G7驾驶室升降电路图",
+            "path_url": null
+          },
+          {
+            "id": 159508,
+            "chat_from": "HuangXianHua",
+            "msg_date": "2026-04-15 15:21:41",
+            "msgtype": "mixed",
+            "text": "23页",
+            "path_url": "http://static2.51gonggui.com/6522213889853254095_1776237705168fa71577b-fd20-41a8-96c0-dd0708a03af3_0"
+          }
+        ],
+        "evidence_source": "db_room_export",
+        "chat_trace_status": "db_verified"
+      },
+      "question_type": "找资料"
+    },
+    {
+      "case_id": "real_train_0003",
+      "layer": "atomic",
+      "input_modality": "image_text",
+      "question_text": "老师好，请问怎么查重汽豪沃国六中央集电盒针脚定义图、还有右前底盘线束针脚定义图",
+      "question_images": [
+        "benchmark/doc_search_bench/envs/doc_search/data/train/case_assets/real_train_0003/question_01.png"
+      ],
+      "vehicle_info": null,
+      "benchmark_track": "chat_completions",
+      "preprocess_strategy": "none",
+      "request_context": {},
+      "notes": "人工筛选的真实企业微信找文件 case；room_id=wr7pwYBwAAs6cb-jRCgXfvd0JukHTeDw；chat_from=FengZhiQiang；opening_message_id=168902；补充车型消息 id=168925；answer_message_id=169149；唯一答案来自黄县华截图红框标题。",
+      "source_file": "ggzj_work_wx_chat_content",
+      "interaction_mode": "multi_turn",
+      "max_turns": 8,
+      "case_repeat_count": 3,
+      "initial_user_message": "怎么查重汽豪沃国六中央集电盒针脚定义图，还有右前底盘线束针脚定义图。TH7国六460马力曼机。",
+      "user_simulation_config": {
+        "driver": "ai",
+        "scenario": "normal",
+        "rollback_intent_mode": "none",
+        "rollback_min_round_gap": 0
+      },
+      "user_profile": {
+        "persona": "normal",
+        "goal": "找到和中央集电盒针脚、右前底盘线束针脚相关的资料。",
+        "known_items": [
+          "重汽 / 豪沃",
+          "国六 / 460马力 / 曼机",
+          "TH7",
+          "中央集电盒针脚定义图 / 右前底盘线束针脚定义图"
+        ],
+        "uncertain_items": [],
+        "aliases": {},
+        "correction_style": "immediate",
+        "notes": "已合并用户第二条补充消息 TH7、460马力、曼机，不再遗漏后续文本线索。"
+      },
+      "metadata": {
+        "room_id": "wr7pwYBwAAs6cb-jRCgXfvd0JukHTeDw",
+        "chat_from": "FengZhiQiang",
+        "opening_message_id": 168902,
+        "transcript": [
+          {
+            "id": 168902,
+            "chat_from": "FengZhiQiang",
+            "msg_date": "2026-04-16 16:10:24",
+            "msgtype": "text",
+            "text": "老师好，请问怎么查重汽豪沃国六中央集电盒针脚定义图、还有右前底盘线束针脚定义图",
+            "path_url": null
+          },
+          {
+            "id": 168925,
+            "chat_from": "FengZhiQiang",
+            "msg_date": "2026-04-16 16:11:17",
+            "msgtype": "text",
+            "text": "TH7国六460马力曼机",
+            "path_url": null
+          },
+          {
+            "id": 169051,
+            "chat_from": "FengZhiQiang",
+            "msg_date": "2026-04-16 16:27:29",
+            "msgtype": "mixed",
+            "text": "找不到呀，老师，麻烦帮忙找一下",
+            "path_url": "http://static2.51gonggui.com/16919142488105099135_17763280532060d0dbab3-b08a-4d40-b64d-5e976271064f_0"
+          },
+          {
+            "id": 169149,
+            "chat_from": "HuangXianHua",
+            "msg_date": "2026-04-16 16:42:04",
+            "msgtype": "mixed",
+            "text": "底盘线束对接接口在后面几页",
+            "path_url": "http://static2.51gonggui.com/4395518804566528998_1776328928155390e96b9-ef1c-48ee-9c63-82d17337611f_0"
+          }
+        ],
+        "evidence_source": "db_room_export",
+        "chat_trace_status": "db_verified"
+      },
+      "question_type": "找资料"
+    },
+    {
+      "case_id": "real_train_0004",
+      "layer": "atomic",
+      "input_modality": "image_text",
+      "question_text": "老师好，请问这个电脑板有嘛，福田",
+      "question_images": [
+        "benchmark/doc_search_bench/envs/doc_search/data/train/case_assets/real_train_0004/question_01.jpg",
+        "benchmark/doc_search_bench/envs/doc_search/data/train/case_assets/real_train_0004/question_02.jpg",
+        "benchmark/doc_search_bench/envs/doc_search/data/train/case_assets/real_train_0004/question_03.jpg"
+      ],
+      "vehicle_info": null,
+      "benchmark_track": "chat_completions",
+      "preprocess_strategy": "none",
+      "request_context": {},
+      "notes": "人工筛选的真实企业微信找文件 case；room_id=wr7pwYBwAAs6cb-jRCgXfvd0JukHTeDw；chat_from=FengZhiQiang；opening_message_id=221395；answer_message_id=221522；唯一答案来自黄县华截图红框标题。",
+      "source_file": "ggzj_work_wx_chat_content",
+      "interaction_mode": "multi_turn",
+      "max_turns": 8,
+      "case_repeat_count": 3,
+      "initial_user_message": "这个电脑板有嘛，福田。",
+      "user_simulation_config": {
+        "driver": "ai",
+        "scenario": "cooperative_vague",
+        "rollback_intent_mode": "none",
+        "rollback_min_round_gap": 0
+      },
+      "user_profile": {
+        "persona": "cooperative_vague",
+        "goal": "找到这块福田电脑板对应的资料。",
+        "known_items": [
+          "福田",
+          "驭菱VQ1",
+          "4W12M",
+          "1.2L",
+          "A6314 / L0100220171A0 / L03690101B8A0",
+          "电脑板"
+        ],
+        "uncertain_items": [
+          "资料"
+        ],
+        "aliases": {},
+        "correction_style": "delayed",
+        "notes": "图片可直接读出 驭菱VQ1、1.2L、4W12M 以及 ECU/OBD 型号信息；用户文本只明确说福田电脑板。"
+      },
+      "metadata": {
+        "room_id": "wr7pwYBwAAs6cb-jRCgXfvd0JukHTeDw",
+        "chat_from": "FengZhiQiang",
+        "opening_message_id": 221395,
+        "transcript": [
+          {
+            "id": 221395,
+            "chat_from": "FengZhiQiang",
+            "msg_date": "2026-04-24 16:14:28",
+            "msgtype": "mixed",
+            "text": "老师好，请问这个电脑板有嘛，福田",
+            "path_url": "http://static2.51gonggui.com/7643522889936944963_17770184721730ce799b6-c903-48c5-85af-2b0298cbc640_0,http://static2.51gonggui.com/7643522889936944963_1777018472173a4e785ab-84c0-4959-9ddf-64a90b422d3d_1,http://static2.51gonggui.com/7643522889936944963_1777018472173203de1ba-bc55-46b4-8988-a6d60ab8b7cd_2"
+          },
+          {
+            "id": 221522,
+            "chat_from": "HuangXianHua",
+            "msg_date": "2026-04-24 16:24:28",
+            "msgtype": "mixed",
+            "text": "参考下",
+            "path_url": "http://static2.51gonggui.com/6552126977509524875_17770190722533b81c517-56ce-4081-b778-42f643595096_0"
+          }
+        ],
+        "evidence_source": "db_room_export",
+        "chat_trace_status": "db_verified"
+      },
+      "question_type": "找资料"
+    },
+    {
+      "case_id": "real_train_0005",
+      "layer": "atomic",
+      "input_modality": "image_text",
+      "question_text": "这个保险盒图纸谁知道？",
+      "question_images": [
+        "benchmark/doc_search_bench/envs/doc_search/data/train/case_assets/real_train_0005/question_01.jpg",
+        "benchmark/doc_search_bench/envs/doc_search/data/train/case_assets/real_train_0005/question_02.jpg"
+      ],
+      "vehicle_info": null,
+      "benchmark_track": "chat_completions",
+      "preprocess_strategy": "none",
+      "request_context": {},
+      "notes": "人工筛选的真实企业微信找文件 case；room_id=wr7pwYBwAAs6cb-jRCgXfvd0JukHTeDw；chat_from=kefuYangJie；opening_message_id=252614；answer_message_id=252755；唯一答案来自黄县华截图红框标题。",
+      "source_file": "ggzj_work_wx_chat_content",
+      "interaction_mode": "multi_turn",
+      "max_turns": 8,
+      "case_repeat_count": 3,
+      "initial_user_message": "这个保险盒图纸谁知道？",
+      "user_simulation_config": {
+        "driver": "ai",
+        "scenario": "cooperative_vague",
+        "rollback_intent_mode": "none",
+        "rollback_min_round_gap": 0
+      },
+      "user_profile": {
+        "persona": "cooperative_vague",
+        "goal": "找到这个保险盒相关资料。",
+        "known_items": [
+          "保险盒",
+          "中国重汽集团济南商用车有限公司",
+          "LZZAELSDXFC228380",
+          "D10.38-50",
+          "2017.07"
+        ],
+        "uncertain_items": [
+          "12500kg / 25000kg",
+          "274"
+        ],
+        "aliases": {},
+        "correction_style": "delayed",
+        "notes": "除用户文本中的保险盒线索外，补充题图铭牌里可直接读出的厂家、VIN、发动机型号和日期。"
+      },
+      "metadata": {
+        "room_id": "wr7pwYBwAAs6cb-jRCgXfvd0JukHTeDw",
+        "chat_from": "kefuYangJie",
+        "opening_message_id": 252614,
+        "transcript": [
+          {
+            "id": 252614,
+            "chat_from": "kefuYangJie",
+            "msg_date": "2026-04-29 11:09:41",
+            "msgtype": "chatrecord",
+            "text": "这个保险盒图纸谁知道？",
+            "path_url": "http://static2.51gonggui.com/6029195319874981525_1777432185352d9625380-3ad5-40a6-833b-7fae4d517e20_0,http://static2.51gonggui.com/6029195319874981525_17774321853526b974794-05f0-47a2-a171-4205401bece5_1"
+          },
+          {
+            "id": 252755,
+            "chat_from": "HuangXianHua",
+            "msg_date": "2026-04-29 11:25:26",
+            "msgtype": "mixed",
+            "text": "@共轨之家-修车助手(电喷专家—陈强) 新传了一份，在汽车电器盒模块里，参考下",
+            "path_url": "http://static2.51gonggui.com/11763623974149045937_17774331301405e740c76-8812-4766-a55b-ef27bf9449e3_0"
+          }
+        ],
+        "evidence_source": "db_room_export",
+        "chat_trace_status": "db_verified"
+      },
+      "question_type": "找资料"
+    },
+    {
+      "case_id": "real_train_0006",
+      "layer": "atomic",
+      "input_modality": "image_text",
+      "question_text": "黄老师  这几个车平台上个有电路图吗",
+      "question_images": [
+        "benchmark/doc_search_bench/envs/doc_search/data/train/case_assets/real_train_0006/question_01.jpg",
+        "benchmark/doc_search_bench/envs/doc_search/data/train/case_assets/real_train_0006/question_02.jpg",
+        "benchmark/doc_search_bench/envs/doc_search/data/train/case_assets/real_train_0006/question_03.jpg",
+        "benchmark/doc_search_bench/envs/doc_search/data/train/case_assets/real_train_0006/question_04.jpg",
+        "benchmark/doc_search_bench/envs/doc_search/data/train/case_assets/real_train_0006/question_05.jpg",
+        "benchmark/doc_search_bench/envs/doc_search/data/train/case_assets/real_train_0006/question_06.jpg",
+        "benchmark/doc_search_bench/envs/doc_search/data/train/case_assets/real_train_0006/question_07.jpg"
+      ],
+      "vehicle_info": null,
+      "benchmark_track": "chat_completions",
+      "preprocess_strategy": "none",
+      "request_context": {},
+      "notes": "人工筛选的真实企业微信找文件 case；room_id=wr7pwYBwAAs6cb-jRCgXfvd0JukHTeDw；chat_from=kefuYangJie；opening_message_id=298354；chatrecord_message_id=298355；answer_message_id=298647；当前数据库证据只支持“只有6360的”，最终唯一答案为黄县华发送的文件标题。",
+      "source_file": "ggzj_work_wx_chat_content",
+      "interaction_mode": "multi_turn",
+      "max_turns": 8,
+      "case_repeat_count": 3,
+      "initial_user_message": "这几个车平台上有电路图吗。",
+      "user_simulation_config": {
+        "driver": "ai",
+        "scenario": "cooperative_vague",
+        "rollback_intent_mode": "none",
+        "rollback_min_round_gap": 0
+      },
+      "user_profile": {
+        "persona": "cooperative_vague",
+        "goal": "确认这几台设备里哪些在平台上有电路图。",
+        "known_items": [
+          "电路图",
+          "SDLG",
+          "SHANTUI",
+          "SANY",
+          "WEICHAI",
+          "E6550F",
+          "E6360F",
+          "SE750HB",
+          "SY550HD",
+          "WP14TG765E304",
+          "WP126430E310",
+          "G3WPGSL167201",
+          "G3WPGSL1254E310",
+          "SY055CF1075K8"
+        ],
+        "uncertain_items": [],
+        "aliases": {},
+        "correction_style": "delayed",
+        "notes": "已补入题图中可直接读出的多台设备型号、发动机型号和系列名；不把客服后续确认的“只有6360的”写回用户已知。"
+      },
+      "metadata": {
+        "room_id": "wr7pwYBwAAs6cb-jRCgXfvd0JukHTeDw",
+        "chat_from": "kefuYangJie",
+        "opening_message_id": 298354,
+        "transcript": [
+          {
+            "id": 298354,
+            "chat_from": "kefuYangJie",
+            "msg_date": "2026-05-07 16:50:16",
+            "msgtype": "text",
+            "text": "黄老师  这几个车平台上个有电路图吗",
+            "path_url": null
+          },
+          {
+            "id": 298355,
+            "chat_from": "kefuYangJie",
+            "msg_date": "2026-05-07 16:50:20",
+            "msgtype": "chatrecord",
+            "text": "多张车型截图",
+            "path_url": "http://static2.51gonggui.com/9634011332092412093_177814382430394b9d162-6ed5-48ee-a3e0-38ce2e90b209_0,http://static2.51gonggui.com/9634011332092412093_1778143824303ee6e4314-319e-4235-994d-209e35d0994a_1,http://static2.51gonggui.com/9634011332092412093_1778143824303a8f2bc80-1a52-4b4a-bc7b-3c740e6e76b5_2,http://static2.51gonggui.com/9634011332092412093_1778143824303dd6c9744-c407-4373-86c1-1ecab6c8329d_3,http://static2.51gonggui.com/9634011332092412093_17781438243035fb595d3-dd1f-41f8-b2b3-5f18ed298d63_4,http://static2.51gonggui.com/9634011332092412093_17781438243034de43136-807b-4d7f-bf16-f33c5aa41f3f_5,http://static2.51gonggui.com/9634011332092412093_177814382430356e6a259-ff88-4294-ac4d-f94100ceb9c1_6"
+          },
+          {
+            "id": 298470,
+            "chat_from": "HuangXianHua",
+            "msg_date": "2026-05-07 16:58:28",
+            "msgtype": "text",
+            "text": "只有6360的，其他整车图还没有",
+            "path_url": null
+          },
+          {
+            "id": 298647,
+            "chat_from": "HuangXianHua",
+            "msg_date": "2026-05-07 17:11:02",
+            "msgtype": "file",
+            "text": "山东临工_E6360_电路图【新款】.pdf",
+            "path_url": "http://static2.51gonggui.com/13397512879171526219_1778145066391295b1e97-105f-4377-adcb-01e131fcc55a_0.pdf"
+          }
+        ],
+        "evidence_source": "db_room_export",
+        "chat_trace_status": "db_verified"
+      },
+      "question_type": "找资料"
+    },
+    {
+      "case_id": "real_train_0007",
+      "layer": "atomic",
+      "input_modality": "image_text",
+      "question_text": "老师这个板子资料是哪个，带计量单元2线的云内发动机，找了好几个都不对",
+      "question_images": [
+        "benchmark/doc_search_bench/envs/doc_search/data/train/case_assets/real_train_0007/question_01.jpg"
+      ],
+      "vehicle_info": null,
+      "benchmark_track": "chat_completions",
+      "preprocess_strategy": "none",
+      "request_context": {},
+      "notes": "人工筛选的真实企业微信找文件 case；room_id=wr7pwYBwAAs6cb-jRCgXfvd0JukHTeDw；chat_from=LiGuang；opening_message_id=131467；answer_message_id=131479；唯一答案来自黄县华截图红框标题。",
+      "source_file": "ggzj_work_wx_chat_content",
+      "question_type": "找资料",
+      "interaction_mode": "multi_turn",
+      "max_turns": 8,
+      "case_repeat_count": 3,
+      "initial_user_message": "这个板子资料是哪个，带计量单元2线的云内发动机，找了好几个都不对。",
+      "user_simulation_config": {
+        "driver": "ai",
+        "scenario": "term_confused",
+        "rollback_intent_mode": "none",
+        "rollback_min_round_gap": 0
+      },
+      "user_profile": {
+        "persona": "term_confused",
+        "goal": "找到这块板子的资料。",
+        "known_items": [
+          "云内",
+          "带计量单元2线",
+          "国方电子",
+          "MDD01 / ECUA-00-000056",
+          "苏州国方汽车电子有限公司",
+          "HA10018767 / 2204005131 / JS1037 / JRN217-1 / 22080203 / 039",
+          "资料"
+        ],
+        "uncertain_items": [],
+        "aliases": {},
+        "correction_style": "delayed",
+        "notes": "补入题图标签中可直接读出的国方电子、MDD01、ECUA-00-000056、厂家名及编号信息。"
+      },
+      "metadata": {
+        "room_id": "wr7pwYBwAAs6cb-jRCgXfvd0JukHTeDw",
+        "chat_from": "LiGuang",
+        "opening_message_id": 131467,
+        "answer_message_id": 131479,
+        "evidence_source": "db_room_export",
+        "chat_trace_status": "db_verified",
+        "source_case_id": "case_000002",
+        "transcript": [
+          {
+            "id": 131467,
+            "chat_from": "LiGuang",
+            "msg_date": "2026-04-11 11:32:47",
+            "msgtype": "mixed",
+            "text": "老师这个板子资料是哪个，带计量单元2线的云内发动机，找了好几个都不对",
+            "path_url": "http://static2.51gonggui.com/5798481028011290960_1775878371857c3e87f82-9c98-4820-875e-8a7e212e875f_0"
+          },
+          {
+            "id": 131479,
+            "chat_from": "HuangXianHua",
+            "msg_date": "2026-04-11 11:34:27",
+            "msgtype": "image",
+            "text": null,
+            "path_url": "http://static2.51gonggui.com/2003149880768230387_1775878471199c1c4cb4b-faf2-4e04-9851-4b109dbf6687_0"
+          }
+        ]
+      }
+    },
+    {
+      "case_id": "real_train_0008",
+      "layer": "atomic",
+      "input_modality": "text",
+      "question_text": "老师，请问三一55C挖机电路图有嘛",
+      "question_images": [],
+      "vehicle_info": null,
+      "benchmark_track": "chat_completions",
+      "preprocess_strategy": "none",
+      "request_context": {},
+      "notes": "人工筛选的真实企业微信找文件 case；room_id=wr7pwYBwAAs6cb-jRCgXfvd0JukHTeDw；chat_from=FengZhiQiang；opening_message_id=131653；answer_message_id=131696；唯一答案来自黄县华截图红框标题。",
+      "source_file": "ggzj_work_wx_chat_content",
+      "question_type": "找资料",
+      "interaction_mode": "multi_turn",
+      "max_turns": 8,
+      "case_repeat_count": 3,
+      "initial_user_message": "请问三一55C挖机电路图有嘛。",
+      "user_simulation_config": {
+        "driver": "ai",
+        "scenario": "cooperative_vague",
+        "rollback_intent_mode": "none",
+        "rollback_min_round_gap": 0
+      },
+      "user_profile": {
+        "persona": "cooperative_vague",
+        "goal": "找到三一55C挖机对应的电路图。",
+        "known_items": [
+          "三一",
+          "55C",
+          "挖机",
+          "电路图"
+        ],
+        "uncertain_items": [],
+        "aliases": {},
+        "correction_style": "delayed",
+        "notes": "用户只给出品牌型号和文档类型，未补充更多车型细节。"
+      },
+      "metadata": {
+        "room_id": "wr7pwYBwAAs6cb-jRCgXfvd0JukHTeDw",
+        "chat_from": "FengZhiQiang",
+        "opening_message_id": 131653,
+        "answer_message_id": 131696,
+        "evidence_source": "db_room_export",
+        "chat_trace_status": "db_verified",
+        "source_case_id": "case_000003",
+        "transcript": [
+          {
+            "id": 131653,
+            "chat_from": "FengZhiQiang",
+            "msg_date": "2026-04-11 11:54:40",
+            "msgtype": "text",
+            "text": "老师，请问三一55C挖机电路图有嘛",
+            "path_url": null
+          },
+          {
+            "id": 131696,
+            "chat_from": "HuangXianHua",
+            "msg_date": "2026-04-11 11:58:04",
+            "msgtype": "image",
+            "text": null,
+            "path_url": "http://static2.51gonggui.com/12037265622321620837_1775879888237aba7eb2c-3080-473a-9693-a518b590ab30_0"
+          }
+        ]
+      }
+    },
+    {
+      "case_id": "real_train_0009",
+      "layer": "atomic",
+      "input_modality": "text",
+      "question_text": "老师，麻烦帮忙找下国六红岩杰狮H6 BCM的针脚定义图",
+      "question_images": [],
+      "vehicle_info": null,
+      "benchmark_track": "chat_completions",
+      "preprocess_strategy": "none",
+      "request_context": {},
+      "notes": "人工筛选的真实企业微信找文件 case；room_id=wr7pwYBwAAs6cb-jRCgXfvd0JukHTeDw；chat_from=MaZhenZhen；opening_message_id=150602；answer_message_id=150623；唯一答案来自黄县华截图红框标题。",
+      "source_file": "ggzj_work_wx_chat_content",
+      "question_type": "找资料",
+      "interaction_mode": "multi_turn",
+      "max_turns": 8,
+      "case_repeat_count": 3,
+      "initial_user_message": "麻烦帮忙找下国六红岩杰狮H6 BCM的针脚定义图。",
+      "user_simulation_config": {
+        "driver": "ai",
+        "scenario": "normal",
+        "rollback_intent_mode": "none",
+        "rollback_min_round_gap": 0
+      },
+      "user_profile": {
+        "persona": "normal",
+        "goal": "找到国六红岩杰狮H6 BCM 的针脚定义图。",
+        "known_items": [
+          "国六",
+          "红岩",
+          "杰狮H6",
+          "BCM",
+          "针脚定义图"
+        ],
+        "uncertain_items": [],
+        "aliases": {},
+        "correction_style": "immediate",
+        "notes": "用户目标明确，直接找对应资料。"
+      },
+      "metadata": {
+        "room_id": "wr7pwYBwAAs6cb-jRCgXfvd0JukHTeDw",
+        "chat_from": "MaZhenZhen",
+        "opening_message_id": 150602,
+        "answer_message_id": 150623,
+        "evidence_source": "db_room_export",
+        "chat_trace_status": "db_verified",
+        "source_case_id": "case_000004",
+        "transcript": [
+          {
+            "id": 150602,
+            "chat_from": "MaZhenZhen",
+            "msg_date": "2026-04-14 11:26:09",
+            "msgtype": "text",
+            "text": "老师，麻烦帮忙找下国六红岩杰狮H6 BCM的针脚定义图",
+            "path_url": null
+          },
+          {
+            "id": 150623,
+            "chat_from": "HuangXianHua",
+            "msg_date": "2026-04-14 11:28:49",
+            "msgtype": "image",
+            "text": null,
+            "path_url": "http://static2.51gonggui.com/2891978899496765409_17761373331969607dbbf-31a2-4776-a2d7-b4ce1ae6866b_0"
+          }
+        ]
+      }
+    },
+    {
+      "case_id": "real_train_0010",
+      "layer": "atomic",
+      "input_modality": "image_text",
+      "question_text": "老师这个整车电路图资料有吗，我看平台只有液压板的针脚",
+      "question_images": [
+        "benchmark/doc_search_bench/envs/doc_search/data/train/case_assets/real_train_0010/question_01.jpg"
+      ],
+      "vehicle_info": null,
+      "benchmark_track": "chat_completions",
+      "preprocess_strategy": "none",
+      "request_context": {},
+      "notes": "来自 benchmark_excel_template.xlsx 的人工整理样本；当前用户侧字段仅保留 xls 原始提问与图片中可直接读出的信息；数据库当前导出未检索到对应聊天元数据。",
+      "source_file": "benchmark_excel_template.xlsx",
+      "question_type": "找资料",
+      "interaction_mode": "multi_turn",
+      "max_turns": 8,
+      "case_repeat_count": 3,
+      "initial_user_message": "这个整车电路图资料有吗，我看平台只有液压板的针脚。",
+      "user_simulation_config": {
+        "driver": "ai",
+        "scenario": "term_confused",
+        "rollback_intent_mode": "none",
+        "rollback_min_round_gap": 0
+      },
+      "user_profile": {
+        "persona": "term_confused",
+        "goal": "找到这台设备对应的整车电路图资料。",
+        "known_items": [
+          "整车电路图资料",
+          "液压板 / 针脚",
+          "HYUNDAI",
+          "R150LC-9",
+          "液压挖掘机",
+          "北京现代京城工程机械有限公司"
+        ],
+        "uncertain_items": [],
+        "aliases": {},
+        "correction_style": "delayed",
+        "notes": "文字里明确提到整车电路图和液压板针脚；图片铭牌可读出 HYUNDAI、北京现代京城工程机械有限公司、R150LC-9、液压挖掘机。"
+      },
+      "metadata": {
+        "evidence_source": "xls_manual_chat_curation",
+        "chat_trace_status": "db_not_found_in_current_export",
+        "source_case_id": "case_000007",
+        "curation_file": "benchmark/data_source2/benchmark_excel_template.xlsx",
+        "manual_gold_title": null,
+        "manual_teacher_reply": null,
+        "transcript": [
+          {
+            "id": null,
+            "chat_from": "manual_xls_user",
+            "msg_date": null,
+            "msgtype": "image_text",
+            "text": "老师这个整车电路图资料有吗，我看平台只有液压板的针脚",
+            "path_url": "benchmark/data_source2/94716f3e052b9b9cc002e92ba0da3450.jpg"
+          }
+        ]
+      }
+    },
+    {
+      "case_id": "real_train_0011",
+      "layer": "atomic",
+      "input_modality": "image_text",
+      "question_text": "老师这个车的资料有吗",
+      "question_images": [
+        "benchmark/doc_search_bench/envs/doc_search/data/train/case_assets/real_train_0011/question_01.jpg"
+      ],
+      "vehicle_info": null,
+      "benchmark_track": "chat_completions",
+      "preprocess_strategy": "none",
+      "request_context": {},
+      "notes": "来自 benchmark_excel_template.xlsx 的人工整理样本；该 case 归为 image_parsing_required：用户侧已知字段只保留 xls 原始提问与师傅文字回复，不写入图片信息；用于测试系统是否能依赖图片解析补足关键线索。",
+      "source_file": "benchmark_excel_template.xlsx",
+      "question_type": "找资料",
+      "interaction_mode": "multi_turn",
+      "max_turns": 8,
+      "case_repeat_count": 3,
+      "initial_user_message": "这个车的资料有吗。",
+      "user_simulation_config": {
+        "driver": "ai",
+        "scenario": "image_parsing_required",
+        "rollback_intent_mode": "none",
+        "rollback_min_round_gap": 0
+      },
+      "user_profile": {
+        "persona": "image_parsing_required",
+        "goal": "???????????",
+        "known_items": [
+          "资料"
+        ],
+        "uncertain_items": [],
+        "aliases": {},
+        "correction_style": "delayed",
+        "notes": "用户文字里只明确说“这个车的资料有吗”，客服回复只有“有个10的，参考下”；图片里的 HOWO、厂家名、车型号不写入用户已知，用于专门测试图片解析补充能力。"
+      },
+      "metadata": {
+        "evidence_source": "xls_manual_chat_curation",
+        "chat_trace_status": "db_not_found_in_current_export",
+        "source_case_id": "case_000008",
+        "curation_file": "benchmark/data_source2/benchmark_excel_template.xlsx",
+        "manual_gold_title": null,
+        "manual_teacher_reply": "有个10的，参考下",
+        "transcript": [
+          {
+            "id": null,
+            "chat_from": "manual_xls_user",
+            "msg_date": null,
+            "msgtype": "image_text",
+            "text": "老师这个车的资料有吗",
+            "path_url": "benchmark/data_source2/f3c12c4f6c7e6766053c3be6c81d5cbe.jpg"
+          },
+          {
+            "id": null,
+            "chat_from": "manual_xls_agent",
+            "msg_date": null,
+            "msgtype": "text",
+            "text": "有个10的，参考下",
+            "path_url": null
+          }
+        ]
+      }
+    },
+    {
+      "case_id": "real_train_0012",
+      "layer": "atomic",
+      "input_modality": "image_text",
+      "question_text": "这个电路图有没老师",
+      "question_images": [
+        "benchmark/doc_search_bench/envs/doc_search/data/train/case_assets/real_train_0012/question_01.jpg",
+        "benchmark/doc_search_bench/envs/doc_search/data/train/case_assets/real_train_0012/question_02.jpg",
+        "benchmark/doc_search_bench/envs/doc_search/data/train/case_assets/real_train_0012/question_03.jpg"
+      ],
+      "vehicle_info": null,
+      "benchmark_track": "chat_completions",
+      "preprocess_strategy": "none",
+      "request_context": {},
+      "notes": "来自 benchmark_excel_template.xlsx 的人工整理样本；当前用户侧字段仅保留 xls 原始提问与图片中可直接读出的信息；数据库当前导出未检索到对应聊天元数据。",
+      "source_file": "benchmark_excel_template.xlsx",
+      "question_type": "找资料",
+      "interaction_mode": "multi_turn",
+      "max_turns": 8,
+      "case_repeat_count": 3,
+      "initial_user_message": "这个电路图有没老师",
+      "user_simulation_config": {
+        "driver": "ai",
+        "scenario": "normal",
+        "rollback_intent_mode": "none",
+        "rollback_min_round_gap": 0
+      },
+      "user_profile": {
+        "persona": "normal",
+        "goal": "找到这个电路图对应的资料。",
+          "known_items": [
+            "康明斯系统",
+            "CUMMINS",
+            "电路图",
+            "ECU",
+            "发动机",
+            "OBD",
+            "柴油机排气处理液喷射单元",
+            "EMR42"
+          ],
+          "uncertain_items": [],
+          "aliases": {},
+          "correction_style": "immediate",
+          "notes": "文字里只提到电路图；题图还能稳定支持康明斯系统，以及 ECU、发动机、OBD 相关线索，不继续展开更细的铭牌或故障码信息。"
+        },
+      "metadata": {
+        "evidence_source": "xls_manual_chat_curation",
+        "chat_trace_status": "db_not_found_in_current_export",
+        "source_case_id": "case_000009",
+        "curation_file": "benchmark/data_source2/benchmark_excel_template.xlsx",
+        "manual_gold_title": null,
+        "manual_teacher_reply": null,
+        "transcript": [
+          {
+            "id": null,
+            "chat_from": "manual_xls_user",
+            "msg_date": null,
+            "msgtype": "image_text",
+            "text": "这个电路图有没老师",
+            "path_url": "benchmark/data_source2/wecom-temp-297860-15e0b4612904b5a77ae1e224b887791d.jpg;benchmark/data_source2/wecom-temp-404398-4164a857a0d363c04e9232103419c433.jpg;benchmark/data_source2/wecom-temp-565930-d6399ecc0983bc629c3cba5d4cf1673e.jpg"
+          }
+        ]
+      }
+    },
+    {
+      "case_id": "real_train_0013",
+      "layer": "atomic",
+      "input_modality": "image_text",
+      "question_text": "老师。麻烦查下这板子的资料",
+      "question_images": [
+        "benchmark/doc_search_bench/envs/doc_search/data/train/case_assets/real_train_0013/question_01.jpg"
+      ],
+      "vehicle_info": null,
+      "benchmark_track": "chat_completions",
+      "preprocess_strategy": "none",
+      "request_context": {},
+      "notes": "来自 benchmark_excel_template.xlsx 的人工整理样本；该 case 归为 image_parsing_required：用户侧已知字段只保留 xls 原始提问，不写入图片信息；用于测试系统是否能依赖图片解析补足关键线索。",
+      "source_file": "benchmark_excel_template.xlsx",
+      "question_type": "找资料",
+      "interaction_mode": "multi_turn",
+      "max_turns": 8,
+      "case_repeat_count": 3,
+      "initial_user_message": "老师。麻烦查下这板子的资料",
+      "user_simulation_config": {
+        "driver": "ai",
+        "scenario": "image_parsing_required",
+        "rollback_intent_mode": "none",
+        "rollback_min_round_gap": 0
+      },
+      "user_profile": {
+        "persona": "image_parsing_required",
+        "goal": "???????????",
+        "known_items": [
+          "资料",
+          "板子"
+        ],
+        "uncertain_items": [],
+        "aliases": {},
+        "correction_style": "delayed",
+        "notes": "用户文字里只明确说“查下这板子的资料”；图片中的 ECU、公司名和各类编号不写入用户已知，用于专门测试图片解析补充能力。"
+      },
+      "metadata": {
+        "evidence_source": "xls_manual_chat_curation",
+        "chat_trace_status": "db_not_found_in_current_export",
+        "source_case_id": "case_000010",
+        "curation_file": "benchmark/data_source2/benchmark_excel_template.xlsx",
+        "manual_gold_title": null,
+        "manual_teacher_reply": null,
+        "transcript": [
+          {
+            "id": null,
+            "chat_from": "manual_xls_user",
+            "msg_date": null,
+            "msgtype": "image_text",
+            "text": "老师。麻烦查下这板子的资料",
+            "path_url": "benchmark/data_source2/81e8e3ee90703fcee053ac5a7358d2c2.jpg"
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,58 @@
+{
+  "benchmark_slug": "search-docs-of-crs-agent",
+  "suite_id": "synthetic_noise_queries",
+  "layer": "atomic",
+  "source_files": [],
+  "acceptance_threshold": 1.0,
+  "case_count": 6,
+  "cases": [
+    {
+      "case_id": "noise_0001",
+      "layer": "atomic",
+      "accepted_titles": [],
+      "preferred_title": null,
+      "expected_response_type": "message_or_empty",
+      "top_k": 10
+    },
+    {
+      "case_id": "noise_0002",
+      "layer": "atomic",
+      "accepted_titles": [],
+      "preferred_title": null,
+      "expected_response_type": "message_or_empty",
+      "top_k": 10
+    },
+    {
+      "case_id": "noise_0003",
+      "layer": "atomic",
+      "accepted_titles": [],
+      "preferred_title": null,
+      "expected_response_type": "message_or_empty",
+      "top_k": 10
+    },
+    {
+      "case_id": "noise_0004",
+      "layer": "atomic",
+      "accepted_titles": [],
+      "preferred_title": null,
+      "expected_response_type": "message_or_empty",
+      "top_k": 10
+    },
+    {
+      "case_id": "noise_0005",
+      "layer": "atomic",
+      "accepted_titles": [],
+      "preferred_title": null,
+      "expected_response_type": "message_or_empty",
+      "top_k": 10
+    },
+    {
+      "case_id": "noise_0006",
+      "layer": "atomic",
+      "accepted_titles": [],
+      "preferred_title": null,
+      "expected_response_type": "message_or_empty",
+      "top_k": 10
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "name": "crs-agent",
+  "private": true,
+  "scripts": {
+    "start": "bash ./scripts/dev-services.sh start all",
+    "start:all": "bash ./scripts/dev-services.sh start all",
+    "start:frontend": "bash ./scripts/dev-services.sh start frontend",
+    "start:admin": "bash ./scripts/dev-services.sh start admin",
+    "start:backend": "bash ./scripts/dev-services.sh start backend",
+    "start:backend:prod": "bash ./scripts/dev-services.sh start backend prod",
+    "start:prod": "npm run start:backend:prod",
+    "stop": "bash ./scripts/dev-services.sh stop all",
+    "stop:frontend": "bash ./scripts/dev-services.sh stop frontend",
+    "stop:admin": "bash ./scripts/dev-services.sh stop admin",
+    "stop:backend": "bash ./scripts/dev-services.sh stop backend",
+    "stop:backend:prod": "bash ./scripts/dev-services.sh stop backend",
+    "restart": "bash ./scripts/dev-services.sh restart all",
+    "restart:all": "bash ./scripts/dev-services.sh restart all",
+    "restart:frontend": "bash ./scripts/dev-services.sh restart frontend",
+    "restart:admin": "bash ./scripts/dev-services.sh restart admin",
+    "restart:backend": "bash ./scripts/dev-services.sh restart backend",
+    "restart:backend:prod": "bash ./scripts/dev-services.sh restart backend prod",
+    "restart:prod": "npm run restart:backend:prod",
+    "build": "npm run build:user && npm run build:admin",
+    "build:user": "cd frontend/user && npm run build",
+    "build:admin": "cd frontend/admin && npm run build",
+    "install:all": "cd frontend/user && npm install && cd ../admin && npm install && cd ../../backend && python3.11 -m venv .venv && .venv/bin/python -m pip install -U pip && .venv/bin/python -m pip install -e ."
+  }
+}

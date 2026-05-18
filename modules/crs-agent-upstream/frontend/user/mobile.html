@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>电路图检索系统</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'JetBrains Mono', monospace;
+            background: #0a0e14;
+            color: #00ff88;
+            overflow-x: hidden;
+        }
+
+        /* 电路板网格背景 */
+        .circuit-grid {
+            background-image:
+                linear-gradient(rgba(0, 255, 136, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 136, 0.05) 1px, transparent 1px);
+            background-size: 20px 20px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* 扫描线动画 */
+        @keyframes scan {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100vh); }
+        }
+
+        .scanline {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            background: linear-gradient(
+                to bottom,
+                transparent,
+                rgba(0, 255, 136, 0.1),
+                transparent
+            );
+            animation: scan 8s linear infinite;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* 霓虹发光效果 */
+        .neon-text {
+            text-shadow:
+                0 0 5px rgba(0, 255, 136, 0.8),
+                0 0 10px rgba(0, 255, 136, 0.6),
+                0 0 20px rgba(0, 255, 136, 0.4);
+        }
+
+        .neon-border {
+            box-shadow:
+                0 0 5px rgba(0, 255, 136, 0.5),
+                inset 0 0 5px rgba(0, 255, 136, 0.2);
+        }
+
+        /* 脉冲动画 */
+        @keyframes pulse-glow {
+            0%, 100% {
+                box-shadow: 0 0 5px rgba(0, 255, 136, 0.5);
+            }
+            50% {
+                box-shadow: 0 0 20px rgba(0, 255, 136, 0.8),
+                            0 0 30px rgba(0, 255, 136, 0.6);
+            }
+        }
+
+        .pulse-glow {
+            animation: pulse-glow 2s ease-in-out infinite;
+        }
+
+        /* 数据流动动画 */
+        @keyframes data-flow {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .data-flow {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .data-flow::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(0, 255, 136, 0.8),
+                transparent
+            );
+            animation: data-flow 2s ease-in-out infinite;
+        }
+
+        /* 搜索框特效 */
+        .search-input {
+            background: rgba(10, 14, 20, 0.8);
+            border: 2px solid rgba(0, 255, 136, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: rgba(0, 255, 136, 0.8);
+            box-shadow:
+                0 0 20px rgba(0, 255, 136, 0.3),
+                inset 0 0 10px rgba(0, 255, 136, 0.1);
+        }
+
+        /* 卡片悬浮效果 */
+        .card {
+            background: rgba(15, 20, 28, 0.9);
+            border: 1px solid rgba(0, 255, 136, 0.3);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(
+                45deg,
+                rgba(0, 255, 136, 0.3),
+                rgba(0, 200, 255, 0.3),
+                rgba(0, 255, 136, 0.3)
+            );
+            border-radius: inherit;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: -1;
+        }
+
+        .card:hover::before {
+            opacity: 1;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            border-color: rgba(0, 255, 136, 0.6);
+        }
+
+        /* 标签样式 */
+        .tag {
+            background: rgba(0, 255, 136, 0.1);
+            border: 1px solid rgba(0, 255, 136, 0.3);
+            padding: 2px 8px;
+            border-radius: 3px;
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        /* 加载动画 */
+        @keyframes rotate {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(0, 255, 136, 0.2);
+            border-top-color: #00ff88;
+            border-radius: 50%;
+            animation: rotate 1s linear infinite;
+        }
+
+        /* 滚动条样式 */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(10, 14, 20, 0.5);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(0, 255, 136, 0.3);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(0, 255, 136, 0.5);
+        }
+
+        /* 淡入动画 */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in-up {
+            animation: fadeInUp 0.5s ease-out;
+        }
+
+        /* 角标装饰 */
+        .corner-accent {
+            position: relative;
+        }
+
+        .corner-accent::before,
+        .corner-accent::after {
+            content: '';
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            border: 2px solid rgba(0, 255, 136, 0.6);
+        }
+
+        .corner-accent::before {
+            top: -1px;
+            left: -1px;
+            border-right: none;
+            border-bottom: none;
+        }
+
+        .corner-accent::after {
+            bottom: -1px;
+            right: -1px;
+            border-left: none;
+            border-top: none;
+        }
+
+        /* 响应式调整 */
+        @media (max-width: 640px) {
+            .circuit-grid {
+                background-size: 15px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useRef } = React;
+
+        const API_BASE = 'http://localhost:8000';
+
+        function App() {
+            const [query, setQuery] = useState('');
+            const [results, setResults] = useState([]);
+            const [loading, setLoading] = useState(false);
+            const [selectedFile, setSelectedFile] = useState(null);
+            const [stats, setStats] = useState(null);
+            const [showStats, setShowStats] = useState(false);
+
+            // 加载系统统计
+            useEffect(() => {
+                fetch(`${API_BASE}/api/stats`)
+                    .then(res => res.json())
+                    .then(data => setStats(data))
+                    .catch(err => console.error('加载统计失败:', err));
+            }, []);
+
+            // 搜索功能
+            const handleSearch = async (e) => {
+                e.preventDefault();
+                if (!query.trim()) return;
+
+                setLoading(true);
+                try {
+                    const response = await fetch(`${API_BASE}/api/chat/search`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            query: query,
+                            limit: 20,
+                            debug: false
+                        })
+                    });
+                    const data = await response.json();
+                    setResults(data.results || []);
+                } catch (error) {
+                    console.error('搜索失败:', error);
+                    alert('搜索失败，请检查后端服务是否运行');
+                } finally {
+                    setLoading(false);
+                }
+            };
+
+            // 获取文件详情
+            const handleViewDetails = async (fileId) => {
+                try {
+                    const response = await fetch(`${API_BASE}/api/file/${fileId}/detail`);
+                    const data = await response.json();
+                    setSelectedFile(data);
+                } catch (error) {
+                    console.error('获取文件详情失败:', error);
+                }
+            };
+
+            return (
+                <div className="relative min-h-screen">
+                    {/* 背景效果 */}
+                    <div className="circuit-grid"></div>
+                    <div className="scanline"></div>
+
+                    {/* 主容器 */}
+                    <div className="relative z-10 px-4 py-6 max-w-2xl mx-auto">
+                        {/* 头部 */}
+                        <header className="mb-8 fade-in-up">
+                            <h1 className="text-3xl font-bold neon-text mb-2" style={{ fontFamily: 'Orbitron, sans-serif' }}>
+                                CIRCUIT SEARCH
+                            </h1>
+                            <div className="flex items-center gap-2 text-xs text-gray-400">
+                                <span className="inline-block w-2 h-2 bg-green-500 rounded-full pulse-glow"></span>
+                                <span>SYSTEM ONLINE</span>
+                                {stats && (
+                                    <>
+                                        <span className="mx-2">|</span>
+                                        <span>{stats.total_files.toLocaleString()} FILES</span>
+                                    </>
+                                )}
+                            </div>
+                        </header>
+
+                        {/* 搜索栏 */}
+                        <form onSubmit={handleSearch} className="mb-6 fade-in-up" style={{ animationDelay: '0.1s' }}>
+                            <div className="relative corner-accent">
+                                <input
+                                    type="text"
+                                    value={query}
+                                    onChange={(e) => setQuery(e.target.value)}
+                                    placeholder="输入搜索关键词..."
+                                    className="search-input w-full px-4 py-3 text-sm rounded-none text-green-400 placeholder-green-900"
+                                />
+                                <button
+                                    type="submit"
+                                    disabled={loading}
+                                    className="absolute right-2 top-1/2 -translate-y-1/2 px-4 py-1.5 bg-green-900 hover:bg-green-800 text-green-400 text-xs font-bold border border-green-700 transition-all duration-300"
+                                >
+                                    {loading ? 'SCAN...' : 'SEARCH'}
+                                </button>
+                            </div>
+                        </form>
+
+                        {/* 统计信息按钮 */}
+                        {stats && (
+                            <button
+                                onClick={() => setShowStats(!showStats)}
+                                className="mb-4 px-4 py-2 text-xs border border-green-700 bg-green-950 text-green-400 hover:bg-green-900 transition-all duration-300"
+                            >
+                                {showStats ? '[ HIDE STATS ]' : '[ SHOW STATS ]'}
+                            </button>
+                        )}
+
+                        {/* 统计面板 */}
+                        {showStats && stats && (
+                            <div className="card mb-6 p-4 fade-in-up">
+                                <h3 className="text-sm font-bold mb-3 neon-text" style={{ fontFamily: 'Orbitron, sans-serif' }}>
+                                    SYSTEM STATISTICS
+                                </h3>
+                                <div className="grid grid-cols-2 gap-3 text-xs">
+                                    <div className="border border-green-900 p-2 bg-green-950 bg-opacity-30">
+                                        <div className="text-gray-500 mb-1">TOTAL FILES</div>
+                                        <div className="text-green-400 font-bold text-lg">{stats.total_files.toLocaleString()}</div>
+                                    </div>
+                                    <div className="border border-green-900 p-2 bg-green-950 bg-opacity-30">
+                                        <div className="text-gray-500 mb-1">TOTAL DOCS</div>
+                                        <div className="text-green-400 font-bold text-lg">{stats.total_docs.toLocaleString()}</div>
+                                    </div>
+                                    <div className="border border-green-900 p-2 bg-green-950 bg-opacity-30">
+                                        <div className="text-gray-500 mb-1">INDEX SIZE</div>
+                                        <div className="text-green-400 font-bold text-lg">{stats.index_size_mb.toFixed(2)} MB</div>
+                                    </div>
+                                    <div className="border border-green-900 p-2 bg-green-950 bg-opacity-30">
+                                        <div className="text-gray-500 mb-1">STATUS</div>
+                                        <div className="text-green-400 font-bold text-lg">READY</div>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* 加载中 */}
+                        {loading && (
+                            <div className="flex flex-col items-center justify-center py-12">
+                                <div className="loading-spinner mb-4"></div>
+                                <p className="text-xs text-gray-500">SCANNING DATABASE...</p>
+                            </div>
+                        )}
+
+                        {/* 搜索结果 */}
+                        {!loading && results.length > 0 && (
+                            <div className="space-y-3">
+                                <div className="text-xs text-gray-500 mb-4">
+                                    FOUND {results.length} RESULTS
+                                </div>
+                                {results.map((result, index) => (
+                                    <div
+                                        key={result.file_id}
+                                        className="card p-4 cursor-pointer data-flow fade-in-up"
+                                        style={{ animationDelay: `${index * 0.05}s` }}
+                                        onClick={() => handleViewDetails(result.file_id)}
+                                    >
+                                        {/* 文件名 */}
+                                        <h3 className="text-sm font-bold text-green-400 mb-2 line-clamp-2">
+                                            {result.title}
+                                        </h3>
+
+                                        {/* 路径 */}
+                                        <p className="text-xs text-gray-500 mb-3 font-mono">
+                                            {result.path}
+                                        </p>
+
+                                        {/* 标签 */}
+                                        <div className="flex flex-wrap gap-2 mb-2">
+                                            {result.tags.brand && (
+                                                <span className="tag text-cyan-400 border-cyan-700">
+                                                    {result.tags.brand}
+                                                </span>
+                                            )}
+                                            {result.tags.series && (
+                                                <span className="tag">
+                                                    {result.tags.series}
+                                                </span>
+                                            )}
+                                            {result.tags.ecus && result.tags.ecus.slice(0, 2).map(ecu => (
+                                                <span key={ecu} className="tag text-yellow-400 border-yellow-700">
+                                                    {ecu}
+                                                </span>
+                                            ))}
+                                        </div>
+
+                                        {/* 得分 */}
+                                        <div className="flex items-center justify-between text-xs mt-3 pt-3 border-t border-green-900">
+                                            <span className="text-gray-600">RELEVANCE</span>
+                                            <span className="text-green-400 font-bold">
+                                                {(result.score * 100).toFixed(2)}%
+                                            </span>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+
+                        {/* 无结果 */}
+                        {!loading && query && results.length === 0 && (
+                            <div className="text-center py-12">
+                                <p className="text-gray-600 text-sm">NO RESULTS FOUND</p>
+                                <p className="text-gray-700 text-xs mt-2">TRY DIFFERENT KEYWORDS</p>
+                            </div>
+                        )}
+
+                        {/* 文件详情模态框 */}
+                        {selectedFile && (
+                            <div
+                                className="fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center p-4"
+                                onClick={() => setSelectedFile(null)}
+                            >
+                                <div
+                                    className="card max-w-2xl w-full max-h-[90vh] overflow-y-auto p-6 corner-accent fade-in-up"
+                                    onClick={(e) => e.stopPropagation()}
+                                >
+                                    {/* 关闭按钮 */}
+                                    <button
+                                        onClick={() => setSelectedFile(null)}
+                                        className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center border border-green-700 text-green-400 hover:bg-green-900 transition-all duration-300"
+                                    >
+                                        ×
+                                    </button>
+
+                                    {/* 标题 */}
+                                    <h2 className="text-lg font-bold neon-text mb-4 pr-8" style={{ fontFamily: 'Orbitron, sans-serif' }}>
+                                        FILE DETAILS
+                                    </h2>
+
+                                    {/* 文件名 */}
+                                    <div className="mb-4 pb-4 border-b border-green-900">
+                                        <div className="text-xs text-gray-500 mb-1">FILENAME</div>
+                                        <div className="text-sm text-green-400 break-all">
+                                            {selectedFile.filename}
+                                        </div>
+                                    </div>
+
+                                    {/* 路径 */}
+                                    <div className="mb-4 pb-4 border-b border-green-900">
+                                        <div className="text-xs text-gray-500 mb-1">PATH</div>
+                                        <div className="text-xs text-gray-400 font-mono break-all">
+                                            {selectedFile.hierarchy_full}
+                                        </div>
+                                    </div>
+
+                                    {/* 文件信息 */}
+                                    <div className="grid grid-cols-2 gap-3 mb-4">
+                                        <div className="border border-green-900 p-2 bg-green-950 bg-opacity-30">
+                                            <div className="text-xs text-gray-500">TYPE</div>
+                                            <div className="text-sm text-green-400">{selectedFile.file_type.toUpperCase()}</div>
+                                        </div>
+                                        <div className="border border-green-900 p-2 bg-green-950 bg-opacity-30">
+                                            <div className="text-xs text-gray-500">SIZE</div>
+                                            <div className="text-sm text-green-400">{(selectedFile.file_size / 1024).toFixed(2)} KB</div>
+                                        </div>
+                                    </div>
+
+                                    {/* 实体信息 */}
+                                    {selectedFile.entities && (
+                                        <div className="mb-4">
+                                            <div className="text-xs text-gray-500 mb-3">EXTRACTED ENTITIES</div>
+                                            <div className="space-y-3">
+                                                {selectedFile.entities.brand && (
+                                                    <div>
+                                                        <span className="text-xs text-cyan-600 mr-2">BRAND:</span>
+                                                        <span className="text-sm text-cyan-400">{selectedFile.entities.brand}</span>
+                                                    </div>
+                                                )}
+                                                {selectedFile.entities.series && (
+                                                    <div>
+                                                        <span className="text-xs text-green-600 mr-2">SERIES:</span>
+                                                        <span className="text-sm text-green-400">{selectedFile.entities.series}</span>
+                                                    </div>
+                                                )}
+                                                {selectedFile.entities.ecus && selectedFile.entities.ecus.length > 0 && (
+                                                    <div>
+                                                        <span className="text-xs text-yellow-600 mr-2">ECU:</span>
+                                                        <div className="flex flex-wrap gap-2 mt-1">
+                                                            {selectedFile.entities.ecus.map(ecu => (
+                                                                <span key={ecu} className="tag text-yellow-400 border-yellow-700">
+                                                                    {ecu}
+                                                                </span>
+                                                            ))}
+                                                        </div>
+                                                    </div>
+                                                )}
+                                                {selectedFile.entities.emissions && selectedFile.entities.emissions.length > 0 && (
+                                                    <div>
+                                                        <span className="text-xs text-gray-600 mr-2">EMISSIONS:</span>
+                                                        <div className="flex flex-wrap gap-2 mt-1">
+                                                            {selectedFile.entities.emissions.map(emission => (
+                                                                <span key={emission} className="tag">
+                                                                    {emission}
+                                                                </span>
+                                                            ))}
+                                                        </div>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    {/* 下载按钮 */}
+                                    <a
+                                        href={`${API_BASE}/api/file/${selectedFile.file_id}/download`}
+                                        download
+                                        className="block w-full py-3 text-center bg-green-900 hover:bg-green-800 text-green-400 text-sm font-bold border border-green-700 transition-all duration-300 mt-6"
+                                    >
+                                        [ DOWNLOAD FILE ]
+                                    </a>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+
+                    {/* 页脚 */}
+                    <footer className="relative z-10 text-center py-8 text-xs text-gray-700">
+                        <div className="mb-2">CIRCUIT DIAGRAM RETRIEVAL SYSTEM v1.0</div>
+                        <div className="flex items-center justify-center gap-2">
+                            <span className="inline-block w-1.5 h-1.5 bg-green-500 rounded-full"></span>
+                            <span>POWERED BY HYBRID SEARCH ENGINE</span>
+                        </div>
+                    </footer>
+                </div>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>

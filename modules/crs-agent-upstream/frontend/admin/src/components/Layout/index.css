@@ -1,0 +1,48 @@
+.admin-layout {
+  min-height: 100vh;
+}
+
+.admin-sider {
+  background: linear-gradient(180deg, #0d1117 0%, #161b22 100%);
+  border-right: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.admin-sider .ant-menu {
+  background: transparent;
+}
+
+.admin-sider .ant-menu-item {
+  font-size: 15px;
+  height: 48px;
+  line-height: 48px;
+  margin: 4px 8px;
+  border-radius: 8px;
+}
+
+.admin-sider .ant-menu-item .anticon {
+  font-size: 18px;
+}
+
+.logo {
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  font-weight: 700;
+  color: #00d4aa;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.admin-header {
+  background: linear-gradient(90deg, #0d1117 0%, #161b22 100%);
+  padding: 0 24px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  height: 64px;
+}
+
+.admin-content {
+  padding: 24px;
+  background: #0a0e14;
+  min-height: calc(100vh - 64px);
+}

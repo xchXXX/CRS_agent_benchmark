@@ -1,0 +1,25 @@
+{
+  "benchmark_slug": "search-docs-of-crs-agent",
+  "suite_id": "real_text_single_turn",
+  "layer": "component",
+  "source_files": [
+    "sample/benchmark_excel_template.xlsx"
+  ],
+  "case_count": 1,
+  "cases": [
+    {
+      "case_id": "case_000003",
+      "layer": "component",
+      "input_modality": "text",
+      "question_text": "老师，请问三一55C挖机电路图有嘛",
+      "question_images": [],
+      "vehicle_info": null,
+      "benchmark_track": "chat_completions",
+      "preprocess_strategy": "none",
+      "request_context": {},
+      "notes": null,
+      "teacher_reply": null,
+      "question_type": "找资料"
+    }
+  ]
+}

@@ -1,0 +1,551 @@
+{
+  "benchmark_slug": "search-docs-of-crs-agent",
+  "suite_id": "mock_dongfeng_keyword_recall",
+  "layer": "atomic",
+  "source_files": [
+    "sample/资料树节点及关联文件-东风.csv"
+  ],
+  "acceptance_threshold": 0.85,
+  "case_count": 49,
+  "cases": [
+    {
+      "case_id": "mock_dongfeng_0001",
+      "layer": "atomic",
+      "accepted_titles": [
+        "【推荐】东风天锦EQ4H_黑色电装两插头D34【国四/五】"
+      ],
+      "preferred_title": "【推荐】东风天锦EQ4H_黑色电装两插头D34【国四/五】",
+      "expected_response_type": "documents",
+      "top_k": 10,
+      "source_file": "sample/资料树节点及关联文件-东风.csv"
+    },
+    {
+      "case_id": "mock_dongfeng_0002",
+      "layer": "atomic",
+      "accepted_titles": [
+        "东风天龙D530_整车电路图【玉柴A07N天然气-Econtrols120针】"
+      ],
+      "preferred_title": "东风天龙D530_整车电路图【玉柴A07N天然气-Econtrols120针】",
+      "expected_response_type": "documents",
+      "top_k": 10,
+      "source_file": "sample/资料树节点及关联文件-东风.csv"
+    },
+    {
+      "case_id": "mock_dongfeng_0003",
+      "layer": "atomic",
+      "accepted_titles": [
+        "东风天龙_6x2载货车_整车电路图【DFL1203A】【康明斯系统-EGR】【国三】"
+      ],
+      "preferred_title": "东风天龙_6x2载货车_整车电路图【DFL1203A】【康明斯系统-EGR】【国三】",
+      "expected_response_type": "documents",
+      "top_k": 10,
+      "source_file": "sample/资料树节点及关联文件-东风.csv"
+    },
+    {
+      "case_id": "mock_dongfeng_0004",
+      "layer": "atomic",
+      "accepted_titles": [
+        "东风天龙启航版D310_K37M.K50M.K42V.K46V.K45M.K46M.K50F.K50N.K37F.TK34_整车电路图【CM2150_EDC17CV44】【国六】"
+      ],
+      "preferred_title": "东风天龙启航版D310_K37M.K50M.K42V.K46V.K45M.K46M.K50F.K50N.K37F.TK34_整车电路图【CM2150_EDC17CV44】【国六】",
+      "expected_response_type": "documents",
+      "top_k": 10,
+      "source_file": "sample/资料树节点及关联文件-东风.csv"
+    },
+    {
+      "case_id": "mock_dongfeng_0005",
+      "layer": "atomic",
+      "accepted_titles": [
+        "东风天龙启航版_6x4危化品牵引车_D310.TF80.TH40.H1712_整车电路图【DFH4250A6】【VECU1_EDC17CV44_后处理配：添蓝、沃尔、Ecofit】【CM2880_Ecofit】【国四、国五】"
+      ],
+      "preferred_title": "东风天龙启航版_6x4危化品牵引车_D310.TF80.TH40.H1712_整车电路图【DFH4250A6】【VECU1_EDC17CV44_后处理配：添蓝、沃尔、Ecofit】【CM2880_Ecofit】【国四、国五】",
+      "expected_response_type": "documents",
+      "top_k": 10,
+      "source_file": "sample/资料树节点及关联文件-东风.csv"
+    },
+    {
+      "case_id": "mock_dongfeng_0006",
+      "layer": "atomic",
+      "accepted_titles": [
+        "东风天龙启航版_6x4牵引车_D310.TF68.TF69.H1510_整车电路图【DFH4250A4】【VECU1_EDC17CV44_后处理配：添蓝、沃尔、Ecofit】【国四、国五】"
+      ],
+      "preferred_title": "东风天龙启航版_6x4牵引车_D310.TF68.TF69.H1510_整车电路图【DFH4250A4】【VECU1_EDC17CV44_后处理配：添蓝、沃尔、Ecofit】【国四、国五】",
+      "expected_response_type": "documents",
+      "top_k": 10,
+      "source_file": "sample/资料树节点及关联文件-东风.csv"
+    },
+    {
+      "case_id": "mock_dongfeng_0007",
+      "layer": "atomic",
+      "accepted_titles": [
+        "东风天龙旗舰GX_D760_整车电路图【德尔福ETC7C_博世MD1_CM2670_CM2380】【国六】"
+      ],
+      "preferred_title": "东风天龙旗舰GX_D760_整车电路图【德尔福ETC7C_博世MD1_CM2670_CM2380】【国六】",
+      "expected_response_type": "documents",
+      "top_k": 10,
+      "source_file": "sample/资料树节点及关联文件-东风.csv"
+    },
+    {
+      "case_id": "mock_dongfeng_0008",
+      "layer": "atomic",
+      "accepted_titles": [
+        "东风天龙旗舰KX_6x4牵引车_D760.H01V.H02V.H1707_整车电路图【DFH4250C2】【VECU2_BCM_CM2150E_依米泰克_Ecofit】【国四、国五】"
+      ],
+      "preferred_title": "东风天龙旗舰KX_6x4牵引车_D760.H01V.H02V.H1707_整车电路图【DFH4250C2】【VECU2_BCM_CM2150E_依米泰克_Ecofit】【国四、国五】",
+      "expected_response_type": "documents",
+      "top_k": 10,
+      "source_file": "sample/资料树节点及关联文件-东风.csv"
+    },
+    {
+      "case_id": "mock_dongfeng_0009",
+      "layer": "atomic",
+      "accepted_titles": [
+        "东风天龙轻盈版D310_6x4牵引车_整车电路图【DFH4250A4】【CM2880_Ecofit_LDWS_360环景影像_TPU】【国四、国五】"
+      ],
+      "preferred_title": "东风天龙轻盈版D310_6x4牵引车_整车电路图【DFH4250A4】【CM2880_Ecofit_LDWS_360环景影像_TPU】【国四、国五】",
+      "expected_response_type": "documents",
+      "top_k": 10,
+      "source_file": "sample/资料树节点及关联文件-东风.csv"
+    },
+    {
+      "case_id": "mock_dongfeng_0010",
+      "layer": "atomic",
+      "accepted_titles": [
+        "东风天龙_6x4水泥搅拌车_D310.K47V.H1909_整车电路图【DFH1258AX1V】【玉柴EDC17CV44_三立DCU】【国四、国五】"
+      ],
+      "preferred_title": "东风天龙_6x4水泥搅拌车_D310.K47V.H1909_整车电路图【DFH1258AX1V】【玉柴EDC17CV44_三立DCU】【国四、国五】",
+      "expected_response_type": "documents",
+      "top_k": 10,
+      "source_file": "sample/资料树节点及关联文件-东风.csv"
+    },
+    {
+      "case_id": "mock_dongfeng_0011",
+      "layer": "atomic",
+      "accepted_titles": [
+        "东风天龙_4x2消防车_远程供排水抢险车_D310.T56L.H1407_整车电路图【DFL5190GXFA】【CM2150E_依米泰克】【国四、国五】"
+      ],
+      "preferred_title": "东风天龙_4x2消防车_远程供排水抢险车_D310.T56L.H1407_整车电路图【DFL5190GXFA】【CM2150E_依米泰克】【国四、国五】",
+      "expected_response_type": "documents",
+      "top_k": 10,
+      "source_file": "sample/资料树节点及关联文件-东风.csv"
+    },
+    {
+      "case_id": "mock_dongfeng_0012",
+      "layer": "atomic",
+      "accepted_titles": [
+        "东风天龙_6x4消防车_远程供排水抢险车_D310.T19H.H1407_整车电路图【DFL5330GXFA】"
+      ],
+      "preferred_title": "东风天龙_6x4消防车_远程供排水抢险车_D310.T19H.H1407_整车电路图【DFL5330GXFA】",
+      "expected_response_type": "documents",
+      "top_k": 10,
+      "source_file": "sample/资料树节点及关联文件-东风.csv"
+    },
+    {
+      "case_id": "mock_dongfeng_0013",
+      "layer": "atomic",
+      "accepted_titles": [
+        "东风新天龙_4x2牵引车_D310.T61H.T61J.H1502_整车电路图【DFL4181A8】【VECU1_EDC17CV44_后处理配：添蓝、沃尔、Ecofit】【国四、国五】"
+      ],
+      "preferred_title": "东风新天龙_4x2牵引车_D310.T61H.T61J.H1502_整车电路图【DFL4181A8】【VECU1_EDC17CV44_后处理配：添蓝、沃尔、Ecofit】【国四、国五】",
+      "expected_response_type": "documents",
+      "top_k": 10,
+      "source_file": "sample/资料树节点及关联文件-东风.csv"
+    },
+    {
+      "case_id": "mock_dongfeng_0014",
+      "layer": "atomic",
+      "accepted_titles": [
+        "东风天龙_6x4牵引车_D310.TA2.H1505_整车电路图【DFL4251A18】【雷诺EQRN然气机】【国四】"
+      ],
+      "preferred_title": "东风天龙_6x4牵引车_D310.TA2.H1505_整车电路图【DFL4251A18】【雷诺EQRN然气机】【国四】",
+      "expected_response_type": "documents",
+      "top_k": 10,
+      "source_file": "sample/资料树节点及关联文件-东风.csv"
+    },
+    {
+      "case_id": "mock_dongfeng_0015",
+      "layer": "atomic",
+      "accepted_titles": [
+        "东风天龙_6x4运油车_D310.T78M.H1909_整车电路图【DFH1260A】【VECU1_EDC17CV44_后处理配：添蓝、沃尔、Ecofit、迪耐斯_威孚力达_DPF控制器】【国四、国五】"
+      ],
+      "preferred_title": "东风天龙_6x4运油车_D310.T78M.H1909_整车电路图【DFH1260A】【VECU1_EDC17CV44_后处理配：添蓝、沃尔、Ecofit、迪耐斯_威孚力达_DPF控制器】【国四、国五】",
+      "expected_response_type": "documents",
+      "top_k": 10,
+      "source_file": "sample/资料树节点及关联文件-东风.csv"
+    },
+    {
+      "case_id": "mock_dongfeng_0016",
+      "layer": "atomic",
+      "accepted_titles": [
+        "东风天龙KC_8x4自卸车_D310.K56V.57V.87V_整车图【武当2号_EDC17-国五】"
+      ],
+      "preferred_title": "东风天龙KC_8x4自卸车_D310.K56V.57V.87V_整车图【武当2号_EDC17-国五】",
+      "expected_response_type": "documents",
+      "top_k": 10,
+      "source_file": "sample/资料树节点及关联文件-东风.csv"
+    },
+    {
+      "case_id": "mock_dongfeng_0017",
+      "layer": "atomic",
+      "accepted_titles": [
+        "东风天龙KC_6x4自卸车渣土车_D310.K20L.K20H.K26A.K26B.K25B.K25Q.H1603_整车电路图【DFL3258A6】【VECU1_DCI_EDC17CV44_后处理配：添蓝、沃尔、Ecofit】【CM2150E-Ecofit】【玉柴EDC7-三立】【国四、国五】"
+      ],
+      "preferred_title": "东风天龙KC_6x4自卸车渣土车_D310.K20L.K20H.K26A.K26B.K25B.K25Q.H1603_整车电路图【DFL3258A6】【VECU1_DCI_EDC17CV44_后处理配：添蓝、沃尔、Ecofit】【CM2150E-Ecofit】【玉柴EDC7-三立】【国四、国五】",
+      "expected_response_type": "documents",
+      "top_k": 10,
+      "source_file": "sample/资料树节点及关联文件-东风.csv"
+    },
+    {
+      "case_id": "mock_dongfeng_0018",
+      "layer": "atomic",
+      "accepted_titles": [
+        "东风天龙D310_KF_整车电路图【MD1】【武当3号VECU】【【国六】"
+      ],
+      "preferred_title": "东风天龙D310_KF_整车电路图【MD1】【武当3号VECU】【【国六】",
+      "expected_response_type": "documents",
+      "top_k": 10,
+      "source_file": "sample/资料树节点及关联文件-东风.csv"
+    },
+    {
+      "case_id": "mock_dongfeng_0019",
+      "layer": "atomic",
+      "accepted_titles": [
+        "东风天龙VL_4x2牵引车_D310.KF81.H1711_整车电路图【DFH4180A】【CM2880_Ecofit泵】【国四、国五】"
+      ],
+      "preferred_title": "东风天龙VL_4x2牵引车_D310.KF81.H1711_整车电路图【DFH4180A】【CM2880_Ecofit泵】【国四、国五】",
+      "expected_response_type": "documents",
+      "top_k": 10,
+      "source_file": "sample/资料树节点及关联文件-东风.csv"
+    },
+    {
+      "case_id": "mock_dongfeng_0020",
+      "layer": "atomic",
+      "accepted_titles": [
+        "东风天龙KL_6x4环卫车_D320.TR84.TR90.TR91.TR92H1902_整车电路图【DFH1250D4】【VECU3_高、低配BCM_X7-MD1CE108_CM2670】【国六】"
+      ],
+      "preferred_title": "东风天龙KL_6x4环卫车_D320.TR84.TR90.TR91.TR92H1902_整车电路图【DFH1250D4】【VECU3_高、低配BCM_X7-MD1CE108_CM2670】【国六】",
+      "expected_response_type": "documents",
+      "top_k": 10,
+      "source_file": "sample/资料树节点及关联文件-东风.csv"
+    },
+    {
+      "case_id": "mock_dongfeng_0021",
+      "layer": "atomic",
+      "accepted_titles": [
+        "东风天龙新启航D320_TL38.TL77.TL85.TL98.TL99.TL76.TL87.TL88.H1905【EDC17CV44-DTES后处理】【国四国五】"
+      ],
+      "preferred_title": "东风天龙新启航D320_TL38.TL77.TL85.TL98.TL99.TL76.TL87.TL88.H1905【EDC17CV44-DTES后处理】【国四国五】",
+      "expected_response_type": "documents",
+      "top_k": 10,
+      "source_file": "sample/资料树节点及关联文件-东风.csv"
+    },
+    {
+      "case_id": "mock_dongfeng_0022",
+      "layer": "atomic",
+      "accepted_titles": [
+        "东风牌_平头牵引车_线束原理图【EQ4163W型】"
+      ],
+      "preferred_title": "东风牌_平头牵引车_线束原理图【EQ4163W型】",
+      "expected_response_type": "documents",
+      "top_k": 10,
+      "source_file": "sample/资料树节点及关联文件-东风.csv"
+    },
+    {
+      "case_id": "mock_dongfeng_0023",
+      "layer": "atomic",
+      "accepted_titles": [
+        "东风_雷诺DCI11_天然气_整车电路图"
+      ],
+      "preferred_title": "东风_雷诺DCI11_天然气_整车电路图",
+      "expected_response_type": "documents",
+      "top_k": 10,
+      "source_file": "sample/资料树节点及关联文件-东风.csv"
+    },
+    {
+      "case_id": "mock_dongfeng_0024",
+      "layer": "atomic",
+      "accepted_titles": [
+        "东风天锦_4x2军用运输车_D530.KF1Y.H1406_整车电路图【EQ1120GAY1】【康明斯CM2150】"
+      ],
+      "preferred_title": "东风天锦_4x2军用运输车_D530.KF1Y.H1406_整车电路图【EQ1120GAY1】【康明斯CM2150】",
+      "expected_response_type": "documents",
+      "top_k": 10,
+      "source_file": "sample/资料树节点及关联文件-东风.csv"
+    },
+    {
+      "case_id": "mock_dongfeng_0025",
+      "layer": "atomic",
+      "accepted_titles": [
+        "东风天锦D560_KR10.11.12.13整车电路图【电装D34ECU】"
+      ],
+      "preferred_title": "东风天锦D560_KR10.11.12.13整车电路图【电装D34ECU】",
+      "expected_response_type": "documents",
+      "top_k": 10,
+      "source_file": "sample/资料树节点及关联文件-东风.csv"
+    },
+    {
+      "case_id": "mock_dongfeng_0026",
+      "layer": "atomic",
+      "accepted_titles": [
+        "东风天锦KR_4x2载货车_D560.KR20.KR21.H1812_整车电路图【DFH1180E3.DFH5180CCYE3.DFH5180XXYE3】【EDC17CV44_ACM1880_Ecofit-国五】【MD1CE108_博世2.2泵-国六】"
+      ],
+      "preferred_title": "东风天锦KR_4x2载货车_D560.KR20.KR21.H1812_整车电路图【DFH1180E3.DFH5180CCYE3.DFH5180XXYE3】【EDC17CV44_ACM1880_Ecofit-国五】【MD1CE108_博世2.2泵-国六】",
+      "expected_response_type": "documents",
+      "top_k": 10,
+      "source_file": "sample/资料树节点及关联文件-东风.csv"
+    },
+    {
+      "case_id": "mock_dongfeng_0027",
+      "layer": "atomic",
+      "accepted_titles": [
+        "东风天锦KR_3700001-KT1B0.H210426整车电路图【燃料电池_绿控系统】【新能源】"
+      ],
+      "preferred_title": "东风天锦KR_3700001-KT1B0.H210426整车电路图【燃料电池_绿控系统】【新能源】",
+      "expected_response_type": "documents",
+      "top_k": 10,
+      "source_file": "sample/资料树节点及关联文件-东风.csv"
+    },
+    {
+      "case_id": "mock_dongfeng_0028",
+      "layer": "atomic",
+      "accepted_titles": [
+        "东风新天龙KL-D320_天锦VR-D560玉柴天然气_整车线束图【国六】"
+      ],
+      "preferred_title": "东风新天龙KL-D320_天锦VR-D560玉柴天然气_整车线束图【国六】",
+      "expected_response_type": "documents",
+      "top_k": 10,
+      "source_file": "sample/资料树节点及关联文件-东风.csv"
+    },
+    {
+      "case_id": "mock_dongfeng_0029",
+      "layer": "atomic",
+      "accepted_titles": [
+        "东风天锦D530_KA_上装控制器电路图"
+      ],
+      "preferred_title": "东风天锦D530_KA_上装控制器电路图",
+      "expected_response_type": "documents",
+      "top_k": 10,
+      "source_file": "sample/资料树节点及关联文件-东风.csv"
+    },
+    {
+      "case_id": "mock_dongfeng_0030",
+      "layer": "atomic",
+      "accepted_titles": [
+        "东风天锦D530_KC9N_整车电路图【CM2150E、CM2880、CM2350A、CM2670、CM2620】【国五国六】"
+      ],
+      "preferred_title": "东风天锦D530_KC9N_整车电路图【CM2150E、CM2880、CM2350A、CM2670、CM2620】【国五国六】",
+      "expected_response_type": "documents",
+      "top_k": 10,
+      "source_file": "sample/资料树节点及关联文件-东风.csv"
+    },
+    {
+      "case_id": "mock_dongfeng_0031",
+      "layer": "atomic",
+      "accepted_titles": [
+        "东风天锦VR_6x2载货车_D530.KD9V.KC9V.H1701_整车电路图【DFH1190B】【CM2150_依米泰克】【国四、国五】"
+      ],
+      "preferred_title": "东风天锦VR_6x2载货车_D530.KD9V.KC9V.H1701_整车电路图【DFH1190B】【CM2150_依米泰克】【国四、国五】",
+      "expected_response_type": "documents",
+      "top_k": 10,
+      "source_file": "sample/资料树节点及关联文件-东风.csv"
+    },
+    {
+      "case_id": "mock_dongfeng_0032",
+      "layer": "atomic",
+      "accepted_titles": [
+        "东风天锦_6x2中置轴轿运车_D530.KG7V.H1701_整车电路图【DFH1210BX】【CM2150_依米泰克_DPF控制器】【CM2880_威孚力达_Ecofit】【国四、国五】"
+      ],
+      "preferred_title": "东风天锦_6x2中置轴轿运车_D530.KG7V.H1701_整车电路图【DFH1210BX】【CM2150_依米泰克_DPF控制器】【CM2880_威孚力达_Ecofit】【国四、国五】",
+      "expected_response_type": "documents",
+      "top_k": 10,
+      "source_file": "sample/资料树节点及关联文件-东风.csv"
+    },
+    {
+      "case_id": "mock_dongfeng_0033",
+      "layer": "atomic",
+      "accepted_titles": [
+        "东风华神_专用车EQ1186TL6DJ5底盘_4x2整车电路图【T710_玉柴YCS04_DCM7.24-国六】【第一版】"
+      ],
+      "preferred_title": "东风华神_专用车EQ1186TL6DJ5底盘_4x2整车电路图【T710_玉柴YCS04_DCM7.24-国六】【第一版】",
+      "expected_response_type": "documents",
+      "top_k": 10,
+      "source_file": "sample/资料树节点及关联文件-东风.csv"
+    },
+    {
+      "case_id": "mock_dongfeng_0034",
+      "layer": "atomic",
+      "accepted_titles": [
+        "东风多利卡D6-保险盒定义"
+      ],
+      "preferred_title": "东风多利卡D6-保险盒定义",
+      "expected_response_type": "documents",
+      "top_k": 10,
+      "source_file": "sample/资料树节点及关联文件-东风.csv"
+    },
+    {
+      "case_id": "mock_dongfeng_0035",
+      "layer": "atomic",
+      "accepted_titles": [
+        "东风多利卡D12_仪表电路图"
+      ],
+      "preferred_title": "东风多利卡D12_仪表电路图",
+      "expected_response_type": "documents",
+      "top_k": 10,
+      "source_file": "sample/资料树节点及关联文件-东风.csv"
+    },
+    {
+      "case_id": "mock_dongfeng_0036",
+      "layer": "atomic",
+      "accepted_titles": [
+        "东风小霸王轻卡_汽车线束图解"
+      ],
+      "preferred_title": "东风小霸王轻卡_汽车线束图解",
+      "expected_response_type": "documents",
+      "top_k": 10,
+      "source_file": "sample/资料树节点及关联文件-东风.csv"
+    },
+    {
+      "case_id": "mock_dongfeng_0037",
+      "layer": "atomic",
+      "accepted_titles": [
+        "东风_轻卡_底盘线束图【ZD30发动机】"
+      ],
+      "preferred_title": "东风_轻卡_底盘线束图【ZD30发动机】",
+      "expected_response_type": "documents",
+      "top_k": 10,
+      "source_file": "sample/资料树节点及关联文件-东风.csv"
+    },
+    {
+      "case_id": "mock_dongfeng_0038",
+      "layer": "atomic",
+      "accepted_titles": [
+        "东风_新天龙KL_国五_克诺尔ABS/EBS/ESC/AEBS_电路图"
+      ],
+      "preferred_title": "东风_新天龙KL_国五_克诺尔ABS/EBS/ESC/AEBS_电路图",
+      "expected_response_type": "documents",
+      "top_k": 10,
+      "source_file": "sample/资料树节点及关联文件-东风.csv"
+    },
+    {
+      "case_id": "mock_dongfeng_0039",
+      "layer": "atomic",
+      "accepted_titles": [
+        "【推荐】东风EDC16UC40【SCR,国四/国五】"
+      ],
+      "preferred_title": "【推荐】东风EDC16UC40【SCR,国四/国五】",
+      "expected_response_type": "documents",
+      "top_k": 10,
+      "source_file": "sample/资料树节点及关联文件-东风.csv"
+    },
+    {
+      "case_id": "mock_dongfeng_0040",
+      "layer": "atomic",
+      "accepted_titles": [
+        "东风天龙_6x4牵引车_整车线束图解【DFL4251A9】"
+      ],
+      "preferred_title": "东风天龙_6x4牵引车_整车线束图解【DFL4251A9】",
+      "expected_response_type": "documents",
+      "top_k": 10,
+      "source_file": "sample/资料树节点及关联文件-东风.csv"
+    },
+    {
+      "case_id": "mock_dongfeng_0041",
+      "layer": "atomic",
+      "accepted_titles": [
+        "东风柳汽_乘龙L2_整车电路图"
+      ],
+      "preferred_title": "东风柳汽_乘龙L2_整车电路图",
+      "expected_response_type": "documents",
+      "top_k": 10,
+      "source_file": "sample/资料树节点及关联文件-东风.csv"
+    },
+    {
+      "case_id": "mock_dongfeng_0042",
+      "layer": "atomic",
+      "accepted_titles": [
+        "东风_天龙_武当2号VECU_针脚定义1【五插头】"
+      ],
+      "preferred_title": "东风_天龙_武当2号VECU_针脚定义1【五插头】",
+      "expected_response_type": "documents",
+      "top_k": 10,
+      "source_file": "sample/资料树节点及关联文件-东风.csv"
+    },
+    {
+      "case_id": "mock_dongfeng_0043",
+      "layer": "atomic",
+      "accepted_titles": [
+        "东风_天龙_武当2号VECU_针脚定义2【五插头】"
+      ],
+      "preferred_title": "东风_天龙_武当2号VECU_针脚定义2【五插头】",
+      "expected_response_type": "documents",
+      "top_k": 10,
+      "source_file": "sample/资料树节点及关联文件-东风.csv"
+    },
+    {
+      "case_id": "mock_dongfeng_0044",
+      "layer": "atomic",
+      "accepted_titles": [
+        "东风拓行D7_玉柴K11发动机_整车电气原理图"
+      ],
+      "preferred_title": "东风拓行D7_玉柴K11发动机_整车电气原理图",
+      "expected_response_type": "documents",
+      "top_k": 10,
+      "source_file": "sample/资料树节点及关联文件-东风.csv"
+    },
+    {
+      "case_id": "mock_dongfeng_0045",
+      "layer": "atomic",
+      "accepted_titles": [
+        "东风康霸_载货车_电喷汽车线束图解"
+      ],
+      "preferred_title": "东风康霸_载货车_电喷汽车线束图解",
+      "expected_response_type": "documents",
+      "top_k": 10,
+      "source_file": "sample/资料树节点及关联文件-东风.csv"
+    },
+    {
+      "case_id": "mock_dongfeng_0046",
+      "layer": "atomic",
+      "accepted_titles": [
+        "东风天龙VL燃油车-保险盒定义【国六】"
+      ],
+      "preferred_title": "东风天龙VL燃油车-保险盒定义【国六】",
+      "expected_response_type": "documents",
+      "top_k": 10,
+      "source_file": "sample/资料树节点及关联文件-东风.csv"
+    },
+    {
+      "case_id": "mock_dongfeng_0047",
+      "layer": "atomic",
+      "accepted_titles": [
+        "东风_天锦_国三_EDC16UC40_配仪表1_整车CAN总线图.PDF"
+      ],
+      "preferred_title": "东风_天锦_国三_EDC16UC40_配仪表1_整车CAN总线图.PDF",
+      "expected_response_type": "documents",
+      "top_k": 10,
+      "source_file": "sample/资料树节点及关联文件-东风.csv"
+    },
+    {
+      "case_id": "mock_dongfeng_0048",
+      "layer": "atomic",
+      "accepted_titles": [
+        "东风_天锦_国三_EDC16UC40_配仪表2_整车CAN总线图.PDF"
+      ],
+      "preferred_title": "东风_天锦_国三_EDC16UC40_配仪表2_整车CAN总线图.PDF",
+      "expected_response_type": "documents",
+      "top_k": 10,
+      "source_file": "sample/资料树节点及关联文件-东风.csv"
+    },
+    {
+      "case_id": "mock_dongfeng_0049",
+      "layer": "atomic",
+      "accepted_titles": [
+        "东风_天龙_三代VECU_针脚定义【四插头】"
+      ],
+      "preferred_title": "东风_天龙_三代VECU_针脚定义【四插头】",
+      "expected_response_type": "documents",
+      "top_k": 10,
+      "source_file": "sample/资料树节点及关联文件-东风.csv"
+    }
+  ]
+}

@@ -1,0 +1,61 @@
+<mxfile host="app.diagrams.net" modified="2026-04-24T10:30:00.000Z" agent="Codex" version="27.0.9">
+  <diagram id="interactive-eval-agent" name="Interactive Eval Agent">
+    <mxGraphModel dx="1600" dy="1000" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="900" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="title" value="CRS DocSearch Interactive Eval Agent" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=24;fontStyle=1;fontColor=#122033;" vertex="1" parent="1">
+          <mxGeometry x="40" y="20" width="500" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="dataset" value="Benchmark Dataset&#xa;- case input&#xa;- gold docs / no-answer&#xa;- hidden truth / oracle facts&#xa;- simulator profile" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EAF7F3;strokeColor=#2F855A;fontColor=#122033;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="40" y="100" width="220" height="130" as="geometry"/>
+        </mxCell>
+        <mxCell id="runner" value="Interactive Benchmark Runner&#xa;- start episode&#xa;- turn loop&#xa;- stop / timeout / max_turns&#xa;- collect transcript" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DDEBFF;strokeColor=#2B6CB0;fontColor=#122033;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="310" y="100" width="240" height="130" as="geometry"/>
+        </mxCell>
+        <mxCell id="simulator" value="User Simulator Agent&#xa;- read hidden truth&#xa;- choose ask_user option&#xa;- generate free text if needed&#xa;- support strict / noisy modes" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF4DE;strokeColor=#C05621;fontColor=#122033;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="310" y="290" width="240" height="130" as="geometry"/>
+        </mxCell>
+        <mxCell id="runtime" value="Existing Agent Loop / DocSearch Runtime&#xa;- image evidence&#xa;- intent router&#xa;- query planning&#xa;- search / clarify / resume" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FDECEC;strokeColor=#C53030;fontColor=#122033;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="620" y="100" width="260" height="130" as="geometry"/>
+        </mxCell>
+        <mxCell id="deferred" value="Deferred State + Search Snapshot&#xa;- tool_call_id&#xa;- ask_user payload&#xa;- selection_payload&#xa;- search_snapshot" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FAF5FF;strokeColor=#6B46C1;fontColor=#122033;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="620" y="290" width="260" height="130" as="geometry"/>
+        </mxCell>
+        <mxCell id="evaluator" value="Episode Evaluator&#xa;- end-to-end success&#xa;- clarify quality&#xa;- turn cost / latency&#xa;- unnecessary ask / loop rate" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EDF2F7;strokeColor=#4A5568;fontColor=#122033;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="960" y="100" width="230" height="130" as="geometry"/>
+        </mxCell>
+        <mxCell id="output" value="Run Artifacts&#xa;- predictions.jsonl&#xa;- events.jsonl&#xa;- episode_transcripts.jsonl&#xa;- report.json / failures.csv" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F7FAFC;strokeColor=#718096;fontColor=#122033;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="960" y="290" width="230" height="130" as="geometry"/>
+        </mxCell>
+        <mxCell id="edge1" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#4A5568;endArrow=block;endFill=1;" edge="1" parent="1" source="dataset" target="runner">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edge2" value="initial request" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#4A5568;endArrow=block;endFill=1;fontSize=12;" edge="1" parent="1" source="runner" target="runtime">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edge3" value="ask_user / documents" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#4A5568;endArrow=block;endFill=1;fontSize=12;" edge="1" parent="1" source="runtime" target="runner">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edge4" value="resume answer" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#4A5568;endArrow=block;endFill=1;fontSize=12;" edge="1" parent="1" source="simulator" target="runner">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edge5" value="oracle context" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#4A5568;endArrow=block;endFill=1;fontSize=12;" edge="1" parent="1" source="dataset" target="simulator">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edge6" value="load / save" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#4A5568;endArrow=block;endFill=1;fontSize=12;" edge="1" parent="1" source="runtime" target="deferred">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edge7" value="selection mapping" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#4A5568;endArrow=block;endFill=1;fontSize=12;" edge="1" parent="1" source="deferred" target="simulator">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edge8" value="episode result" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#4A5568;endArrow=block;endFill=1;fontSize=12;" edge="1" parent="1" source="runner" target="evaluator">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edge9" value="reports" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#4A5568;endArrow=block;endFill=1;fontSize=12;" edge="1" parent="1" source="evaluator" target="output">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

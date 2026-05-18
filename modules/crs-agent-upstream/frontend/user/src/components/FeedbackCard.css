@@ -1,0 +1,205 @@
+/* ===== FeedbackCard ===== */
+
+.feedback-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  padding: 14px 16px;
+  margin-top: 10px;
+  box-shadow: var(--shadow-sm);
+  animation: feedbackSlideIn 0.3s ease-out both;
+}
+
+@keyframes feedbackSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* --- Thank-you state --- */
+.feedback-thankyou {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--accent-emerald);
+  animation: feedbackFadeOut 1.5s ease-in-out forwards;
+}
+
+.feedback-thankyou-icon {
+  font-size: 1rem;
+}
+
+@keyframes feedbackFadeOut {
+  0%, 60% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* --- Header --- */
+.feedback-header {
+  margin-bottom: 10px;
+}
+
+.feedback-label {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+/* --- Stars --- */
+.feedback-stars {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 10px;
+}
+
+.feedback-star-wrapper {
+  position: relative;
+  width: 26px;
+  height: 26px;
+  cursor: pointer;
+}
+
+.feedback-star-svg {
+  width: 26px;
+  height: 26px;
+  transition: transform 0.15s ease;
+}
+
+.feedback-star-wrapper:hover .feedback-star-svg {
+  transform: scale(1.15);
+}
+
+.feedback-star-zone {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: 50%;
+}
+
+.feedback-star-left {
+  left: 0;
+}
+
+.feedback-star-right {
+  right: 0;
+}
+
+.feedback-rating-text {
+  margin-left: 6px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--accent-amber);
+  font-family: var(--font-mono);
+  min-width: 24px;
+}
+
+/* --- Tags --- */
+.feedback-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 10px;
+  animation: feedbackSlideIn 0.2s ease-out both;
+}
+
+.feedback-tag {
+  font-size: 0.75rem;
+  padding: 4px 10px;
+  border-radius: 20px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  font-family: var(--font-display);
+  line-height: 1.4;
+}
+
+.feedback-tag:hover {
+  border-color: var(--accent-cyan);
+  color: var(--accent-cyan);
+  background: var(--accent-cyan-dim);
+}
+
+.feedback-tag-active {
+  border-color: var(--accent-cyan);
+  color: var(--accent-cyan);
+  background: var(--accent-cyan-dim);
+  font-weight: 500;
+}
+
+/* --- Comment --- */
+.feedback-comment-wrap {
+  position: relative;
+  margin-bottom: 10px;
+  animation: feedbackSlideIn 0.2s ease-out both;
+}
+
+.feedback-comment {
+  width: 100%;
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  font-size: 0.8125rem;
+  font-family: var(--font-display);
+  resize: none;
+  outline: none;
+  transition: border-color 0.15s ease;
+  line-height: 1.5;
+}
+
+.feedback-comment::placeholder {
+  color: var(--text-tertiary);
+}
+
+.feedback-comment:focus {
+  border-color: var(--accent-cyan);
+}
+
+.feedback-char-count {
+  position: absolute;
+  right: 8px;
+  bottom: 6px;
+  font-size: 0.6875rem;
+  color: var(--text-tertiary);
+  font-family: var(--font-mono);
+}
+
+/* --- Submit --- */
+.feedback-submit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 18px;
+  border-radius: 8px;
+  border: none;
+  background: var(--accent-cyan);
+  color: #fff;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  font-family: var(--font-display);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  animation: feedbackSlideIn 0.2s ease-out both;
+}
+
+.feedback-submit:hover:not(:disabled) {
+  background: var(--accent-cyan-light);
+  box-shadow: 0 2px 8px rgba(8, 145, 178, 0.25);
+}
+
+.feedback-submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

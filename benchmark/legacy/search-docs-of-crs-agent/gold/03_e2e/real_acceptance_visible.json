@@ -1,0 +1,72 @@
+{
+  "benchmark_slug": "search-docs-of-crs-agent",
+  "suite_id": "real_acceptance_visible",
+  "layer": "e2e",
+  "source_files": [
+    "sample/benchmark_excel_template.xlsx"
+  ],
+  "acceptance_threshold": 0.85,
+  "case_count": 5,
+  "cases": [
+    {
+      "case_id": "case_000002",
+      "layer": "e2e",
+      "accepted_titles": [
+        "【推荐】国方MDD01【81/40针】",
+        "【平台版】国方MDD01_电路图【云内】【81和40针】",
+        "国方MDD01C_电路图【云内】",
+        "国方MDD01BS_电路图",
+        "国方MDD01BS_电路图【新风T3LC02】"
+      ],
+      "preferred_title": "【推荐】国方MDD01【81/40针】",
+      "expected_response_type": "documents",
+      "top_k": 10,
+      "question_type": "找资料"
+    },
+    {
+      "case_id": "case_000003",
+      "layer": "e2e",
+      "accepted_titles": [
+        "三一_SY55_SY60_SY65_SY75-9挖掘机_仪表显示器针脚定义"
+      ],
+      "preferred_title": "三一_SY55_SY60_SY65_SY75-9挖掘机_仪表显示器针脚定义",
+      "expected_response_type": "documents",
+      "top_k": 10,
+      "question_type": "找资料"
+    },
+    {
+      "case_id": "case_000007",
+      "layer": "e2e",
+      "accepted_titles": [
+        "现代_150LC-9挖掘机_液压电脑板针脚定义"
+      ],
+      "preferred_title": "现代_150LC-9挖掘机_液压电脑板针脚定义",
+      "expected_response_type": "documents",
+      "top_k": 10,
+      "question_type": "找资料"
+    },
+    {
+      "case_id": "case_000008",
+      "layer": "e2e",
+      "accepted_titles": [
+        "重汽豪泺_2010版ZZ1257N4048W_罐车线束图【豪沃】"
+      ],
+      "preferred_title": "重汽豪泺_2010版ZZ1257N4048W_罐车线束图【豪沃】",
+      "expected_response_type": "documents",
+      "top_k": 10,
+      "question_type": "找资料"
+    },
+    {
+      "case_id": "case_000010",
+      "layer": "e2e",
+      "accepted_titles": [
+        "【推荐】华夏龙晖73针_ECU电路图",
+        "福田驭菱_华夏龙辉73针ECU电路图【柳机LJ465Q】【原厂图】"
+      ],
+      "preferred_title": "【推荐】华夏龙晖73针_ECU电路图",
+      "expected_response_type": "documents",
+      "top_k": 10,
+      "question_type": "找资料"
+    }
+  ]
+}

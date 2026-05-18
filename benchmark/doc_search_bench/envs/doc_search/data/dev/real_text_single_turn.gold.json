@@ -1,0 +1,36 @@
+{
+  "benchmark_slug": "search-docs-of-crs-agent",
+  "suite_id": "real_text_single_turn",
+  "layer": "component",
+  "source_files": [
+    "sample/benchmark_excel_template.xlsx"
+  ],
+  "acceptance_threshold": 1.0,
+  "case_count": 1,
+  "cases": [
+    {
+      "case_id": "case_000003",
+      "layer": "component",
+      "accepted_titles": [
+        "三一_SY55_SY60_SY65_SY75-9挖掘机_仪表显示器针脚定义"
+      ],
+      "preferred_title": "三一_SY55_SY60_SY65_SY75-9挖掘机_仪表显示器针脚定义",
+      "expected_response_type": "documents",
+      "top_k": 10,
+      "question_type": "找资料",
+      "page_goal_mode": "disabled",
+      "accepted_pages": [],
+      "accepted_page_ranges": [],
+      "target_doc": {
+        "file_id": "三一_SY55_SY60_SY65_SY75-9挖掘机_仪表显示器针脚定义",
+        "title": "三一_SY55_SY60_SY65_SY75-9挖掘机_仪表显示器针脚定义",
+        "facets": {
+          "brand": "三一",
+          "series": "SY",
+          "model": "55C",
+          "doc_type": "仪表针脚图"
+        }
+      }
+    }
+  ]
+}

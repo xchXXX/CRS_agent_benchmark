@@ -1,0 +1,13 @@
+{
+  "source_files": [
+    "资料树节点及关联文件原数据表.xls",
+    "sample/benchmark_excel_template.xlsx",
+    "sample/资料树节点及关联文件-东风.csv",
+    "sample/资料树节点及关联文件(添加52份解放相关电路图搜索关键词语).txt"
+  ],
+  "notes": [
+    "本目录只保存新 benchmark 所依赖的数据来源清单，不复制 sample 真源文件。",
+    "train mock/synthetic case 由仓库根目录的 资料树节点及关联文件原数据表.xls 经 benchmark/doc_search_bench/utils/regenerate_train_from_xls.py 生成。",
+    "图像输入仍直接引用仓库根目录 sample/ 下的图片路径。"
+  ]
+}

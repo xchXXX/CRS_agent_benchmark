@@ -1,0 +1,81 @@
+{
+  "benchmark_slug": "search-docs-of-crs-agent",
+  "suite_id": "synthetic_noise_queries",
+  "layer": "atomic",
+  "source_files": [],
+  "case_count": 6,
+  "cases": [
+    {
+      "case_id": "noise_0001",
+      "layer": "atomic",
+      "input_modality": "text",
+      "question_text": "老师，帮我找下火星牌 MARS-42 BCM 针脚图 ZZZ_NO_SUCH_DOC_001",
+      "question_images": [],
+      "vehicle_info": null,
+      "benchmark_track": "search_api",
+      "preprocess_strategy": "none",
+      "request_context": {},
+      "notes": "synthetic negative query for false-positive suppression"
+    },
+    {
+      "case_id": "noise_0002",
+      "layer": "atomic",
+      "input_modality": "text",
+      "question_text": "宇宙牌 QX999 整车电路图 ZZZ_NO_SUCH_DOC_002",
+      "question_images": [],
+      "vehicle_info": null,
+      "benchmark_track": "search_api",
+      "preprocess_strategy": "none",
+      "request_context": {},
+      "notes": "synthetic negative query for false-positive suppression"
+    },
+    {
+      "case_id": "noise_0003",
+      "layer": "atomic",
+      "input_modality": "text",
+      "question_text": "北极星 PX-700 量子 ECU 电路图 ZZZ_NO_SUCH_DOC_003",
+      "question_images": [],
+      "vehicle_info": null,
+      "benchmark_track": "search_api",
+      "preprocess_strategy": "none",
+      "request_context": {},
+      "notes": "synthetic negative query for false-positive suppression"
+    },
+    {
+      "case_id": "noise_0004",
+      "layer": "atomic",
+      "input_modality": "text",
+      "question_text": "海王星 N7 冷藏车仪表定义图 ZZZ_NO_SUCH_DOC_004",
+      "question_images": [],
+      "vehicle_info": null,
+      "benchmark_track": "search_api",
+      "preprocess_strategy": "none",
+      "request_context": {},
+      "notes": "synthetic negative query for false-positive suppression"
+    },
+    {
+      "case_id": "noise_0005",
+      "layer": "atomic",
+      "input_modality": "text",
+      "question_text": "虚构品牌 TEST-ALPHA 发动机线束图 ZZZ_NO_SUCH_DOC_005",
+      "question_images": [],
+      "vehicle_info": null,
+      "benchmark_track": "search_api",
+      "preprocess_strategy": "none",
+      "request_context": {},
+      "notes": "synthetic negative query for false-positive suppression"
+    },
+    {
+      "case_id": "noise_0006",
+      "layer": "atomic",
+      "input_modality": "text",
+      "question_text": "不存在车型 OMEGA-9000 电器原理图 ZZZ_NO_SUCH_DOC_006",
+      "question_images": [],
+      "vehicle_info": null,
+      "benchmark_track": "search_api",
+      "preprocess_strategy": "none",
+      "request_context": {},
+      "notes": "synthetic negative query for false-positive suppression"
+    }
+  ]
+}

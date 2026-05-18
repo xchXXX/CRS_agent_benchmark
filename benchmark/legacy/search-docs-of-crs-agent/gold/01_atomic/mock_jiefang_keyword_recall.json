@@ -1,0 +1,584 @@
+{
+  "benchmark_slug": "search-docs-of-crs-agent",
+  "suite_id": "mock_jiefang_keyword_recall",
+  "layer": "atomic",
+  "source_files": [
+    "sample/资料树节点及关联文件(添加52份解放相关电路图搜索关键词语).txt"
+  ],
+  "acceptance_threshold": 0.85,
+  "case_count": 52,
+  "cases": [
+    {
+      "case_id": "mock_jiefang_0001",
+      "layer": "atomic",
+      "accepted_titles": [
+        "一汽解放_J5_J5M_整车电气原理图【博世EDC7UC31_电装国三系统_电装国四系统】【国三国四】"
+      ],
+      "preferred_title": "一汽解放_J5_J5M_整车电气原理图【博世EDC7UC31_电装国三系统_电装国四系统】【国三国四】",
+      "expected_response_type": "documents",
+      "top_k": 10,
+      "source_file": "sample/资料树节点及关联文件(添加52份解放相关电路图搜索关键词语).txt"
+    },
+    {
+      "case_id": "mock_jiefang_0002",
+      "layer": "atomic",
+      "accepted_titles": [
+        "一汽解放_J5_整车电路图【EDC7UC31_CAN仪表_ABS】【国三】"
+      ],
+      "preferred_title": "一汽解放_J5_整车电路图【EDC7UC31_CAN仪表_ABS】【国三】",
+      "expected_response_type": "documents",
+      "top_k": 10,
+      "source_file": "sample/资料树节点及关联文件(添加52份解放相关电路图搜索关键词语).txt"
+    },
+    {
+      "case_id": "mock_jiefang_0003",
+      "layer": "atomic",
+      "accepted_titles": [
+        "一汽解放_J5_整车电路图【国二】"
+      ],
+      "preferred_title": "一汽解放_J5_整车电路图【国二】",
+      "expected_response_type": "documents",
+      "top_k": 10,
+      "source_file": "sample/资料树节点及关联文件(添加52份解放相关电路图搜索关键词语).txt"
+    },
+    {
+      "case_id": "mock_jiefang_0004",
+      "layer": "atomic",
+      "accepted_titles": [
+        "解放_奥威_J5P_CA4182P21K2型_平头牵引车线束图"
+      ],
+      "preferred_title": "解放_奥威_J5P_CA4182P21K2型_平头牵引车线束图",
+      "expected_response_type": "documents",
+      "top_k": 10,
+      "source_file": "sample/资料树节点及关联文件(添加52份解放相关电路图搜索关键词语).txt"
+    },
+    {
+      "case_id": "mock_jiefang_0005",
+      "layer": "atomic",
+      "accepted_titles": [
+        "一汽解放_J6_电喷CA4250P66型牵引车线束图解【李自广_博世EDC7UC31】"
+      ],
+      "preferred_title": "一汽解放_J6_电喷CA4250P66型牵引车线束图解【李自广_博世EDC7UC31】",
+      "expected_response_type": "documents",
+      "top_k": 10,
+      "source_file": "sample/资料树节点及关联文件(添加52份解放相关电路图搜索关键词语).txt"
+    },
+    {
+      "case_id": "mock_jiefang_0006",
+      "layer": "atomic",
+      "accepted_titles": [
+        "一汽解放_J6_整车电路图【EDC7】【国三】"
+      ],
+      "preferred_title": "一汽解放_J6_整车电路图【EDC7】【国三】",
+      "expected_response_type": "documents",
+      "top_k": 10,
+      "source_file": "sample/资料树节点及关联文件(添加52份解放相关电路图搜索关键词语).txt"
+    },
+    {
+      "case_id": "mock_jiefang_0007",
+      "layer": "atomic",
+      "accepted_titles": [
+        "一汽解放_老J6_电路图"
+      ],
+      "preferred_title": "一汽解放_老J6_电路图",
+      "expected_response_type": "documents",
+      "top_k": 10,
+      "source_file": "sample/资料树节点及关联文件(添加52份解放相关电路图搜索关键词语).txt"
+    },
+    {
+      "case_id": "mock_jiefang_0008",
+      "layer": "atomic",
+      "accepted_titles": [
+        "一汽解放_J6P_整车线束原理图【博世EDC17CV44-2.2泵】【国四】【2015版】"
+      ],
+      "preferred_title": "一汽解放_J6P_整车线束原理图【博世EDC17CV44-2.2泵】【国四】【2015版】",
+      "expected_response_type": "documents",
+      "top_k": 10,
+      "source_file": "sample/资料树节点及关联文件(添加52份解放相关电路图搜索关键词语).txt"
+    },
+    {
+      "case_id": "mock_jiefang_0009",
+      "layer": "atomic",
+      "accepted_titles": [
+        "一汽解放_J6P_领航版_整车线束原理图【博世EDC17CV44-6.5泵】【国四】【2016版】"
+      ],
+      "preferred_title": "一汽解放_J6P_领航版_整车线束原理图【博世EDC17CV44-6.5泵】【国四】【2016版】",
+      "expected_response_type": "documents",
+      "top_k": 10,
+      "source_file": "sample/资料树节点及关联文件(添加52份解放相关电路图搜索关键词语).txt"
+    },
+    {
+      "case_id": "mock_jiefang_0010",
+      "layer": "atomic",
+      "accepted_titles": [
+        "一汽解放_J6P_整车电路图【CA4250P66M26T1E6】【气体机】【国六】"
+      ],
+      "preferred_title": "一汽解放_J6P_整车电路图【CA4250P66M26T1E6】【气体机】【国六】",
+      "expected_response_type": "documents",
+      "top_k": 10,
+      "source_file": "sample/资料树节点及关联文件(添加52份解放相关电路图搜索关键词语).txt"
+    },
+    {
+      "case_id": "mock_jiefang_0011",
+      "layer": "atomic",
+      "accepted_titles": [
+        "一汽解放_J6P_牵引车_整车电路图【CA4250P66K24T1A1E6】【锡柴CA6DM2-46E6_自主气驱】【国六】"
+      ],
+      "preferred_title": "一汽解放_J6P_牵引车_整车电路图【CA4250P66K24T1A1E6】【锡柴CA6DM2-46E6_自主气驱】【国六】",
+      "expected_response_type": "documents",
+      "top_k": 10,
+      "source_file": "sample/资料树节点及关联文件(添加52份解放相关电路图搜索关键词语).txt"
+    },
+    {
+      "case_id": "mock_jiefang_0012",
+      "layer": "atomic",
+      "accepted_titles": [
+        "一汽解放_J6P_牵引车_整车线束图【CA6DM2-46E6_FA08ECU-自主气驱】【国六】"
+      ],
+      "preferred_title": "一汽解放_J6P_牵引车_整车线束图【CA6DM2-46E6_FA08ECU-自主气驱】【国六】",
+      "expected_response_type": "documents",
+      "top_k": 10,
+      "source_file": "sample/资料树节点及关联文件(添加52份解放相关电路图搜索关键词语).txt"
+    },
+    {
+      "case_id": "mock_jiefang_0013",
+      "layer": "atomic",
+      "accepted_titles": [
+        "一汽解放_J6P_ABS_气路图【锡柴自主FA08_BCM_缓速器】【国六】"
+      ],
+      "preferred_title": "一汽解放_J6P_ABS_气路图【锡柴自主FA08_BCM_缓速器】【国六】",
+      "expected_response_type": "documents",
+      "top_k": 10,
+      "source_file": "sample/资料树节点及关联文件(添加52份解放相关电路图搜索关键词语).txt"
+    },
+    {
+      "case_id": "mock_jiefang_0014",
+      "layer": "atomic",
+      "accepted_titles": [
+        "一汽解放_J6P_锡柴自主FA08电脑板_自主后处理_电路图【锡柴自主FA08_BCM_缓速器】【国六】"
+      ],
+      "preferred_title": "一汽解放_J6P_锡柴自主FA08电脑板_自主后处理_电路图【锡柴自主FA08_BCM_缓速器】【国六】",
+      "expected_response_type": "documents",
+      "top_k": 10,
+      "source_file": "sample/资料树节点及关联文件(添加52份解放相关电路图搜索关键词语).txt"
+    },
+    {
+      "case_id": "mock_jiefang_0015",
+      "layer": "atomic",
+      "accepted_titles": [
+        "一汽解放_J6P_牵引车_整车电路图【EDC17_CA6DL2_CA6DM2_CA6DN1_V1.0】【国四、国五】"
+      ],
+      "preferred_title": "一汽解放_J6P_牵引车_整车电路图【EDC17_CA6DL2_CA6DM2_CA6DN1_V1.0】【国四、国五】",
+      "expected_response_type": "documents",
+      "top_k": 10,
+      "source_file": "sample/资料树节点及关联文件(添加52份解放相关电路图搜索关键词语).txt"
+    },
+    {
+      "case_id": "mock_jiefang_0016",
+      "layer": "atomic",
+      "accepted_titles": [
+        "一汽解放_J6P牵引车_整车线束图【锡柴CA6DM2-46E4_解放自主FEUP_自主气驱罐】【国五】"
+      ],
+      "preferred_title": "一汽解放_J6P牵引车_整车线束图【锡柴CA6DM2-46E4_解放自主FEUP_自主气驱罐】【国五】",
+      "expected_response_type": "documents",
+      "top_k": 10,
+      "source_file": "sample/资料树节点及关联文件(添加52份解放相关电路图搜索关键词语).txt"
+    },
+    {
+      "case_id": "mock_jiefang_0017",
+      "layer": "atomic",
+      "accepted_titles": [
+        "一汽解放_J6P_牵引车_整车电路图【CA4250P66K2T1E5】【锡柴CA6DL3-37E5_FCRI_自主气驱】【国五】"
+      ],
+      "preferred_title": "一汽解放_J6P_牵引车_整车电路图【CA4250P66K2T1E5】【锡柴CA6DL3-37E5_FCRI_自主气驱】【国五】",
+      "expected_response_type": "documents",
+      "top_k": 10,
+      "source_file": "sample/资料树节点及关联文件(添加52份解放相关电路图搜索关键词语).txt"
+    },
+    {
+      "case_id": "mock_jiefang_0018",
+      "layer": "atomic",
+      "accepted_titles": [
+        "一汽解放_J6P载货车_整车线束图【锡柴CA6DM2-46E52_解放自主FEUP】【国五】"
+      ],
+      "preferred_title": "一汽解放_J6P载货车_整车线束图【锡柴CA6DM2-46E52_解放自主FEUP】【国五】",
+      "expected_response_type": "documents",
+      "top_k": 10,
+      "source_file": "sample/资料树节点及关联文件(添加52份解放相关电路图搜索关键词语).txt"
+    },
+    {
+      "case_id": "mock_jiefang_0019",
+      "layer": "atomic",
+      "accepted_titles": [
+        "一汽解放_J6P_整车电路图【CA3310P66K2L5BT4AE5】【锡柴6DL2-35E5_EDC17CV44_博世6.5泵】【国四、国五】"
+      ],
+      "preferred_title": "一汽解放_J6P_整车电路图【CA3310P66K2L5BT4AE5】【锡柴6DL2-35E5_EDC17CV44_博世6.5泵】【国四、国五】",
+      "expected_response_type": "documents",
+      "top_k": 10,
+      "source_file": "sample/资料树节点及关联文件(添加52份解放相关电路图搜索关键词语).txt"
+    },
+    {
+      "case_id": "mock_jiefang_0020",
+      "layer": "atomic",
+      "accepted_titles": [
+        "一汽解放_J6P_牵引车_整车电路图【CA4250P66K24T1A1E5F】【锡柴CA6DM3-55E5_FCRI_自主气驱】【国四、国五】"
+      ],
+      "preferred_title": "一汽解放_J6P_牵引车_整车电路图【CA4250P66K24T1A1E5F】【锡柴CA6DM3-55E5_FCRI_自主气驱】【国四、国五】",
+      "expected_response_type": "documents",
+      "top_k": 10,
+      "source_file": "sample/资料树节点及关联文件(添加52份解放相关电路图搜索关键词语).txt"
+    },
+    {
+      "case_id": "mock_jiefang_0021",
+      "layer": "atomic",
+      "accepted_titles": [
+        "解放J6P_载货车_锡柴CA6DM2-42E51_整车线束图_CA1310P66K24L7T4E5"
+      ],
+      "preferred_title": "解放J6P_载货车_锡柴CA6DM2-42E51_整车线束图_CA1310P66K24L7T4E5",
+      "expected_response_type": "documents",
+      "top_k": 10,
+      "source_file": "sample/资料树节点及关联文件(添加52份解放相关电路图搜索关键词语).txt"
+    },
+    {
+      "case_id": "mock_jiefang_0022",
+      "layer": "atomic",
+      "accepted_titles": [
+        "解放J6P_载货车_大柴CA6DK1-28E5_整车线束图_CA1250P66K1L4T3E5J"
+      ],
+      "preferred_title": "解放J6P_载货车_大柴CA6DK1-28E5_整车线束图_CA1250P66K1L4T3E5J",
+      "expected_response_type": "documents",
+      "top_k": 10,
+      "source_file": "sample/资料树节点及关联文件(添加52份解放相关电路图搜索关键词语).txt"
+    },
+    {
+      "case_id": "mock_jiefang_0023",
+      "layer": "atomic",
+      "accepted_titles": [
+        "解放J6P_牵引车_CA6DM3-55E52_整车线束图_CA4250P66K25T1A1E5"
+      ],
+      "preferred_title": "解放J6P_牵引车_CA6DM3-55E52_整车线束图_CA4250P66K25T1A1E5",
+      "expected_response_type": "documents",
+      "top_k": 10,
+      "source_file": "sample/资料树节点及关联文件(添加52份解放相关电路图搜索关键词语).txt"
+    },
+    {
+      "case_id": "mock_jiefang_0024",
+      "layer": "atomic",
+      "accepted_titles": [
+        "一汽解放_J6P_左底盘线束图【锡柴自主电脑板_自主气驱_19款】【国五】"
+      ],
+      "preferred_title": "一汽解放_J6P_左底盘线束图【锡柴自主电脑板_自主气驱_19款】【国五】",
+      "expected_response_type": "documents",
+      "top_k": 10,
+      "source_file": "sample/资料树节点及关联文件(添加52份解放相关电路图搜索关键词语).txt"
+    },
+    {
+      "case_id": "mock_jiefang_0025",
+      "layer": "atomic",
+      "accepted_titles": [
+        "一汽解放_J6P_驾驶室线束图【锡柴自主电脑板_自主气驱_19款】【国五】"
+      ],
+      "preferred_title": "一汽解放_J6P_驾驶室线束图【锡柴自主电脑板_自主气驱_19款】【国五】",
+      "expected_response_type": "documents",
+      "top_k": 10,
+      "source_file": "sample/资料树节点及关联文件(添加52份解放相关电路图搜索关键词语).txt"
+    },
+    {
+      "case_id": "mock_jiefang_0026",
+      "layer": "atomic",
+      "accepted_titles": [
+        "一汽解放_J6P_前保险杠线束图【锡柴自主电脑板_自主气驱_19款】【国五】"
+      ],
+      "preferred_title": "一汽解放_J6P_前保险杠线束图【锡柴自主电脑板_自主气驱_19款】【国五】",
+      "expected_response_type": "documents",
+      "top_k": 10,
+      "source_file": "sample/资料树节点及关联文件(添加52份解放相关电路图搜索关键词语).txt"
+    },
+    {
+      "case_id": "mock_jiefang_0027",
+      "layer": "atomic",
+      "accepted_titles": [
+        "一汽解放_J6P_右底盘线束图【CA4251P66K24T1A22E5】【锡柴自主电脑板_自主气驱】【国五】"
+      ],
+      "preferred_title": "一汽解放_J6P_右底盘线束图【CA4251P66K24T1A22E5】【锡柴自主电脑板_自主气驱】【国五】",
+      "expected_response_type": "documents",
+      "top_k": 10,
+      "source_file": "sample/资料树节点及关联文件(添加52份解放相关电路图搜索关键词语).txt"
+    },
+    {
+      "case_id": "mock_jiefang_0028",
+      "layer": "atomic",
+      "accepted_titles": [
+        "一汽解放_J6P_左底盘线束图【CA4251P66K24T1A22E5】【锡柴自主电脑板_自主气驱】【国五】"
+      ],
+      "preferred_title": "一汽解放_J6P_左底盘线束图【CA4251P66K24T1A22E5】【锡柴自主电脑板_自主气驱】【国五】",
+      "expected_response_type": "documents",
+      "top_k": 10,
+      "source_file": "sample/资料树节点及关联文件(添加52份解放相关电路图搜索关键词语).txt"
+    },
+    {
+      "case_id": "mock_jiefang_0029",
+      "layer": "atomic",
+      "accepted_titles": [
+        "一汽解放_J6P_驾驶室线束图【CA4251P66K24T1A22E5】【锡柴自主电脑板_自主气驱】【国五】"
+      ],
+      "preferred_title": "一汽解放_J6P_驾驶室线束图【CA4251P66K24T1A22E5】【锡柴自主电脑板_自主气驱】【国五】",
+      "expected_response_type": "documents",
+      "top_k": 10,
+      "source_file": "sample/资料树节点及关联文件(添加52份解放相关电路图搜索关键词语).txt"
+    },
+    {
+      "case_id": "mock_jiefang_0030",
+      "layer": "atomic",
+      "accepted_titles": [
+        "一汽解放_J6P_整车线束原理图【博世EDC17CV44-2.2泵】【国四】【2015版】"
+      ],
+      "preferred_title": "一汽解放_J6P_整车线束原理图【博世EDC17CV44-2.2泵】【国四】【2015版】",
+      "expected_response_type": "documents",
+      "top_k": 10,
+      "source_file": "sample/资料树节点及关联文件(添加52份解放相关电路图搜索关键词语).txt"
+    },
+    {
+      "case_id": "mock_jiefang_0031",
+      "layer": "atomic",
+      "accepted_titles": [
+        "一汽解放_J6P_领航版-北方版-寒区版_整车电气维修第一分册【EDC17CV44-博世2.2泵】"
+      ],
+      "preferred_title": "一汽解放_J6P_领航版-北方版-寒区版_整车电气维修第一分册【EDC17CV44-博世2.2泵】",
+      "expected_response_type": "documents",
+      "top_k": 10,
+      "source_file": "sample/资料树节点及关联文件(添加52份解放相关电路图搜索关键词语).txt"
+    },
+    {
+      "case_id": "mock_jiefang_0032",
+      "layer": "atomic",
+      "accepted_titles": [
+        "一汽解放_J6P_电气线路维修第二分册【解放自主52E/91E-自主气驱泵】【2016款】"
+      ],
+      "preferred_title": "一汽解放_J6P_电气线路维修第二分册【解放自主52E/91E-自主气驱泵】【2016款】",
+      "expected_response_type": "documents",
+      "top_k": 10,
+      "source_file": "sample/资料树节点及关联文件(添加52份解放相关电路图搜索关键词语).txt"
+    },
+    {
+      "case_id": "mock_jiefang_0033",
+      "layer": "atomic",
+      "accepted_titles": [
+        "一汽解放_J6P_电气维修图【解放自主52E/91E-天纳克6.0泵】【国四国五】"
+      ],
+      "preferred_title": "一汽解放_J6P_电气维修图【解放自主52E/91E-天纳克6.0泵】【国四国五】",
+      "expected_response_type": "documents",
+      "top_k": 10,
+      "source_file": "sample/资料树节点及关联文件(添加52份解放相关电路图搜索关键词语).txt"
+    },
+    {
+      "case_id": "mock_jiefang_0034",
+      "layer": "atomic",
+      "accepted_titles": [
+        "李自广_解放J6P_自主FEUP2单体泵_国四_整车电路图"
+      ],
+      "preferred_title": "李自广_解放J6P_自主FEUP2单体泵_国四_整车电路图",
+      "expected_response_type": "documents",
+      "top_k": 10,
+      "source_file": "sample/资料树节点及关联文件(添加52份解放相关电路图搜索关键词语).txt"
+    },
+    {
+      "case_id": "mock_jiefang_0035",
+      "layer": "atomic",
+      "accepted_titles": [
+        "一汽解放_J6P_国四_EDC17CV44配博世2.2SCR_双DIN一体_信息_娱乐系统_电路"
+      ],
+      "preferred_title": "一汽解放_J6P_国四_EDC17CV44配博世2.2SCR_双DIN一体_信息_娱乐系统_电路",
+      "expected_response_type": "documents",
+      "top_k": 10,
+      "source_file": "sample/资料树节点及关联文件(添加52份解放相关电路图搜索关键词语).txt"
+    },
+    {
+      "case_id": "mock_jiefang_0036",
+      "layer": "atomic",
+      "accepted_titles": [
+        "一汽解放_J6P_国四_EDC17CV44配博世2.2SCR_双DIN分离_信息_娱乐系统_电路"
+      ],
+      "preferred_title": "一汽解放_J6P_国四_EDC17CV44配博世2.2SCR_双DIN分离_信息_娱乐系统_电路",
+      "expected_response_type": "documents",
+      "top_k": 10,
+      "source_file": "sample/资料树节点及关联文件(添加52份解放相关电路图搜索关键词语).txt"
+    },
+    {
+      "case_id": "mock_jiefang_0037",
+      "layer": "atomic",
+      "accepted_titles": [
+        "一汽解放_J6P_J6M_运油车_整车线束图【大柴CA6DK1-26E51_解放自主FEUP_大柴自主FEUP_FCRI_自主气驱罐】【国五】"
+      ],
+      "preferred_title": "一汽解放_J6P_J6M_运油车_整车线束图【大柴CA6DK1-26E51_解放自主FEUP_大柴自主FEUP_FCRI_自主气驱罐】【国五】",
+      "expected_response_type": "documents",
+      "top_k": 10,
+      "source_file": "sample/资料树节点及关联文件(添加52份解放相关电路图搜索关键词语).txt"
+    },
+    {
+      "case_id": "mock_jiefang_0038",
+      "layer": "atomic",
+      "accepted_titles": [
+        "解放J6P自卸车_锡柴CA6SM2-37E5N_整车线束图_CA3250P66L2BT1E24M5"
+      ],
+      "preferred_title": "解放J6P自卸车_锡柴CA6SM2-37E5N_整车线束图_CA3250P66L2BT1E24M5",
+      "expected_response_type": "documents",
+      "top_k": 10,
+      "source_file": "sample/资料树节点及关联文件(添加52份解放相关电路图搜索关键词语).txt"
+    },
+    {
+      "case_id": "mock_jiefang_0039",
+      "layer": "atomic",
+      "accepted_titles": [
+        "解放J6P自卸车_CA6DM3-39E52_整车线束图_CA3251P66K24L1T1E5"
+      ],
+      "preferred_title": "解放J6P自卸车_CA6DM3-39E52_整车线束图_CA3251P66K24L1T1E5",
+      "expected_response_type": "documents",
+      "top_k": 10,
+      "source_file": "sample/资料树节点及关联文件(添加52份解放相关电路图搜索关键词语).txt"
+    },
+    {
+      "case_id": "mock_jiefang_0040",
+      "layer": "atomic",
+      "accepted_titles": [
+        "解放J6P_自卸车_CA3310P66K2L5BT4AE5_锡柴6DL2-35E5_EDC17CV44_博世6.5_保险_熔断器盒"
+      ],
+      "preferred_title": "解放J6P_自卸车_CA3310P66K2L5BT4AE5_锡柴6DL2-35E5_EDC17CV44_博世6.5_保险_熔断器盒",
+      "expected_response_type": "documents",
+      "top_k": 10,
+      "source_file": "sample/资料树节点及关联文件(添加52份解放相关电路图搜索关键词语).txt"
+    },
+    {
+      "case_id": "mock_jiefang_0041",
+      "layer": "atomic",
+      "accepted_titles": [
+        "解放J6P_自卸车_CA3310P66K2L5BT4AE5_车门控制器_电路图"
+      ],
+      "preferred_title": "解放J6P_自卸车_CA3310P66K2L5BT4AE5_车门控制器_电路图",
+      "expected_response_type": "documents",
+      "top_k": 10,
+      "source_file": "sample/资料树节点及关联文件(添加52份解放相关电路图搜索关键词语).txt"
+    },
+    {
+      "case_id": "mock_jiefang_0042",
+      "layer": "atomic",
+      "accepted_titles": [
+        "解放J6P_自卸车_CA3310P66K2L5BT4AE5_行车记录仪_电路图"
+      ],
+      "preferred_title": "解放J6P_自卸车_CA3310P66K2L5BT4AE5_行车记录仪_电路图",
+      "expected_response_type": "documents",
+      "top_k": 10,
+      "source_file": "sample/资料树节点及关联文件(添加52份解放相关电路图搜索关键词语).txt"
+    },
+    {
+      "case_id": "mock_jiefang_0043",
+      "layer": "atomic",
+      "accepted_titles": [
+        "解放J6P_自卸车_CA3310P66K2L5BT4AE5_收放机_电路图"
+      ],
+      "preferred_title": "解放J6P_自卸车_CA3310P66K2L5BT4AE5_收放机_电路图",
+      "expected_response_type": "documents",
+      "top_k": 10,
+      "source_file": "sample/资料树节点及关联文件(添加52份解放相关电路图搜索关键词语).txt"
+    },
+    {
+      "case_id": "mock_jiefang_0044",
+      "layer": "atomic",
+      "accepted_titles": [
+        "解放J6P_天然气_375CFV_整车线束图_电路图"
+      ],
+      "preferred_title": "解放J6P_天然气_375CFV_整车线束图_电路图",
+      "expected_response_type": "documents",
+      "top_k": 10,
+      "source_file": "sample/资料树节点及关联文件(添加52份解放相关电路图搜索关键词语).txt"
+    },
+    {
+      "case_id": "mock_jiefang_0045",
+      "layer": "atomic",
+      "accepted_titles": [
+        "解放J6P牵引车_潍柴430天然气_整车线束图_CA4251P66K29T1A5E5MJ"
+      ],
+      "preferred_title": "解放J6P牵引车_潍柴430天然气_整车线束图_CA4251P66K29T1A5E5MJ",
+      "expected_response_type": "documents",
+      "top_k": 10,
+      "source_file": "sample/资料树节点及关联文件(添加52份解放相关电路图搜索关键词语).txt"
+    },
+    {
+      "case_id": "mock_jiefang_0046",
+      "layer": "atomic",
+      "accepted_titles": [
+        "一汽解放_J6P_整车起动电路图【天然气】【2015版】"
+      ],
+      "preferred_title": "一汽解放_J6P_整车起动电路图【天然气】【2015版】",
+      "expected_response_type": "documents",
+      "top_k": 10,
+      "source_file": "sample/资料树节点及关联文件(添加52份解放相关电路图搜索关键词语).txt"
+    },
+    {
+      "case_id": "mock_jiefang_0047",
+      "layer": "atomic",
+      "accepted_titles": [
+        "一汽解放_J6P_领航版_左车身线束图【CA6DM3_FCRI_自主气驱】【国六】"
+      ],
+      "preferred_title": "一汽解放_J6P_领航版_左车身线束图【CA6DM3_FCRI_自主气驱】【国六】",
+      "expected_response_type": "documents",
+      "top_k": 10,
+      "source_file": "sample/资料树节点及关联文件(添加52份解放相关电路图搜索关键词语).txt"
+    },
+    {
+      "case_id": "mock_jiefang_0048",
+      "layer": "atomic",
+      "accepted_titles": [
+        "一汽解放_J6P_领航版_车门控制器_针脚定义【CA6DM3_FCRI_自主气驱】【国六】"
+      ],
+      "preferred_title": "一汽解放_J6P_领航版_车门控制器_针脚定义【CA6DM3_FCRI_自主气驱】【国六】",
+      "expected_response_type": "documents",
+      "top_k": 10,
+      "source_file": "sample/资料树节点及关联文件(添加52份解放相关电路图搜索关键词语).txt"
+    },
+    {
+      "case_id": "mock_jiefang_0049",
+      "layer": "atomic",
+      "accepted_titles": [
+        "一汽解放_J6P_领航版_车队管理模块_针脚定义【CA6DM3_FCRI_自主气驱】【国六】"
+      ],
+      "preferred_title": "一汽解放_J6P_领航版_车队管理模块_针脚定义【CA6DM3_FCRI_自主气驱】【国六】",
+      "expected_response_type": "documents",
+      "top_k": 10,
+      "source_file": "sample/资料树节点及关联文件(添加52份解放相关电路图搜索关键词语).txt"
+    },
+    {
+      "case_id": "mock_jiefang_0050",
+      "layer": "atomic",
+      "accepted_titles": [
+        "一汽解放_J6P_领航版_整车线束原理图【博世EDC17CV44-6.5泵】【国四】【2016版】"
+      ],
+      "preferred_title": "一汽解放_J6P_领航版_整车线束原理图【博世EDC17CV44-6.5泵】【国四】【2016版】",
+      "expected_response_type": "documents",
+      "top_k": 10,
+      "source_file": "sample/资料树节点及关联文件(添加52份解放相关电路图搜索关键词语).txt"
+    },
+    {
+      "case_id": "mock_jiefang_0051",
+      "layer": "atomic",
+      "accepted_titles": [
+        "一汽解放_J6P领航版_线束原理图【博世EDC17CV44】【国四、国五】"
+      ],
+      "preferred_title": "一汽解放_J6P领航版_线束原理图【博世EDC17CV44】【国四、国五】",
+      "expected_response_type": "documents",
+      "top_k": 10,
+      "source_file": "sample/资料树节点及关联文件(添加52份解放相关电路图搜索关键词语).txt"
+    },
+    {
+      "case_id": "mock_jiefang_0052",
+      "layer": "atomic",
+      "accepted_titles": [
+        "一汽解放_J6P_领航版_北方版_寒区版_整车电路图【EDC17_博世2.2】【国四、国五】"
+      ],
+      "preferred_title": "一汽解放_J6P_领航版_北方版_寒区版_整车电路图【EDC17_博世2.2】【国四、国五】",
+      "expected_response_type": "documents",
+      "top_k": 10,
+      "source_file": "sample/资料树节点及关联文件(添加52份解放相关电路图搜索关键词语).txt"
+    }
+  ]
+}

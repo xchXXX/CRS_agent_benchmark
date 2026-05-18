@@ -1,0 +1,34 @@
+{
+  "benchmark_slug": "search-docs-of-crs-agent",
+  "suite_id": "real_acceptance_holdout",
+  "layer": "blind",
+  "source_files": [
+    "sample/benchmark_excel_template.xlsx"
+  ],
+  "acceptance_threshold": 0.85,
+  "case_count": 2,
+  "cases": [
+    {
+      "case_id": "case_000004",
+      "layer": "blind",
+      "accepted_titles": [
+        "杰狮H6_杰虎H6_BCM_电路图【燃油 燃气_2.3m驾驶室】【国六】"
+      ],
+      "preferred_title": "杰狮H6_杰虎H6_BCM_电路图【燃油 燃气_2.3m驾驶室】【国六】",
+      "expected_response_type": "documents",
+      "top_k": 10,
+      "question_type": "找资料"
+    },
+    {
+      "case_id": "case_000009",
+      "layer": "blind",
+      "accepted_titles": [
+        "康明斯D2.5_CM2621_F162_原理图【国六】"
+      ],
+      "preferred_title": "康明斯D2.5_CM2621_F162_原理图【国六】",
+      "expected_response_type": "documents",
+      "top_k": 10,
+      "question_type": "找资料"
+    }
+  ]
+}

@@ -1,0 +1,284 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "CRS Agent 资料检索 Benchmark Output Contract",
+  "type": "object",
+  "required": [
+    "case_id",
+    "layer",
+    "business_line",
+    "input_modality",
+    "input",
+    "response",
+    "prediction",
+    "validation",
+    "metrics"
+  ],
+  "properties": {
+    "case_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "layer": {
+      "type": "string",
+      "enum": [
+        "atomic",
+        "component",
+        "e2e",
+        "blind"
+      ]
+    },
+    "business_line": {
+      "type": "string",
+      "const": "DOC_SEARCH"
+    },
+    "input_modality": {
+      "type": "string",
+      "enum": [
+        "text",
+        "image_text"
+      ]
+    },
+    "input": {
+      "type": "object",
+      "required": [
+        "question_text",
+        "question_images",
+        "vehicle_info"
+      ],
+      "properties": {
+        "question_text": {
+          "type": "string"
+        },
+        "question_images": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "vehicle_info": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "execution": {
+      "type": "object",
+      "properties": {
+        "run_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "started_at": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "ended_at": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "duration_ms": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "endpoint": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "session_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "response": {
+      "type": "object",
+      "required": [
+        "response_type",
+        "final_status",
+        "business"
+      ],
+      "properties": {
+        "response_type": {
+          "type": "string"
+        },
+        "final_status": {
+          "type": "string"
+        },
+        "business": {
+          "type": "string"
+        },
+        "raw_summary": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "prediction": {
+      "type": "object",
+      "required": [
+        "top_k_documents"
+      ],
+      "properties": {
+        "top_k_documents": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "rank",
+              "doc_title",
+              "doc_path",
+              "score"
+            ],
+            "properties": {
+              "rank": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "doc_title": {
+                "type": "string"
+              },
+              "doc_path": {
+                "type": "string"
+              },
+              "score": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              }
+            },
+            "additionalProperties": false
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "workflow": {
+      "type": "object",
+      "properties": {
+        "planned_queries": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "used_image_context": {
+          "type": "boolean"
+        },
+        "ask_user_rounds": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "notes": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "validation": {
+      "type": "object",
+      "required": [
+        "schema_pass",
+        "blocking_failures",
+        "deterministic_hash"
+      ],
+      "properties": {
+        "schema_pass": {
+          "type": "boolean"
+        },
+        "blocking_failures": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "warnings": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "deterministic_hash": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "metrics": {
+      "type": "object",
+      "required": [
+        "recall_hit",
+        "hit_at_1",
+        "hit_at_3",
+        "mrr"
+      ],
+      "properties": {
+        "recall_hit": {
+          "type": "boolean"
+        },
+        "hit_at_1": {
+          "type": "boolean"
+        },
+        "hit_at_3": {
+          "type": "boolean"
+        },
+        "mrr": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        }
+      },
+      "additionalProperties": false
+    },
+    "artifacts": {
+      "type": "object",
+      "properties": {
+        "raw_response_path": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "normalized_output_path": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "score_report_path": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}
