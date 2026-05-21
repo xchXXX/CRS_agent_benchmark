@@ -12,11 +12,7 @@
       "case_id": "case_000002",
       "layer": "component",
       "accepted_titles": [
-        "【推荐】国方MDD01【81/40针】",
-        "【平台版】国方MDD01_电路图【云内】【81和40针】",
-        "国方MDD01C_电路图【云内】",
-        "国方MDD01BS_电路图",
-        "国方MDD01BS_电路图【新风T3LC02】"
+        "【推荐】国方MDD01【81/40针】"
       ],
       "preferred_title": "【推荐】国方MDD01【81/40针】",
       "expected_response_type": "documents",
@@ -26,15 +22,31 @@
       "accepted_pages": [],
       "accepted_page_ranges": [],
       "target_doc": {
-        "file_id": "【推荐】国方MDD01【81+40针】【平台版】",
-        "title": "【推荐】国方MDD01【81+40针】【平台版】",
+        "file_id": "【推荐】国方MDD01【81/40针】",
+        "title": "【推荐】国方MDD01【81/40针】",
         "facets": {
           "board_family": "MDD01",
           "engine_brand": "云内",
-          "connector": "81+40针",
+          "connector": "81/40针",
           "doc_type": "电路图"
         }
-      }
+      },
+      "target_match_mode": "any_of",
+      "target_docs": [
+        {
+          "file_id": "【推荐】国方MDD01【81/40针】",
+          "title": "【推荐】国方MDD01【81/40针】",
+          "doc_path": "【推荐】国方MDD01【81/40针】",
+          "facets": {
+            "board_family": "MDD01",
+            "engine_brand": "云内",
+            "connector": "81/40针",
+            "doc_type": "电路图"
+          },
+          "accepted_pages": [],
+          "accepted_page_ranges": []
+        }
+      ]
     },
     {
       "case_id": "case_000007",
@@ -58,7 +70,23 @@
           "component": "液压电脑板",
           "doc_type": "针脚定义"
         }
-      }
+      },
+      "target_match_mode": "any_of",
+      "target_docs": [
+        {
+          "file_id": "现代_150LC-9挖掘机_液压电脑板针脚定义",
+          "title": "现代_150LC-9挖掘机_液压电脑板针脚定义",
+          "doc_path": "现代_150LC-9挖掘机_液压电脑板针脚定义",
+          "facets": {
+            "brand": "现代",
+            "model": "150LC-9",
+            "component": "液压电脑板",
+            "doc_type": "针脚定义"
+          },
+          "accepted_pages": [],
+          "accepted_page_ranges": []
+        }
+      ]
     },
     {
       "case_id": "case_000010",
@@ -81,7 +109,32 @@
           "board_family": "华夏龙晖73针",
           "doc_type": "ECU电路图"
         }
-      }
+      },
+      "target_match_mode": "any_of",
+      "target_docs": [
+        {
+          "file_id": "【推荐】华夏龙晖73针_ECU电路图",
+          "title": "【推荐】华夏龙晖73针_ECU电路图",
+          "doc_path": "【推荐】华夏龙晖73针_ECU电路图",
+          "facets": {
+            "board_family": "华夏龙晖73针",
+            "doc_type": "ECU电路图"
+          },
+          "accepted_pages": [],
+          "accepted_page_ranges": []
+        },
+        {
+          "file_id": "福田驭菱_华夏龙辉73针ECU电路图【柳机LJ465Q】【原厂图】",
+          "title": "福田驭菱_华夏龙辉73针ECU电路图【柳机LJ465Q】【原厂图】",
+          "doc_path": "福田驭菱_华夏龙辉73针ECU电路图【柳机LJ465Q】【原厂图】",
+          "facets": {
+            "board_family": "华夏龙晖73针",
+            "doc_type": "ECU电路图"
+          },
+          "accepted_pages": [],
+          "accepted_page_ranges": []
+        }
+      ]
     }
   ]
 }

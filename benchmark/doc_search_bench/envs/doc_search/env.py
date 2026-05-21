@@ -16,7 +16,6 @@ from ...types import BenchmarkTurnRecord, CaseRunResult, PredictedDocument, Task
 from ...user import (
     AskUserDecisionContext,
     AskUserOption,
-    build_structured_decision_prompt,
     generate_structured_user_decision,
     UserSimulationProviderError,
 )
@@ -26,6 +25,13 @@ from .preprocessors import prepare_request_context
 
 
 ROLLBACK_UNSUPPORTED_GAP = "当前新版 ask_user 主线暂不支持撤回上一轮，请重新发起查询。"
+_INSTRUCTION_BLOCKLIST_MARKERS = (
+    "room_id=",
+    "chat_from=",
+    "opening_message_id=",
+    "answer_message_id=",
+    "唯一答案来自",
+)
 
 
 @dataclass(frozen=True)
@@ -90,6 +96,61 @@ def summarize_option_labels(options: list[Any], *, limit: int = 3) -> str | None
     return f"{'、'.join(labels)}{suffix}"
 
 
+def sanitize_instruction_text(instruction: str) -> str:
+    normalized = str(instruction or "").replace("\r\n", "\n")
+    kept_lines: list[str] = []
+    for raw_line in normalized.split("\n"):
+        line = raw_line.strip()
+        if not line:
+            if kept_lines and kept_lines[-1] != "":
+                kept_lines.append("")
+            continue
+        if any(marker in line for marker in _INSTRUCTION_BLOCKLIST_MARKERS):
+            continue
+        kept_lines.append(line)
+    while kept_lines and kept_lines[-1] == "":
+        kept_lines.pop()
+    return "\n".join(kept_lines).strip()
+
+
+def build_visible_card_summary(ask_user_payload: dict[str, Any] | None) -> str | None:
+    if not isinstance(ask_user_payload, dict):
+        return None
+
+    context = ask_user_payload.get("context")
+    if not isinstance(context, dict):
+        return None
+
+    parts: list[str] = []
+    message_text = clip_text(context.get("message"), limit=160)
+    if message_text:
+        parts.append(message_text)
+
+    top_result = context.get("top_result")
+    if isinstance(top_result, dict):
+        top_bits = [
+            clip_text(top_result.get("title"), limit=80),
+            clip_text(top_result.get("brand"), limit=40),
+            clip_text(top_result.get("series"), limit=40),
+            clip_text(top_result.get("model"), limit=40),
+        ]
+        top_values = [bit for bit in top_bits if bit]
+        if top_values:
+            parts.append(f"候选摘要：{' / '.join(top_values)}")
+
+    existence_info = context.get("existence_info")
+    if isinstance(existence_info, dict):
+        existence_message = clip_text(existence_info.get("message"), limit=120)
+        if existence_message:
+            parts.append(f"提示：{existence_message}")
+
+    deduped: list[str] = []
+    for item in parts:
+        if item and item not in deduped:
+            deduped.append(item)
+    return "\n".join(deduped).strip() or None
+
+
 def summarize_document_titles(docs: list[PredictedDocument], *, limit: int = 3) -> str | None:
     titles = [doc.doc_title.strip() for doc in docs[:limit] if doc.doc_title.strip()]
     if not titles:
@@ -131,6 +192,134 @@ def summarize_evidence(evidence: dict[str, Any] | None) -> list[str]:
         if rendered:
             detail.append(f"conflicts={rendered}")
     return detail
+
+
+def normalize_text_list(values: Any) -> list[str]:
+    if not isinstance(values, list):
+        return []
+    deduped: list[str] = []
+    seen: set[str] = set()
+    for item in values:
+        text = str(item or "").strip()
+        if not text or text in seen:
+            continue
+        seen.add(text)
+        deduped.append(text)
+    return deduped
+
+
+def safe_int(value: Any) -> int | None:
+    if value is None or isinstance(value, bool):
+        return None
+    try:
+        return int(value)
+    except (TypeError, ValueError):
+        return None
+
+
+def safe_float(value: Any) -> float | None:
+    if value is None or isinstance(value, bool):
+        return None
+    try:
+        return float(value)
+    except (TypeError, ValueError):
+        return None
+
+
+def resolve_task_target_titles(task: TaskCase) -> list[str]:
+    titles: list[str] = []
+    for target in getattr(task, "target_docs", []) or []:
+        raw = getattr(target, "title", None)
+        if isinstance(raw, str) and raw.strip():
+            titles.append(raw.strip())
+    if titles:
+        return normalize_text_list(titles)
+    return normalize_text_list(list(getattr(task, "accepted_titles", []) or []))
+
+
+def build_multi_target_trace_payload(task: TaskCase, result: CaseRunResult, file_outcome: dict[str, Any]) -> dict[str, Any]:
+    task_metadata = result.task_metadata
+    target_titles = normalize_text_list(list(getattr(task_metadata, "target_doc_titles", []) or []))
+    if not target_titles:
+        target_titles = resolve_task_target_titles(task)
+
+    target_doc_ids = normalize_text_list(list(getattr(task_metadata, "target_doc_ids", []) or []))
+    matched_targets = normalize_text_list(file_outcome.get("matched_targets"))
+    missed_targets = normalize_text_list(file_outcome.get("missed_targets"))
+    target_doc_count = safe_int(file_outcome.get("target_doc_count"))
+    if target_doc_count is None:
+        target_doc_count = safe_int(getattr(task_metadata, "target_doc_count", None))
+    if target_doc_count is None:
+        target_doc_count = len(target_titles)
+    matched_target_count = safe_int(file_outcome.get("matched_target_count"))
+    if matched_target_count is None:
+        matched_target_count = len(matched_targets)
+    target_coverage_rate = safe_float(file_outcome.get("target_coverage_rate"))
+    if target_coverage_rate is None:
+        target_coverage_rate = 0.0 if target_doc_count <= 0 else round(matched_target_count / target_doc_count, 6)
+    all_targets_hit = file_outcome.get("all_targets_hit")
+    if not isinstance(all_targets_hit, bool):
+        all_targets_hit = bool(target_doc_count > 0 and matched_target_count == target_doc_count)
+    best_target_rank = safe_int(file_outcome.get("best_target_rank"))
+    target_match_mode = str(
+        file_outcome.get("target_match_mode") or getattr(task_metadata, "target_match_mode", None) or "any_of"
+    ).strip() or "any_of"
+
+    return {
+        "trace_kind": "file_judge_multi_target",
+        "target_match_mode": target_match_mode,
+        "target_doc_count": target_doc_count,
+        "target_doc_ids": target_doc_ids,
+        "target_doc_titles": target_titles,
+        "matched_targets": matched_targets,
+        "missed_targets": missed_targets,
+        "matched_target_count": matched_target_count,
+        "target_coverage_rate": round(target_coverage_rate, 6),
+        "all_targets_hit": all_targets_hit,
+        "best_target_rank": best_target_rank,
+        "recall_hit": bool(file_outcome.get("recall_hit")),
+        "hit_at_1": bool(file_outcome.get("hit_at_1")),
+        "hit_at_3": bool(file_outcome.get("hit_at_3")),
+        "mrr": round(float(file_outcome.get("mrr") or 0.0), 6),
+    }
+
+
+def attach_multi_target_runtime_fields(task: TaskCase, result: CaseRunResult, file_outcome: dict[str, Any]) -> dict[str, Any]:
+    payload = build_multi_target_trace_payload(task, result, file_outcome)
+
+    result.task_metadata.target_match_mode = str(payload["target_match_mode"])
+    result.task_metadata.target_doc_count = int(payload["target_doc_count"])
+    if payload["target_doc_ids"]:
+        result.task_metadata.target_doc_ids = list(payload["target_doc_ids"])
+    if payload["target_doc_titles"]:
+        result.task_metadata.target_doc_titles = list(payload["target_doc_titles"])
+    if not result.task_metadata.accepted_titles and payload["target_doc_titles"]:
+        result.task_metadata.accepted_titles = list(payload["target_doc_titles"])
+
+    for key in (
+        "target_match_mode",
+        "target_doc_count",
+        "matched_targets",
+        "missed_targets",
+        "matched_target_count",
+        "target_coverage_rate",
+        "all_targets_hit",
+        "best_target_rank",
+    ):
+        setattr(result.metrics, key, payload[key])
+        setattr(result.analysis, key, payload[key])
+    return payload
+
+
+def upsert_multi_target_trace(result: CaseRunResult, payload: dict[str, Any]) -> None:
+    trace = list(result.analysis.decision_trace or [])
+    filtered = [
+        item
+        for item in trace
+        if not (isinstance(item, dict) and str(item.get("trace_kind") or "") == "file_judge_multi_target")
+    ]
+    filtered.append(dict(payload))
+    result.analysis.decision_trace = filtered
 
 
 def _first_non_empty_text(item: dict[str, Any], keys: tuple[str, ...]) -> str:
@@ -431,17 +620,15 @@ class DocSearchBenchmarkEnv(BaseBenchmarkEnv):
     @staticmethod
     def build_scenario_instruction(task: TaskCase, result: CaseRunResult) -> str:
         config = task.user_simulation_config
-        decision_count = sum(1 for turn in result.workflow.turns if turn.user_decision_kind == "choose_option")
         rollback_declared = any(
             turn.user_decision_kind == "declare_rollback_intent" for turn in result.workflow.turns
         )
-        lines = [task.instruction.strip()]
+        lines = [sanitize_instruction_text(task.instruction)]
         lines.append("")
         lines.append("当前用户场景补充：")
         lines.append(f"- 场景名：{config.scenario}")
         lines.append(f"- 撤回意图模式：{config.rollback_intent_mode}")
         lines.append(f"- 滞后撤回最少间隔轮次：{config.rollback_min_round_gap}")
-        lines.append(f"- 已完成的选项选择次数：{decision_count}")
         lines.append(f"- 是否已经表达过撤回意图：{'是' if rollback_declared else '否'}")
         if task.user_profile and task.user_profile.persona:
             lines.append(f"- 用户人格：{task.user_profile.persona}")
@@ -792,7 +979,6 @@ class DocSearchBenchmarkEnv(BaseBenchmarkEnv):
         instruction = self.build_scenario_instruction(task, result)
         transcript = self.render_decision_transcript(result)
         ask_user_payload = extract_ask_user_payload(turn.response_body)
-        ask_user_context = ask_user_payload.get("context") if isinstance(ask_user_payload.get("context"), dict) else {}
         context = AskUserDecisionContext(
             ask_user_question=turn.ask_user_question or "",
             options=[
@@ -807,12 +993,7 @@ class DocSearchBenchmarkEnv(BaseBenchmarkEnv):
             scenario=task.user_simulation_config.scenario,
             initial_user_message=task.initial_user_message or task.question_text,
             user_profile=task.user_profile,
-            ask_user_context=dict(ask_user_context),
-        )
-        prompt = build_structured_decision_prompt(
-            instruction=instruction,
-            transcript=transcript,
-            context=context,
+            visible_card_summary=build_visible_card_summary(ask_user_payload),
         )
         def trace_hook(event: str, payload: dict[str, Any]) -> None:
             self.log_user_decision_trace(task, result, turn, event, payload)
@@ -820,7 +1001,7 @@ class DocSearchBenchmarkEnv(BaseBenchmarkEnv):
             user_strategy=self.config.user_strategy,
             model=self.config.user_model,
             provider=self.config.user_provider,
-            prompt=prompt,
+            prompt=instruction,
             context=context,
             instruction=instruction,
             transcript=transcript,
@@ -1366,6 +1547,7 @@ class DocSearchBenchmarkEnv(BaseBenchmarkEnv):
         )
 
         file_outcome = judge_file(task, result)
+        multi_target_payload = attach_multi_target_runtime_fields(task, result, file_outcome)
         result.metrics.recall_hit = file_outcome["recall_hit"]
         result.metrics.hit_at_1 = file_outcome["hit_at_1"]
         result.metrics.hit_at_3 = file_outcome["hit_at_3"]
@@ -1381,8 +1563,22 @@ class DocSearchBenchmarkEnv(BaseBenchmarkEnv):
                 ("hit_at_1", file_outcome["hit_at_1"]),
                 ("hit_at_3", file_outcome["hit_at_3"]),
                 ("mrr", round(float(file_outcome["mrr"]), 6)),
+                ("target_match_mode", multi_target_payload["target_match_mode"]),
+                ("matched_target_count", multi_target_payload["matched_target_count"]),
+                ("target_doc_count", multi_target_payload["target_doc_count"]),
+                ("target_coverage_rate", multi_target_payload["target_coverage_rate"]),
             ],
             detail=[
+                (
+                    f"matched_targets={summarize_codes(multi_target_payload['matched_targets'])}"
+                    if summarize_codes(multi_target_payload["matched_targets"])
+                    else ""
+                ),
+                (
+                    f"missed_targets={summarize_codes(multi_target_payload['missed_targets'])}"
+                    if summarize_codes(multi_target_payload["missed_targets"])
+                    else ""
+                ),
                 f"阻断={summarize_codes(file_outcome['blocking_failures'])}"
                 if summarize_codes(file_outcome["blocking_failures"])
                 else "",
@@ -1390,7 +1586,13 @@ class DocSearchBenchmarkEnv(BaseBenchmarkEnv):
                 if summarize_codes(file_outcome["warnings"])
                 else "",
             ],
-            payload={"recall_hit": file_outcome["recall_hit"]},
+            payload={
+                "recall_hit": file_outcome["recall_hit"],
+                "target_match_mode": multi_target_payload["target_match_mode"],
+                "matched_target_count": multi_target_payload["matched_target_count"],
+                "target_doc_count": multi_target_payload["target_doc_count"],
+                "target_coverage_rate": multi_target_payload["target_coverage_rate"],
+            },
         )
 
         page_outcome = judge_page(task, result)
@@ -1432,6 +1634,7 @@ class DocSearchBenchmarkEnv(BaseBenchmarkEnv):
         result.analysis.simulation_stop_count = int(trace_analysis["simulation_stop_count"])
         result.analysis.simulation_valid_stop = trace_analysis["simulation_valid_stop"]
         result.analysis.user_stop_reason_code = trace_analysis["user_stop_reason_code"]
+        upsert_multi_target_trace(result, multi_target_payload)
         self.log_case_event(
             task,
             result,
@@ -1440,14 +1643,32 @@ class DocSearchBenchmarkEnv(BaseBenchmarkEnv):
                 ("final_hit", result.analysis.final_hit),
                 ("turn_count", result.analysis.turn_count),
                 ("failure_reason", result.analysis.failure_reason or "无"),
+                ("target_match_mode", multi_target_payload["target_match_mode"]),
+                ("coverage", multi_target_payload["target_coverage_rate"]),
             ],
             detail=[
                 f"correction_count={result.analysis.correction_count}",
                 f"ambiguous_turn_count={result.analysis.ambiguous_turn_count}",
                 f"stop_reason={result.analysis.stop_reason or '无'}",
                 f"user_stop_reason_code={result.analysis.user_stop_reason_code or '无'}",
+                (
+                    f"matched_targets={summarize_codes(multi_target_payload['matched_targets'])}"
+                    if summarize_codes(multi_target_payload["matched_targets"])
+                    else ""
+                ),
+                (
+                    f"missed_targets={summarize_codes(multi_target_payload['missed_targets'])}"
+                    if summarize_codes(multi_target_payload["missed_targets"])
+                    else ""
+                ),
             ],
-            payload={"final_hit": result.analysis.final_hit},
+            payload={
+                "final_hit": result.analysis.final_hit,
+                "target_match_mode": multi_target_payload["target_match_mode"],
+                "matched_target_count": multi_target_payload["matched_target_count"],
+                "target_doc_count": multi_target_payload["target_doc_count"],
+                "target_coverage_rate": multi_target_payload["target_coverage_rate"],
+            },
         )
         result.execution.ended_at = now_iso()
         if result.execution.started_at and result.execution.ended_at:

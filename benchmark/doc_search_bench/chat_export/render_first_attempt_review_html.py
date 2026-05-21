@@ -11,7 +11,7 @@ from typing import Any
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="渲染每个 case 的首次 attempt 完整流程 HTML")
+    parser = argparse.ArgumentParser(description="渲染每个 case 的完整流程 HTML")
     parser.add_argument(
         "--run-id",
         help="例如 train-20260514T104548Z；与 --report 二选一，优先使用 --run-id",
@@ -51,7 +51,7 @@ def resolve_output_path(args: argparse.Namespace, report_path: Path) -> Path:
         out = Path(args.output)
         return out if out.is_absolute() else (repo_root() / out)
     run_dir = report_path.parent
-    return run_dir / "first_attempt_review.html"
+    return run_dir / "round_case_review.html"
 
 
 def load_json(path: Path) -> dict[str, Any]:
@@ -170,6 +170,28 @@ def render_summary_summary(turn: dict[str, Any]) -> str:
     return " / ".join(pieces)
 
 
+def format_input_type(input_type: str) -> str:
+    value = str(input_type or "").strip()
+    if not value:
+        return "未知类型"
+    mapping = {
+        "single_select": "单选",
+        "multi_select": "多选",
+        "number": "数字",
+        "text": "文本",
+    }
+    return mapping.get(value, value)
+
+
+def format_case_type(result: dict[str, Any]) -> str:
+    parts: list[str] = []
+    for key in ("layer", "interaction_mode", "input_modality", "page_goal_mode"):
+        value = result.get(key)
+        if value not in (None, ""):
+            parts.append(str(value))
+    return " · ".join(parts) if parts else "未知类型"
+
+
 def render_fact_block(title: str, facts: Any) -> str:
     if not facts:
         return ""
@@ -256,6 +278,126 @@ def render_decision_evidence(evidence: dict[str, Any] | None) -> str:
     """
 
 
+def normalize_string_list(values: Any) -> list[str]:
+    if not isinstance(values, list):
+        return []
+    deduped: list[str] = []
+    seen: set[str] = set()
+    for item in values:
+        text = str(item or "").strip()
+        if not text or text in seen:
+            continue
+        seen.add(text)
+        deduped.append(text)
+    return deduped
+
+
+def find_multi_target_payload(result: dict[str, Any]) -> dict[str, Any]:
+    analysis = result.get("analysis") or {}
+    decision_trace = analysis.get("decision_trace") if isinstance(analysis, dict) else []
+    if isinstance(decision_trace, list):
+        for item in reversed(decision_trace):
+            if isinstance(item, dict) and str(item.get("trace_kind") or "") == "file_judge_multi_target":
+                return item
+
+    task_metadata = result.get("task_metadata") or {}
+    target_titles = normalize_string_list(task_metadata.get("target_doc_titles"))
+    accepted_titles = normalize_string_list(task_metadata.get("accepted_titles"))
+    if not target_titles:
+        target_titles = accepted_titles
+    target_doc_count = task_metadata.get("target_doc_count")
+    try:
+        target_doc_count = int(target_doc_count)
+    except (TypeError, ValueError):
+        target_doc_count = len(target_titles)
+    if target_doc_count <= 0:
+        target_doc_count = len(target_titles)
+
+    return {
+        "trace_kind": "file_judge_multi_target",
+        "target_match_mode": str(task_metadata.get("target_match_mode") or "any_of"),
+        "target_doc_count": target_doc_count,
+        "target_doc_ids": normalize_string_list(task_metadata.get("target_doc_ids")),
+        "target_doc_titles": target_titles,
+        "matched_targets": [],
+        "missed_targets": [],
+        "matched_target_count": 0,
+        "target_coverage_rate": 0.0,
+        "all_targets_hit": False,
+        "best_target_rank": None,
+        "recall_hit": bool((result.get("metrics") or {}).get("recall_hit")),
+        "hit_at_1": bool((result.get("metrics") or {}).get("hit_at_1")),
+        "hit_at_3": bool((result.get("metrics") or {}).get("hit_at_3")),
+        "mrr": float((result.get("metrics") or {}).get("mrr") or 0.0),
+    }
+
+
+def render_multi_target_list(items: list[str], empty_text: str, css_class: str) -> str:
+    values = normalize_string_list(items)
+    if not values:
+        return f'<div class="empty">{html_text(empty_text)}</div>'
+    return "".join(f'<li class="{css_class}">{html_text(item)}</li>' for item in values)
+
+
+def render_multi_target_summary(result: dict[str, Any], payload: dict[str, Any]) -> str:
+    target_titles = normalize_string_list(payload.get("target_doc_titles"))
+    matched_targets = normalize_string_list(payload.get("matched_targets"))
+    missed_targets = normalize_string_list(payload.get("missed_targets"))
+    target_doc_count = payload.get("target_doc_count")
+    try:
+        target_doc_count = int(target_doc_count)
+    except (TypeError, ValueError):
+        target_doc_count = len(target_titles)
+    if target_doc_count <= 0:
+        target_doc_count = len(target_titles)
+    matched_target_count = payload.get("matched_target_count")
+    try:
+        matched_target_count = int(matched_target_count)
+    except (TypeError, ValueError):
+        matched_target_count = len(matched_targets)
+    coverage = payload.get("target_coverage_rate")
+    try:
+        coverage_value = float(coverage)
+    except (TypeError, ValueError):
+        coverage_value = 0.0 if target_doc_count <= 0 else matched_target_count / target_doc_count
+    coverage_percent = f"{coverage_value * 100:.1f}%"
+    target_match_mode = str(payload.get("target_match_mode") or "any_of")
+    best_target_rank = payload.get("best_target_rank")
+    best_rank_text = "-" if best_target_rank in (None, "") else str(best_target_rank)
+    all_targets_hit = payload.get("all_targets_hit")
+    all_targets_text = "是" if all_targets_hit is True else ("否" if all_targets_hit is False else "-")
+    final_hit = bool((result.get("analysis") or {}).get("final_hit"))
+
+    return f"""
+    <section class="card multi-target-card">
+      <div class="section-title">多目标文档判定</div>
+      <div class="keyvals multi-target-overview">
+        <div><span>target_match_mode</span><strong>{html_text(target_match_mode)}</strong></div>
+        <div><span>target_doc_count</span><strong>{html_text(target_doc_count)}</strong></div>
+        <div><span>matched_target_count</span><strong>{html_text(matched_target_count)}</strong></div>
+        <div><span>coverage</span><strong>{html_text(coverage_percent)}</strong></div>
+        <div><span>all_targets_hit</span><strong>{html_text(all_targets_text)}</strong></div>
+        <div><span>best_target_rank</span><strong>{html_text(best_rank_text)}</strong></div>
+        <div><span>final_hit</span><strong>{html_text('成功' if final_hit else '失败')}</strong></div>
+      </div>
+      <div class="target-grid">
+        <div class="target-column">
+          <div class="target-title">目标文档列表</div>
+          <ul class="target-list">{render_multi_target_list(target_titles, '未记录目标文档', 'target-pill')}</ul>
+        </div>
+        <div class="target-column">
+          <div class="target-title">matched_targets</div>
+          <ul class="target-list">{render_multi_target_list(matched_targets, '本次未命中目标文档', 'target-pill matched')}</ul>
+        </div>
+        <div class="target-column">
+          <div class="target-title">missed_targets</div>
+          <ul class="target-list">{render_multi_target_list(missed_targets, '没有漏召回目标', 'target-pill missed')}</ul>
+        </div>
+      </div>
+    </section>
+    """
+
+
 def render_visible_documents(turn: dict[str, Any]) -> str:
     response_body = turn.get("response_body") or {}
     content = response_body.get("content") or {}
@@ -333,7 +475,7 @@ def render_request_context(turn: dict[str, Any]) -> str:
     """
 
 
-def render_turn(turn: dict[str, Any], target_title: str) -> str:
+def render_turn(turn: dict[str, Any], target_title: str, multi_target_payload: dict[str, Any]) -> str:
     turn_index = turn.get("turn_index")
     request_kind = str(turn.get("request_kind") or "")
     response_type = str(turn.get("response_type") or "")
@@ -346,6 +488,7 @@ def render_turn(turn: dict[str, Any], target_title: str) -> str:
     user_decision_evidence = turn.get("user_decision_evidence") if isinstance(turn.get("user_decision_evidence"), dict) else {}
     response_body = turn.get("response_body") or {}
     content = response_body.get("content") or {}
+    input_type = str(content.get("input_type") or "")
     options = turn.get("clarify_options_snapshot") or []
 
     ask_block = ""
@@ -353,7 +496,7 @@ def render_turn(turn: dict[str, Any], target_title: str) -> str:
         option_html = "".join(render_option(option, selected_label) for option in options)
         ask_block = f"""
         <div class="turn-block">
-          <div class="block-title">选项卡提问</div>
+          <div class="block-title">选项卡提问 · {html_text(format_input_type(input_type))}</div>
           <div class="ask-question">{html_text(ask_question or "未记录提问文案")}</div>
           <div class="option-list">{option_html or '<div class="empty">无选项快照</div>'}</div>
         </div>
@@ -377,13 +520,24 @@ def render_turn(turn: dict[str, Any], target_title: str) -> str:
     result_block = ""
     if response_type == "documents":
         visible_summary = render_summary_summary(turn)
+        matched_targets = normalize_string_list(multi_target_payload.get("matched_targets"))
+        missed_targets = normalize_string_list(multi_target_payload.get("missed_targets"))
+        coverage = multi_target_payload.get("target_coverage_rate")
+        try:
+            coverage_text = f"{float(coverage) * 100:.1f}%"
+        except (TypeError, ValueError):
+            coverage_text = "-"
         result_block = f"""
         <div class="turn-block">
           <div class="block-title">最终文档返回</div>
           <div class="keyvals compact">
             <div><span>target_doc_title</span><strong>{html_text(target_title)}</strong></div>
+            <div><span>target_match_mode</span><strong>{html_text(multi_target_payload.get('target_match_mode') or 'any_of')}</strong></div>
             <div><span>summary</span><strong>{html_text(visible_summary or content.get('summary') or response_body.get('result_summary', {}).get('preview') or '')}</strong></div>
             <div><span>可见文档数</span><strong>{html_text(infer_visible_result_count(content))}</strong></div>
+            <div><span>matched_targets</span><strong>{html_text(' / '.join(matched_targets) if matched_targets else '-')}</strong></div>
+            <div><span>missed_targets</span><strong>{html_text(' / '.join(missed_targets) if missed_targets else '-')}</strong></div>
+            <div><span>coverage</span><strong>{html_text(coverage_text)}</strong></div>
           </div>
           <div class="doc-list">{render_visible_documents(turn)}</div>
         </div>
@@ -423,12 +577,14 @@ def render_case_panel(
     profile = fixture_case.get("user_profile") or {}
     turns = (result.get("workflow") or {}).get("turns") or []
     analysis = result.get("analysis") or {}
+    multi_target_payload = find_multi_target_payload(result)
     target_title = str((result.get("task_metadata") or {}).get("target_doc_title") or "")
     accepted_titles = (result.get("task_metadata") or {}).get("accepted_titles") or []
     final_status = str((result.get("response") or {}).get("final_status") or "")
     response_type = str((result.get("response") or {}).get("response_type") or "")
+    case_type = format_case_type(result)
     section_class = "case-panel active" if active else "case-panel"
-    turn_html = "".join(render_turn(turn, target_title) for turn in turns)
+    turn_html = "".join(render_turn(turn, target_title, multi_target_payload) for turn in turns)
     facts_html = "".join(
         [
             render_fact_block("known_items", profile.get("known_items")),
@@ -444,12 +600,17 @@ def render_case_panel(
           <div class="question">{html_text(question_text)}</div>
         </div>
         <div class="hero-side">
+          <div class="hero-chip">{html_text(case_type)}</div>
           <div class="hero-chip">{html_text(str(result.get('input_modality') or ''))}</div>
           <div class="hero-chip">{html_text(final_status)}</div>
         </div>
       </div>
 
       <section class="card summary">
+        <div class="summary-item">
+          <div class="section-kicker">case类型</div>
+          <div>{html_text(case_type)}</div>
+        </div>
         <div class="summary-item">
           <div class="section-kicker">用户目标</div>
           <div>{html_text(profile.get('goal') or '')}</div>
@@ -475,6 +636,8 @@ def render_case_panel(
           <div>{html_text(analysis.get('turn_count') or len(turns))}</div>
         </div>
       </section>
+
+      {render_multi_target_summary(result, multi_target_payload)}
 
       <div class="fact-grid">{facts_html}</div>
       {render_question_images(question_images, base_dir)}
@@ -510,7 +673,7 @@ def build_html(results: list[dict[str, Any]], fixture_map: dict[str, dict[str, A
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>首次 attempt 审阅页</title>
+  <title>round 审阅页</title>
   <style>
     :root {{
       color-scheme: light;
@@ -693,10 +856,60 @@ def build_html(results: list[dict[str, Any]], fixture_map: dict[str, dict[str, A
       padding: 18px;
       margin-bottom: 18px;
     }}
+    .multi-target-card {{
+      margin-bottom: 18px;
+    }}
     .section-title {{
       font-size: 20px;
       font-weight: 800;
       margin-bottom: 14px;
+    }}
+    .multi-target-overview {{
+      margin-bottom: 14px;
+    }}
+    .target-grid {{
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }}
+    .target-column {{
+      background: rgba(255,255,255,.74);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 14px;
+      min-width: 0;
+    }}
+    .target-title {{
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+    }}
+    .target-list {{
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      gap: 8px;
+    }}
+    .target-pill {{
+      display: block;
+      padding: 10px 12px;
+      border-radius: 12px;
+      background: #fffaf2;
+      border: 1px solid var(--line);
+      line-height: 1.55;
+      overflow-wrap: anywhere;
+    }}
+    .target-pill.matched {{
+      background: rgba(53, 104, 89, 0.1);
+      border-color: rgba(53, 104, 89, 0.28);
+    }}
+    .target-pill.missed {{
+      background: rgba(181, 84, 47, 0.1);
+      border-color: rgba(181, 84, 47, 0.24);
     }}
     .image-grid {{
       display: flex;
@@ -875,6 +1088,7 @@ def build_html(results: list[dict[str, Any]], fixture_map: dict[str, dict[str, A
       }}
       .summary {{ grid-template-columns: repeat(2, minmax(0, 1fr)); }}
       .fact-grid {{ grid-template-columns: 1fr; }}
+      .target-grid {{ grid-template-columns: 1fr; }}
       .option-list {{ grid-template-columns: 1fr; }}
       .keyvals, .keyvals.compact {{ grid-template-columns: 1fr; }}
     }}
@@ -891,8 +1105,8 @@ def build_html(results: list[dict[str, Any]], fixture_map: dict[str, dict[str, A
   <div class="app">
     <aside class="sidebar">
       <div class="brand">
-        <h2>First Attempt Review</h2>
-        <p>每个 case 只展示第一次 attempt，包含题面、用户已知信息、ask_user 选项卡、模拟用户选择与最终返回。</p>
+        <h2>Round Case Review</h2>
+        <p>每个 case 展示完整流程，包含题面、用户已知信息、ask_user 选项卡、模拟用户选择与最终返回。</p>
       </div>
       <div class="nav">
         {''.join(nav_items)}

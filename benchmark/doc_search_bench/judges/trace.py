@@ -104,6 +104,43 @@ def _count_ambiguous_turns(result) -> int:
     return 0
 
 
+def _target_doc_count(task, result) -> int:
+    explicit_count = getattr(result.task_metadata, "target_doc_count", None)
+    if explicit_count is not None and not isinstance(explicit_count, bool):
+        try:
+            return max(int(explicit_count), 0)
+        except (TypeError, ValueError):
+            pass
+    accepted_titles = getattr(result.task_metadata, "accepted_titles", None)
+    if isinstance(accepted_titles, list):
+        normalized = [title for title in accepted_titles if str(title or "").strip()]
+        if normalized:
+            return len(normalized)
+    accepted_titles = getattr(task, "accepted_titles", None)
+    if isinstance(accepted_titles, list):
+        normalized = [title for title in accepted_titles if str(title or "").strip()]
+        if normalized:
+            return len(normalized)
+    return 0
+
+
+def _matched_target_count(result) -> int | None:
+    value = getattr(result.metrics, "matched_target_count", None)
+    if value is None or isinstance(value, bool):
+        return None
+    try:
+        return int(value)
+    except (TypeError, ValueError):
+        return None
+
+
+def _all_targets_hit(result) -> bool | None:
+    value = getattr(result.metrics, "all_targets_hit", None)
+    if isinstance(value, bool):
+        return value
+    return None
+
+
 def _infer_failure_reason(task, result) -> str | None:
     if result.metrics.recall_hit:
         return None
@@ -124,10 +161,21 @@ def _infer_failure_reason(task, result) -> str | None:
         return "user_simulation_stop"
 
     blocking_failures = set(result.validation.blocking_failures or [])
+    if "TARGET_SET_INCOMPLETE" in blocking_failures:
+        return "multi_target_incomplete"
+    if "MULTI_TARGET_PARTIAL_HIT" in blocking_failures:
+        return "multi_target_partial_hit"
     if result.workflow.capability_gaps or "CAPABILITY_GAP_PRESENT" in blocking_failures:
         return "protocol_capability_gap"
     if "ASK_USER_ROUNDS_INSUFFICIENT" in blocking_failures:
         return "insufficient_clarification"
+
+    target_doc_count = _target_doc_count(task, result)
+    matched_target_count = _matched_target_count(result)
+    all_targets_hit = _all_targets_hit(result)
+    if target_doc_count > 1 and matched_target_count is not None and matched_target_count > 0:
+        if all_targets_hit is False or matched_target_count < target_doc_count:
+            return "multi_target_partial_hit"
 
     if result.workflow.ask_user_rounds > 0:
         return "insufficient_clarification"

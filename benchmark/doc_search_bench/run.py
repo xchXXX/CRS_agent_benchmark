@@ -209,6 +209,108 @@ def _round_or_none(value: float | None) -> float | None:
     return round(value, 6)
 
 
+def _coerce_int(value: Any) -> int | None:
+    if value is None or isinstance(value, bool):
+        return None
+    try:
+        return int(value)
+    except (TypeError, ValueError):
+        return None
+
+
+def _coerce_float(value: Any) -> float | None:
+    if value is None or isinstance(value, bool):
+        return None
+    try:
+        return float(value)
+    except (TypeError, ValueError):
+        return None
+
+
+def _coerce_str_list(value: Any) -> list[str]:
+    if not isinstance(value, list):
+        return []
+    items: list[str] = []
+    for item in value:
+        text = str(item or "").strip()
+        if text:
+            items.append(text)
+    return items
+
+
+def _target_doc_count(task_metadata: Any) -> int:
+    explicit_count = _coerce_int(getattr(task_metadata, "target_doc_count", None))
+    if explicit_count is not None:
+        return max(explicit_count, 0)
+    for field_name in ("target_doc_titles", "target_doc_ids", "accepted_titles"):
+        values = _coerce_str_list(getattr(task_metadata, field_name, None))
+        if values:
+            return len(values)
+    return 0
+
+
+def _target_match_mode(task_metadata: Any) -> str | None:
+    explicit_mode = str(getattr(task_metadata, "target_match_mode", "") or "").strip()
+    if explicit_mode:
+        return explicit_mode
+    target_doc_count = _target_doc_count(task_metadata)
+    if target_doc_count > 1:
+        return "any_of"
+    if target_doc_count == 1:
+        return "legacy_single_target"
+    return None
+
+
+def _target_titles(task_metadata: Any) -> list[str]:
+    titles = _coerce_str_list(getattr(task_metadata, "target_doc_titles", None))
+    if titles:
+        return titles
+    return _coerce_str_list(getattr(task_metadata, "accepted_titles", None))
+
+
+def _target_ids(task_metadata: Any) -> list[str]:
+    return _coerce_str_list(getattr(task_metadata, "target_doc_ids", None))
+
+
+def _matched_target_count(metrics: Any) -> int | None:
+    return _coerce_int(getattr(metrics, "matched_target_count", None))
+
+
+def _target_coverage_rate(metrics: Any) -> float | None:
+    return _coerce_float(getattr(metrics, "target_coverage_rate", None))
+
+
+def _all_targets_hit(metrics: Any) -> bool | None:
+    value = getattr(metrics, "all_targets_hit", None)
+    if isinstance(value, bool):
+        return value
+    return None
+
+
+def _best_target_rank(metrics: Any) -> int | None:
+    return _coerce_int(getattr(metrics, "best_target_rank", None))
+
+
+def _partial_target_hit(metrics: Any, task_metadata: Any) -> bool:
+    matched_count = _matched_target_count(metrics)
+    if matched_count is None or matched_count <= 0:
+        return False
+    all_hit = _all_targets_hit(metrics)
+    if all_hit is False:
+        return True
+    target_doc_count = _target_doc_count(task_metadata)
+    return target_doc_count > 1 and matched_count < target_doc_count
+
+
+def _full_target_hit(metrics: Any, task_metadata: Any) -> bool:
+    all_hit = _all_targets_hit(metrics)
+    if all_hit is not None:
+        return all_hit
+    matched_count = _matched_target_count(metrics)
+    target_doc_count = _target_doc_count(task_metadata)
+    return bool(target_doc_count > 0 and matched_count is not None and matched_count >= target_doc_count)
+
+
 def build_case_rollups(case_results: list[CaseRunResult]) -> list[dict[str, Any]]:
     grouped_results: dict[tuple[str, str, str], list[CaseRunResult]] = defaultdict(list)
     for item in case_results:
@@ -219,7 +321,11 @@ def build_case_rollups(case_results: list[CaseRunResult]) -> list[dict[str, Any]
         attempts = sorted(grouped_results[group_key], key=lambda item: item.attempt_index)
         sample = attempts[0]
         attempt_count = len(attempts)
-        is_positive = bool(sample.task_metadata.accepted_titles)
+        sample_target_doc_count = _target_doc_count(sample.task_metadata)
+        sample_target_match_mode = _target_match_mode(sample.task_metadata)
+        sample_target_doc_titles = _target_titles(sample.task_metadata)
+        sample_target_doc_ids = _target_ids(sample.task_metadata)
+        is_positive = bool(sample_target_doc_count > 0 or sample.task_metadata.accepted_titles)
         pass_attempt_count = sum(1 for item in attempts if not item.validation.blocking_failures)
         recall_hit_count = sum(1 for item in attempts if item.metrics.recall_hit)
         hit_at_1_count = sum(1 for item in attempts if item.metrics.hit_at_1)
@@ -258,6 +364,11 @@ def build_case_rollups(case_results: list[CaseRunResult]) -> list[dict[str, Any]
         final_hit_attempt_count = 0
         latency_total = 0.0
         latency_count = 0
+        partial_target_hit_attempt_count = 0
+        full_target_hit_attempt_count = 0
+        matched_target_counts: list[int] = []
+        target_coverage_rates: list[float] = []
+        best_target_ranks: list[int] = []
 
         for item in attempts:
             blocking = list(item.validation.blocking_failures or [])
@@ -290,6 +401,19 @@ def build_case_rollups(case_results: list[CaseRunResult]) -> list[dict[str, Any]
             if duration_ms is not None:
                 latency_total += float(duration_ms)
                 latency_count += 1
+            matched_target_count = _matched_target_count(item.metrics)
+            if matched_target_count is not None:
+                matched_target_counts.append(matched_target_count)
+            target_coverage_rate = _target_coverage_rate(item.metrics)
+            if target_coverage_rate is not None:
+                target_coverage_rates.append(target_coverage_rate)
+            best_target_rank = _best_target_rank(item.metrics)
+            if best_target_rank is not None:
+                best_target_ranks.append(best_target_rank)
+            if _partial_target_hit(item.metrics, item.task_metadata):
+                partial_target_hit_attempt_count += 1
+            if _full_target_hit(item.metrics, item.task_metadata):
+                full_target_hit_attempt_count += 1
 
             attempt_summaries.append(
                 {
@@ -304,6 +428,12 @@ def build_case_rollups(case_results: list[CaseRunResult]) -> list[dict[str, Any]
                     "stop_reason": item.workflow.stop_reason,
                     "blocking_failures": blocking,
                     "capability_gaps": capability_gaps,
+                    "target_match_mode": _target_match_mode(item.task_metadata),
+                    "target_doc_count": _target_doc_count(item.task_metadata),
+                    "matched_target_count": matched_target_count,
+                    "target_coverage_rate": target_coverage_rate,
+                    "all_targets_hit": _all_targets_hit(item.metrics),
+                    "best_target_rank": best_target_rank,
                 }
             )
 
@@ -317,6 +447,10 @@ def build_case_rollups(case_results: list[CaseRunResult]) -> list[dict[str, Any]
                 "legacy_source_layer": sample.task_metadata.legacy_source_layer,
                 "interaction_mode": sample.task_metadata.interaction_mode,
                 "page_goal_mode": sample.task_metadata.page_goal_mode,
+                "target_match_mode": sample_target_match_mode,
+                "target_doc_count": sample_target_doc_count,
+                "target_doc_titles": sample_target_doc_titles,
+                "target_doc_ids": sample_target_doc_ids,
                 "is_positive": is_positive,
                 "attempt_count": attempt_count,
                 "pass_attempt_count": pass_attempt_count,
@@ -363,6 +497,17 @@ def build_case_rollups(case_results: list[CaseRunResult]) -> list[dict[str, Any]
                     else None
                 ),
                 "final_hit_attempt_count": final_hit_attempt_count,
+                "partial_target_hit_attempt_count": partial_target_hit_attempt_count,
+                "full_target_hit_attempt_count": full_target_hit_attempt_count,
+                "matched_target_count_min": min(matched_target_counts) if matched_target_counts else None,
+                "matched_target_count_max": max(matched_target_counts) if matched_target_counts else None,
+                "min_target_coverage_rate": (
+                    round(min(target_coverage_rates), 6) if target_coverage_rates else None
+                ),
+                "max_target_coverage_rate": (
+                    round(max(target_coverage_rates), 6) if target_coverage_rates else None
+                ),
+                "best_target_rank_min": min(best_target_ranks) if best_target_ranks else None,
                 "avg_turn_count": round(turn_count_total / attempt_count, 6),
                 "avg_latency_ms": _round_or_none(latency_total / latency_count) if latency_count > 0 else None,
                 "avg_correction_count": round(correction_total / attempt_count, 6),
@@ -425,6 +570,23 @@ def aggregate_case_rollup_files(case_rollups: list[dict[str, Any]], threshold: f
             6,
         )
     )
+    multi_target_rollups = [item for item in case_rollups if (item.get("target_doc_count") or 0) > 1]
+    target_doc_counts = [int(item.get("target_doc_count") or 0) for item in positive_rollups if item.get("target_doc_count")]
+    coverage_mins = [
+        float(item["min_target_coverage_rate"])
+        for item in multi_target_rollups
+        if item.get("min_target_coverage_rate") is not None
+    ]
+    coverage_maxs = [
+        float(item["max_target_coverage_rate"])
+        for item in multi_target_rollups
+        if item.get("max_target_coverage_rate") is not None
+    ]
+    target_match_mode_counter: Counter[str] = Counter()
+    for item in positive_rollups:
+        mode = str(item.get("target_match_mode") or "").strip()
+        if mode:
+            target_match_mode_counter[mode] += 1
 
     return {
         "count_basis": "unique_case",
@@ -446,6 +608,18 @@ def aggregate_case_rollup_files(case_rollups: list[dict[str, Any]], threshold: f
         "avg_mrr": round(avg_mrr, 6),
         "output_check_cases": output_check_cases,
         "output_pass_rate": output_pass_rate,
+        "target_match_mode_counts": _sorted_counts(target_match_mode_counter),
+        "target_doc_count_min": min(target_doc_counts) if target_doc_counts else None,
+        "target_doc_count_max": max(target_doc_counts) if target_doc_counts else None,
+        "multi_target_case_count": len(multi_target_rollups),
+        "partial_target_hit_case_count": sum(
+            1 for item in multi_target_rollups if (item.get("partial_target_hit_attempt_count") or 0) > 0
+        ),
+        "full_target_hit_case_count": sum(
+            1 for item in multi_target_rollups if (item.get("full_target_hit_attempt_count") or 0) > 0
+        ),
+        "min_target_coverage_rate": round(min(coverage_mins), 6) if coverage_mins else None,
+        "max_target_coverage_rate": round(max(coverage_maxs), 6) if coverage_maxs else None,
     }
 
 
@@ -578,8 +752,11 @@ def aggregate_case_rollup_failures(case_rollups: list[dict[str, Any]]) -> dict[s
     stop_reason_counter: Counter[str] = Counter()
     final_status_counter: Counter[str] = Counter()
     failure_reason_counter: Counter[str] = Counter()
+    target_match_mode_counter: Counter[str] = Counter()
     blocking_cases: list[dict[str, Any]] = []
     capability_gap_cases: list[dict[str, Any]] = []
+    multi_target_failure_codes = {"MULTI_TARGET_PARTIAL_HIT", "TARGET_SET_INCOMPLETE"}
+    multi_target_failure_counter: Counter[str] = Counter()
 
     for item in case_rollups:
         blocking_codes = sorted(item["blocking_failure_counts"].keys())
@@ -588,9 +765,12 @@ def aggregate_case_rollup_failures(case_rollups: list[dict[str, Any]]) -> dict[s
         failure_reason_codes = sorted(item["failure_reason_counts"].keys())
         stop_reasons = sorted(item["stop_reason_counts"].keys())
         final_statuses = sorted(item["final_status_counts"].keys())
+        target_match_mode = str(item.get("target_match_mode") or "").strip()
 
         for code in blocking_codes:
             blocking_counter[code] += 1
+            if code in multi_target_failure_codes:
+                multi_target_failure_counter[code] += 1
         for code in warning_codes:
             warning_counter[code] += 1
         for code in capability_gap_codes:
@@ -601,6 +781,8 @@ def aggregate_case_rollup_failures(case_rollups: list[dict[str, Any]]) -> dict[s
             stop_reason_counter[code] += 1
         for code in final_statuses:
             final_status_counter[code] += 1
+        if target_match_mode:
+            target_match_mode_counter[target_match_mode] += 1
 
         if blocking_codes:
             blocking_cases.append(
@@ -612,6 +794,12 @@ def aggregate_case_rollup_failures(case_rollups: list[dict[str, Any]]) -> dict[s
                     "attempt_count": item["attempt_count"],
                     "pass_attempt_count": item["pass_attempt_count"],
                     "pass_attempt_rate": item["pass_attempt_rate"],
+                    "target_match_mode": item.get("target_match_mode"),
+                    "target_doc_count": item.get("target_doc_count"),
+                    "partial_target_hit_attempt_count": item.get("partial_target_hit_attempt_count"),
+                    "full_target_hit_attempt_count": item.get("full_target_hit_attempt_count"),
+                    "min_target_coverage_rate": item.get("min_target_coverage_rate"),
+                    "max_target_coverage_rate": item.get("max_target_coverage_rate"),
                     "blocking_failures": blocking_codes,
                     "failure_reasons": failure_reason_codes,
                     "capability_gaps": capability_gap_codes,
@@ -628,6 +816,8 @@ def aggregate_case_rollup_failures(case_rollups: list[dict[str, Any]]) -> dict[s
                     "layer": item["layer"],
                     "attempt_count": item["attempt_count"],
                     "capability_gap_attempt_count": item["capability_gap_attempt_count"],
+                    "target_match_mode": item.get("target_match_mode"),
+                    "target_doc_count": item.get("target_doc_count"),
                     "capability_gaps": capability_gap_codes,
                     "failure_reasons": failure_reason_codes,
                     "blocking_failures": blocking_codes,
@@ -643,6 +833,8 @@ def aggregate_case_rollup_failures(case_rollups: list[dict[str, Any]]) -> dict[s
         "capability_gap_counts": _sorted_counts(capability_gap_counter),
         "capability_gap_case_count": len(capability_gap_cases),
         "failure_reason_counts": _sorted_counts(failure_reason_counter),
+        "target_match_mode_counts": _sorted_counts(target_match_mode_counter),
+        "multi_target_failure_counts": _sorted_counts(multi_target_failure_counter),
         "stop_reason_counts": _sorted_counts(stop_reason_counter),
         "final_status_counts": _sorted_counts(final_status_counter),
         "blocking_cases": blocking_cases,

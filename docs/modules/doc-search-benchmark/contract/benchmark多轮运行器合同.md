@@ -17,6 +17,12 @@
 
 本文冻结阶段 5 的 benchmark 多轮运行器合同。这里的“多轮运行器”指 benchmark 侧真正驱动 `/chat/completions` 会话闭环的执行层。
 
+在“多目标文档 benchmark”第一阶段中，本文还负责冻结：
+
+- 运行器如何承接 `target_docs`
+- 运行器如何在结果中写回多目标评测字段
+- 运行器与 V1 / V2 样本兼容的输入输出边界
+
 ## 2. 阶段 5 目标
 
 阶段 5 只负责把以下闭环真实跑起来：
@@ -39,12 +45,33 @@
 - `RunConfig.user_strategy`
 - `RunConfig.user_model`
 - `RunConfig.user_provider`
+- `TaskCase.target_docs`
+- `TaskCase.target_match_mode`
 
 冻结结论：
 
 - 首轮消息继续固定使用 `task.initial_user_message`
 - `ask_user` 轮不消费 `initial_message`
 - `ask_user` 轮若收到 `stop`，按合法用户模拟早停处理
+- 多目标真值不参与会话驱动决策，只参与运行结束后的 judge 与报告收口
+
+### 3.1 V1 / V2 兼容输入规则
+
+运行器输入层必须兼容 V1 / V2 两类样本合同。
+
+冻结规则如下：
+
+1. 若 `TaskCase` 已提供 `target_docs`，运行器直接消费 V2 主真值
+2. 若 `TaskCase` 未提供 `target_docs`，允许由上游装载层按 V1 规则回退构造单元素 `target_docs`
+3. 运行器不得在执行层重新发明另一套多目标回退逻辑
+4. 运行器内部读取到的真值结构必须统一为：
+   - `target_docs`
+   - `target_match_mode`
+
+这样可以确保：
+
+- 会话执行层不再区分“原始 V1 样本”与“原始 V2 样本”
+- 评测、报告、review 的消费输入保持单一路径
 
 ## 4. 运行器执行单元
 
@@ -162,6 +189,51 @@
 - `workflow.stopped_by_user_simulation`
 - `workflow.simulation_stop_count`
 - `artifacts.raw_response_paths`
+
+多目标第一阶段额外要求：
+
+- attempt 结果必须带出 `target_match_mode`
+- attempt 结果必须带出 `target_doc_count`
+- attempt 结果必须带出 `target_doc_ids`
+- attempt 结果必须带出 `target_doc_titles`
+- attempt 结果必须带出 `matched_targets`
+- attempt 结果必须带出 `missed_targets`
+- attempt 结果必须带出 `matched_target_count`
+- attempt 结果必须带出 `target_coverage_rate`
+- attempt 结果必须带出 `all_targets_hit`
+- attempt 结果必须带出 `best_target_rank`
+
+冻结说明：
+
+- 上述字段属于标准报告与聚合收口的正式输入
+- 运行器可以不在会话中直接使用这些字段，但必须保证它们在 attempt 终态中可被落盘
+- 旧 `target_doc_title / target_doc_file_id` 若保留，只能作为首个目标快照兼容字段
+
+### 9.1 case rollup 与汇总收口要求
+
+多目标 case 进入 `case_rollup`、suite summary 与 review 收口时，运行器链路至少要保留以下事实：
+
+- 当前 case 的 `target_match_mode`
+- 当前 case 的合法目标总数
+- 当前 attempt 实际命中的目标集合
+- 当前 attempt 未命中的目标集合
+- 当前 attempt 的最佳命中 rank
+
+冻结目的：
+
+- 让后续聚合逻辑能区分“命中过任一目标”与“命中过全部目标”
+- 让 `all_of` case 的稳定性分析有正式输入
+
+### 9.2 页码真值的阶段性要求
+
+多目标第一阶段中，运行器链路只要求承接目标维度页码真值结构，不要求把页码判定升级为新的 official gate。
+
+冻结规则：
+
+- 目标维度页码真值位置固定为 `target_docs[i].accepted_pages / accepted_page_ranges`
+- case 级页码字段只允许作为 V1 兼容输入
+- 页码结果当前仍按 `shadow` 收口
+- 不允许在本阶段把多目标页码结果接入正式通过线
 
 原始响应文件必须至少按以下维度区分，避免覆盖：
 
