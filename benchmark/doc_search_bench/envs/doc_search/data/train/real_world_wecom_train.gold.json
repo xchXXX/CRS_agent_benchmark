@@ -33,7 +33,21 @@
         }
       },
       "required_ask_user_rounds": 0,
-      "question_type": "找资料"
+      "question_type": "找资料",
+      "target_match_mode": "any_of",
+      "target_docs": [
+        {
+          "file_id": "云内D20_MD1CC878原理图【国六】【原厂图】【2021.6.24】",
+          "title": "云内D20_MD1CC878原理图【国六】【原厂图】【2021.6.24】",
+          "doc_path": "云内D20_MD1CC878原理图【国六】【原厂图】【2021.6.24】",
+          "facets": {
+            "brand": "云内",
+            "doc_type": "电路图"
+          },
+          "accepted_pages": [],
+          "accepted_page_ranges": []
+        }
+      ]
     },
     {
       "case_id": "real_train_0002",
@@ -58,13 +72,28 @@
         }
       },
       "required_ask_user_rounds": 0,
-      "question_type": "找资料"
+      "question_type": "找资料",
+      "target_match_mode": "any_of",
+      "target_docs": [
+        {
+          "file_id": "重汽_汕德卡G7_HTEA1_(全发动机)整车电路图【NanoBCU】【MAN、潍柴_博世MD1-2.2泵-国五】【2024-02版】",
+          "title": "重汽_汕德卡G7_HTEA1_(全发动机)整车电路图【NanoBCU】【MAN、潍柴_博世MD1-2.2泵-国五】【2024-02版】",
+          "doc_path": "重汽_汕德卡G7_HTEA1_(全发动机)整车电路图【NanoBCU】【MAN、潍柴_博世MD1-2.2泵-国五】【2024-02版】",
+          "facets": {
+            "brand": "重汽",
+            "doc_type": "整车电路图"
+          },
+          "accepted_pages": [],
+          "accepted_page_ranges": []
+        }
+      ]
     },
     {
       "case_id": "real_train_0003",
       "layer": "atomic",
       "accepted_titles": [
-        "重汽_HTE2.0-TH7/黄河_燃油车_整车电路图【MAN/潍柴_博世MD1-2.2泵】【国六】"
+        "重汽_HTE2.0-TH7/黄河_燃油车_整车电路图【MAN/潍柴_博世MD1-2.2泵】【国六】",
+        "mock/重汽_HTE2.0-TH7_中央集电盒与右前底盘线束_多目标联调样本"
       ],
       "preferred_title": "重汽_HTE2.0-TH7/黄河_燃油车_整车电路图【MAN/潍柴_博世MD1-2.2泵】【国六】",
       "expected_response_type": "documents",
@@ -83,7 +112,32 @@
         }
       },
       "required_ask_user_rounds": 0,
-      "question_type": "找资料"
+      "question_type": "找资料",
+      "target_match_mode": "any_of",
+      "target_docs": [
+        {
+          "file_id": "重汽_HTE2.0-TH7/黄河_燃油车_整车电路图【MAN/潍柴_博世MD1-2.2泵】【国六】",
+          "title": "重汽_HTE2.0-TH7/黄河_燃油车_整车电路图【MAN/潍柴_博世MD1-2.2泵】【国六】",
+          "doc_path": "重汽_HTE2.0-TH7/黄河_燃油车_整车电路图【MAN/潍柴_博世MD1-2.2泵】【国六】",
+          "facets": {
+            "brand": "重汽",
+            "doc_type": "整车电路图"
+          },
+          "accepted_pages": [],
+          "accepted_page_ranges": []
+        },
+        {
+          "file_id": "mock/重汽_HTE2.0-TH7_中央集电盒与右前底盘线束_多目标联调样本",
+          "title": "mock/重汽_HTE2.0-TH7_中央集电盒与右前底盘线束_多目标联调样本",
+          "doc_path": "mock/重汽_HTE2.0-TH7_中央集电盒与右前底盘线束_多目标联调样本",
+          "facets": {
+            "brand": "重汽",
+            "doc_type": "整车电路图"
+          },
+          "accepted_pages": [],
+          "accepted_page_ranges": []
+        }
+      ]
     },
     {
       "case_id": "real_train_0004",
@@ -108,7 +162,21 @@
         }
       },
       "required_ask_user_rounds": 0,
-      "question_type": "找资料"
+      "question_type": "找资料",
+      "target_match_mode": "any_of",
+      "target_docs": [
+        {
+          "file_id": "福田时代_驭菱VQ1_LD-JH-WFG03D_独悬车型_ECU电路图【福田4W12-汽油】【国五】",
+          "title": "福田时代_驭菱VQ1_LD-JH-WFG03D_独悬车型_ECU电路图【福田4W12-汽油】【国五】",
+          "doc_path": "福田时代_驭菱VQ1_LD-JH-WFG03D_独悬车型_ECU电路图【福田4W12-汽油】【国五】",
+          "facets": {
+            "brand": "福田",
+            "doc_type": "ECU电路图"
+          },
+          "accepted_pages": [],
+          "accepted_page_ranges": []
+        }
+      ]
     },
     {
       "case_id": "real_train_0005",
@@ -133,7 +201,21 @@
         }
       },
       "required_ask_user_rounds": 0,
-      "question_type": "找资料"
+      "question_type": "找资料",
+      "target_match_mode": "any_of",
+      "target_docs": [
+        {
+          "file_id": "重汽_斯太尔D7B_保险丝继电器盒定义【黑色迷你_D10发动机_EDC17CV44】",
+          "title": "重汽_斯太尔D7B_保险丝继电器盒定义【黑色迷你_D10发动机_EDC17CV44】",
+          "doc_path": "重汽_斯太尔D7B_保险丝继电器盒定义【黑色迷你_D10发动机_EDC17CV44】",
+          "facets": {
+            "brand": "重汽",
+            "doc_type": "保险丝继电器盒定义"
+          },
+          "accepted_pages": [],
+          "accepted_page_ranges": []
+        }
+      ]
     },
     {
       "case_id": "real_train_0006",
@@ -158,13 +240,28 @@
         }
       },
       "required_ask_user_rounds": 0,
-      "question_type": "找资料"
+      "question_type": "找资料",
+      "target_match_mode": "any_of",
+      "target_docs": [
+        {
+          "file_id": "山东临工_E6360_电路图【新款】.pdf",
+          "title": "山东临工_E6360_电路图【新款】.pdf",
+          "doc_path": "山东临工_E6360_电路图【新款】.pdf",
+          "facets": {
+            "brand": "山东临工",
+            "doc_type": "电路图"
+          },
+          "accepted_pages": [],
+          "accepted_page_ranges": []
+        }
+      ]
     },
     {
       "case_id": "real_train_0007",
       "layer": "atomic",
       "accepted_titles": [
-        "【推荐】国方MDD01【81/40针】"
+        "【推荐】国方MDD01【81/40针】",
+        "mock/国方MDD01_计量单元2线_多目标联调样本"
       ],
       "preferred_title": "【推荐】国方MDD01【81/40针】",
       "expected_response_type": "documents",
@@ -185,7 +282,36 @@
           "doc_type": "资料"
         }
       },
-      "required_ask_user_rounds": 0
+      "required_ask_user_rounds": 0,
+      "target_match_mode": "any_of",
+      "target_docs": [
+        {
+          "file_id": "【推荐】国方MDD01【81/40针】",
+          "title": "【推荐】国方MDD01【81/40针】",
+          "doc_path": "【推荐】国方MDD01【81/40针】",
+          "facets": {
+            "board_family": "MDD01",
+            "engine_brand": "云内",
+            "connector": "81/40针",
+            "doc_type": "资料"
+          },
+          "accepted_pages": [],
+          "accepted_page_ranges": []
+        },
+        {
+          "file_id": "mock/国方MDD01_计量单元2线_多目标联调样本",
+          "title": "mock/国方MDD01_计量单元2线_多目标联调样本",
+          "doc_path": "mock/国方MDD01_计量单元2线_多目标联调样本",
+          "facets": {
+            "board_family": "MDD01",
+            "engine_brand": "云内",
+            "connector": "81/40针",
+            "doc_type": "资料"
+          },
+          "accepted_pages": [],
+          "accepted_page_ranges": []
+        }
+      ]
     },
     {
       "case_id": "real_train_0008",
@@ -212,7 +338,23 @@
           "doc_type": "仪表显示器针脚定义"
         }
       },
-      "required_ask_user_rounds": 0
+      "required_ask_user_rounds": 0,
+      "target_match_mode": "any_of",
+      "target_docs": [
+        {
+          "file_id": "三一_SY55_SY60_SY65_SY75-9挖掘机_仪表显示器针脚定义",
+          "title": "三一_SY55_SY60_SY65_SY75-9挖掘机_仪表显示器针脚定义",
+          "doc_path": "三一_SY55_SY60_SY65_SY75-9挖掘机_仪表显示器针脚定义",
+          "facets": {
+            "brand": "三一",
+            "series": "SY",
+            "model": "55C",
+            "doc_type": "仪表显示器针脚定义"
+          },
+          "accepted_pages": [],
+          "accepted_page_ranges": []
+        }
+      ]
     },
     {
       "case_id": "real_train_0009",
@@ -239,7 +381,23 @@
           "doc_type": "电路图"
         }
       },
-      "required_ask_user_rounds": 0
+      "required_ask_user_rounds": 0,
+      "target_match_mode": "any_of",
+      "target_docs": [
+        {
+          "file_id": "杰狮H6_杰虎H6_BCM_电路图【燃油 燃气_2.3m驾驶室】【国六】",
+          "title": "杰狮H6_杰虎H6_BCM_电路图【燃油 燃气_2.3m驾驶室】【国六】",
+          "doc_path": "杰狮H6_杰虎H6_BCM_电路图【燃油 燃气_2.3m驾驶室】【国六】",
+          "facets": {
+            "brand": "红岩",
+            "series": "杰狮H6",
+            "component": "BCM",
+            "doc_type": "电路图"
+          },
+          "accepted_pages": [],
+          "accepted_page_ranges": []
+        }
+      ]
     },
     {
       "case_id": "real_train_0010",
@@ -266,7 +424,23 @@
           "doc_type": "针脚定义"
         }
       },
-      "required_ask_user_rounds": 0
+      "required_ask_user_rounds": 0,
+      "target_match_mode": "any_of",
+      "target_docs": [
+        {
+          "file_id": "现代_150LC-9挖掘机_液压电脑板针脚定义",
+          "title": "现代_150LC-9挖掘机_液压电脑板针脚定义",
+          "doc_path": "现代_150LC-9挖掘机_液压电脑板针脚定义",
+          "facets": {
+            "brand": "现代",
+            "model": "150LC-9",
+            "component": "液压电脑板",
+            "doc_type": "针脚定义"
+          },
+          "accepted_pages": [],
+          "accepted_page_ranges": []
+        }
+      ]
     },
     {
       "case_id": "real_train_0011",
@@ -293,7 +467,23 @@
           "doc_type": "罐车线束图"
         }
       },
-      "required_ask_user_rounds": 0
+      "required_ask_user_rounds": 0,
+      "target_match_mode": "any_of",
+      "target_docs": [
+        {
+          "file_id": "重汽豪泺_2010版ZZ1257N4048W_罐车线束图【豪沃】",
+          "title": "重汽豪泺_2010版ZZ1257N4048W_罐车线束图【豪沃】",
+          "doc_path": "重汽豪泺_2010版ZZ1257N4048W_罐车线束图【豪沃】",
+          "facets": {
+            "brand": "重汽豪泺",
+            "series": "豪沃",
+            "model": "ZZ1257N4048W",
+            "doc_type": "罐车线束图"
+          },
+          "accepted_pages": [],
+          "accepted_page_ranges": []
+        }
+      ]
     },
     {
       "case_id": "real_train_0012",
@@ -320,13 +510,30 @@
           "doc_type": "原理图"
         }
       },
-      "required_ask_user_rounds": 0
+      "required_ask_user_rounds": 0,
+      "target_match_mode": "any_of",
+      "target_docs": [
+        {
+          "file_id": "康明斯D2.5_CM2621_F162_原理图【国六】",
+          "title": "康明斯D2.5_CM2621_F162_原理图【国六】",
+          "doc_path": "康明斯D2.5_CM2621_F162_原理图【国六】",
+          "facets": {
+            "brand": "康明斯",
+            "engine_model": "D2.5",
+            "controller": "CM2621_F162",
+            "doc_type": "原理图"
+          },
+          "accepted_pages": [],
+          "accepted_page_ranges": []
+        }
+      ]
     },
     {
       "case_id": "real_train_0013",
       "layer": "atomic",
       "accepted_titles": [
-        "【推荐】华夏龙晖73针_ECU电路图"
+        "【推荐】华夏龙晖73针_ECU电路图",
+        "mock/华夏龙晖73针_ECU电路图_多目标联调样本"
       ],
       "preferred_title": "【推荐】华夏龙晖73针_ECU电路图",
       "expected_response_type": "documents",
@@ -345,7 +552,32 @@
           "doc_type": "ECU电路图"
         }
       },
-      "required_ask_user_rounds": 0
+      "required_ask_user_rounds": 0,
+      "target_match_mode": "any_of",
+      "target_docs": [
+        {
+          "file_id": "【推荐】华夏龙晖73针_ECU电路图",
+          "title": "【推荐】华夏龙晖73针_ECU电路图",
+          "doc_path": "【推荐】华夏龙晖73针_ECU电路图",
+          "facets": {
+            "board_family": "华夏龙晖73针",
+            "doc_type": "ECU电路图"
+          },
+          "accepted_pages": [],
+          "accepted_page_ranges": []
+        },
+        {
+          "file_id": "mock/华夏龙晖73针_ECU电路图_多目标联调样本",
+          "title": "mock/华夏龙晖73针_ECU电路图_多目标联调样本",
+          "doc_path": "mock/华夏龙晖73针_ECU电路图_多目标联调样本",
+          "facets": {
+            "board_family": "华夏龙晖73针",
+            "doc_type": "ECU电路图"
+          },
+          "accepted_pages": [],
+          "accepted_page_ranges": []
+        }
+      ]
     }
   ]
 }

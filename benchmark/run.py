@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import configparser
 import json
 import mimetypes
 import os
@@ -41,6 +42,12 @@ DEFAULT_OPENROUTER_RETRY_BACKOFF_SECONDS = 2.0
 DEFAULT_OPENROUTER_PREFLIGHT_URL = "https://openrouter.ai/api/v1/models"
 DEFAULT_OPENROUTER_PREFLIGHT_RETRIES = 3
 DEFAULT_OPENROUTER_PREFLIGHT_BACKOFF_SECONDS = 2.0
+DEFAULT_IMAGE_REQUEST_RETRY_ATTEMPTS = 3
+DEFAULT_IMAGE_REQUEST_RETRY_BACKOFF_SECONDS = 2.0
+DEFAULT_MYSQL_HOST = "127.0.0.1"
+DEFAULT_MYSQL_PORT = 3306
+DEFAULT_MYSQL_WAIT_SECONDS = 15.0
+ROUND_REVIEW_HTML_FILENAME = "round_case_review.html"
 DEFAULT_IMAGE_PROBE_QUESTION = "请先根据当前图片做一次简短识别；如果信息不足，请直接发起一个澄清问题。"
 _RETRYABLE_TRANSPORT_ERROR_MARKERS = (
     "unexpected_eof_while_reading",
@@ -227,6 +234,214 @@ def _ensure_proxy_ready(*, proxy_url: str, vpn_exe_path: Path, timeout_seconds: 
     }
 
 
+def _repo_mysql_root(*, repo_root: Path | None = None) -> Path:
+    resolved_repo_root = (repo_root or _repo_root()).resolve()
+    return resolved_repo_root / ".local" / "mysql"
+
+
+def _read_repo_mysql_config(*, repo_root: Path | None = None) -> dict[str, Any]:
+    mysql_root = _repo_mysql_root(repo_root=repo_root)
+    defaults_file = mysql_root / "my.ini"
+    if not defaults_file.exists():
+        return {
+            "ok": False,
+            "reason": "mysql_defaults_file_missing",
+            "mysql_root": str(mysql_root),
+            "defaults_file": str(defaults_file),
+        }
+
+    parser = configparser.ConfigParser()
+    try:
+        parser.read(defaults_file, encoding="utf-8")
+    except Exception as exc:
+        return {
+            "ok": False,
+            "reason": "mysql_defaults_file_unreadable",
+            "mysql_root": str(mysql_root),
+            "defaults_file": str(defaults_file),
+            "detail": str(exc),
+        }
+
+    if not parser.has_section("mysqld"):
+        return {
+            "ok": False,
+            "reason": "mysql_defaults_missing_mysqld_section",
+            "mysql_root": str(mysql_root),
+            "defaults_file": str(defaults_file),
+        }
+
+    host = str(parser.get("mysqld", "bind-address", fallback=DEFAULT_MYSQL_HOST) or DEFAULT_MYSQL_HOST).strip()
+    try:
+        port = int(parser.get("mysqld", "port", fallback=str(DEFAULT_MYSQL_PORT)))
+    except ValueError:
+        port = DEFAULT_MYSQL_PORT
+    basedir_raw = str(parser.get("mysqld", "basedir", fallback="") or "").strip()
+    basedir = Path(basedir_raw.replace("\\", "/")).resolve() if basedir_raw else None
+    run_dir = mysql_root / "run"
+    stdout_log_path = run_dir / "mysqld.stdout.log"
+    stderr_log_path = run_dir / "mysqld.stderr.log"
+    mysqld_path = (basedir / "bin" / "mysqld.exe").resolve() if basedir is not None else None
+
+    return {
+        "ok": True,
+        "mysql_root": str(mysql_root),
+        "defaults_file": str(defaults_file),
+        "host": host or DEFAULT_MYSQL_HOST,
+        "port": port,
+        "basedir": str(basedir) if basedir is not None else None,
+        "mysqld_path": str(mysqld_path) if mysqld_path is not None else None,
+        "run_dir": str(run_dir),
+        "stdout_log_path": str(stdout_log_path),
+        "stderr_log_path": str(stderr_log_path),
+    }
+
+
+def _start_repo_mysql_process(mysql_config: dict[str, Any]) -> dict[str, Any]:
+    mysqld_path_raw = mysql_config.get("mysqld_path")
+    defaults_file_raw = mysql_config.get("defaults_file")
+    mysql_root_raw = mysql_config.get("mysql_root")
+    stdout_log_path_raw = mysql_config.get("stdout_log_path")
+    stderr_log_path_raw = mysql_config.get("stderr_log_path")
+
+    if not isinstance(mysqld_path_raw, str) or not mysqld_path_raw.strip():
+        return {"ok": False, "reason": "mysqld_path_missing"}
+    if not isinstance(defaults_file_raw, str) or not defaults_file_raw.strip():
+        return {"ok": False, "reason": "mysql_defaults_file_missing"}
+    if not isinstance(mysql_root_raw, str) or not mysql_root_raw.strip():
+        return {"ok": False, "reason": "mysql_root_missing"}
+    if not isinstance(stdout_log_path_raw, str) or not stdout_log_path_raw.strip():
+        return {"ok": False, "reason": "mysql_stdout_log_path_missing"}
+    if not isinstance(stderr_log_path_raw, str) or not stderr_log_path_raw.strip():
+        return {"ok": False, "reason": "mysql_stderr_log_path_missing"}
+
+    mysqld_path = Path(mysqld_path_raw)
+    defaults_file = Path(defaults_file_raw)
+    mysql_root = Path(mysql_root_raw)
+    stdout_log_path = Path(stdout_log_path_raw)
+    stderr_log_path = Path(stderr_log_path_raw)
+
+    if not mysqld_path.exists():
+        return {"ok": False, "reason": "mysqld_exe_missing", "mysqld_path": str(mysqld_path)}
+    if not defaults_file.exists():
+        return {"ok": False, "reason": "mysql_defaults_file_missing", "defaults_file": str(defaults_file)}
+
+    stdout_log_path.parent.mkdir(parents=True, exist_ok=True)
+    stderr_log_path.parent.mkdir(parents=True, exist_ok=True)
+    stdout_log_path.touch(exist_ok=True)
+    stderr_log_path.touch(exist_ok=True)
+
+    with open(stdout_log_path, "ab") as stdout_handle, open(stderr_log_path, "ab") as stderr_handle:
+        try:
+            proc = subprocess.Popen(
+                [str(mysqld_path), f"--defaults-file={defaults_file}"],
+                cwd=str(mysql_root),
+                stdout=stdout_handle,
+                stderr=stderr_handle,
+                stdin=subprocess.DEVNULL,
+                close_fds=True,
+            )
+        except OSError as exc:
+            return {
+                "ok": False,
+                "reason": "mysqld_start_failed",
+                "mysqld_path": str(mysqld_path),
+                "defaults_file": str(defaults_file),
+                "detail": str(exc),
+            }
+
+    return {
+        "ok": True,
+        "pid": int(proc.pid),
+        "method": f"{mysqld_path.name} --defaults-file={defaults_file}",
+        "mysqld_path": str(mysqld_path),
+        "defaults_file": str(defaults_file),
+        "stdout_log_path": str(stdout_log_path),
+        "stderr_log_path": str(stderr_log_path),
+    }
+
+
+def _wait_for_port_ready(host: str, port: int, *, timeout_seconds: float, poll_seconds: float = 0.2) -> bool:
+    deadline = time.time() + max(0.0, float(timeout_seconds))
+    while time.time() < deadline:
+        if _is_port_listening(host, port):
+            return True
+        time.sleep(max(0.05, float(poll_seconds)))
+    return _is_port_listening(host, port)
+
+
+def _ensure_local_mysql_running(*, repo_root: Path | None = None, wait_seconds: float | None = None) -> dict[str, Any]:
+    host = DEFAULT_MYSQL_HOST
+    port = DEFAULT_MYSQL_PORT
+    mysql_root = _repo_mysql_root(repo_root=repo_root)
+    defaults_file = mysql_root / "my.ini"
+
+    if _is_port_listening(host, port):
+        return {
+            "attempted": False,
+            "ready": True,
+            "host": host,
+            "port": port,
+            "method": "already_running",
+            "mysql_root": str(mysql_root),
+            "defaults_file": str(defaults_file),
+        }
+
+    mysql_config = _read_repo_mysql_config(repo_root=repo_root)
+    if not bool(mysql_config.get("ok")):
+        return {
+            "attempted": False,
+            "ready": False,
+            **mysql_config,
+        }
+
+    host = str(mysql_config.get("host") or host)
+    port = int(mysql_config.get("port") or port)
+    timeout_seconds = DEFAULT_MYSQL_WAIT_SECONDS if wait_seconds is None else max(0.0, float(wait_seconds))
+
+    if _is_port_listening(host, port):
+        return {
+            "attempted": False,
+            "ready": True,
+            "host": host,
+            "port": port,
+            "method": "already_running",
+            **mysql_config,
+        }
+
+    start_result = _start_repo_mysql_process(mysql_config)
+    if not bool(start_result.get("ok")):
+        return {
+            "attempted": True,
+            "ready": False,
+            "host": host,
+            "port": port,
+            "errors": [str(start_result.get("reason") or "mysqld_start_failed")],
+            **mysql_config,
+            "start_result": start_result,
+        }
+
+    if _wait_for_port_ready(host, port, timeout_seconds=timeout_seconds):
+        return {
+            "attempted": True,
+            "ready": True,
+            "host": host,
+            "port": port,
+            "method": str(start_result.get("method") or "mysqld"),
+            **mysql_config,
+            "start_result": start_result,
+        }
+
+    return {
+        "attempted": True,
+        "ready": False,
+        "host": host,
+        "port": port,
+        "errors": ["mysqld_started_but_port_not_ready"],
+        **mysql_config,
+        "start_result": start_result,
+    }
+
+
 def _proxy_env_overrides(proxy_url: str) -> dict[str, str]:
     normalized_proxy_url = str(proxy_url or "").strip()
     if not normalized_proxy_url:
@@ -268,6 +483,14 @@ def _user_stability_env_overrides() -> dict[str, str]:
         "BENCHMARK_OPENROUTER_PREFLIGHT_BACKOFF_SECONDS": str(
             os.environ.get("BENCHMARK_OPENROUTER_PREFLIGHT_BACKOFF_SECONDS")
             or DEFAULT_OPENROUTER_PREFLIGHT_BACKOFF_SECONDS
+        ),
+        "BENCHMARK_IMAGE_REQUEST_RETRY_ATTEMPTS": str(
+            os.environ.get("BENCHMARK_IMAGE_REQUEST_RETRY_ATTEMPTS")
+            or DEFAULT_IMAGE_REQUEST_RETRY_ATTEMPTS
+        ),
+        "BENCHMARK_IMAGE_REQUEST_RETRY_BACKOFF_SECONDS": str(
+            os.environ.get("BENCHMARK_IMAGE_REQUEST_RETRY_BACKOFF_SECONDS")
+            or DEFAULT_IMAGE_REQUEST_RETRY_BACKOFF_SECONDS
         ),
     }
 
@@ -654,7 +877,25 @@ def _build_probe_files(image_paths: list[Path]) -> list[tuple[str, str, bytes, s
     return files
 
 
-def _build_image_probe_question() -> str:
+def _build_image_probe_question(case: Any) -> str:
+    initial_user_message = getattr(case, "initial_user_message", None)
+    if isinstance(initial_user_message, str):
+        normalized = initial_user_message.strip()
+        if normalized:
+            return (
+                "请先根据当前图片做一次简短识别，并结合这条用户原始问题判断信息是否足够："
+                f"{normalized}"
+                "；如果信息不足，请直接发起一个澄清问题。"
+            )
+    question_text = getattr(case, "question_text", None)
+    if isinstance(question_text, str):
+        normalized = question_text.strip()
+        if normalized:
+            return (
+                "请先根据当前图片做一次简短识别，并结合这条用户问题判断信息是否足够："
+                f"{normalized}"
+                "；如果信息不足，请直接发起一个澄清问题。"
+            )
     return DEFAULT_IMAGE_PROBE_QUESTION
 
 
@@ -905,7 +1146,7 @@ def _resolve_probe_target(
                 if not image_path.is_absolute():
                     image_path = (repo_root / image_path).resolve()
                 if image_path.exists():
-                    probe_question = _build_image_probe_question()
+                    probe_question = _build_image_probe_question(case)
                     return image_path, probe_question, str(case.case_id)
     return None
 
@@ -951,6 +1192,57 @@ def _build_benchmark_command(
         if case_id:
             cmd.extend(["--case-id", str(case_id)])
     return cmd
+
+
+def _export_round_review_html(
+    *,
+    report_path: Path,
+    output_path: Path,
+) -> dict[str, Any]:
+    script_path = CURRENT_DIR / "doc_search_bench" / "chat_export" / "render_round_case_review_html.py"
+    if not script_path.exists():
+        return {
+            "ok": False,
+            "reason": "review_script_missing",
+            "script_path": str(script_path),
+            "report_path": str(report_path),
+            "output_path": str(output_path),
+        }
+    if not report_path.exists():
+        return {
+            "ok": False,
+            "reason": "report_missing",
+            "report_path": str(report_path),
+            "output_path": str(output_path),
+        }
+
+    cmd = [
+        sys.executable,
+        str(script_path),
+        "--report",
+        str(report_path),
+        "--output",
+        str(output_path),
+    ]
+    result = subprocess.run(
+        cmd,
+        cwd=str(_repo_root()),
+        capture_output=True,
+        text=True,
+        timeout=600,
+    )
+    export_result: dict[str, Any] = {
+        "script_path": str(script_path),
+        "report_path": str(report_path),
+        "output_path": str(output_path),
+        "returncode": result.returncode,
+        "stdout": result.stdout[:1200],
+        "stderr": result.stderr[:1200],
+        "ok": result.returncode == 0 and output_path.exists(),
+    }
+    if not export_result["ok"]:
+        export_result["reason"] = "review_export_failed"
+    return export_result
 
 
 def _run_one_click(args: argparse.Namespace) -> int:
@@ -1021,6 +1313,20 @@ def _run_one_click(args: argparse.Namespace) -> int:
                     "one_click": False,
                     "reason": "redis_not_ready",
                     "redis_prepare": redis_prepare,
+                },
+                ensure_ascii=False,
+                indent=2,
+            )
+        )
+        return 2
+    mysql_prepare = _ensure_local_mysql_running(repo_root=repo_root)
+    if not bool(mysql_prepare.get("ready")):
+        print(
+            json.dumps(
+                {
+                    "one_click": False,
+                    "reason": "mysql_not_ready",
+                    "mysql_prepare": mysql_prepare,
                 },
                 ensure_ascii=False,
                 indent=2,
@@ -1276,11 +1582,23 @@ def _run_one_click(args: argparse.Namespace) -> int:
 
             if chosen_attempt is None and round_attempts:
                 chosen_attempt = round_attempts[-1]
+            review_html_export: dict[str, Any] | None = None
+            if chosen_attempt is not None:
+                parsed = chosen_attempt.get("parsed")
+                if isinstance(parsed, dict):
+                    actual_report_raw = parsed.get("actual_report")
+                    if isinstance(actual_report_raw, str) and actual_report_raw.strip():
+                        report_path = Path(actual_report_raw.strip()).resolve()
+                        review_html_export = _export_round_review_html(
+                            report_path=report_path,
+                            output_path=report_path.parent / ROUND_REVIEW_HTML_FILENAME,
+                        )
             run_summaries.append(
                 {
                     "round": round_index,
                     "selected_attempt": chosen_attempt,
                     "attempts": round_attempts,
+                    "review_html_export": review_html_export,
                 }
             )
 
@@ -1299,6 +1617,7 @@ def _run_one_click(args: argparse.Namespace) -> int:
                     "user_runtime_env": _user_stability_env_overrides(),
                     "proxy_bootstrap": proxy_bootstrap,
                     "proxy_probe": proxy_probe,
+                    "mysql_prepare": mysql_prepare,
                     "token_status": token_status,
                     "backend_openrouter_status": backend_openrouter_status,
                     "openrouter_preflight": openrouter_preflight,

@@ -68,10 +68,80 @@ def _text_outputs_pass(texts: list[str], outputs: list[str]) -> bool | None:
     return True
 
 
+def _dedupe_titles(values: list[str]) -> list[str]:
+    deduped: list[str] = []
+    seen: set[str] = set()
+    for value in values:
+        if not isinstance(value, str):
+            continue
+        cleaned = value.strip()
+        if not cleaned or cleaned in seen:
+            continue
+        seen.add(cleaned)
+        deduped.append(cleaned)
+    return deduped
+
+
+def _target_title_from_truth(target: Any) -> str | None:
+    if isinstance(target, dict):
+        raw = target.get("title")
+    else:
+        raw = getattr(target, "title", None)
+    if isinstance(raw, str) and raw.strip():
+        return raw.strip()
+    return None
+
+
+def _resolve_target_titles(task) -> list[str]:
+    target_docs = getattr(task, "target_docs", None) or []
+    target_titles = [_target_title_from_truth(target) for target in target_docs]
+    deduped_targets = _dedupe_titles([title for title in target_titles if title])
+    if deduped_targets:
+        return deduped_targets
+    return _dedupe_titles(list(task.accepted_titles or []))
+
+
+def _resolve_target_match_mode(task) -> str:
+    raw_mode = getattr(task, "target_match_mode", None)
+    if isinstance(raw_mode, str) and raw_mode.strip().lower() == "all_of":
+        return "all_of"
+    return "any_of"
+
+
+def _find_matched_targets(
+    docs: list[Any],
+    assistant_texts: list[str],
+    target_titles: list[str],
+    top_k: int,
+) -> tuple[list[str], int | None, bool]:
+    matched_ranks: dict[str, int] = {}
+    text_only_match = False
+    for idx, doc in enumerate(docs[:top_k], start=1):
+        doc_payload = doc if isinstance(doc, dict) else getattr(doc, "__dict__", {})
+        for title in target_titles:
+            if title in matched_ranks:
+                continue
+            if matches_titles(doc_payload, [title]):
+                matched_ranks[title] = idx
+    if assistant_texts:
+        for title in target_titles:
+            if title in matched_ranks:
+                continue
+            if any(_text_matches_titles(text, [title]) for text in assistant_texts):
+                matched_ranks[title] = 1
+                text_only_match = True
+
+    matched_targets = [title for title in target_titles if title in matched_ranks]
+    best_rank = min(matched_ranks.values()) if matched_ranks else None
+    return matched_targets, best_rank, text_only_match
+
+
 def judge_file(task, result) -> dict[str, Any]:
     docs = result.prediction.top_k_documents or []
-    accepted_titles = task.accepted_titles
-    is_positive = bool(accepted_titles)
+    accepted_titles = _dedupe_titles(list(task.accepted_titles or []))
+    target_titles = _resolve_target_titles(task)
+    target_match_mode = _resolve_target_match_mode(task)
+    is_positive = bool(target_titles)
     blocking_failures: list[str] = []
     warnings: list[str] = []
     assistant_texts = _assistant_text_candidates(result)
@@ -91,6 +161,12 @@ def judge_file(task, result) -> dict[str, Any]:
     )
 
     matched_rank: int | None = None
+    matched_targets: list[str] = []
+    missed_targets: list[str] = []
+    matched_target_count = 0
+    target_doc_count = len(target_titles)
+    target_coverage_rate = 0.0
+    all_targets_hit = False
     if scoring_blocked:
         recall_hit = False if is_positive else len(docs) == 0
         hit_at_1 = False
@@ -100,19 +176,27 @@ def judge_file(task, result) -> dict[str, Any]:
         if not docs:
             if not assistant_texts:
                 blocking_failures.append("NO_PREDICTED_DOCUMENTS")
-        for idx, doc in enumerate(docs[: task.top_k], start=1):
-            if matches_titles(doc.__dict__, accepted_titles):
-                matched_rank = idx
-                break
-        if matched_rank is None and assistant_texts:
-            for text in assistant_texts:
-                if _text_matches_titles(text, accepted_titles):
-                    matched_rank = 1
-                    warnings.append("TEXT_ONLY_FILE_MATCH")
-                    break
-        if matched_rank is None:
-            blocking_failures.append("FILE_RECALL_MISS")
-        elif matched_rank > 1:
+        matched_targets, matched_rank, text_only_match = _find_matched_targets(
+            docs,
+            assistant_texts,
+            target_titles,
+            task.top_k,
+        )
+        missed_targets = [title for title in target_titles if title not in matched_targets]
+        matched_target_count = len(matched_targets)
+        all_targets_hit = target_doc_count > 0 and matched_target_count == target_doc_count
+        target_coverage_rate = 0.0 if target_doc_count == 0 else round(matched_target_count / target_doc_count, 6)
+        if text_only_match:
+            warnings.append("TEXT_ONLY_FILE_MATCH")
+        if target_match_mode == "all_of":
+            recall_hit = all_targets_hit
+            if not recall_hit:
+                blocking_failures.append("TARGET_SET_INCOMPLETE")
+        else:
+            recall_hit = matched_target_count > 0
+            if not recall_hit:
+                blocking_failures.append("FILE_RECALL_MISS")
+        if matched_rank is not None and matched_rank > 1:
             warnings.append("RANKING_MISS")
     else:
         if docs:
@@ -124,7 +208,6 @@ def judge_file(task, result) -> dict[str, Any]:
         mrr = 0.0
 
     if not scoring_blocked and is_positive:
-        recall_hit = bool(matched_rank is not None)
         hit_at_1 = matched_rank == 1
         hit_at_3 = matched_rank is not None and matched_rank <= 3
         mrr = 0.0 if matched_rank is None else round(1.0 / matched_rank, 6)
@@ -134,6 +217,14 @@ def judge_file(task, result) -> dict[str, Any]:
     return {
         "is_positive": is_positive,
         "matched_rank": matched_rank,
+        "best_target_rank": matched_rank,
+        "target_match_mode": target_match_mode,
+        "matched_targets": matched_targets,
+        "missed_targets": missed_targets,
+        "matched_target_count": matched_target_count,
+        "target_doc_count": target_doc_count,
+        "target_coverage_rate": target_coverage_rate,
+        "all_targets_hit": all_targets_hit,
         "recall_hit": recall_hit,
         "hit_at_1": hit_at_1,
         "hit_at_3": hit_at_3,

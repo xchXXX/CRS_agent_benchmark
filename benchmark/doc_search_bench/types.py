@@ -47,6 +47,8 @@ class TargetDocumentTruth:
     title: str | None = None
     doc_path: str | None = None
     facets: dict[str, str] = field(default_factory=dict)
+    accepted_pages: list[int] = field(default_factory=list)
+    accepted_page_ranges: list[tuple[int, int]] = field(default_factory=list)
 
 
 @dataclass(frozen=True)
@@ -89,6 +91,8 @@ class TaskCase:
     legacy_source_layer: str | None = None
     user_profile: UserProfile | None = None
     target_doc: TargetDocumentTruth | None = None
+    target_docs: list[TargetDocumentTruth] = field(default_factory=list)
+    target_match_mode: str = "any_of"
     metadata: dict[str, Any] = field(default_factory=dict)
 
 
@@ -279,6 +283,10 @@ class TaskMetadataRecord:
     user_profile_uncertain_items: list[str] = field(default_factory=list)
     target_doc_file_id: str | None = None
     target_doc_title: str | None = None
+    target_doc_count: int = 0
+    target_doc_ids: list[str] = field(default_factory=list)
+    target_doc_titles: list[str] = field(default_factory=list)
+    target_match_mode: str = "any_of"
 
 
 @dataclass
@@ -566,12 +574,55 @@ def resolve_uncertain_items(profile: UserProfile | None) -> list[str]:
 def parse_target_document_truth(raw_value: object) -> TargetDocumentTruth | None:
     if not isinstance(raw_value, dict):
         return None
+    accepted_pages: list[int] = []
+    for item in raw_value.get("accepted_pages", []):
+        try:
+            accepted_pages.append(int(item))
+        except (TypeError, ValueError):
+            continue
     return TargetDocumentTruth(
         file_id=_parse_optional_text(raw_value.get("file_id")),
         title=_parse_optional_text(raw_value.get("title")),
         doc_path=_parse_optional_text(raw_value.get("doc_path")),
         facets=_parse_string_mapping(raw_value.get("facets")),
+        accepted_pages=accepted_pages,
+        accepted_page_ranges=parse_page_ranges(raw_value.get("accepted_page_ranges")),
     )
+
+
+def parse_target_document_truths(raw_value: object) -> list[TargetDocumentTruth]:
+    if not isinstance(raw_value, list):
+        return []
+    target_docs: list[TargetDocumentTruth] = []
+    for item in raw_value:
+        target_doc = parse_target_document_truth(item)
+        if target_doc is not None:
+            target_docs.append(target_doc)
+    return target_docs
+
+
+def infer_target_match_mode(raw_value: object) -> str:
+    if isinstance(raw_value, str) and raw_value.strip():
+        normalized = raw_value.strip().lower()
+        if normalized in {"any_of", "all_of"}:
+            return normalized
+    return "any_of"
+
+
+def derive_accepted_titles(
+    raw_titles: object,
+    *,
+    target_docs: list[TargetDocumentTruth],
+) -> list[str]:
+    accepted_titles = [
+        str(item).strip()
+        for item in raw_titles
+        if isinstance(item, str) and str(item).strip()
+    ] if isinstance(raw_titles, list) else []
+    if not target_docs:
+        return accepted_titles
+    derived_titles = [doc.title for doc in target_docs if isinstance(doc.title, str) and doc.title.strip()]
+    return _dedupe_strings([*derived_titles, *accepted_titles])
 
 
 def infer_page_goal_mode(
@@ -671,11 +722,17 @@ def merge_suite_from_paths(
             fixture_case.get("layer") or gold_case.get("layer") or suite_layer,
             legacy_source_split=legacy_source_split,
         )
-        accepted_titles = [
-            str(item).strip()
-            for item in gold_case.get("accepted_titles", [])
-            if isinstance(item, str) and str(item).strip()
-        ]
+        target_docs = parse_target_document_truths(gold_case.get("target_docs"))
+        target_doc = parse_target_document_truth(gold_case.get("target_doc"))
+        if target_docs:
+            accepted_titles = derive_accepted_titles(gold_case.get("accepted_titles"), target_docs=target_docs)
+            if target_doc is None:
+                target_doc = target_docs[0]
+        else:
+            accepted_titles = derive_accepted_titles(gold_case.get("accepted_titles"), target_docs=[])
+            if target_doc is not None:
+                target_docs = [target_doc]
+                accepted_titles = derive_accepted_titles(accepted_titles, target_docs=target_docs)
         accepted_pages = []
         for item in gold_case.get("accepted_pages", []):
             try:
@@ -705,7 +762,6 @@ def merge_suite_from_paths(
             else fixture_case.get("user_simulation_config"),
         )
         user_profile = parse_user_profile(fixture_case.get("user_profile"))
-        target_doc = parse_target_document_truth(gold_case.get("target_doc"))
         actions = parse_actions(
             gold_case.get("actions")
             if isinstance(gold_case.get("actions"), list)
@@ -798,6 +854,8 @@ def merge_suite_from_paths(
                 ),
                 user_profile=user_profile,
                 target_doc=target_doc,
+                target_docs=target_docs,
+                target_match_mode=infer_target_match_mode(gold_case.get("target_match_mode")),
                 metadata={
                     "fixture_path": str(fixture_path),
                     "gold_path": str(gold_path),
@@ -817,6 +875,9 @@ def merge_suite_from_paths(
 
 
 def build_case_run_result(task: TaskCase, run_id: str, *, attempt_index: int = 1) -> CaseRunResult:
+    target_docs = list(task.target_docs) if task.target_docs else ([task.target_doc] if task.target_doc else [])
+    target_doc_ids = [doc.file_id for doc in target_docs if isinstance(doc.file_id, str) and doc.file_id.strip()]
+    target_doc_titles = [doc.title for doc in target_docs if isinstance(doc.title, str) and doc.title.strip()]
     return CaseRunResult(
         case_id=task.case_id,
         attempt_index=attempt_index,
@@ -870,5 +931,9 @@ def build_case_run_result(task: TaskCase, run_id: str, *, attempt_index: int = 1
             user_profile_uncertain_items=resolve_uncertain_items(task.user_profile),
             target_doc_file_id=task.target_doc.file_id if task.target_doc else None,
             target_doc_title=task.target_doc.title if task.target_doc else None,
+            target_doc_count=len(target_docs),
+            target_doc_ids=target_doc_ids,
+            target_doc_titles=target_doc_titles,
+            target_match_mode=task.target_match_mode,
         ),
     )

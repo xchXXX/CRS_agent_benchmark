@@ -177,6 +177,53 @@ class GeneratedCaseSpec:
     persona: str
 
 
+def build_target_docs(
+    accepted_titles: list[str],
+    preferred_title: str | None,
+    target_doc: dict[str, Any] | None,
+    *,
+    accepted_pages: list[int] | None = None,
+    accepted_page_ranges: list[list[int]] | None = None,
+) -> list[dict[str, Any]]:
+    accepted_pages = list(accepted_pages or [])
+    accepted_page_ranges = list(accepted_page_ranges or [])
+    base_doc = dict(target_doc or {})
+    base_facets = dict(base_doc.get("facets") or {})
+
+    target_docs: list[dict[str, Any]] = []
+    seen_titles: set[str] = set()
+    base_title = base_doc.get("title")
+    base_file_id = base_doc.get("file_id")
+    base_doc_path = base_doc.get("doc_path")
+
+    ordered_titles: list[str] = []
+    if preferred_title:
+        ordered_titles.append(preferred_title)
+    for title in accepted_titles:
+        if title not in ordered_titles:
+            ordered_titles.append(title)
+    if not ordered_titles and base_title and base_title not in ordered_titles:
+        ordered_titles.append(base_title)
+
+    for title in ordered_titles:
+        if not title or title in seen_titles:
+            continue
+        seen_titles.add(title)
+        resolved_file_id = base_file_id if title == base_title and base_file_id else title
+        resolved_doc_path = base_doc_path if title == base_title and base_doc_path else title
+        target_docs.append(
+            {
+                "file_id": resolved_file_id,
+                "title": title,
+                "doc_path": resolved_doc_path,
+                "facets": dict(base_facets),
+                "accepted_pages": list(accepted_pages),
+                "accepted_page_ranges": list(accepted_page_ranges),
+            }
+        )
+    return target_docs
+
+
 def write_json(path: Path, payload: dict[str, Any]) -> None:
     path.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
@@ -507,6 +554,7 @@ def build_positive_suite(
             "layer": "atomic",
             "accepted_titles": [row.title],
             "preferred_title": row.title,
+            "target_match_mode": "any_of",
             "expected_response_type": "documents",
             "top_k": 10,
             "source_file": SOURCE_FILE,
@@ -520,6 +568,13 @@ def build_positive_suite(
             },
             "required_ask_user_rounds": required_ask_user_rounds,
         }
+        gold_case["target_docs"] = build_target_docs(
+            gold_case["accepted_titles"],
+            gold_case["preferred_title"],
+            gold_case["target_doc"],
+            accepted_pages=gold_case["accepted_pages"],
+            accepted_page_ranges=gold_case["accepted_page_ranges"],
+        )
         gold_cases.append(gold_case)
 
     fixture_blob = {
@@ -676,6 +731,7 @@ def build_negative_suite(
             "layer": "atomic",
             "accepted_titles": [],
             "preferred_title": None,
+            "target_match_mode": "any_of",
             "expected_response_type": "message_or_empty",
             "top_k": 10,
             "page_goal_mode": "disabled",
@@ -689,6 +745,7 @@ def build_negative_suite(
             },
             "required_ask_user_rounds": 1,
         }
+        gold_case["target_docs"] = []
         gold_cases.append(gold_case)
 
     fixture_blob = {

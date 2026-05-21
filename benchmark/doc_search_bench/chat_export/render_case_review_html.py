@@ -186,11 +186,54 @@ def render_fact_list(title: str, values: Any) -> str:
     return ""
 
 
+def normalize_string_list(values: Any) -> list[str]:
+    if not isinstance(values, list):
+        return []
+    deduped: list[str] = []
+    seen: set[str] = set()
+    for item in values:
+        text = str(item or "").strip()
+        if not text or text in seen:
+            continue
+        seen.add(text)
+        deduped.append(text)
+    return deduped
+
+
+def resolve_gold_target_titles(gold_case: dict[str, Any]) -> list[str]:
+    target_docs = gold_case.get("target_docs") if isinstance(gold_case.get("target_docs"), list) else []
+    titles: list[str] = []
+    for item in target_docs:
+        if not isinstance(item, dict):
+            continue
+        title = str(item.get("title") or "").strip()
+        if title:
+            titles.append(title)
+    if titles:
+        return normalize_string_list(titles)
+    return normalize_string_list(gold_case.get("accepted_titles"))
+
+
+def render_target_doc_summary(gold_case: dict[str, Any]) -> str:
+    target_titles = resolve_gold_target_titles(gold_case)
+    if not target_titles:
+        return '<div class="summary-value">未记录</div>'
+    match_mode = str(gold_case.get("target_match_mode") or "any_of")
+    pills = "".join(f'<li class="target-pill">{html.escape(item)}</li>' for item in target_titles)
+    return f"""
+    <div class="summary-value">
+      <div class="target-meta">target_match_mode={html.escape(match_mode)} · target_doc_count={len(target_titles)}</div>
+      <ul class="target-pill-list">{pills}</ul>
+    </div>
+    """
+
+
 def render_case_section(case: dict[str, Any], gold_case: dict[str, Any], base_dir: Path, active: bool) -> str:
     case_id = case["case_id"]
     metadata = case.get("metadata") or {}
     transcript = metadata.get("transcript") or []
-    accepted_title = (gold_case.get("accepted_titles") or [""])[0]
+    target_titles = resolve_gold_target_titles(gold_case)
+    accepted_title = target_titles[0] if target_titles else ""
     cards = "\n".join(render_message_card(message, base_dir) for message in transcript)
     day_labels: list[str] = []
     for message in transcript:
@@ -224,8 +267,8 @@ def render_case_section(case: dict[str, Any], gold_case: dict[str, Any], base_di
           <div class="summary-value">{html.escape(str(case.get("initial_user_message") or ""))}</div>
         </div>
         <div class="summary-card">
-          <div class="summary-label">唯一答案</div>
-          <div class="summary-value">{html.escape(accepted_title)}</div>
+          <div class="summary-label">目标文档</div>
+          {render_target_doc_summary(gold_case)}
         </div>
         <div class="summary-card">
           <div class="summary-label">聊天溯源</div>
@@ -261,7 +304,8 @@ def build_html(cases: list[dict[str, Any]], gold_map: dict[str, dict[str, Any]],
     for idx, case in enumerate(cases):
         case_id = case["case_id"]
         gold_case = gold_map[case_id]
-        accepted_title = (gold_case.get("accepted_titles") or [""])[0]
+        target_titles = resolve_gold_target_titles(gold_case)
+        accepted_title = target_titles[0] if target_titles else ""
         nav_items.append(
             f"""
             <button class="case-nav-item{' active' if idx == 0 else ''}" data-target="{html.escape(case_id)}">
@@ -410,6 +454,26 @@ def build_html(cases: list[dict[str, Any]], gold_map: dict[str, dict[str, Any]],
     .summary-value {{
       font-size: 14px;
       line-height: 1.6;
+    }}
+    .target-meta {{
+      color: var(--muted);
+      font-size: 12px;
+      margin-bottom: 8px;
+    }}
+    .target-pill-list {{
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      gap: 8px;
+    }}
+    .target-pill {{
+      display: block;
+      padding: 8px 10px;
+      border-radius: 8px;
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      overflow-wrap: anywhere;
     }}
     .fact-grid {{
       display: grid;

@@ -302,3 +302,61 @@ def test_make_one_click_run_id_has_expected_prefix():
 
     assert run_id.startswith("one-click-")
     assert len(run_id) == len("one-click-20260518T020939Z")
+
+
+def test_ensure_local_mysql_running_returns_already_running(monkeypatch, tmp_path: Path):
+    monkeypatch.setattr(benchmark_run, "_is_port_listening", lambda host, port: True)
+
+    result = benchmark_run._ensure_local_mysql_running(repo_root=tmp_path)
+
+    assert result["attempted"] is False
+    assert result["ready"] is True
+    assert result["host"] == "127.0.0.1"
+    assert result["port"] == 3306
+    assert result["method"] == "already_running"
+
+
+def test_ensure_local_mysql_running_returns_structured_failure_when_start_does_not_listen(
+    monkeypatch,
+    tmp_path: Path,
+):
+    mysql_root = tmp_path / ".local" / "mysql"
+    mysql_root.mkdir(parents=True)
+    defaults_file = mysql_root / "my.ini"
+    basedir = mysql_root / "mysql-8.0.45-winx64"
+    bin_dir = basedir / "bin"
+    bin_dir.mkdir(parents=True)
+    (bin_dir / "mysqld.exe").write_bytes(b"")
+    defaults_file.write_text(
+        "[mysqld]\n"
+        f"basedir={basedir.as_posix()}\n"
+        "port=3306\n"
+        "bind-address=127.0.0.1\n",
+        encoding="utf-8",
+    )
+
+    monkeypatch.setattr(benchmark_run, "_is_port_listening", lambda host, port: False)
+    monkeypatch.setattr(benchmark_run, "_wait_for_port_ready", lambda *args, **kwargs: False)
+
+    captured: dict[str, object] = {}
+
+    class DummyProc:
+        pid = 4321
+
+    def fake_popen(cmd, **kwargs):
+        captured["cmd"] = cmd
+        captured["cwd"] = kwargs["cwd"]
+        return DummyProc()
+
+    monkeypatch.setattr(benchmark_run.subprocess, "Popen", fake_popen)
+
+    result = benchmark_run._ensure_local_mysql_running(repo_root=tmp_path, wait_seconds=0.01)
+
+    assert result["attempted"] is True
+    assert result["ready"] is False
+    assert result["host"] == "127.0.0.1"
+    assert result["port"] == 3306
+    assert result["errors"] == ["mysqld_started_but_port_not_ready"]
+    assert "start_result" in result
+    assert captured["cwd"] == str(mysql_root)
+    assert str(captured["cmd"][0]).endswith("mysqld.exe")
