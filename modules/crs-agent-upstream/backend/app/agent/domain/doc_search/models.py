@@ -24,6 +24,7 @@ class DocSearchSelectionPayload(BaseModel):
 
 class DocSearchRequest(BaseModel):
     query: str
+    original_query: str | None = None
     filters: dict[str, Any] = Field(default_factory=dict)
     top_k: int = 20
     selection_payload: DocSearchSelectionPayload = Field(default_factory=DocSearchSelectionPayload)
@@ -158,6 +159,17 @@ class DocSearchPlannedQuery(BaseModel):
 
 
 class DocSearchQueryPlan(BaseModel):
-    primary_query: str
-    queries: list[DocSearchPlannedQuery] = Field(default_factory=list)
-    rationale: str = ""
+    input_mode: str = Field(default="", description="输入模式：text、text_image 或 image。")
+    primary_query: str = Field(description="用于搜索资料本体的最优搜索词，应接近资料库标题或文件名。")
+    queries: list[DocSearchPlannedQuery] = Field(default_factory=list, description="按命中概率排序的资料搜索词。")
+    body_keyword: str = Field(
+        default="",
+        description="用户要在文档/PDF/电路图内部定位的具体对象；没有内部定位诉求时为空。",
+    )
+    body_keyword_confidence: float = Field(
+        default=0.0,
+        ge=0.0,
+        le=1.0,
+        description="body_keyword 的置信度；明确内部定位对象时应大于 0.8。",
+    )
+    rationale: str = Field(default="", description="一句话说明搜索词和图内搜索词的拆分依据。")

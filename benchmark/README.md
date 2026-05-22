@@ -4,11 +4,23 @@
 
 `benchmark/` 只负责 `doc_search` benchmark 的构建、运行、评分与失败分析，不负责业务功能实现。
 
+统一运行规则：
+
+- 默认运行方式固定为 `python benchmark\run.py --one-click`
+- 未经明确说明，不再把 `python benchmark/run.py --split ...` 作为推荐主入口
+- 需要指定数据集时，在 `--one-click` 后继续追加 `--split train|dev|test`
+
 当前 benchmark 的正式边界是：
 
 - 测文件命中能力
 - 页码字段进入任务模型与报告结构
-- 页码结果当前只做 shadow report，不参与 official gate
+- 已正式读取文档结果中的 `body_search`
+- 文档定位 benchmark 已升级为三层定位判定链路：
+  - 文档命中
+  - 页命中
+  - 坐标命中
+- 页级与坐标级结果进入 benchmark 标准结果与报告
+- 文档召回仍是 `official gate` 主线；页级与坐标级作为定位维度独立统计
 
 ## 2. 阅读顺序
 
@@ -89,55 +101,78 @@ benchmark/
 
 ## 6. 评分方式
 
-正式评分由四类 judge 协作完成：
+正式评分与定位统计由六类 judge 协作完成：
 
 - `contract judge`
 - `file judge`
 - `page judge`
+- `locator judge`
+- `coord judge`
 - `failure judge`
 
 当前 gate 口径：
 
 - 文件命中参与 official gate
-- 页码结果只进入 shadow report
+- 页码结果参与页级定位统计
+- `body_search` 页级与坐标级定位结果进入定位统计与报告
+
+定位补充说明：
+
+- 页级真值只保留 `accepted_pages / accepted_page_ranges`
+- 坐标真值固定为 `target_docs[i].accepted_region_groups`
+- 不再引入 `accepted_locator_pages / accepted_locator_page_ranges`
+- `locator_keywords` 作为定位样本关键词真值进入任务模型与报告
+- 多页场景下，命中页集合内任意一页命中任意合法 region group 即判定坐标成功
 
 补充说明：
 
 - `chat_completions` 轨道对真实外部 `ggzj_*` 文档结果做归一化时，`doc_title` 优先取返回中的标题字段
 - 当真实结果缺少 `hierarchy_full / path / physical_path` 这类路径字段时，benchmark 会回退使用稳定文档标识（如 `file_id`）填充规范化后的 `doc_path`
 - 该回退只用于 benchmark 侧合同适配，避免真实外部结果因缺少本地路径字段被误判为 `SCHEMA_INVALID`
-- 该回退不改变文件命中规则；最终是否命中 gold，仍以 `top_k` 中规范化文档标题/路径与 `accepted_titles` 的匹配结果为准
+- 该回退不改变文件命中规则；当前 `official gate` 最终是否命中 gold，仍以 `top_k` 中规范化文档标题与 `accepted_titles / target_docs[*].title` 的匹配结果为准
+- `doc_path` 目前主要用于页级与坐标级目标文档解析，不作为 `official gate` 的稳定命中判据
 
 ## 7. 常用命令
 
-### 7.1 运行 train
+### 7.1 统一入口
 
 ```powershell
-python benchmark/run.py --split train --base-url http://127.0.0.1:8000
+python benchmark\run.py --one-click
 ```
 
-### 7.2 运行 dev
+说明：
+
+- benchmark 的默认运行入口统一为 `--one-click`
+- `--one-click` 会负责代理、Redis、MySQL、token、OpenRouter 预检、backend 拉起与 probe
+
+### 7.2 运行 train
 
 ```powershell
-python benchmark/run.py --split dev --base-url http://127.0.0.1:8000
+python benchmark\run.py --one-click --split train
 ```
 
-### 7.3 运行 test
+### 7.3 运行 dev
 
 ```powershell
-python benchmark/run.py --split test --base-url http://127.0.0.1:8000
+python benchmark\run.py --one-click --split dev
 ```
 
-### 7.4 只跑单个 case
+### 7.4 运行 test
 
 ```powershell
-python benchmark/run.py --split test --case-id case_000003 --base-url http://127.0.0.1:8000
+python benchmark\run.py --one-click --split test
 ```
 
-### 7.5 快速 smoke
+### 7.5 只跑单个 case
 
 ```powershell
-python benchmark/run.py --split train --smoke-fast --base-url http://127.0.0.1:8006 --timeout-ms 240000
+python benchmark\run.py --one-click --split test --case-id case_000003
+```
+
+### 7.6 快速 smoke
+
+```powershell
+python benchmark\run.py --one-click --split train --smoke-fast --timeout-ms 240000
 ```
 
 说明：
@@ -147,7 +182,7 @@ python benchmark/run.py --split train --smoke-fast --base-url http://127.0.0.1:8
 - 默认 `--timeout-ms` 已提升到 `240000`，适合作为 smoke 口径。
 - 如需完整回归，建议显式使用 `--timeout-ms 1200000`，避免慢 case 被过早截断。
 
-### 7.5 查看失败汇总
+### 7.7 查看失败汇总
 
 ```powershell
 python benchmark/analyze_failures.py benchmark/reports/runs/<run_id>/report.score.json

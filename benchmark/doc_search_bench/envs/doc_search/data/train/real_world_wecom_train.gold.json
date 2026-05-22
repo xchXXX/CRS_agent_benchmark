@@ -20,9 +20,9 @@
       "expected_response_type": "documents",
       "top_k": 10,
       "source_file": "ggzj_work_wx_chat_content",
-      "page_goal_mode": "disabled",
-      "accepted_pages": [],
-      "accepted_page_ranges": [],
+      "page_goal_mode": "shadow",
+      "accepted_pages": [12],
+      "accepted_page_ranges": [[12, 13]],
       "target_doc": {
         "file_id": "云内D20_MD1CC878原理图【国六】【原厂图】【2021.6.24】",
         "title": "云内D20_MD1CC878原理图【国六】【原厂图】【2021.6.24】",
@@ -44,8 +44,13 @@
             "brand": "云内",
             "doc_type": "电路图"
           },
-          "accepted_pages": [],
-          "accepted_page_ranges": []
+          "accepted_pages": [12],
+          "accepted_page_ranges": [[12, 13]],
+          "locator_keywords": [
+            "博世878",
+            "供电模块",
+            "云内"
+          ]
         }
       ]
     },
@@ -324,9 +329,9 @@
       "top_k": 10,
       "source_file": "ggzj_work_wx_chat_content",
       "question_type": "找资料",
-      "page_goal_mode": "disabled",
-      "accepted_pages": [],
-      "accepted_page_ranges": [],
+      "page_goal_mode": "shadow",
+      "accepted_pages": [8],
+      "accepted_page_ranges": [[8, 9]],
       "target_doc": {
         "file_id": "三一_SY55_SY60_SY65_SY75-9挖掘机_仪表显示器针脚定义",
         "title": "三一_SY55_SY60_SY65_SY75-9挖掘机_仪表显示器针脚定义",
@@ -351,8 +356,13 @@
             "model": "55C",
             "doc_type": "仪表显示器针脚定义"
           },
-          "accepted_pages": [],
-          "accepted_page_ranges": []
+          "accepted_pages": [8],
+          "accepted_page_ranges": [[8, 9]],
+          "locator_keywords": [
+            "仪表",
+            "显示器",
+            "针脚"
+          ]
         }
       ]
     },
@@ -496,9 +506,9 @@
       "top_k": 10,
       "source_file": "benchmark_excel_template.xlsx",
       "question_type": "找资料",
-      "page_goal_mode": "disabled",
-      "accepted_pages": [],
-      "accepted_page_ranges": [],
+      "page_goal_mode": "shadow",
+      "accepted_pages": [21],
+      "accepted_page_ranges": [[21, 22]],
       "target_doc": {
         "file_id": "康明斯D2.5_CM2621_F162_原理图【国六】",
         "title": "康明斯D2.5_CM2621_F162_原理图【国六】",
@@ -523,8 +533,13 @@
             "controller": "CM2621_F162",
             "doc_type": "原理图"
           },
-          "accepted_pages": [],
-          "accepted_page_ranges": []
+          "accepted_pages": [21],
+          "accepted_page_ranges": [[21, 22]],
+          "locator_keywords": [
+            "CM2621",
+            "F162",
+            "原理图"
+          ]
         }
       ]
     },

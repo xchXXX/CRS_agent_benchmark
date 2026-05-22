@@ -35,6 +35,7 @@ DEFAULT_OPENROUTER_API_BASE = "https://openrouter.ai/api/v1"
 DEFAULT_OPENROUTER_TIMEOUT_SECONDS = 600.0
 DEFAULT_OPENROUTER_RETRY_ATTEMPTS = 4
 DEFAULT_OPENROUTER_RETRY_BACKOFF_SECONDS = 2.0
+DEFAULT_USER_MODEL = "openrouter:deepseek/deepseek-chat-v3-0324"
 _WARMED_USER_MODELS: set[tuple[str, str | None, str | None, float | None]] = set()
 STOP_REASON_CODES = {
     "OPTION_SPACE_CONFLICT",
@@ -1236,7 +1237,7 @@ def generate_structured_user_decision(
 
 def load_user(
     user_strategy: Union[str, UserStrategy],
-    model: Optional[str] = "gpt-4o",
+    model: Optional[str] = DEFAULT_USER_MODEL,
     provider: Optional[str] = None,
 ) -> BaseUserSimulationEnv:
     strategy = get_user_strategy(user_strategy)

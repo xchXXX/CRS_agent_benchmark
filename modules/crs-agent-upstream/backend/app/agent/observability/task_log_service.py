@@ -197,6 +197,8 @@ def _resolve_phase(event_type: str) -> str:
         return "ask_user"
     if "guard" in lowered:
         return "guard"
+    if lowered.startswith("circuit_"):
+        return "tool"
     if "tool" in lowered:
         return "tool"
     if "error" in lowered:
@@ -227,6 +229,24 @@ def _resolve_event_summary(event_type: str, payload: dict[str, Any], detail: str
         "repair_answer_gate_review_ask_user": "回答审查改为 ask_user",
         "repair_answer_gate_ready": "通过回答审查",
         "repair_answer_gate_review_blocked_ready": "回答审查阻止直接回答",
+        "circuit_body_search_started": "开始电路图内搜索",
+        "circuit_body_search_skipped": "跳过电路图内搜索",
+        "circuit_body_source_docs_resolved": "完成电路图解析文档匹配",
+        "circuit_body_source_docs_resolve_failed": "电路图解析文档匹配失败",
+        "circuit_candidate_docs_search_skipped": "跳过电路图候选文档搜索",
+        "circuit_candidate_docs_search_failed": "电路图候选文档搜索失败",
+        "circuit_candidate_docs_searched": "完成电路图候选文档搜索",
+        "circuit_body_doc_search_started": "开始单文档图内搜索",
+        "circuit_body_doc_searched": "完成单文档图内搜索",
+        "circuit_body_hit_rerank_skipped": "跳过图内候选排序",
+        "circuit_body_hit_rerank_failed": "图内候选排序失败",
+        "circuit_body_hit_reranked": "完成图内候选排序",
+        "circuit_preview_token_skipped": "跳过局部预览 token 生成",
+        "circuit_preview_token_failed": "局部预览 token 生成失败",
+        "circuit_preview_token_created": "完成局部预览 token 生成",
+        "circuit_body_search_completed": "完成电路图内搜索",
+        "circuit_body_search_enhanced": "完成资料搜索结果增强",
+        "circuit_body_search_enhance_failed": "资料搜索结果增强失败",
     }
     summary = mapping.get(event_type)
     if summary:

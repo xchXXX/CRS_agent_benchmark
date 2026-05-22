@@ -1,5 +1,6 @@
 """Post-search pipeline for doc_search domain."""
 
+import unicodedata
 from collections.abc import Callable
 from typing import Any
 
@@ -52,9 +53,17 @@ class DocSearchPipeline:
     ) -> DocSearchExecutionResult:
         results = list(raw.get("results", []))
         preprocessing = raw.get("preprocessing")
+        exact_match_query = request.original_query or request.query
         effective_filters = self.merge_filters(request.selection_payload, request.filters)
         selected_file_ids = request.selection_payload.file_ids
         has_user_structured_selection = bool(request.filters or request.selection_payload.filters or selected_file_ids)
+        has_exact_top_result = (
+            not has_user_structured_selection
+            and self._is_top_result_exact_query_match(results, exact_match_query)
+        )
+
+        if has_exact_top_result:
+            results = [results[0]]
 
         if selected_file_ids:
             allowed_ids = set(selected_file_ids)
@@ -66,7 +75,7 @@ class DocSearchPipeline:
         if regular_filters:
             results = self.apply_filters_strict(results, regular_filters)
 
-        if not has_user_structured_selection and preprocessing:
+        if not has_exact_top_result and not has_user_structured_selection and preprocessing:
             auto_outcome = self._entity_filter_policy.apply_initial(
                 results=results,
                 preprocessing=preprocessing,
@@ -100,7 +109,7 @@ class DocSearchPipeline:
             )
         return DocSearchExecutionResult(
             query=raw.get("query", request.query),
-            original_query=request.query,
+            original_query=request.original_query or request.query,
             results=final_results,
             total=len(results),
             preprocessing=preprocessing,
@@ -114,6 +123,26 @@ class DocSearchPipeline:
             summary_query=summary_query,
             result_summary=result_summary,
         )
+
+    @classmethod
+    def _is_top_result_exact_query_match(cls, results: list[dict[str, Any]], query: str) -> bool:
+        if not results or not query:
+            return False
+
+        query_norm = cls._normalize_exact_title(query)
+        if not query_norm:
+            return False
+
+        top_result = results[0]
+        for field_name in ("filename", "title"):
+            value = top_result.get(field_name)
+            if value and cls._normalize_exact_title(str(value)) == query_norm:
+                return True
+        return False
+
+    @staticmethod
+    def _normalize_exact_title(value: str) -> str:
+        return unicodedata.normalize("NFKC", str(value)).strip()
 
     @staticmethod
     def merge_filters(

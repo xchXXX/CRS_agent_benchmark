@@ -21,7 +21,7 @@
 当前阶段固定按以下顺序执行：
 
 1. 先跑真实运行器，拿到每一次尝试的 `CaseRunResult`
-2. 先做合同判定，再做文件判定，再做页码判定
+2. 先做合同判定，再做文件判定、页码判定、页级 locator 判定、坐标判定
 3. 尝试级汇总直接形成 `attempt_level`
 4. 再把同一个 case 的多次尝试折叠成 `case_rollups`
 5. 基于 `case_rollups` 再生成 `case_level`
@@ -42,6 +42,8 @@
 - `validation.blocking_failures`
 - `validation.warnings`
 - 文件与页码指标
+- 页级 locator 指标
+- 坐标级指标
 - `analysis.final_hit`
 - `analysis.turn_count`
 - `analysis.decision_trace`
@@ -59,12 +61,16 @@
 1. `judge_contract()`
 2. `judge_file()`
 3. `judge_page()`
+4. `judge_locator()`
+5. `judge_coord()`
 
 对应代码：
 
 - `benchmark/doc_search_bench/judges/contract.py`
 - `benchmark/doc_search_bench/judges/file.py`
 - `benchmark/doc_search_bench/judges/page.py`
+- `benchmark/doc_search_bench/judges/locator.py`
+- `benchmark/doc_search_bench/judges/coord.py`
 - `benchmark/doc_search_bench/judges/trace.py`
 
 ### 4.1 合同判定
@@ -100,6 +106,22 @@
 - 产出页码命中指标
 - 在 `shadow` 模式下只保留观察性告警，不进入正式 gate
 
+### 4.4 locator 判定
+
+locator 判定负责：
+
+- 判断文档命中后的页级 body_search 结果是否命中真值页
+- 输出 `locator_hit_at_1 / locator_hit_at_k`
+
+### 4.5 坐标判定
+
+坐标判定负责：
+
+- 在 `document_hit && page_hit` 成立后比较 `accepted_region_groups`
+- 把 `highlight_boxes_px` 归一化后与 `boxes_norm` 做几何比较
+- 在多页场景下应用“任意命中页命中任意合法 group 即成功”的规则
+- 输出 `coord_hit / coord_failure_reason`
+
 ## 5. 尝试级汇总
 
 尝试级汇总入口是：
@@ -113,6 +135,8 @@
 
 - 文件分数
 - 页码分数
+- locator 分数
+- coord 分数
 - 失败统计
 - `failure_reason` 统计
 - 停止原因统计
@@ -197,7 +221,23 @@
 - `case_level.page`
   - 这些数字按唯一 case 统计
 
-## 8. 当前能力缺口边界
+## 8. 坐标统计口径
+
+坐标统计必须显式告诉你三件事：
+
+1. 有多少 attempt/case 根本不具备坐标判分资格
+2. 有多少是在文档未命中或页未命中处提前失败
+3. 有多少真正进入了坐标比较但未命中合法区域组
+
+因此报告中至少固定：
+
+- `coord_eligible`
+- `coord_hit_rate`
+- `coord_hit_given_doc_hit_rate`
+- `coord_hit_given_page_hit_rate`
+- `coord_failure_reason_counts`
+
+## 9. 当前能力缺口边界
 
 阶段 7 不假装系统已经支持撤回。
 
@@ -213,7 +253,7 @@
 - 正式 fail
 - 暂不进入正常通过样本
 
-## 9. 标准报告脱敏层
+## 10. 标准报告脱敏层
 
 当前标准报告中的 `cases` 字段必须做脱敏序列化。
 
@@ -224,7 +264,7 @@
 - 不直接暴露 `selected_selection_payload`
 - 原始 payload 只留在内部运行资产
 
-## 10. 代码映射
+## 11. 代码映射
 
 - `benchmark/doc_search_bench/envs/doc_search/env.py`
   - 逐次尝试结果生产与分析收口
@@ -236,6 +276,10 @@
   - 文件口径与根阻断收口
 - `benchmark/doc_search_bench/judges/page.py`
   - 页码三模式与页码汇总
+- `benchmark/doc_search_bench/judges/locator.py`
+  - 页级 body_search 定位判定
+- `benchmark/doc_search_bench/judges/coord.py`
+  - 坐标定位判定
 - `benchmark/doc_search_bench/judges/failure.py`
   - 尝试级失败统计
 - `benchmark/doc_search_bench/judges/trace.py`

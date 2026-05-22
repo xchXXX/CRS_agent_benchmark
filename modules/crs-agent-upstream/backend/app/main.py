@@ -16,7 +16,9 @@ from app.api.admin_dimension import router as admin_dimension_router
 from app.api.admin_feedback import router as admin_feedback_router
 from app.api.admin_logs import router as admin_logs_router
 from app.api.chat import router as chat_router
+from app.api.circuit_body_search import router as circuit_body_search_router
 from app.api.feedback import router as feedback_router
+from app.api.frontend_runtime import router as frontend_runtime_router
 from app.api.ggzj import router as ggzj_router
 from app.api.health import router as health_router
 from app.api.image import router as image_router
@@ -160,11 +162,13 @@ def create_app() -> FastAPI:
     )
     app.include_router(health_router)
     app.include_router(chat_router)
+    app.include_router(circuit_body_search_router)
     app.include_router(search_router)
     app.include_router(speech_router)
     app.include_router(ggzj_router)
     app.include_router(image_router)
     app.include_router(legacy_proxy_router)
+    _include_compat_router(app, frontend_runtime_router)
     _include_compat_router(app, feedback_router)
     app.include_router(admin_auth_router)
     _include_compat_router(app, admin_benchmark_router)

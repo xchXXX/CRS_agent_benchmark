@@ -23,6 +23,7 @@ _KNOWN_PROVIDER_PREFIXES = (
     "xai:",
     "ollama:",
 )
+DEFAULT_BENCHMARK_USER_MODEL = "openrouter:deepseek/deepseek-chat-v3-0324"
 
 
 @dataclass(frozen=True)
@@ -91,13 +92,13 @@ def _has_openrouter_credentials(env: dict[str, str]) -> bool:
 def _normalize_backend_model(raw_model: str, env: dict[str, str]) -> tuple[str, str | None]:
     model = raw_model.strip()
     if not model:
-        return "gpt-4o", None
+        return DEFAULT_BENCHMARK_USER_MODEL, None
 
     for prefix in _KNOWN_PROVIDER_PREFIXES:
         if model.startswith(prefix):
             if prefix == "ollama:":
                 _, _, stripped_model = model.partition(":")
-                return stripped_model.strip() or "gpt-4o", "ollama"
+                return stripped_model.strip() or DEFAULT_BENCHMARK_USER_MODEL, "ollama"
             return model, None
 
     if "/" in model:
@@ -135,7 +136,7 @@ def resolve_user_model_defaults() -> ResolvedUserModelDefaults:
             source="backend_clarify_or_agent_model",
         )
 
-    fallback_model = _first_non_empty(env, "BENCHMARK_USER_MODEL") or "gpt-4o"
+    fallback_model = _first_non_empty(env, "BENCHMARK_USER_MODEL") or DEFAULT_BENCHMARK_USER_MODEL
     fallback_provider = _first_non_empty(env, "BENCHMARK_USER_PROVIDER") or None
     return ResolvedUserModelDefaults(
         model=fallback_model,

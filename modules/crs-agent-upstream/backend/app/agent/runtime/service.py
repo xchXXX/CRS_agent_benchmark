@@ -1,12 +1,12 @@
 """Agent Loop service implementation."""
 
+import asyncio
 from datetime import datetime, timezone
 import json
 import re
 import time
-import unicodedata
 from dataclasses import dataclass
-from typing import Any, AsyncIterator, Sequence
+from typing import Any, AsyncIterator, Awaitable, Callable, Sequence
 from uuid import uuid4
 
 from genai_prices import calc_price
@@ -20,6 +20,7 @@ from app.agent.ask_user_v2 import (
 from app.agent.context import CaseContextManager, CaseContextPromptBuilder, LoopGuard, LoopGuardExceededError
 from app.agent.adapters.doc_search_response_adapter import DOC_SEARCH_DEFERRED_TOOL_NAME, DocSearchResponseAdapter
 from app.agent.adapters.legacy_doc_search_adapter import LegacyDocSearchAdapter
+from app.agent.domain.circuit_body_search import resolve_circuit_body_keyword
 from app.agent.adapters.repair_knowledge_followup_adapter import RepairKnowledgeFollowupAdapter
 from app.agent.domain.doc_search.query_planner import PydanticAIDocSearchQueryPlanner
 from app.agent.domain.parameter_query.response_adapter import (
@@ -57,6 +58,7 @@ class ActiveStreamState:
 @dataclass(frozen=True)
 class DocSearchWorkflowRunState:
     query: str
+    original_query: str | None = None
     clarify_round: int = 0
     deferred_state: DeferredState | None = None
 
@@ -79,6 +81,7 @@ class DocSearchPlannedSearchResult:
     executed_queries: tuple[DocSearchExecutedQuery, ...]
     primary_query: str
     rationale: str = ""
+    body_keyword: str = ""
 
 
 @dataclass(frozen=True)
@@ -208,17 +211,13 @@ class AgentLoopService:
         "发动机",
         "控制器",
         "控制单元",
-        "控制板",
         "电脑板",
-        "板子",
-        "板卡",
         "计量单元",
         "单元",
         "系统",
         "故障码",
         "报码",
         "资料",
-        "维修",
         "电路图",
         "针脚定义",
         "铭牌",
@@ -229,225 +228,19 @@ class AgentLoopService:
         "传感器",
         "继电器",
         "保险盒",
-        "软件",
-        "制造",
-        "型号",
     }
-    _DOC_SEARCH_HINT_REJECT_SUBSTRINGS = (
-        "老师",
-        "麻烦",
-        "帮忙",
-        "请问",
-        "疑似",
-        "查询",
-        "查下",
-        "查一下",
-        "找下",
-        "找一下",
-        "资料",
-        "文档",
-        "技术文档",
-        "故障",
-        "维修",
-        "标签",
-        "包含",
-        "独悬",
-        "零件号",
-        "对应",
-        "车型",
-        "图号",
-        "编号",
-        "数据",
-        "电控单元",
-        "发动机",
-        "品牌",
-        "型号",
-        "功率",
-        "代号",
-        "软件",
-        "制造",
-    )
     _DOC_SEARCH_DOC_TYPE_HINTS = (
-        "整车电路图",
-        "整车电路图册",
-        "整车图",
         "电脑板针脚定义",
         "针脚定义",
-        "针脚图",
-        "引脚定义",
-        "引脚图",
-        "接插件定义",
         "ECU电路图",
-        "ECU图",
         "发动机电路图",
-        "仪表电路图",
-        "电气原理图",
-        "电气维修图",
-        "电气图",
-        "电路图册",
         "电路图",
-        "线路图",
-        "接线图",
         "线束图",
-        "线束图解",
         "原理图",
-        "保险盒定义",
-        "保险丝盒定义",
-        "保险盒",
         "维修手册",
-        "诊断手册",
-        "电脑版数据",
-        "电脑数据",
-        "标定数据",
-        "程序数据",
-        "数据流",
         "资料",
     )
     _DOC_SEARCH_CODE_PRIORITY_HINTS = ("ECUA", "ECU", "EDC", "DCU", "MDD", "ME")
-    _DOC_SEARCH_SHORT_CODE_RE = re.compile(r"\b(?:[A-Z]\d[A-Z0-9]{0,3}|\d{2,4}[A-Z]{1,2})\b")
-    _DOC_SEARCH_QUERY_FILLER_PHRASES = (
-        "帮我找一下",
-        "帮忙找一下",
-        "帮我找下",
-        "帮忙找下",
-        "帮我搜一下",
-        "帮忙搜一下",
-        "帮我搜下",
-        "帮忙搜下",
-        "帮我查一下",
-        "帮忙查一下",
-        "帮我查下",
-        "帮忙查下",
-        "帮我找",
-        "帮忙找",
-        "帮我搜",
-        "帮忙搜",
-        "帮我查",
-        "帮忙查",
-        "我想找",
-        "我要找",
-        "想找",
-        "要找",
-        "找一下",
-        "找下",
-        "搜一下",
-        "搜下",
-        "查一下",
-        "查下",
-        "找一份",
-        "查一份",
-        "搜一份",
-        "请找",
-        "请查",
-        "请搜",
-        "有没有",
-        "有吗",
-        "有嘛",
-        "有么",
-        "哪里有",
-        "哪有",
-        "给我",
-        "麻烦",
-        "老师",
-        "请问",
-        "这个",
-        "这份",
-        "那个",
-        "哪个",
-        "哪些",
-        "相关的",
-        "相关",
-        "一份",
-        "一下",
-        "看看",
-        "看下",
-        "需要",
-    )
-    _DOC_SEARCH_QUERY_PARTICLE_RE = re.compile(r"[的了吗呢啊吧嘛]")
-    _DOC_SEARCH_QUERY_COMPACT_RE = re.compile(r"(?<=[\u4e00-\u9fff])\s+(?=[A-Za-z0-9])|(?<=[A-Za-z0-9])\s+(?=[\u4e00-\u9fff])")
-    _DOC_SEARCH_QUERY_SEPARATE_RE = re.compile(r"(?<=[\u4e00-\u9fff])(?=[A-Za-z0-9])|(?<=[A-Za-z0-9])(?=[\u4e00-\u9fff])")
-    _DOC_SEARCH_QUERY_REPLACEMENTS = (
-        ("保鲜盒", "保险盒"),
-        ("挖机", "挖掘机"),
-        ("整车图", "整车电路图"),
-        ("全车图", "整车电路图"),
-        ("ECU图", "ECU电路图"),
-        ("ecu图", "ECU电路图"),
-        ("针脚定义图", "针脚定义"),
-        ("引脚定义图", "引脚定义"),
-        ("针脚图", "针脚定义"),
-        ("引脚图", "引脚定义"),
-        ("电气图", "电气原理图"),
-    )
-    _DOC_SEARCH_BROAD_DOC_TYPE_VARIANTS = (
-        "电路图",
-        "整车电路图",
-        "线束图",
-        "针脚定义",
-        "保险盒定义",
-        "维修手册",
-    )
-    _DOC_SEARCH_IMAGE_DEFAULT_DOC_TYPE_QUERIES = (
-        "ECU电路图",
-        "电脑板针脚定义",
-        "针脚定义",
-        "技术资料",
-    )
-    _DOC_SEARCH_VEHICLE_DEFAULT_DOC_TYPE_QUERIES = (
-        "整车电路图",
-        "电路图",
-        "维修手册",
-        "技术资料",
-    )
-    _DOC_SEARCH_COMPANY_HINT_STRIP_SUFFIXES = (
-        "汽车电子有限公司",
-        "电子有限公司",
-        "有限公司",
-        "汽车电子",
-        "电子",
-        "系统",
-        "电脑板",
-        "控制板",
-        "控制器",
-        "电控单元",
-        "发动机",
-        "制造",
-    )
-    _DOC_SEARCH_ENTITY_ALIASES = {
-        "brand": {
-            "faw": ("一汽", "解放"),
-            "dfac": ("东风",),
-            "dfl": ("东风",),
-            "cnhtc": ("中国重汽", "重汽"),
-            "sinotruk": ("中国重汽", "重汽"),
-            "sany": ("三一",),
-        },
-        "series": {
-            "howo": ("豪沃",),
-        },
-        "supplier": {
-            "bosch": ("博世",),
-            "cummins": ("康明斯",),
-            "denso": ("电装",),
-            "delphi": ("德尔福",),
-            "emitec": ("依米泰克",),
-            "ecofit": ("依科菲特",),
-        },
-    }
-    _DOC_SEARCH_RANK_GENERIC_TOKENS = {
-        "资料",
-        "文档",
-        "图",
-        "图纸",
-        "相关",
-        "电路图",
-        "整车图",
-        "整车电路图",
-        "线路图",
-        "线束图",
-        "原理图",
-        "维修手册",
-    }
     """Main runtime service for the new backend."""
 
     _INTENT_CONTEXT_KEY = "__resolved_request_intent"
@@ -1130,10 +923,9 @@ class AgentLoopService:
         if not normalized:
             return tuple()
 
-        code_source = cls._DOC_SEARCH_QUERY_SEPARATE_RE.sub(" ", normalized)
         alpha_numeric_tokens = [
             str(token or "").strip("()[]{}<>，。；;：:,_/\\ ")
-            for token in cls._DOC_SEARCH_IMAGE_CODE_RE.findall(code_source)
+            for token in cls._DOC_SEARCH_IMAGE_CODE_RE.findall(normalized)
         ]
         candidates: list[str] = []
         seen: set[str] = set()
@@ -1141,23 +933,12 @@ class AgentLoopService:
             cleaned = str(token or "").strip("()[]{}<>，。；;：:,_/\\ ")
             if len(cleaned) < 4:
                 continue
-            if cleaned.isalpha():
-                continue
             if cleaned in seen:
                 continue
             seen.add(cleaned)
             candidates.append(cleaned)
 
-        for token in cls._DOC_SEARCH_SHORT_CODE_RE.findall(code_source):
-            cleaned = str(token or "").strip("()[]{}<>，。；;：:,_/\\ ")
-            if len(cleaned) < 2:
-                continue
-            if cleaned in seen:
-                continue
-            seen.add(cleaned)
-            candidates.append(cleaned)
-
-        for token in cls._DOC_SEARCH_NUMERIC_CODE_RE.findall(code_source):
+        for token in cls._DOC_SEARCH_NUMERIC_CODE_RE.findall(normalized):
             cleaned = str(token or "").strip("()[]{}<>，。；;：:,_/\\ ")
             if len(cleaned) < 4:
                 continue
@@ -1168,72 +949,6 @@ class AgentLoopService:
             seen.add(cleaned)
             candidates.append(cleaned)
         return tuple(candidates)
-
-    @classmethod
-    def _expand_doc_search_query_text_variants(cls, text: str | None) -> tuple[str, ...]:
-        normalized = cls._normalize_doc_search_query_text(text)
-        if not normalized:
-            return tuple()
-
-        variants: list[str] = []
-
-        def _append(value: Any) -> None:
-            candidate = cls._normalize_doc_search_query_text(value)
-            if candidate and candidate.lower() not in {item.lower() for item in variants}:
-                variants.append(candidate)
-
-        separated = cls._DOC_SEARCH_QUERY_SEPARATE_RE.sub(" ", normalized)
-        if separated != normalized:
-            _append(separated)
-
-        for source in (normalized, separated):
-            replaced = source
-            for src, dst in cls._DOC_SEARCH_QUERY_REPLACEMENTS:
-                replaced = replaced.replace(src, dst)
-            _append(replaced)
-            replaced_separated = cls._DOC_SEARCH_QUERY_SEPARATE_RE.sub(" ", replaced)
-            _append(replaced_separated)
-
-        return tuple(variant for variant in variants if variant != normalized)
-
-    @classmethod
-    def _space_doc_search_known_entities(
-        cls,
-        *,
-        text: str,
-        entities: dict[str, list[str]],
-    ) -> str | None:
-        spaced = cls._normalize_doc_search_query_text(text)
-        if not spaced:
-            return None
-
-        entity_values: list[str] = []
-        for facet in (
-            "brand",
-            "series",
-            "model",
-            "platform",
-            "ecu",
-            "supplier",
-            "subsystem",
-            "emissions",
-            "drive_type",
-            "batch",
-            "doc_type",
-            "eng_code",
-        ):
-            for value in entities.get(facet, []) or []:
-                cls._append_unique_text(entity_values, value)
-
-        for value in sorted(entity_values, key=lambda item: len(str(item)), reverse=True):
-            token = str(value or "").strip()
-            if len(token) < 2:
-                continue
-            spaced = re.sub(rf"\s*({re.escape(token)})\s*", r" \1 ", spaced, flags=re.IGNORECASE)
-
-        spaced = cls._DOC_SEARCH_QUERY_SEPARATE_RE.sub(" ", spaced)
-        spaced = cls._DOC_SEARCH_QUERY_SPACE_RE.sub(" ", spaced).strip()
-        return spaced or None
 
     @classmethod
     def _score_doc_search_code_candidate(
@@ -1298,312 +1013,6 @@ class AgentLoopService:
         return tuple(hints)
 
     @classmethod
-    def _clean_doc_search_query_for_search(cls, text: str) -> str | None:
-        normalized = cls._normalize_doc_search_query_text(text)
-        if not normalized:
-            return None
-
-        cleaned = normalized
-        for phrase in sorted(cls._DOC_SEARCH_QUERY_FILLER_PHRASES, key=len, reverse=True):
-            cleaned = cleaned.replace(phrase, " ")
-        cleaned = cls._DOC_SEARCH_QUERY_PARTICLE_RE.sub(" ", cleaned)
-        cleaned = cls._DOC_SEARCH_QUERY_SPACE_RE.sub(" ", cleaned).strip()
-        return cls._normalize_doc_search_query_text(cleaned)
-
-    @staticmethod
-    def _coerce_regex_match_value(match: Any) -> str | None:
-        if isinstance(match, tuple):
-            value = "".join(str(part or "") for part in match)
-        else:
-            value = str(match or "")
-        value = value.strip()
-        return value or None
-
-    @classmethod
-    def _extract_doc_search_regex_entities(cls, query: str) -> dict[str, list[str]]:
-        try:
-            from app.legacy.config.regex_patterns import (
-                BATCH_PATTERNS,
-                BRAND_PATTERNS,
-                DOC_TYPE_PATTERNS,
-                DRIVE_PATTERNS,
-                ECU_PATTERNS,
-                EMISSION_PATTERNS,
-                MODEL_PATTERNS,
-                PLATFORM_PATTERNS,
-                SERIES_PATTERNS,
-                SUBSYSTEM_PATTERNS,
-                SUPPLIER_PATTERNS,
-            )
-            from app.legacy.services.engineering_naming import extract_eng_codes
-        except Exception:
-            return {}
-
-        patterns_by_facet = {
-            "brand": BRAND_PATTERNS,
-            "series": SERIES_PATTERNS,
-            "model": MODEL_PATTERNS,
-            "platform": PLATFORM_PATTERNS,
-            "ecu": ECU_PATTERNS,
-            "supplier": SUPPLIER_PATTERNS,
-            "emissions": EMISSION_PATTERNS,
-            "subsystem": SUBSYSTEM_PATTERNS,
-            "doc_type": DOC_TYPE_PATTERNS,
-            "drive_type": DRIVE_PATTERNS,
-            "batch": BATCH_PATTERNS,
-        }
-        entities: dict[str, list[str]] = {}
-        for facet, patterns in patterns_by_facet.items():
-            for pattern in patterns:
-                for match in re.findall(pattern, query, re.IGNORECASE):
-                    value = cls._coerce_regex_match_value(match)
-                    if value:
-                        cls._append_unique_text(entities.setdefault(facet, []), value)
-
-        try:
-            for value in extract_eng_codes(query):
-                cls._append_unique_text(entities.setdefault("eng_code", []), value)
-        except Exception:
-            pass
-        return entities
-
-    @classmethod
-    def _append_unique_text(cls, target: list[str], value: Any) -> None:
-        text = str(value or "").strip()
-        if not text:
-            return
-        key = text.lower()
-        if key not in {item.lower() for item in target}:
-            target.append(text)
-
-    @classmethod
-    def _merge_doc_search_entities(
-        cls,
-        base: dict[str, list[str]],
-        extra: dict[str, list[str]],
-    ) -> dict[str, list[str]]:
-        merged = {facet: list(values or []) for facet, values in (base or {}).items()}
-        for facet, values in (extra or {}).items():
-            bucket = merged.setdefault(facet, [])
-            for value in values or []:
-                cls._append_unique_text(bucket, value)
-        return merged
-
-    @classmethod
-    def _expand_doc_search_entity_aliases(
-        cls,
-        facet: str,
-        values: Sequence[Any],
-    ) -> list[str]:
-        aliases_by_value = cls._DOC_SEARCH_ENTITY_ALIASES.get(facet, {})
-        expanded: list[str] = []
-        for value in values or []:
-            text = str(value or "").strip()
-            if not text:
-                continue
-            normalized_key = cls._normalize_doc_search_rank_text(text)
-            aliases = aliases_by_value.get(normalized_key, ())
-            ordered_values = [text, *aliases]
-            if aliases and text.isascii():
-                ordered_values = [*aliases, text]
-            for candidate in ordered_values:
-                cls._append_unique_text(expanded, candidate)
-        return expanded
-
-    @classmethod
-    def _prune_contained_doc_search_values(cls, values: Sequence[Any]) -> list[str]:
-        normalized_values = [str(value or "").strip() for value in values if str(value or "").strip()]
-        pruned: list[str] = []
-        for value in normalized_values:
-            value_norm = cls._normalize_doc_search_rank_text(value)
-            if not value_norm:
-                continue
-            if any(
-                value_norm != other_norm
-                and value_norm in other_norm
-                and len(value_norm) < len(other_norm)
-                for other_norm in [cls._normalize_doc_search_rank_text(other) for other in normalized_values]
-            ):
-                continue
-            cls._append_unique_text(pruned, value)
-        return pruned
-
-    @classmethod
-    def _collect_doc_search_query_entities(
-        cls,
-        *,
-        query: str,
-        dimension_service: Any | None,
-    ) -> dict[str, list[str]]:
-        entities: dict[str, list[str]] = {}
-        if dimension_service is not None and getattr(dimension_service, "is_loaded", False):
-            try:
-                matched = dimension_service.match(query)
-                if isinstance(matched, dict):
-                    entities = cls._merge_doc_search_entities(entities, matched)
-            except Exception:
-                entities = {}
-
-        entities = cls._merge_doc_search_entities(
-            entities,
-            cls._extract_doc_search_regex_entities(query),
-        )
-        for facet in list(entities.keys()):
-            expanded = cls._expand_doc_search_entity_aliases(facet, entities.get(facet, []))
-            if expanded:
-                entities[facet] = expanded
-
-        if dimension_service is not None and getattr(dimension_service, "is_loaded", False):
-            for facet in ("series", "model", "platform", "ecu", "subsystem", "doc_type"):
-                for value in list(entities.get(facet, []) or []):
-                    try:
-                        chain = dimension_service.get_ancestor_chain(facet, value)
-                    except Exception:
-                        chain = []
-                    for parent_facet, parent_value in chain or []:
-                        cls._append_unique_text(entities.setdefault(parent_facet, []), parent_value)
-
-        doc_hints = cls._extract_doc_search_doc_type_hints(query)
-        if doc_hints:
-            entities = cls._merge_doc_search_entities(entities, {"doc_type": list(doc_hints)})
-
-        for code in cls._extract_doc_search_code_candidates(query):
-            cls._append_unique_text(entities.setdefault("eng_code", []), code)
-
-        brands_norm = {cls._normalize_doc_search_rank_text(value) for value in entities.get("brand", [])}
-        if "三一" in brands_norm:
-            for code in list(entities.get("eng_code", []) or []):
-                code_text = str(code or "").upper()
-                if re.fullmatch(r"\d{2,4}[A-Z]{1,2}", code_text):
-                    cls._append_unique_text(entities.setdefault("model", []), f"SY{code_text}")
-        return entities
-
-    @classmethod
-    def _build_doc_search_rule_query_variants(
-        cls,
-        *,
-        query: str,
-        active_deps: AgentRuntimeDeps,
-    ) -> tuple[DocSearchExecutedQuery, ...]:
-        normalized = cls._normalize_doc_search_query_text(query)
-        if not normalized:
-            return tuple()
-
-        entities = cls._collect_doc_search_query_entities(
-            query=normalized,
-            dimension_service=getattr(active_deps, "dimension_service", None),
-        )
-        cleaned = cls._clean_doc_search_query_for_search(normalized)
-
-        variants: list[DocSearchExecutedQuery] = []
-        seen: set[str] = set()
-
-        def _queue(query_text: Any, confidence: float) -> None:
-            value = cls._normalize_doc_search_query_text(query_text)
-            if not value:
-                return
-            key = value.lower()
-            if key in seen:
-                return
-            seen.add(key)
-            variants.append(DocSearchExecutedQuery(query=value, confidence=confidence))
-
-        _queue(normalized, 1.0)
-        for expanded_variant in cls._expand_doc_search_query_text_variants(normalized):
-            _queue(expanded_variant, 0.94)
-        if cleaned and cleaned != normalized:
-            _queue(cleaned, 0.96)
-            for expanded_variant in cls._expand_doc_search_query_text_variants(cleaned):
-                _queue(expanded_variant, 0.9)
-
-        for entity_spaced in (
-            cls._space_doc_search_known_entities(text=normalized, entities=entities),
-            cls._space_doc_search_known_entities(text=cleaned or "", entities=entities),
-        ):
-            if entity_spaced:
-                _queue(entity_spaced, 0.92)
-                for expanded_variant in cls._expand_doc_search_query_text_variants(entity_spaced):
-                    _queue(expanded_variant, 0.88)
-
-        compact_cleaned = cls._DOC_SEARCH_QUERY_COMPACT_RE.sub("", cleaned or "")
-        if compact_cleaned and compact_cleaned != cleaned:
-            _queue(compact_cleaned, 0.9)
-
-        doc_types = list(dict.fromkeys(entities.get("doc_type", []) or []))
-        if not doc_types and any(word in normalized for word in ("资料", "文档", "图纸")):
-            doc_types = ["资料"]
-        variant_doc_types = [
-            doc_type
-            for doc_type in doc_types
-            if cls._normalize_doc_search_rank_text(doc_type) not in {"资料", "文档", "图纸"}
-        ]
-        has_specific_doc_type = bool(variant_doc_types)
-
-        identity_facets = (
-            "brand",
-            "series",
-            "model",
-            "platform",
-            "ecu",
-            "supplier",
-            "subsystem",
-            "emissions",
-            "drive_type",
-            "batch",
-            "eng_code",
-        )
-        identity_parts: list[str] = []
-        for facet in identity_facets:
-            for value in cls._prune_contained_doc_search_values(entities.get(facet, []) or [])[:2]:
-                cls._append_unique_text(identity_parts, value)
-
-        if identity_parts:
-            for doc_type in variant_doc_types[:3]:
-                _queue(" ".join([*identity_parts[:6], doc_type]), 0.9)
-
-            if not has_specific_doc_type:
-                for doc_type in cls._DOC_SEARCH_BROAD_DOC_TYPE_VARIANTS[:5]:
-                    _queue(" ".join([*identity_parts[:4], doc_type]), 0.86)
-
-            brands = entities.get("brand", []) or []
-            series_values = entities.get("series", []) or []
-            model_values = entities.get("model", []) or []
-            platform_values = entities.get("platform", []) or []
-            ecu_values = entities.get("ecu", []) or []
-            suppliers = entities.get("supplier", []) or []
-            subsystems = entities.get("subsystem", []) or []
-            eng_codes = entities.get("eng_code", []) or []
-
-            loop_doc_types = variant_doc_types[:2] or (list(cls._DOC_SEARCH_BROAD_DOC_TYPE_VARIANTS[:2]) if not has_specific_doc_type else [""])
-            for doc_type in loop_doc_types:
-                for brand in brands[:2] or [""]:
-                    for series in series_values[:2] or [""]:
-                        parts = [brand, series, doc_type]
-                        if brand or series:
-                            _queue(" ".join(part for part in parts if part), 0.88)
-                    for model in [*model_values[:2], *platform_values[:2]]:
-                        parts = [brand, model, doc_type]
-                        if any(parts):
-                            _queue(" ".join(part for part in parts if part), 0.86)
-                    for ecu in ecu_values[:2]:
-                        parts = [brand, ecu, doc_type]
-                        _queue(" ".join(part for part in parts if part), 0.85)
-
-                for supplier in suppliers[:2]:
-                    for code in [*ecu_values[:2], *eng_codes[:2], *platform_values[:2]]:
-                        parts = [supplier, code, doc_type]
-                        _queue(" ".join(part for part in parts if part), 0.84)
-
-                for subsystem in subsystems[:2]:
-                    parts = [*(brands[:1] or []), subsystem, doc_type]
-                    _queue(" ".join(part for part in parts if part), 0.84)
-
-            if not has_specific_doc_type:
-                _queue(" ".join(identity_parts[:6]), 0.82)
-
-        return tuple(variants[:16])
-
-    @classmethod
     def _extract_doc_search_image_hint_queries(
         cls,
         payloads: Sequence[dict[str, Any]] | None,
@@ -1615,30 +1024,12 @@ class AgentLoopService:
         direct_queries: list[str] = []
         supplier_hints: list[str] = []
         brand_hints: list[str] = []
-        series_hints: list[str] = []
-        doc_type_hints: list[str] = []
-        has_vehicle_identity_hint = False
-        has_ecu_or_board_hint = False
 
         for payload in payloads:
             vehicle = payload.get("vehicle") if isinstance(payload.get("vehicle"), dict) else {}
-            vehicle_brand = str(vehicle.get("brand") or "").strip()
-            vehicle_series = str(vehicle.get("series") or "").strip()
-            if vehicle_brand:
-                has_vehicle_identity_hint = True
-                for value in cls._expand_doc_search_entity_aliases("brand", [vehicle_brand]):
-                    cls._append_unique_text(brand_hints, value)
-            if vehicle_series:
-                has_vehicle_identity_hint = True
-                for value in cls._expand_doc_search_entity_aliases("series", [vehicle_series]):
-                    cls._append_unique_text(series_hints, value)
-            for value in (
-                vehicle.get("model"),
-                vehicle.get("engine"),
-                vehicle.get("emission"),
-            ):
-                if str(value or "").strip():
-                    has_vehicle_identity_hint = True
+            brand = str(vehicle.get("brand") or "").strip()
+            if brand and brand not in brand_hints:
+                brand_hints.append(brand)
 
             raw = payload.get("raw") if isinstance(payload.get("raw"), dict) else {}
             raw_values: list[str] = []
@@ -1664,32 +1055,6 @@ class AgentLoopService:
                 normalized = str(text or "").strip()
                 if not normalized:
                     continue
-                for doc_type in cls._extract_doc_search_doc_type_hints(normalized):
-                    if doc_type not in doc_type_hints:
-                        doc_type_hints.append(doc_type)
-                lowered = normalized.lower()
-                if any(marker in lowered for marker in ("ecu", "ecm")) or any(
-                    marker in normalized
-                    for marker in ("电控单元", "电脑板", "控制板", "板子", "板卡")
-                ):
-                    has_ecu_or_board_hint = True
-                if has_ecu_or_board_hint and "ECU电路图" not in doc_type_hints:
-                    doc_type_hints.append("ECU电路图")
-                if ("针脚" in normalized or "引脚" in normalized) and "针脚定义" not in doc_type_hints:
-                    doc_type_hints.append("针脚定义")
-
-                regex_entities = cls._extract_doc_search_regex_entities(normalized)
-                for value in cls._expand_doc_search_entity_aliases("supplier", regex_entities.get("supplier", [])):
-                    cls._append_unique_text(supplier_hints, value)
-                for value in cls._expand_doc_search_entity_aliases("brand", regex_entities.get("brand", [])):
-                    cls._append_unique_text(brand_hints, value)
-                    has_vehicle_identity_hint = True
-                for value in cls._expand_doc_search_entity_aliases("series", regex_entities.get("series", [])):
-                    cls._append_unique_text(series_hints, value)
-                    has_vehicle_identity_hint = True
-                if any(regex_entities.get(facet) for facet in ("model", "platform", "emissions")):
-                    has_vehicle_identity_hint = True
-
                 for token in cls._extract_doc_search_code_candidates(normalized):
                     score = cls._score_doc_search_code_candidate(
                         token,
@@ -1700,19 +1065,14 @@ class AgentLoopService:
                     if previous is None or score > previous:
                         code_scores[token] = score
 
-                supplier_source = (
-                    normalized == summary
-                    or normalized in suggested_queries
-                    or normalized in visible_text
-                    or normalized in raw_values
-                )
+                supplier_source = normalized in suggested_queries or normalized in visible_text or normalized in raw_values
                 if not supplier_source:
                     continue
 
                 for token in cls._DOC_SEARCH_CHINESE_HINT_RE.findall(normalized):
                     supplier = cls._normalize_doc_search_company_hint(token)
-                    if supplier:
-                        cls._append_unique_text(supplier_hints, supplier)
+                    if supplier and supplier not in supplier_hints:
+                        supplier_hints.append(supplier)
 
         prioritized_codes = sorted(code_scores.items(), key=lambda item: (-item[1], len(item[0]), item[0]))
 
@@ -1726,46 +1086,15 @@ class AgentLoopService:
         for query in direct_queries[:3]:
             _queue(query)
 
-        preferred_doc_types = [
-            doc_type
-            for doc_type in doc_type_hints
-            if cls._normalize_doc_search_rank_text(doc_type) not in {"资料", "文档", "技术资料"}
-        ]
-        if not preferred_doc_types and has_vehicle_identity_hint and not has_ecu_or_board_hint:
-            preferred_doc_types = list(cls._DOC_SEARCH_VEHICLE_DEFAULT_DOC_TYPE_QUERIES)
-        elif not preferred_doc_types and (supplier_hints or prioritized_codes):
-            preferred_doc_types = list(cls._DOC_SEARCH_IMAGE_DEFAULT_DOC_TYPE_QUERIES)
-
-        for brand in brand_hints[:2]:
-            for series in series_hints[:2]:
-                for doc_type in preferred_doc_types[:2]:
-                    _queue(f"{brand} {series} {doc_type}")
-
-        for supplier in supplier_hints[:2]:
-            for doc_type in preferred_doc_types[:2]:
-                _queue(f"{supplier} {doc_type}")
-            _queue(supplier)
-
         for code, _ in prioritized_codes[:5]:
-            for doc_type in preferred_doc_types[:1]:
-                _queue(f"{code} {doc_type}")
             for supplier in supplier_hints[:2]:
-                _queue(f"{supplier} {code}")
                 _queue(f"{supplier}{code}")
-
-        for code, _ in prioritized_codes[:5]:
-            for doc_type in preferred_doc_types[:2]:
-                for supplier in supplier_hints[:2]:
-                    _queue(f"{supplier} {code} {doc_type}")
-                for brand in brand_hints[:1]:
-                    _queue(f"{brand} {code} {doc_type}")
-                for series in series_hints[:1]:
-                    _queue(f"{series} {code} {doc_type}")
             _queue(code)
             for brand in brand_hints[:1]:
                 _queue(f"{brand} {code}")
 
         for supplier in supplier_hints[:2]:
+            _queue(supplier)
             for brand in brand_hints[:1]:
                 _queue(f"{brand} {supplier}")
 
@@ -1781,19 +1110,13 @@ class AgentLoopService:
             seen_queries.add(key)
             normalized_queries.append(normalized)
 
-        return tuple(normalized_queries[:20])
+        return tuple(normalized_queries[:12])
 
     @classmethod
     def _normalize_doc_search_company_hint(cls, text: str) -> str | None:
         normalized = re.sub(r"\s+", "", str(text or "").strip())
         if not normalized:
             return None
-        if any(marker in normalized for marker in cls._DOC_SEARCH_HINT_REJECT_SUBSTRINGS):
-            return None
-        for suffix in sorted(cls._DOC_SEARCH_COMPANY_HINT_STRIP_SUFFIXES, key=len, reverse=True):
-            if normalized.endswith(suffix) and len(normalized) > len(suffix) + 1:
-                normalized = normalized[: -len(suffix)]
-                break
         normalized = cls._DOC_SEARCH_COMPANY_SUFFIX_RE.sub("", normalized)
         normalized = cls._DOC_SEARCH_CITY_PREFIX_RE.sub("", normalized)
         normalized = normalized.strip("，。、；：-_/ ")
@@ -1803,8 +1126,8 @@ class AgentLoopService:
             return None
         if any(hint in normalized for hint in cls._DOC_SEARCH_DOC_TYPE_HINTS):
             return None
-        if len(normalized) > 6:
-            return None
+        if len(normalized) > 4:
+            normalized = normalized[-4:]
         return normalized
 
     @classmethod
@@ -1822,19 +1145,21 @@ class AgentLoopService:
         request: ChatRequest,
         active_deps: AgentRuntimeDeps,
         fallback_query: str,
-    ) -> tuple[str, tuple[DocSearchExecutedQuery, ...], str]:
+    ) -> tuple[str, tuple[DocSearchExecutedQuery, ...], str, str]:
         fallback = str(fallback_query or "").strip()
         payloads = self._collect_request_and_case_image_evidence(request=request, active_deps=active_deps)
-        if not payloads:
-            rule_queries = self._build_doc_search_rule_query_variants(
-                query=fallback,
-                active_deps=active_deps,
-            )
-            if rule_queries:
-                return rule_queries[0].query, rule_queries, ""
-            if not fallback:
-                return "", tuple(), ""
-            return fallback, (DocSearchExecutedQuery(query=fallback, confidence=1.0),), ""
+        request_text = (request.message or "").strip()
+        has_text = bool(request_text)
+        has_image_evidence = bool(payloads)
+        if has_text and has_image_evidence:
+            input_mode = "text_image"
+        elif has_image_evidence:
+            input_mode = "image"
+        else:
+            input_mode = "text"
+
+        if not fallback and not request_text and not has_image_evidence:
+            return "", tuple(), "", ""
 
         planner = PydanticAIDocSearchQueryPlanner(config_service=active_deps.config_service)
         image_evidence = self._build_image_evidence_summary(
@@ -1844,9 +1169,10 @@ class AgentLoopService:
         image_hint_queries = self._extract_doc_search_image_hint_queries(payloads)
 
         plan = await planner.plan(
-            query=(request.message or "").strip(),
+            query=request_text or fallback,
             image_evidence=image_evidence,
             known_slots=known_slots,
+            input_mode=input_mode,
         )
         executed: list[DocSearchExecutedQuery] = []
         seen: set[str] = set()
@@ -1868,10 +1194,12 @@ class AgentLoopService:
 
         primary_query = self._normalize_doc_search_query_text(fallback)
         rationale = ""
+        body_keyword = ""
         planner_items: list[Any] = []
         if plan is not None:
             primary_query = self._normalize_doc_search_query_text(plan.primary_query) or primary_query
             rationale = str(plan.rationale or "").strip()
+            body_keyword = str(plan.body_keyword or "").strip()
             planner_items = list(plan.queries)
 
         if primary_query:
@@ -1898,19 +1226,12 @@ class AgentLoopService:
                 else 0.86,
             )
 
-        for rule_query in self._build_doc_search_rule_query_variants(
-            query=fallback or request.message,
-            active_deps=active_deps,
-        ):
-            _append_query(rule_query.query, min(float(rule_query.confidence), 0.82))
-
         if not executed:
             if not fallback:
-                return "", tuple(), ""
-            return fallback, (DocSearchExecutedQuery(query=fallback, confidence=1.0),), ""
+                return "", tuple(), "", body_keyword
+            return fallback, (DocSearchExecutedQuery(query=fallback, confidence=1.0),), "", body_keyword
 
-        max_queries = 20 if payloads else 8
-        return executed[0].query, tuple(executed[:max_queries]), rationale
+        return executed[0].query, tuple(executed[:10]), rationale, body_keyword
 
     @staticmethod
     def _is_better_doc_search_result_candidate(
@@ -1920,227 +1241,14 @@ class AgentLoopService:
         if current is None:
             return True
         candidate_rank = (
-            float(candidate.get("ranking_score") or 0.0),
             float(candidate.get("score") or 0.0),
             float(candidate.get("matched_query_confidence") or 0.0),
         )
         current_rank = (
-            float(current.get("ranking_score") or 0.0),
             float(current.get("score") or 0.0),
             float(current.get("matched_query_confidence") or 0.0),
         )
         return candidate_rank > current_rank
-
-    @classmethod
-    def _iter_doc_search_result_text_fields(cls, item: dict[str, Any]) -> list[str]:
-        fields: list[str] = []
-        for field_name in (
-            "filename",
-            "title",
-            "physical_path",
-            "hierarchy_full",
-            "brand",
-            "series",
-            "model",
-            "ggzj_file_type",
-        ):
-            value = item.get(field_name)
-            if value not in (None, ""):
-                fields.append(str(value))
-
-        for field_name in (
-            "doc_types",
-            "subsystems",
-            "ecus",
-            "suppliers",
-            "emissions",
-            "eng_codes",
-            "platform_codes",
-            "drive_types",
-            "batches",
-        ):
-            value = item.get(field_name)
-            if isinstance(value, list):
-                fields.extend(str(part) for part in value if part not in (None, ""))
-            elif value not in (None, ""):
-                fields.append(str(value))
-        return fields
-
-    @classmethod
-    def _normalize_doc_search_rank_text(cls, value: Any) -> str:
-        normalized = unicodedata.normalize("NFKC", str(value or "")).lower()
-        normalized = re.sub(r"[\s_\-.,;:!?/\\()（）【】\[\]{}，。；：！？、|｜]+", "", normalized)
-        return normalized
-
-    @classmethod
-    def _extract_doc_search_rank_tokens(cls, query: str) -> tuple[str, ...]:
-        cleaned = cls._clean_doc_search_query_for_search(query) or cls._normalize_doc_search_query_text(query) or ""
-        tokens: list[str] = []
-
-        def _add(value: Any) -> None:
-            normalized = cls._normalize_doc_search_rank_text(value)
-            if len(normalized) < 2:
-                return
-            if normalized in {"资料", "文档", "图", "相关"}:
-                return
-            if normalized not in tokens:
-                tokens.append(normalized)
-
-        separated = cls._DOC_SEARCH_QUERY_SEPARATE_RE.sub(" ", cleaned)
-        for variant in (cleaned, separated):
-            for expanded_variant in cls._expand_doc_search_query_text_variants(variant):
-                for part in re.findall(r"[\u4e00-\u9fff]+|[A-Za-z0-9]+", expanded_variant):
-                    _add(part)
-
-        entities = cls._collect_doc_search_query_entities(query=cleaned, dimension_service=None)
-        for facet in (
-            "brand",
-            "series",
-            "model",
-            "platform",
-            "ecu",
-            "supplier",
-            "subsystem",
-            "emissions",
-            "drive_type",
-            "batch",
-            "doc_type",
-            "eng_code",
-        ):
-            for value in entities.get(facet, []) or []:
-                _add(value)
-
-        for part in re.findall(r"[\u4e00-\u9fff]+|[A-Za-z0-9]+", separated):
-            _add(part)
-            for split_part in cls._extract_doc_search_doc_type_hints(part):
-                _add(split_part)
-
-        for doc_type in cls._extract_doc_search_doc_type_hints(cleaned):
-            _add(doc_type)
-        for code in cls._extract_doc_search_code_candidates(cleaned):
-            _add(code)
-        return tuple(tokens[:20])
-
-    @classmethod
-    def _score_doc_search_token_coverage(cls, *, result_text: str, query_text: str) -> float:
-        tokens = cls._extract_doc_search_rank_tokens(query_text)
-        if not tokens:
-            return 0.0
-
-        weighted_total = 0.0
-        weighted_hits = 0.0
-        alnum_tokens: list[str] = []
-        alnum_hits = 0
-
-        for token in tokens:
-            has_alnum = bool(re.search(r"[a-z0-9]", token))
-            has_digit = any(ch.isdigit() for ch in token)
-            if token in cls._DOC_SEARCH_RANK_GENERIC_TOKENS:
-                weight = 0.45
-            elif has_alnum:
-                weight = 2.4 if has_digit else 1.6
-                if token in {"ecu", "bcm", "dcu", "edc"}:
-                    weight = 0.8
-                else:
-                    alnum_tokens.append(token)
-            else:
-                weight = 1.0
-
-            weighted_total += weight
-            if token in result_text:
-                weighted_hits += weight
-                if has_alnum and token not in {"ecu", "bcm", "dcu", "edc"}:
-                    alnum_hits += 1
-
-        if weighted_total <= 0:
-            return 0.0
-
-        score = weighted_hits / weighted_total
-        if alnum_tokens:
-            alnum_ratio = alnum_hits / len(alnum_tokens)
-            score += 0.35 * alnum_ratio
-            if alnum_hits == len(alnum_tokens):
-                score += 0.25
-            elif alnum_hits == 0:
-                score -= 0.2
-
-        return max(0.0, min(score, 1.5))
-
-    @classmethod
-    def _score_doc_search_result_intent_match(
-        cls,
-        item: dict[str, Any],
-        *,
-        primary_query: str,
-        matched_query: str,
-    ) -> float:
-        result_text = cls._normalize_doc_search_rank_text(
-            " ".join(cls._iter_doc_search_result_text_fields(item))
-        )
-        if not result_text:
-            return 0.0
-
-        score = 0.0
-        for query_text, weight in ((primary_query, 0.65), (matched_query, 0.35)):
-            cleaned = cls._clean_doc_search_query_for_search(query_text) or cls._normalize_doc_search_query_text(query_text) or ""
-            query_norm = cls._normalize_doc_search_rank_text(cleaned)
-            if query_norm and query_norm in result_text:
-                score += weight
-
-            score += weight * cls._score_doc_search_token_coverage(
-                result_text=result_text,
-                query_text=cleaned,
-            )
-
-        return min(score, 1.5)
-
-    @classmethod
-    def _doc_search_snapshot_has_strong_intent_match(
-        cls,
-        *,
-        snapshot: dict[str, Any],
-        primary_query: str,
-    ) -> bool:
-        results = [
-            item
-            for item in list(snapshot.get("results") or [])[:20]
-            if isinstance(item, dict)
-        ]
-        if not results:
-            return False
-
-        query_tokens = cls._extract_doc_search_rank_tokens(primary_query)
-        alnum_tokens = [
-            token
-            for token in query_tokens
-            if re.search(r"[a-z0-9]", token) and token not in {"ecu", "bcm"}
-        ]
-        best_score = 0.0
-        has_alnum_hit = not alnum_tokens
-        best_alnum_ratio = 1.0 if not alnum_tokens else 0.0
-
-        for item in results:
-            result_text = cls._normalize_doc_search_rank_text(
-                " ".join(cls._iter_doc_search_result_text_fields(item))
-            )
-            if alnum_tokens:
-                alnum_hits = sum(1 for token in alnum_tokens if token in result_text)
-                best_alnum_ratio = max(best_alnum_ratio, alnum_hits / len(alnum_tokens))
-            if alnum_tokens and any(token in result_text for token in alnum_tokens):
-                has_alnum_hit = True
-
-            score = float(item.get("intent_match_score") or 0.0)
-            if score <= 0:
-                score = cls._score_doc_search_result_intent_match(
-                    item,
-                    primary_query=primary_query,
-                    matched_query=str(item.get("matched_query") or primary_query),
-                )
-            best_score = max(best_score, score)
-
-        if alnum_tokens:
-            return has_alnum_hit and best_alnum_ratio >= 0.5 and best_score >= 0.58
-        return best_score >= 0.72
 
     @staticmethod
     def _merge_doc_search_envelopes(
@@ -2209,17 +1317,6 @@ class AgentLoopService:
                 merged_item = dict(item)
                 merged_item.setdefault("matched_query", query_info.query)
                 merged_item.setdefault("matched_query_confidence", query_info.confidence)
-                intent_match_score = AgentLoopService._score_doc_search_result_intent_match(
-                    merged_item,
-                    primary_query=primary_query,
-                    matched_query=query_info.query,
-                )
-                merged_item["intent_match_score"] = intent_match_score
-                merged_item["ranking_score"] = (
-                    float(merged_item.get("score") or 0.0)
-                    + intent_match_score * 0.28
-                    + float(query_info.confidence or 0.0) * 0.03
-                )
                 if AgentLoopService._is_better_doc_search_result_candidate(
                     merged_item,
                     merged_results.get(dedupe_key),
@@ -2229,10 +1326,8 @@ class AgentLoopService:
         ordered_results = sorted(
             merged_results.values(),
             key=lambda item: (
-                -float(item.get("ranking_score") or item.get("score") or 0.0),
-                -float(item.get("intent_match_score") or 0.0),
-                -float(item.get("matched_query_confidence") or 0.0),
                 -float(item.get("score") or 0.0),
+                -float(item.get("matched_query_confidence") or 0.0),
             )
         )
 
@@ -2287,7 +1382,7 @@ class AgentLoopService:
         workflow_state: DocSearchWorkflowRunState,
         selection_payload: dict[str, Any] | None,
     ) -> DocSearchPlannedSearchResult:
-        primary_query, executed_queries, rationale = await self._plan_doc_search_queries(
+        primary_query, executed_queries, rationale, body_keyword = await self._plan_doc_search_queries(
             request=request,
             active_deps=active_deps,
             fallback_query=workflow_state.query,
@@ -2311,9 +1406,11 @@ class AgentLoopService:
                 executed_queries=executed_queries,
                 primary_query=primary_query or workflow_state.query,
                 rationale=rationale,
+                body_keyword=body_keyword,
             )
 
         merged_snapshot = dict(merged_snapshot_envelope.get("data") or {})
+        merged_snapshot["original_user_query"] = workflow_state.original_query or workflow_state.query
         preprocessing_candidates = merged_snapshot.pop("validation_preprocessing_candidates", None)
         planned_queries = merged_snapshot.get("planned_queries") or []
         final_envelope: dict[str, Any] | None = None
@@ -2326,20 +1423,11 @@ class AgentLoopService:
         if not candidate_preprocessings and isinstance(merged_snapshot.get("preprocessing"), dict):
             candidate_preprocessings = [merged_snapshot.get("preprocessing")]
 
-        snapshots_to_try = list(candidate_preprocessings)
-        if self._doc_search_snapshot_has_strong_intent_match(
-            snapshot=merged_snapshot,
-            primary_query=primary_query or workflow_state.query,
-        ):
-            snapshots_to_try.append(None)
-        if not snapshots_to_try:
-            snapshots_to_try = [None]
+        snapshots_to_try = candidate_preprocessings or [None]
         for preprocessing in snapshots_to_try:
             snapshot = dict(merged_snapshot)
             if preprocessing is not None:
                 snapshot["preprocessing"] = preprocessing
-            else:
-                snapshot.pop("preprocessing", None)
             final_envelope = await adapter.search_from_snapshot(
                 query=primary_query or workflow_state.query,
                 snapshot=snapshot,
@@ -2360,12 +1448,16 @@ class AgentLoopService:
                 merged_data.pop("planned_queries", None)
             if rationale:
                 merged_data["query_plan_rationale"] = rationale
+            if body_keyword:
+                merged_data["body_keyword"] = body_keyword
+                merged_data["circuit_body_keyword"] = body_keyword
 
         return DocSearchPlannedSearchResult(
             envelope=merged,
             executed_queries=executed_queries,
             primary_query=primary_query or workflow_state.query,
             rationale=rationale,
+            body_keyword=body_keyword,
         )
 
     async def _resolve_request_intent(
@@ -2375,10 +1467,6 @@ class AgentLoopService:
         active_deps: AgentRuntimeDeps,
         session_id: str,
     ) -> IntentDecision:
-        cached = self._cached_intent_decision(request)
-        if cached is not None:
-            return cached
-
         started_at = time.perf_counter()
         router = RequestIntentRouter(
             fault_code_parser=active_deps.fault_code_parser,
@@ -2393,24 +1481,55 @@ class AgentLoopService:
             ),
         )
         router_text = self._build_intent_router_text_with_image_evidence(request=request, active_deps=active_deps)
+        high_confidence = router.route_high_confidence(router_text)
+        if high_confidence is not None:
+            self._cache_intent_decision(request, high_confidence)
+            self._trace_intent_router_decision(
+                active_deps=active_deps,
+                session_id=session_id,
+                decision=high_confidence,
+                started_at=started_at,
+            )
+            return high_confidence
+
+        cached = self._cached_intent_decision(request)
+        if cached is not None:
+            return cached
+
         decision = await router.route_async(router_text, request.mode)
         self._cache_intent_decision(request, decision)
 
-        tracer = getattr(active_deps, "tracer", None)
-        if tracer is not None:
-            tracer.trace(
-                event_type="intent_router_decision",
-                session_id=session_id,
-                payload={
-                    "intent": decision.intent.value,
-                    "reason": decision.reason,
-                    "source": decision.source,
-                    "confidence": decision.confidence,
-                    "normalized_fault_code": decision.normalized_fault_code,
-                    "elapsed_ms": int((time.perf_counter() - started_at) * 1000),
-                },
-            )
+        self._trace_intent_router_decision(
+            active_deps=active_deps,
+            session_id=session_id,
+            decision=decision,
+            started_at=started_at,
+        )
         return decision
+
+    @staticmethod
+    def _trace_intent_router_decision(
+        *,
+        active_deps: AgentRuntimeDeps,
+        session_id: str,
+        decision: IntentDecision,
+        started_at: float,
+    ) -> None:
+        tracer = getattr(active_deps, "tracer", None)
+        if tracer is None:
+            return
+        tracer.trace(
+            event_type="intent_router_decision",
+            session_id=session_id,
+            payload={
+                "intent": decision.intent.value,
+                "reason": decision.reason,
+                "source": decision.source,
+                "confidence": decision.confidence,
+                "normalized_fault_code": decision.normalized_fault_code,
+                "elapsed_ms": int((time.perf_counter() - started_at) * 1000),
+            },
+        )
 
     async def process(self, request: ChatRequest, runtime_deps: AgentRuntimeDeps | None = None) -> ChatResponse:
         status = self._status
@@ -3230,6 +2349,7 @@ class AgentLoopService:
             clarify_round = int(deferred_state.payload.get("clarify_round") or 0)
             return DocSearchWorkflowRunState(
                 query=query,
+                original_query=query,
                 clarify_round=clarify_round,
                 deferred_state=deferred_state,
             )
@@ -3238,14 +2358,15 @@ class AgentLoopService:
             return None
 
         query = (request.message or "").strip()
-        if request.ask_user_answer is None and self._has_request_or_case_image_evidence(
+        has_image_evidence = request.ask_user_answer is None and self._has_request_or_case_image_evidence(
             request=request,
             active_deps=active_deps,
-        ):
+        )
+        if has_image_evidence:
             query = self._build_query_with_image_evidence(query, active_deps.case_context)
-        if not query:
+        if not query and not has_image_evidence:
             return None
-        return DocSearchWorkflowRunState(query=query)
+        return DocSearchWorkflowRunState(query=query, original_query=query)
 
     async def _process_doc_search_workflow(
         self,
@@ -3547,14 +2668,60 @@ class AgentLoopService:
         )
         if request.ask_user_answer is not None:
             self._record_case_context_user_answer(active_deps=active_deps, answer=request.ask_user_answer)
-        response = await self._execute_doc_search_workflow(
-            request=request,
-            active_deps=active_deps,
-            session_id=session_id,
-            request_id=request_id,
-            runtime_version=runtime_version,
-            workflow_state=workflow_state,
+        progress_queue: asyncio.Queue[str] = asyncio.Queue()
+
+        async def _progress_callback(message: str) -> None:
+            normalized = str(message or "").strip()
+            if normalized:
+                await progress_queue.put(normalized)
+
+        response_task = asyncio.create_task(
+            self._execute_doc_search_workflow(
+                request=request,
+                active_deps=active_deps,
+                session_id=session_id,
+                request_id=request_id,
+                runtime_version=runtime_version,
+                workflow_state=workflow_state,
+                progress_callback=_progress_callback,
+            )
         )
+        try:
+            while not response_task.done():
+                progress_task = asyncio.create_task(progress_queue.get())
+                done, pending = await asyncio.wait(
+                    {response_task, progress_task},
+                    return_when=asyncio.FIRST_COMPLETED,
+                )
+                if progress_task in done:
+                    yield AgentRuntimeEvent(
+                        type=AgentEventType.HINT,
+                        session_id=session_id,
+                        message=progress_task.result(),
+                        metadata={"request_id": request_id},
+                    )
+                else:
+                    progress_task.cancel()
+                for task in pending:
+                    if task is not response_task:
+                        task.cancel()
+                        try:
+                            await task
+                        except asyncio.CancelledError:
+                            pass
+
+            response = await response_task
+            while not progress_queue.empty():
+                yield AgentRuntimeEvent(
+                    type=AgentEventType.HINT,
+                    session_id=session_id,
+                    message=progress_queue.get_nowait(),
+                    metadata={"request_id": request_id},
+                )
+        except Exception:
+            if not response_task.done():
+                response_task.cancel()
+            raise
         self._persist_case_context_after_doc_search(
             active_deps=active_deps,
             request=request,
@@ -3579,6 +2746,7 @@ class AgentLoopService:
         request_id: str,
         runtime_version: str | None,
         workflow_state: DocSearchWorkflowRunState,
+        progress_callback: Callable[[str], Awaitable[None]] | None = None,
     ) -> ChatResponse:
         adapter = LegacyDocSearchAdapter(active_deps)
 
@@ -3616,6 +2784,17 @@ class AgentLoopService:
                 snapshot=search_snapshot,
                 selection_payload=selection_payload,
             )
+            if search_envelope.get("status") == "ok" and isinstance(search_envelope.get("data"), dict):
+                data = search_envelope["data"]
+                for key in (
+                    "body_keyword",
+                    "circuit_body_keyword",
+                    "planned_queries",
+                    "query_plan_rationale",
+                ):
+                    value = search_snapshot.get(key)
+                    if value:
+                        data.setdefault(key, value)
         else:
             planned_search = await self._execute_planned_doc_search(
                 adapter=adapter,
@@ -3693,6 +2872,19 @@ class AgentLoopService:
                 llm_observability=getattr(active_deps, "llm_observability", None),
             )
 
+        if progress_callback is not None and self._can_attempt_circuit_body_search(
+            active_deps=active_deps,
+            search_data=search_data,
+            workflow_state=workflow_state,
+        ):
+            await progress_callback("正在电路图内搜索定位，请稍候...")
+
+        await self._enhance_doc_search_with_circuit_body_search(
+            active_deps=active_deps,
+            search_data=search_data,
+            workflow_state=workflow_state,
+        )
+
         response = self._build_documents_response_from_envelope(
             active_deps=active_deps,
             search_envelope=search_envelope,
@@ -3710,6 +2902,189 @@ class AgentLoopService:
             error_code="DOC_SEARCH_RESPONSE_BUILD_FAILED",
             message="资料搜索结果组装失败。",
         )
+
+    @staticmethod
+    def _is_circuit_body_search_candidate_result(item: Any) -> bool:
+        if not isinstance(item, dict):
+            return False
+        value = item.get("ggzj_data_type")
+        if isinstance(value, int):
+            if value == 3:
+                return True
+        text = str(value or "").strip()
+        if text.isdigit() and int(text) == 3:
+            return True
+
+        text_parts: list[str] = []
+        for key in ("filename", "title", "physical_path", "hierarchy_full", "ggzj_file_type", "file_type"):
+            field_value = item.get(key)
+            if field_value:
+                text_parts.append(str(field_value))
+        for key in ("doc_types", "tags"):
+            field_value = item.get(key)
+            if isinstance(field_value, dict):
+                text_parts.extend(str(part) for part in field_value.values() if part)
+            elif isinstance(field_value, (list, tuple, set)):
+                text_parts.extend(str(part) for part in field_value if part)
+            elif field_value:
+                text_parts.append(str(field_value))
+
+        joined = " ".join(text_parts)
+        return any(marker in joined for marker in ("电路图", "线束图", "针脚定义", "针脚图"))
+
+    @classmethod
+    def _has_circuit_body_search_candidate(cls, search_data: dict[str, Any]) -> bool:
+        return any(
+            cls._is_circuit_body_search_candidate_result(item)
+            for item in (search_data.get("results") or [])
+        )
+
+    @staticmethod
+    def _can_attempt_circuit_body_search(
+        *,
+        active_deps: AgentRuntimeDeps,
+        search_data: dict[str, Any],
+        workflow_state: DocSearchWorkflowRunState,
+    ) -> bool:
+        if getattr(active_deps, "circuit_body_search_enhancer", None) is None:
+            return False
+        if not search_data.get("results"):
+            return False
+        if not AgentLoopService._has_circuit_body_search_candidate(search_data):
+            return False
+        keyword = resolve_circuit_body_keyword(
+            search_data=search_data,
+            fallback_query=workflow_state.query,
+        )
+        return bool(keyword)
+
+    async def _enhance_doc_search_with_circuit_body_search(
+        self,
+        *,
+        active_deps: AgentRuntimeDeps,
+        search_data: dict[str, Any],
+        workflow_state: DocSearchWorkflowRunState,
+    ) -> None:
+        tracer = getattr(active_deps, "tracer", None)
+        session_id = getattr(active_deps, "request_session_id", None)
+
+        def trace_circuit_event(
+            event_type: str,
+            payload: dict[str, Any],
+            detail: str | None = None,
+        ) -> None:
+            if tracer is None:
+                return
+            tracer.trace(
+                event_type=event_type,
+                session_id=session_id,
+                detail=detail,
+                payload=payload,
+            )
+
+        enhancer = getattr(active_deps, "circuit_body_search_enhancer", None)
+        if enhancer is None:
+            trace_circuit_event(
+                "circuit_body_search_skipped",
+                {
+                    "reason": "enhancer_unavailable",
+                    "workflow_query": workflow_state.query,
+                    "source_result_count": len(search_data.get("results") or []),
+                },
+            )
+            return
+
+        keyword = resolve_circuit_body_keyword(
+            search_data=search_data,
+            fallback_query=workflow_state.query,
+        )
+        if not keyword:
+            trace_circuit_event(
+                "circuit_body_search_skipped",
+                {
+                    "reason": "missing_keyword",
+                    "workflow_query": workflow_state.query,
+                    "source_result_count": len(search_data.get("results") or []),
+                    "candidate_query": (
+                        str(search_data.get("query") or "").strip()
+                        or str(search_data.get("original_query") or "").strip()
+                        or workflow_state.query
+                    ),
+                },
+            )
+            return
+
+        if not self._has_circuit_body_search_candidate(search_data):
+            trace_circuit_event(
+                "circuit_body_search_skipped",
+                {
+                    "reason": "missing_circuit_data_type_results",
+                    "workflow_query": workflow_state.query,
+                    "source_result_count": len(search_data.get("results") or []),
+                    "candidate_query": (
+                        str(search_data.get("query") or "").strip()
+                        or str(search_data.get("original_query") or "").strip()
+                        or workflow_state.query
+                    ),
+                },
+            )
+            return
+
+        candidate_query = (
+            str(search_data.get("query") or "").strip()
+            or str(search_data.get("original_query") or "").strip()
+            or workflow_state.query
+        )
+        source_result_count = len(search_data.get("results") or [])
+        try:
+            circuit_body_max_docs = len(search_data.get("results") or [])
+            trace_circuit_event(
+                "circuit_body_search_started",
+                {
+                    "keyword": keyword,
+                    "candidate_query": candidate_query,
+                    "workflow_query": workflow_state.query,
+                    "source_result_count": source_result_count,
+                    "max_docs": circuit_body_max_docs,
+                    "max_candidate_docs": 20,
+                },
+            )
+            search_data["results"] = await enhancer.enhance(
+                results=search_data.get("results") or [],
+                body_keyword=keyword,
+                max_docs=circuit_body_max_docs,
+                candidate_query=candidate_query,
+                max_candidate_docs=20,
+                trace_callback=trace_circuit_event,
+            )
+            if tracer is not None:
+                body_hit_count = sum(
+                    1
+                    for item in search_data.get("results") or []
+                    if isinstance(item, dict) and (item.get("body_search") or {}).get("status") == "hit"
+                )
+                trace_circuit_event(
+                    "circuit_body_search_enhanced",
+                    {
+                        "keyword": keyword,
+                        "candidate_query": candidate_query,
+                        "source_result_count": source_result_count,
+                        "result_count": len(search_data.get("results") or []),
+                        "body_hit_count": body_hit_count,
+                    },
+                )
+        except Exception as exc:
+            trace_circuit_event(
+                "circuit_body_search_enhance_failed",
+                {
+                    "keyword": keyword,
+                    "candidate_query": candidate_query,
+                    "workflow_query": workflow_state.query,
+                    "source_result_count": source_result_count,
+                    "result_count": len(search_data.get("results") or []),
+                },
+                detail=str(exc),
+            )
 
     @staticmethod
     def _current_run_messages(
@@ -4069,6 +3444,23 @@ class AgentLoopService:
         if not message:
             return image_evidence_business
 
+        router = RequestIntentRouter(
+            fault_code_parser=self._deps.fault_code_parser,
+            diagnosis_enabled_provider=self._is_diagnosis_enabled,
+            config_service=self._deps.config_service,
+        )
+        router_text = self._build_intent_router_text_from_request_context(request) or message
+        high_confidence = router.route_high_confidence(router_text)
+        if high_confidence is not None:
+            if high_confidence.intent == RoutedIntent.DOC_SEARCH:
+                return "DOC_SEARCH"
+            if high_confidence.intent == RoutedIntent.PARAM_QUERY:
+                return "PARAM_QUERY"
+            if high_confidence.intent in {RoutedIntent.FAULT_DIAGNOSIS, RoutedIntent.FAULT_DIAGNOSIS_LLM}:
+                return "FAULT_DIAGNOSIS"
+            if high_confidence.intent == RoutedIntent.GENERAL_CHAT:
+                return "GENERAL_CHAT"
+
         cached = self._cached_intent_decision(request)
         if cached is not None:
             if cached.intent == RoutedIntent.DOC_SEARCH:
@@ -4081,12 +3473,6 @@ class AgentLoopService:
                 return "GENERAL_CHAT"
             return None
 
-        router = RequestIntentRouter(
-            fault_code_parser=self._deps.fault_code_parser,
-            diagnosis_enabled_provider=self._is_diagnosis_enabled,
-            config_service=self._deps.config_service,
-        )
-        router_text = self._build_intent_router_text_from_request_context(request) or message
         decision = router.route(router_text, request.mode)
         if decision.intent == RoutedIntent.DOC_SEARCH:
             return "DOC_SEARCH"

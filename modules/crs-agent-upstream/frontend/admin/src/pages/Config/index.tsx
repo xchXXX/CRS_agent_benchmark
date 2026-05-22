@@ -4,6 +4,50 @@ import { DeleteOutlined } from '@ant-design/icons'
 import { configService } from '../../services/config'
 import './index.css'
 
+type ConfigItem = {
+  key: string
+  value: string
+  type: string
+  description?: string
+  is_sensitive?: boolean
+}
+
+const categoryNames: Record<string, string> = {
+  frontend: '前端展示',
+  external_service: '外部服务',
+  llm: 'LLM配置',
+  search: '检索参数',
+  session: '会话配置',
+  clarify: '澄清模块',
+  intent: '意图识别',
+  runtime: '运行时配置',
+  parameter_query: '参数查询'
+}
+
+const externalServiceGroups: Array<{
+  key: string
+  label: string
+  match: (item: ConfigItem) => boolean
+  description?: string
+}> = [
+  {
+    key: 'circuit_body_search',
+    label: '电路图内搜索',
+    match: item => item.key.startsWith('circuit_diagram_body_search_'),
+    description: '配置外部电路图内搜索接口和解析库 PostgreSQL 连接。搜索接口通过 pdf_id 和 keyword 查询 PDF 内部命中元素，并返回页码与坐标。'
+  },
+  {
+    key: 'diagnosis',
+    label: '故障诊断',
+    match: item => item.key.startsWith('diagnosis_'),
+  },
+  {
+    key: 'oss',
+    label: '图片 OSS',
+    match: item => item.key.startsWith('aliyun_oss_'),
+  },
+]
+
 export default function Config() {
   const [configs, setConfigs] = useState<any>({})
   const [loading, setLoading] = useState(false)
@@ -28,17 +72,17 @@ export default function Config() {
     })
   }, [])
 
-  const handleSave = async (category: string) => {
+  const handleSave = async (itemsToSave: ConfigItem[]) => {
     setLoading(true)
     try {
       const values = form.getFieldsValue()
-      const items = configs[category]?.map((c: any) => ({
+      const items = itemsToSave.map((c: ConfigItem) => ({
         key: c.key,
         value: c.type === 'bool'
           ? String(values[c.key] ?? false)
           : String(values[c.key] ?? c.value),
         type: c.type
-      })) || []
+      }))
       await configService.update(items)
       message.success('保存成功')
       const res = await configService.getAll()
@@ -49,16 +93,95 @@ export default function Config() {
     }
   }
 
-  const categoryNames: Record<string, string> = {
-    frontend: '前端展示',
-    external_service: '外部服务',
-    llm: 'LLM配置',
-    search: '检索参数',
-    session: '会话配置',
-    clarify: '澄清模块',
-    intent: '意图识别',
-    runtime: '运行时配置',
-    parameter_query: '参数查询'
+  const renderConfigItems = (items: ConfigItem[]) => {
+    return items.map((c: ConfigItem) => {
+      let formControl
+      if (c.type === 'bool') {
+        formControl = (
+          <Switch
+            disabled={c.is_sensitive}
+            checkedChildren="开启"
+            unCheckedChildren="关闭"
+          />
+        )
+      } else if (c.key.includes('prompt')) {
+        formControl = <Input.TextArea rows={10} disabled={c.is_sensitive} />
+      } else {
+        formControl = <Input disabled={c.is_sensitive} />
+      }
+
+      return (
+        <Form.Item
+          key={c.key}
+          name={c.key}
+          label={c.description || c.key}
+          initialValue={c.type === 'bool' ? String(c.value).toLowerCase() === 'true' : c.value}
+          valuePropName={c.type === 'bool' ? 'checked' : 'value'}
+        >
+          {formControl}
+        </Form.Item>
+      )
+    })
+  }
+
+  const renderConfigCard = (items: ConfigItem[], options?: { description?: string }) => {
+    return (
+      <Card className="config-card">
+        <Space direction="vertical" size="middle" className="config-card-content">
+          {options?.description && (
+            <Alert
+              type="info"
+              showIcon
+              message={options.description}
+            />
+          )}
+          <div>{renderConfigItems(items)}</div>
+          <Button type="primary" loading={loading} onClick={() => handleSave(items)}>
+            保存
+          </Button>
+        </Space>
+      </Card>
+    )
+  }
+
+  const renderExternalServiceConfig = () => {
+    const externalItems = (configs.external_service || []) as ConfigItem[]
+    const groupedKeys = new Set<string>()
+    const tabItems = externalServiceGroups.map(group => {
+      const groupItems = externalItems.filter(item => group.match(item))
+      groupItems.forEach(item => groupedKeys.add(item.key))
+      return {
+        key: group.key,
+        label: group.label,
+        children: renderConfigCard(groupItems, { description: group.description })
+      }
+    }).filter(item => {
+      const group = externalServiceGroups.find(groupItem => groupItem.key === item.key)
+      return externalItems.some(configItem => group?.match(configItem))
+    })
+
+    const otherItems = externalItems.filter(item => !groupedKeys.has(item.key))
+    if (otherItems.length > 0) {
+      tabItems.push({
+        key: 'other',
+        label: '其他',
+        children: renderConfigCard(otherItems)
+      })
+    }
+
+    if (tabItems.length === 0) {
+      return renderConfigCard(externalItems)
+    }
+
+    return (
+      <div className="external-service-panel">
+        <Tabs
+          className="external-service-tabs"
+          tabPosition="top"
+          items={tabItems}
+        />
+      </div>
+    )
   }
 
   return (
@@ -70,41 +193,9 @@ export default function Config() {
             ...Object.keys(configs).filter(cat => cat !== 'system').map(cat => ({
               key: cat,
               label: categoryNames[cat] || cat,
-              children: (
-                <Card className="config-card">
-                  {(configs[cat] || []).map((c: any) => {
-                    let formControl
-                    if (c.type === 'bool') {
-                      formControl = (
-                        <Switch
-                          disabled={c.is_sensitive}
-                          checkedChildren="开启"
-                          unCheckedChildren="关闭"
-                        />
-                      )
-                    } else if (c.key.includes('prompt')) {
-                      formControl = <Input.TextArea rows={10} disabled={c.is_sensitive} />
-                    } else {
-                      formControl = <Input disabled={c.is_sensitive} />
-                    }
-
-                    return (
-                      <Form.Item
-                        key={c.key}
-                        name={c.key}
-                        label={c.description || c.key}
-                        initialValue={c.type === 'bool' ? String(c.value).toLowerCase() === 'true' : c.value}
-                        valuePropName={c.type === 'bool' ? 'checked' : 'value'}
-                      >
-                        {formControl}
-                      </Form.Item>
-                    )
-                  })}
-                  <Button type="primary" loading={loading} onClick={() => handleSave(cat)}>
-                    保存
-                  </Button>
-                </Card>
-              )
+              children: cat === 'external_service'
+                ? renderExternalServiceConfig()
+                : renderConfigCard(configs[cat] || [])
             })),
             {
               key: '_system',

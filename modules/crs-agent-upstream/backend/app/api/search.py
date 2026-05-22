@@ -6,7 +6,6 @@ from fastapi import APIRouter, HTTPException, Request
 from pydantic import BaseModel, Field
 
 from app.agent.adapters.legacy_doc_search_adapter import LegacyDocSearchAdapter
-from app.agent.runtime.service import AgentLoopService, DocSearchExecutedQuery
 from app.api.request_context import build_request_runtime_deps
 
 
@@ -51,94 +50,15 @@ def _serialize_search_result(item: dict[str, Any]) -> dict[str, Any]:
     }
 
 
-async def _execute_search_with_rule_variants(
-    *,
-    adapter: LegacyDocSearchAdapter,
-    runtime_deps: Any,
-    request: SearchRequestCompat,
-) -> dict[str, Any]:
-    executed_queries = AgentLoopService._build_doc_search_rule_query_variants(
-        query=request.query,
-        active_deps=runtime_deps,
-    ) or (DocSearchExecutedQuery(query=request.query, confidence=1.0),)
-
-    raw_envelopes = []
-    for query_info in executed_queries:
-        raw_envelopes.append(
-            (
-                query_info,
-                await adapter.search_raw(
-                    query=query_info.query,
-                    top_k=request.limit,
-                ),
-            )
-        )
-
-    merged_envelope = AgentLoopService._merge_doc_search_envelopes(
-        raw_envelopes,
-        primary_query=request.query,
-    )
-    if merged_envelope.get("status") != "ok":
-        return merged_envelope
-
-    merged_snapshot = dict(merged_envelope.get("data") or {})
-    preprocessing_candidates = merged_snapshot.pop("validation_preprocessing_candidates", None)
-    planned_queries = list(merged_snapshot.get("planned_queries") or [])
-    candidate_preprocessings = [
-        item
-        for item in (preprocessing_candidates or [])
-        if isinstance(item, dict)
-    ]
-    if not candidate_preprocessings and isinstance(merged_snapshot.get("preprocessing"), dict):
-        candidate_preprocessings = [merged_snapshot["preprocessing"]]
-
-    preprocessing_attempts = list(candidate_preprocessings)
-    if AgentLoopService._doc_search_snapshot_has_strong_intent_match(
-        snapshot=merged_snapshot,
-        primary_query=request.query,
-    ):
-        preprocessing_attempts.append(None)
-    if not preprocessing_attempts:
-        preprocessing_attempts = [None]
-
-    final_envelope: dict[str, Any] | None = None
-    for preprocessing in preprocessing_attempts:
-        snapshot = dict(merged_snapshot)
-        if preprocessing is not None:
-            snapshot["preprocessing"] = preprocessing
-        else:
-            snapshot.pop("preprocessing", None)
-        final_envelope = await adapter.search_from_snapshot(
-            query=request.query,
-            snapshot=snapshot,
-            filters=request.filters,
-            top_k=request.limit,
-        )
-        if not isinstance(final_envelope, dict) or final_envelope.get("status") != "ok":
-            break
-        validity = (final_envelope.get("data") or {}).get("validity") or {}
-        if validity.get("has_valid_results") is not False:
-            break
-
-    result = final_envelope or merged_envelope
-    if result.get("status") == "ok" and isinstance(result.get("data"), dict):
-        data = result["data"]
-        if len(planned_queries) > 1:
-            data["planned_queries"] = planned_queries
-        else:
-            data.pop("planned_queries", None)
-    return result
-
-
 @router.post("/search")
 @router.post("/chat/api/search")
 async def search(request: SearchRequestCompat, raw_request: Request):
     runtime_deps = await build_request_runtime_deps(raw_request)
     adapter = LegacyDocSearchAdapter(runtime_deps)
-    result = await _execute_search_with_rule_variants(
-        adapter=adapter,
-        runtime_deps=runtime_deps,
-        request=request,
+    result = await adapter.search(
+        request.query,
+        filters=request.filters,
+        top_k=request.limit,
     )
     if result["status"] == "failed":
         error_code = result.get("data", {}).get("error_code")
@@ -176,10 +96,7 @@ async def search(request: SearchRequestCompat, raw_request: Request):
         "stats": {
             "took_ms": data.get("search_time_ms") or 0,
             "candidates": data.get("total") or 0,
-            "debug_info": {
-                "search_method": data.get("search_method"),
-                "planned_queries": data.get("planned_queries") or [],
-            },
+            "debug_info": {"search_method": data.get("search_method")},
         },
         "validity": data.get("validity") or {"has_valid_results": True},
     }

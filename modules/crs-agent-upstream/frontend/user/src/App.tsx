@@ -8,6 +8,7 @@ import {
 } from 'lucide-react'
 import './styles/index.css'
 import DocumentViewer from './components/DocumentViewer'
+import CircuitBodyHitPanel, { type CircuitBodyBestHit, type CircuitBodySearch } from './components/CircuitBodyHitPanel'
 import ReportViewer from './components/ReportViewer'
 import { MarkdownRenderer } from './components/MarkdownRenderer'
 import ImageUploadButton from './components/ImageUploadButton'
@@ -25,6 +26,7 @@ import { compressImage, getImagePreviewUrl, revokeImagePreviewUrl } from './util
 import { requestDeleteOssImages, uploadImage } from './utils/aliOssUtils'
 import { getStoredToken } from './utils/tokenValidator'
 import { taskManager } from './services/sse'
+import { fetchFrontendRuntimeConfig, type FrontendRuntimeConfig } from './utils/debugConsole'
 import type {
   ChatRequest,
   ChatResponse,
@@ -55,6 +57,7 @@ interface SearchResult {
   ggzj_data_type?: number
   ggzj_file_no?: string | null
   ggzj_file_type?: string | null
+  body_search?: CircuitBodySearch
   title: string
   path: string
   tags: {
@@ -148,6 +151,7 @@ interface Message {
   imageOssDeleteTokens?: string[]
   // 澄清向导字段
   wizardState?: WizardState
+  relatedWizardId?: string
   repairFollowupState?: RepairFollowupState
   askUserV2State?: AskUserV2FormState
   // 故障码 LLM 分析时的状态提示
@@ -279,6 +283,83 @@ function pickExampleQueries(count: number, seed: number): ExampleQuery[] {
   return results
 }
 
+function firstNonEmptyValue(...values: unknown[]): unknown {
+  return values.find((value) => value !== undefined && value !== null && String(value).trim() !== '')
+}
+
+function normalizeOptionalNumber(value: unknown): number | undefined {
+  if (value === undefined || value === null || String(value).trim() === '') {
+    return undefined
+  }
+  const numericValue = Number(value)
+  return Number.isFinite(numericValue) ? numericValue : undefined
+}
+
+function normalizeOptionalDataType(value: unknown): number | undefined {
+  if (value === undefined || value === null || String(value).trim() === '') {
+    return undefined
+  }
+  const textValue = String(value).trim()
+  const numericValue = Number(textValue)
+  return Number.isFinite(numericValue) ? numericValue : undefined
+}
+
+function normalizeDocumentAccessFields(raw: any): {
+  pic_folder_url?: string
+  ggzj_sn?: number
+  ggzj_data_type?: number
+  ggzj_file_no?: string | null
+  ggzj_file_type?: string | null
+} {
+  if (!raw || typeof raw !== 'object') {
+    return {}
+  }
+
+  const picFolderUrl = firstNonEmptyValue(raw.pic_folder_url, raw.picFolderUrl)
+  const fileNo = firstNonEmptyValue(raw.ggzj_file_no, raw.ggzjFileNo, raw.fileNo)
+  const fileType = firstNonEmptyValue(raw.ggzj_file_type, raw.ggzjFileType, raw.fileType)
+
+  return {
+    pic_folder_url: picFolderUrl !== undefined ? String(picFolderUrl) : undefined,
+    ggzj_sn: normalizeOptionalNumber(firstNonEmptyValue(raw.ggzj_sn, raw.ggzjSn, raw.sn)),
+    ggzj_data_type: normalizeOptionalDataType(firstNonEmptyValue(raw.ggzj_data_type, raw.ggzjDataType, raw.dataType)),
+    ggzj_file_no: fileNo !== undefined ? String(fileNo) : null,
+    ggzj_file_type: fileType !== undefined ? String(fileType) : null,
+  }
+}
+
+function buildTopResultFromRaw(raw: any): TopResult | undefined {
+  if (!raw || typeof raw !== 'object') return undefined
+  const fileId = String(raw.file_id || '').trim()
+  if (!fileId) return undefined
+  const score = Number(raw.score ?? 0)
+  const access = normalizeDocumentAccessFields(raw)
+
+  return {
+    file_id: fileId,
+    title: String(raw.title || raw.filename || ''),
+    score: Number.isFinite(score) ? score : 0,
+    pic_folder_url: access.pic_folder_url || '',
+    brand: raw.brand,
+    series: raw.series,
+    model: raw.model,
+    ggzj_sn: access.ggzj_sn,
+    ggzj_data_type: access.ggzj_data_type,
+    ggzj_file_no: access.ggzj_file_no,
+    ggzj_file_type: access.ggzj_file_type,
+    selectionPayload: raw.selectionPayload || raw.selection_payload || {},
+  }
+}
+
+function buildExistenceInfoFromRaw(raw: any) {
+  if (!raw || typeof raw !== 'object') return undefined
+  return {
+    status: raw.status as 'exact_match' | 'partial_match' | 'no_match',
+    message: raw.message,
+    suggestions: raw.suggestions
+  }
+}
+
 function buildWizardPayloadFromAskUser(response: ChatResponse, fallbackQuery: string) {
   const askUser = response.ask_user || response.content
   if (!askUser || typeof askUser !== 'object') {
@@ -286,26 +367,8 @@ function buildWizardPayloadFromAskUser(response: ChatResponse, fallbackQuery: st
   }
 
   const context = askUser.context || {}
-  const topResult = context.top_result ? {
-    file_id: context.top_result.file_id,
-    title: context.top_result.title,
-    score: context.top_result.score,
-    pic_folder_url: context.top_result.pic_folder_url,
-    brand: context.top_result.brand,
-    series: context.top_result.series,
-    model: context.top_result.model,
-    ggzj_sn: context.top_result.ggzj_sn,
-    ggzj_data_type: context.top_result.ggzj_data_type,
-    ggzj_file_no: context.top_result.ggzj_file_no,
-    ggzj_file_type: context.top_result.ggzj_file_type,
-    selectionPayload: context.top_result.selection_payload || {},
-  } as TopResult : undefined
-
-  const existenceInfo = context.existence_info ? {
-    status: context.existence_info.status as 'exact_match' | 'partial_match' | 'no_match',
-    message: context.existence_info.message,
-    suggestions: context.existence_info.suggestions
-  } : undefined
+  const topResult = buildTopResultFromRaw(context.top_result)
+  const existenceInfo = buildExistenceInfoFromRaw(context.existence_info)
 
   const newRound: WizardRound = {
     id: Math.random().toString(36).substring(2, 9),
@@ -790,6 +853,127 @@ function extractRepairKnowledgeSources(metadata: ChatResponse['metadata'] | unde
     }))
 }
 
+const CIRCUIT_HIT_SUBLIST_LIMIT = 3
+const CIRCUIT_NEARBY_HIT_DISTANCE_PX = 900
+const DEFAULT_WEBVIEW_DEBUG_URL = 'https://mft-static.51gonggui.com/pdf-loader/index.html#/?page=2&file=https://mft-static.51gonggui.com/wps/file/img/%E5%85%B1%E8%BD%A8%E5%8E%9F%E5%88%9B_%E4%BA%94%E5%8D%81%E9%93%83_2017_C&E_6WG1_ECU_%E7%94%B5%E8%B7%AF%E5%9B%BE30653'
+const WEBVIEW_DEBUG_FAB_POSITION_KEY = 'crs_webview_debug_fab_position'
+
+function getDefaultWebviewDebugFabPosition() {
+  if (typeof window === 'undefined') {
+    return { x: 0, y: 0 }
+  }
+  return {
+    x: Math.max(12, window.innerWidth - 62),
+    y: Math.max(12, window.innerHeight - 154),
+  }
+}
+
+function clampWebviewDebugFabPosition(position: { x: number; y: number }) {
+  if (typeof window === 'undefined') {
+    return position
+  }
+  const margin = 8
+  const size = 46
+  const maxX = Math.max(margin, window.innerWidth - size - margin)
+  const maxY = Math.max(margin, window.innerHeight - size - margin)
+  return {
+    x: Math.min(Math.max(margin, Math.round(position.x)), maxX),
+    y: Math.min(Math.max(margin, Math.round(position.y)), maxY),
+  }
+}
+
+function loadWebviewDebugFabPosition() {
+  if (typeof window === 'undefined') {
+    return { x: 0, y: 0 }
+  }
+  try {
+    const saved = window.localStorage.getItem(WEBVIEW_DEBUG_FAB_POSITION_KEY)
+    if (saved) {
+      const parsed = JSON.parse(saved) as { x?: unknown; y?: unknown }
+      const x = Number(parsed.x)
+      const y = Number(parsed.y)
+      if (Number.isFinite(x) && Number.isFinite(y)) {
+        return clampWebviewDebugFabPosition({ x, y })
+      }
+    }
+  } catch {
+    // ignore invalid saved position
+  }
+  return getDefaultWebviewDebugFabPosition()
+}
+
+function validCircuitHitBox(value?: number[]): value is [number, number, number, number] {
+  return Array.isArray(value) &&
+    value.length === 4 &&
+    value.every((part) => Number.isFinite(part)) &&
+    value[2] > value[0] &&
+    value[3] > value[1]
+}
+
+function primaryCircuitHitBox(hit?: CircuitBodyBestHit): [number, number, number, number] | null {
+  const boxes = hit?.highlight_boxes_px
+  if (!Array.isArray(boxes)) {
+    return null
+  }
+  const box = boxes.find(validCircuitHitBox)
+  return box || null
+}
+
+function circuitHitCenter(hit?: CircuitBodyBestHit): { x: number; y: number; size: number } | null {
+  const box = primaryCircuitHitBox(hit)
+  if (!box) {
+    return null
+  }
+  return {
+    x: (box[0] + box[2]) / 2,
+    y: (box[1] + box[3]) / 2,
+    size: Math.max(box[2] - box[0], box[3] - box[1], 1),
+  }
+}
+
+function areNearbyCircuitHits(left: CircuitBodyBestHit, right: CircuitBodyBestHit): boolean {
+  if (left.page_index !== right.page_index) {
+    return false
+  }
+  const leftCenter = circuitHitCenter(left)
+  const rightCenter = circuitHitCenter(right)
+  if (!leftCenter || !rightCenter) {
+    return false
+  }
+  const distance = Math.hypot(leftCenter.x - rightCenter.x, leftCenter.y - rightCenter.y)
+  const threshold = Math.max(
+    CIRCUIT_NEARBY_HIT_DISTANCE_PX,
+    Math.max(leftCenter.size, rightCenter.size) * 3
+  )
+  return distance <= threshold
+}
+
+function compactCircuitHits(hits: CircuitBodyBestHit[]): {
+  visibleHits: CircuitBodyBestHit[]
+  totalCount: number
+  hiddenHitCount: number
+  mergedNearbyCount: number
+} {
+  const groups: Array<{ hit: CircuitBodyBestHit; nearbyCount: number }> = []
+  for (const hit of hits) {
+    const targetGroup = groups.find((group) => areNearbyCircuitHits(group.hit, hit))
+    if (targetGroup) {
+      targetGroup.nearbyCount += 1
+    } else {
+      groups.push({ hit, nearbyCount: 0 })
+    }
+  }
+
+  const visibleGroups = groups.slice(0, CIRCUIT_HIT_SUBLIST_LIMIT)
+  const visibleHits = visibleGroups.map((group) => group.hit)
+  return {
+    visibleHits,
+    totalCount: hits.length,
+    hiddenHitCount: Math.max(hits.length - visibleHits.length, 0),
+    mergedNearbyCount: groups.reduce((total, group) => total + group.nearbyCount, 0),
+  }
+}
+
 function App() {
   const [messages, setMessages] = useState<Message[]>([])
   const [inputValue, setInputValue] = useState('')
@@ -797,10 +981,21 @@ function App() {
   const [searchState, setSearchState] = useState<SearchState>({ query: '', filters: {} })
   const [isListening, setIsListening] = useState(false)
   const [speechSupported, setSpeechSupported] = useState(false)
-  const [isSecureContext, setIsSecureContext] = useState(true)
-  const [voiceError, setVoiceError] = useState<string | null>(null)
   // 文档查看器状态
-  const [viewerDoc, setViewerDoc] = useState<{ title: string; picFolderUrl: string; token: string; urlType?: string } | null>(null)
+  const [viewerDoc, setViewerDoc] = useState<{
+    title: string
+    picFolderUrl: string
+    token: string
+    urlType?: string
+    initialPage?: number
+    circuitSearch?: {
+      enabled: boolean
+      viewerToken?: string
+      keyword?: string
+      hits?: CircuitBodyBestHit[]
+      activeHitId?: string
+    }
+  } | null>(null)
   // 报告查看器状态
   const [showReportViewer, setShowReportViewer] = useState(false)
   const [currentReportUrl, setCurrentReportUrl] = useState<string | null>(null)
@@ -833,8 +1028,11 @@ function App() {
   const [isSessionRestored, setIsSessionRestored] = useState(false)
   // 生命周期管理状态
   const [currentLifecycle, setCurrentLifecycle] = useState<Lifecycle>('idle')
+  const [frontendRuntimeConfig, setFrontendRuntimeConfig] = useState<FrontendRuntimeConfig | null>(null)
+  const [webviewDebugFabPosition, setWebviewDebugFabPosition] = useState(loadWebviewDebugFabPosition)
   // 搜索结果分页状态：记录每个消息的当前页码
   const [resultPages, setResultPages] = useState<Record<string, number>>({})
+  const [expandedCircuitHitByMessage, setExpandedCircuitHitByMessage] = useState<Record<string, string | null>>({})
   const RESULTS_PER_PAGE = 5  // 每页显示5条结果
   const [currentBusiness, setCurrentBusiness] = useState<BusinessType | null>(null)
   const [switchConfirmState, setSwitchConfirmState] = useState<{
@@ -857,10 +1055,50 @@ function App() {
   const modeMenuRef = useRef<HTMLDivElement>(null)
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
+  const webviewDebugFabDragRef = useRef<{
+    pointerId: number
+    startX: number
+    startY: number
+    originX: number
+    originY: number
+    currentX: number
+    currentY: number
+    moved: boolean
+  } | null>(null)
   // Token 诊断：连续点击 logo 5 次触发
   const logoClickCountRef = useRef(0)
   const logoClickTimerRef = useRef<number | null>(null)
   const [tokenDiagnoseResult, setTokenDiagnoseResult] = useState<Record<string, unknown> | null>(null)
+
+  useEffect(() => {
+    let cancelled = false
+    fetchFrontendRuntimeConfig()
+      .then((config) => {
+        if (!cancelled) {
+          setFrontendRuntimeConfig(config)
+        }
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setFrontendRuntimeConfig(null)
+        }
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWebviewDebugFabPosition((current) => clampWebviewDebugFabPosition(current))
+    }
+    window.addEventListener('resize', handleResize)
+    window.visualViewport?.addEventListener('resize', handleResize)
+    return () => {
+      window.removeEventListener('resize', handleResize)
+      window.visualViewport?.removeEventListener('resize', handleResize)
+    }
+  }, [])
   const [repairKnowledgeModal, setRepairKnowledgeModal] = useState<{
     sources: RepairKnowledgeSourceRef[]
     activeSourceId: string | null
@@ -1153,6 +1391,15 @@ function App() {
     return null
   }, [messages])
 
+  const latestUserMessageIndex = useMemo(() => {
+    for (let i = messages.length - 1; i >= 0; i--) {
+      if (messages[i].type === 'user') {
+        return i
+      }
+    }
+    return -1
+  }, [messages])
+
   // 语音输入规范化：将中文数字、拼音转换为标准格式
   const normalizeVoiceInput = (text: string): string => {
     // 中文数字映射
@@ -1199,11 +1446,8 @@ function App() {
     if (!aliyunSpeechService.isSupported()) {
       console.warn('当前环境不支持语音识别')
       setSpeechSupported(false)
-      setIsSecureContext(false)
       return
     }
-
-    setIsSecureContext(true)
 
     // 检查阿里云语音服务是否可用
     const checkAliyunSpeech = async () => {
@@ -1222,7 +1466,6 @@ function App() {
 
   // 开始实时语音识别
   const startRecording = async () => {
-    setVoiceError(null)
     setInputValue('')
 
     try {
@@ -1244,7 +1487,6 @@ function App() {
         },
         onError: (error) => {
           console.error('语音识别错误:', error)
-          setVoiceError(error)
           setIsListening(false)
         },
         onStop: () => {
@@ -1255,7 +1497,6 @@ function App() {
     } catch (err) {
       const error = err as Error
       console.error('启动语音识别失败:', error)
-      setVoiceError(error.message || '无法启动语音识别')
       setIsListening(false)
     }
   }
@@ -1312,6 +1553,205 @@ function App() {
 
   const addMessage = (message: Omit<Message, 'id' | 'timestamp'>) => {
     setMessages(prev => [...prev, { ...message, id: generateId(), timestamp: new Date() }])
+  }
+
+  const clearTransientLoadingMessages = useCallback((messageId?: string | null) => {
+    setMessages(prev => prev.filter(msg => {
+      if (messageId) {
+        return !(
+          msg.id === messageId &&
+          (
+            msg.type === 'intent_loading' ||
+            (msg.type === 'assistant_text' && !msg.content.trim() && !msg.streamHint)
+          )
+        )
+      }
+      return msg.type !== 'intent_loading'
+    }))
+  }, [])
+
+  const openSearchResultDocument = async (result: SearchResult, hit?: CircuitBodyBestHit) => {
+    const pageNumber = typeof hit?.page_number === 'number' ? hit.page_number : undefined
+    const access = normalizeDocumentAccessFields(result)
+    const circuitHits = Array.isArray(result.body_search?.top_hits)
+      ? result.body_search.top_hits.filter((item): item is CircuitBodyBestHit => Boolean(item?.hit_id))
+      : []
+    const fallbackHits = circuitHits.length > 0
+      ? circuitHits
+      : (result.body_search?.best_hit ? [result.body_search.best_hit] : [])
+    const circuitSearch = result.body_search?.status === 'hit' && (result.body_search.viewer_token || hit?.viewer_token)
+      ? {
+          enabled: true,
+          viewerToken: result.body_search.viewer_token || hit?.viewer_token,
+          keyword: result.body_search.keyword || hit?.matched_text || hit?.snippet || '',
+          hits: fallbackHits,
+          activeHitId: hit?.hit_id,
+        }
+      : undefined
+
+    if (access.ggzj_sn !== undefined) {
+      try {
+        const { getGgzjFileUrl } = await import('@/services/api')
+        const fileUrlResp = await getGgzjFileUrl({
+          sn: access.ggzj_sn,
+          data_type: access.ggzj_data_type || 2,
+          file_no: access.ggzj_file_no || null,
+          file_type: access.ggzj_file_type || null,
+        })
+        if (fileUrlResp.url) {
+          const token = generateId()
+          setViewerDoc({
+            title: result.title,
+            picFolderUrl: fileUrlResp.url,
+            token,
+            urlType: fileUrlResp.url_type,
+            initialPage: pageNumber,
+            circuitSearch,
+          })
+        } else {
+          const notification: Notification = {
+            id: Date.now().toString(),
+            type: 'warning',
+            title: '无法访问',
+            message: fileUrlResp.message || '该文档暂无在线访问链接',
+            timestamp: new Date(),
+          }
+          setNotifications(prev => [...prev, notification])
+        }
+      } catch {
+        const notification: Notification = {
+          id: Date.now().toString(),
+          type: 'error',
+          title: '获取链接失败',
+          message: '获取文件链接时出错，请稍后重试',
+          timestamp: new Date(),
+        }
+        setNotifications(prev => [...prev, notification])
+      }
+      return
+    }
+
+    if (access.pic_folder_url) {
+      const token = generateId()
+      setViewerDoc({
+        title: result.title,
+        picFolderUrl: access.pic_folder_url,
+        token,
+        initialPage: pageNumber,
+        circuitSearch,
+      })
+      return
+    }
+
+    const notification: Notification = {
+      id: Date.now().toString(),
+      type: 'warning',
+      title: '无法访问',
+      message: '该文档暂无在线访问链接',
+      timestamp: new Date(),
+    }
+    setNotifications(prev => [...prev, notification])
+  }
+
+  const openWebviewDebugDocument = () => {
+    const debugUrl = frontendRuntimeConfig?.webview_debug_url || DEFAULT_WEBVIEW_DEBUG_URL
+    const token = generateId()
+    setViewerDoc({
+      title: 'WebView 图内搜索调试',
+      picFolderUrl: debugUrl,
+      token,
+      urlType: 'raw_pdf',
+      initialPage: 2,
+      circuitSearch: {
+        enabled: true,
+        viewerToken: frontendRuntimeConfig?.webview_debug_viewer_token || '',
+        keyword: '',
+        hits: [],
+      },
+    })
+  }
+
+  const handleWebviewDebugFabPointerDown = (event: React.PointerEvent<HTMLButtonElement>) => {
+    webviewDebugFabDragRef.current = {
+      pointerId: event.pointerId,
+      startX: event.clientX,
+      startY: event.clientY,
+      originX: webviewDebugFabPosition.x,
+      originY: webviewDebugFabPosition.y,
+      currentX: webviewDebugFabPosition.x,
+      currentY: webviewDebugFabPosition.y,
+      moved: false,
+    }
+    event.currentTarget.setPointerCapture(event.pointerId)
+  }
+
+  const handleWebviewDebugFabPointerMove = (event: React.PointerEvent<HTMLButtonElement>) => {
+    const drag = webviewDebugFabDragRef.current
+    if (!drag || drag.pointerId !== event.pointerId) return
+    const deltaX = event.clientX - drag.startX
+    const deltaY = event.clientY - drag.startY
+    if (Math.abs(deltaX) > 4 || Math.abs(deltaY) > 4) {
+      drag.moved = true
+    }
+    const nextPosition = clampWebviewDebugFabPosition({
+      x: drag.originX + deltaX,
+      y: drag.originY + deltaY,
+    })
+    drag.currentX = nextPosition.x
+    drag.currentY = nextPosition.y
+    setWebviewDebugFabPosition(nextPosition)
+  }
+
+  const handleWebviewDebugFabPointerUp = (event: React.PointerEvent<HTMLButtonElement>) => {
+    const drag = webviewDebugFabDragRef.current
+    if (!drag || drag.pointerId !== event.pointerId) return
+    webviewDebugFabDragRef.current = null
+    try {
+      event.currentTarget.releasePointerCapture(event.pointerId)
+    } catch {
+      // ignore release failure
+    }
+    const finalPosition = clampWebviewDebugFabPosition({ x: drag.currentX, y: drag.currentY })
+    setWebviewDebugFabPosition(finalPosition)
+    try {
+      window.localStorage.setItem(WEBVIEW_DEBUG_FAB_POSITION_KEY, JSON.stringify(finalPosition))
+    } catch {
+      // ignore storage failure
+    }
+    if (!drag.moved) {
+      openWebviewDebugDocument()
+    }
+  }
+
+  const handleWebviewDebugFabPointerCancel = (event: React.PointerEvent<HTMLButtonElement>) => {
+    const drag = webviewDebugFabDragRef.current
+    if (!drag || drag.pointerId !== event.pointerId) return
+    webviewDebugFabDragRef.current = null
+  }
+
+  const resolveSearchResultDocumentAccessForPreview = async (
+    result: SearchResult
+  ): Promise<{ url: string; urlType?: string } | null> => {
+    const access = normalizeDocumentAccessFields(result)
+
+    if (access.ggzj_sn !== undefined) {
+      try {
+        const { getGgzjFileUrl } = await import('@/services/api')
+        const fileUrlResp = await getGgzjFileUrl({
+          sn: access.ggzj_sn,
+          data_type: access.ggzj_data_type || 2,
+          file_no: access.ggzj_file_no || null,
+          file_type: access.ggzj_file_type || null,
+        })
+        return fileUrlResp.url
+          ? { url: fileUrlResp.url, urlType: fileUrlResp.url_type }
+          : null
+      } catch {
+        return null
+      }
+    }
+
+    return access.pic_folder_url ? { url: access.pic_folder_url } : null
   }
 
   const updateRepairFollowupMessage = useCallback(
@@ -1446,7 +1886,8 @@ function App() {
     query: string,
     filters: Record<string, string> = {},
     clarifyFacet?: string,
-    clarifyChoice?: string
+    clarifyChoice?: string,
+    transientMessageId?: string | null
   ) => {
     setIsLoading(true)
 
@@ -1532,6 +1973,8 @@ function App() {
         }
       }
 
+      clearTransientLoadingMessages(transientMessageId)
+
       // 创建重试函数
       const retryAction = () => {
         // 移除错误消息
@@ -1588,22 +2031,22 @@ function App() {
         const textExistenceInfo = typeof response.content === 'object' ? response.content?.existence_info : undefined
         const shouldArchivePrevious = typeof response.content === 'object' && response.content?.should_archive_previous
 
-        // 如果需要归档上一轮对话，将活跃的 wizard 标记为 archived
+        // 如果需要归档上一轮对话，将 wizard 路径也标记为 archived，避免跨上下文回退
         if (shouldArchivePrevious) {
           setMessages(prev => prev.map(msg => {
-            if (msg.type === 'clarify_wizard' && msg.wizardState?.status === 'active') {
+            if (msg.type === 'clarify_wizard' && msg.wizardState && msg.wizardState.status !== 'archived') {
               return {
                 ...msg,
                 wizardState: { ...msg.wizardState, status: 'archived' as const }
               }
             }
-            if (msg.type === 'repair_followup' && msg.repairFollowupState?.status === 'active') {
+            if (msg.type === 'repair_followup' && msg.repairFollowupState && msg.repairFollowupState.status !== 'archived') {
               return {
                 ...msg,
                 repairFollowupState: { ...msg.repairFollowupState, status: 'archived' as const }
               }
             }
-            if (msg.type === 'ask_user_form' && msg.askUserV2State?.status === 'active') {
+            if (msg.type === 'ask_user_form' && msg.askUserV2State && msg.askUserV2State.status !== 'archived') {
               return {
                 ...msg,
                 askUserV2State: { ...msg.askUserV2State, status: 'archived' as const }
@@ -1846,70 +2289,88 @@ function App() {
         const results = docContent.results || docContent.documents || []
         const totalHits = Number(docContent.total_hits ?? docContent.total ?? results.length)
         const returnedCount = Number(docContent.returned_count ?? results.length)
-        const searchResults: SearchResult[] = results.map((doc: any) => ({
-          file_id: doc.file_id || doc.id,
-          doc_id: doc.file_id || doc.id,
-          ref_file_id: doc.ref_file_id,
-          parent_id: doc.parent_id,
-          pic_folder_url: doc.pic_folder_url,
-          ggzj_sn: doc.ggzj_sn,
-          ggzj_data_type: doc.ggzj_data_type,
-          ggzj_file_no: doc.ggzj_file_no,
-          ggzj_file_type: doc.ggzj_file_type,
-          title: doc.filename || doc.title,
-          path: doc.physical_path || doc.path,
-          tags: {
-            brand: doc.brand,
-            series: doc.series,
-            model: doc.model,
-            ...doc.tags
-          },
-          score: doc.score,
-          explain: []
-        }))
-        addMessage({
+        const searchResults: SearchResult[] = results.map((doc: any) => {
+          const access = normalizeDocumentAccessFields(doc)
+          return {
+            file_id: doc.file_id || doc.id,
+            doc_id: doc.file_id || doc.id,
+            ref_file_id: doc.ref_file_id,
+            parent_id: doc.parent_id,
+            pic_folder_url: access.pic_folder_url,
+            ggzj_sn: access.ggzj_sn,
+            ggzj_data_type: access.ggzj_data_type,
+            ggzj_file_no: access.ggzj_file_no,
+            ggzj_file_type: access.ggzj_file_type,
+            body_search: doc.body_search,
+            title: doc.filename || doc.title,
+            path: doc.physical_path || doc.path,
+            tags: {
+              brand: doc.brand,
+              series: doc.series,
+              model: doc.model,
+              ...doc.tags
+            },
+            score: doc.score,
+            explain: []
+          }
+        })
+        const resultMessage: Message = {
+          id: generateId(),
           type: 'results',
           content: docContent.summary || `找到 ${totalHits} 个相关文档（当前展示 ${returnedCount} 条）`,
           results: searchResults,
           stats: { took_ms: 0, candidates: totalHits },
           suggestions: response.suggestions,
           requestId: response.request_id,
-        })
+          business: response.business || undefined,
+          timestamp: new Date(),
+        }
 
         // 搜索完成时，将活跃的 wizard 标记为 completed，同时清理 clarify_intent
-        setMessages(prev => prev.map(msg => {
-          if (msg.type === 'clarify_wizard' && msg.wizardState?.status === 'active') {
-            return {
-              ...msg,
-              wizardState: {
-                ...msg.wizardState,
-                status: 'completed' as const,
-                resultsCount: totalHits
+        setMessages(prev => {
+          const activeWizard = prev.find(msg => msg.type === 'clarify_wizard' && msg.wizardState?.status === 'active')
+          const relatedWizardId = activeWizard?.id
+          const updatedMessages = prev.map(msg => {
+            if (msg.type === 'clarify_wizard' && msg.wizardState?.status === 'active') {
+              return {
+                ...msg,
+                wizardState: {
+                  ...msg.wizardState,
+                  status: 'completed' as const,
+                  resultsCount: totalHits
+                }
               }
             }
-          }
-          if (msg.type === 'repair_followup' && msg.repairFollowupState && ['active', 'submitting'].includes(msg.repairFollowupState.status)) {
-            return {
-              ...msg,
-              repairFollowupState: { ...msg.repairFollowupState, status: 'submitted' as const }
+            if (msg.type === 'repair_followup' && msg.repairFollowupState && ['active', 'submitting'].includes(msg.repairFollowupState.status)) {
+              return {
+                ...msg,
+                repairFollowupState: { ...msg.repairFollowupState, status: 'submitted' as const }
+              }
             }
-          }
-          if (msg.type === 'ask_user_form' && msg.askUserV2State && ['active', 'submitting'].includes(msg.askUserV2State.status)) {
-            return {
-              ...msg,
-              askUserV2State: { ...msg.askUserV2State, status: 'submitted' as const }
+            if (msg.type === 'ask_user_form' && msg.askUserV2State && ['active', 'submitting'].includes(msg.askUserV2State.status)) {
+              return {
+                ...msg,
+                askUserV2State: { ...msg.askUserV2State, status: 'submitted' as const }
+              }
             }
-          }
-          // 兜底清理：将未完成的 clarify_intent / clarify_business 标记为 completed
-          if ((msg.type === 'clarify_intent' || msg.type === 'clarify_business') && msg.lifecycle !== 'completed') {
-            return {
-              ...msg,
-              lifecycle: 'completed' as const,
-              selectedIntent: msg.selectedIntent || '资料搜索'  // 默认值
+            // 兜底清理：将未完成的 clarify_intent / clarify_business 标记为 completed
+            if ((msg.type === 'clarify_intent' || msg.type === 'clarify_business') && msg.lifecycle !== 'completed') {
+              return {
+                ...msg,
+                lifecycle: 'completed' as const,
+                selectedIntent: msg.selectedIntent || '资料搜索'  // 默认值
+              }
             }
-          }
-          return msg
-        }))
+            return msg
+          })
+          return [
+            ...updatedMessages,
+            {
+              ...resultMessage,
+              relatedWizardId,
+            }
+          ]
+        })
         break
       }
 
@@ -2093,26 +2554,10 @@ function App() {
         const resultsCount = response.content?.results_count
 
         // 获取 top1 结果用于快捷入口
-        const topResult: TopResult | undefined = response.content?.top_result ? {
-          file_id: response.content.top_result.file_id,
-          title: response.content.top_result.title,
-          score: response.content.top_result.score,
-          pic_folder_url: response.content.top_result.pic_folder_url,
-          brand: response.content.top_result.brand,
-          series: response.content.top_result.series,
-          model: response.content.top_result.model,
-          ggzj_sn: response.content.top_result.ggzj_sn,
-          ggzj_data_type: response.content.top_result.ggzj_data_type,
-          ggzj_file_no: response.content.top_result.ggzj_file_no,
-          ggzj_file_type: response.content.top_result.ggzj_file_type,
-        } : undefined
+        const topResult = buildTopResultFromRaw(response.content?.top_result)
 
         // 获取存在性信息
-        const existenceInfo = response.content?.existence_info ? {
-          status: response.content.existence_info.status as 'exact_match' | 'partial_match' | 'no_match',
-          message: response.content.existence_info.message,
-          suggestions: response.content.existence_info.suggestions
-        } : undefined
+        const existenceInfo = buildExistenceInfoFromRaw(response.content?.existence_info)
 
         // 查找是否已存在 active 状态的 clarify_wizard 消息
         setMessages(prev => {
@@ -2219,6 +2664,7 @@ function App() {
     imageFiles: File[] = []
   ): Promise<boolean> => {
     setIsLoading(true)
+    let transientMessageId: string | null = null
 
     // 新查询时，将所有未提交反馈的消息标记为已提交（隐藏反馈卡片）
     setMessages(prev => prev.map(msg =>
@@ -2243,6 +2689,7 @@ function App() {
       if (useStream) {
         // 流式输出模式
         const msgId = generateId()
+        transientMessageId = msgId
         setStreamingMessageId(msgId)
 
         // 创建 AbortController 用于中断流式请求
@@ -2578,7 +3025,7 @@ function App() {
       if (useChatApi && imageFiles.length === 0 && !clarifyChoice && !askUserAnswer) {
         console.log('聊天API失败，降级到搜索API')
         setUseChatApi(false)
-        await performSearch(message)
+        await performSearch(message, {}, undefined, undefined, transientMessageId)
         return false
       }
 
@@ -2589,6 +3036,8 @@ function App() {
         errorType = 'network'
         errorMessage = '网络连接失败，请检查网络后重试'
       }
+
+      clearTransientLoadingMessages(transientMessageId)
 
       addMessage({
         type: 'error',
@@ -2836,16 +3285,17 @@ function App() {
   // 处理快捷入口预览（只打开文档查看器，不改变任何状态）
   const handleQuickAccess = async (topResult: TopResult) => {
     if (isLoading) return
+    const access = normalizeDocumentAccessFields(topResult)
 
     // 共轨之家外部资料：按需获取文件链接
-    if (topResult.ggzj_sn) {
+    if (access.ggzj_sn !== undefined) {
       try {
         const { getGgzjFileUrl } = await import('@/services/api')
         const fileUrlResp = await getGgzjFileUrl({
-          sn: topResult.ggzj_sn,
-          data_type: topResult.ggzj_data_type || 2,
-          file_no: topResult.ggzj_file_no || null,
-          file_type: topResult.ggzj_file_type || null,
+          sn: access.ggzj_sn,
+          data_type: access.ggzj_data_type || 2,
+          file_no: access.ggzj_file_no || null,
+          file_type: access.ggzj_file_type || null,
         })
         if (fileUrlResp.url) {
           const token = generateId()
@@ -2859,11 +3309,11 @@ function App() {
       } catch {
         // 静默失败
       }
-    } else if (topResult.pic_folder_url) {
+    } else if (access.pic_folder_url) {
       const token = generateId()
       setViewerDoc({
         title: topResult.title,
-        picFolderUrl: topResult.pic_folder_url,
+        picFolderUrl: access.pic_folder_url,
         token
       })
     }
@@ -2909,18 +3359,20 @@ function App() {
     if (!wizardMsg || !wizardMsg.wizardState) return
 
     const { wizardState } = wizardMsg
+    const wizardIndex = messages.findIndex(msg => msg.id === wizardId)
+    if (wizardIndex < 0 || (wizardState.status !== 'active' && wizardState.status !== 'completed')) return
+    if (targetRoundIndex < 0 || targetRoundIndex >= wizardState.rounds.length) return
 
-    if (wizardState.rounds.some(round => !!round.toolCallId)) {
-      const notification: Notification = {
-        id: generateId(),
-        type: 'info',
-        title: '提示',
-        message: '当前新版 ask_user 流程暂不支持回退上一轮，请重新发起查询。',
-        timestamp: new Date(),
-      }
-      setNotifications(prev => [...prev, notification])
-      return
-    }
+    // 如果 wizard 之后已经出现新的用户消息，说明用户已开启新一轮上下文，旧路径禁止回退
+    const hasNewerUserTurn = messages.slice(wizardIndex + 1).some(msg => msg.type === 'user')
+    if (hasNewerUserTurn) return
+
+    const removedResultIds = wizardIndex >= 0
+      ? messages
+        .slice(wizardIndex + 1)
+        .filter(msg => msg.type === 'results' && (!msg.relatedWizardId || msg.relatedWizardId === wizardId))
+        .map(msg => msg.id)
+      : []
 
     // 回退到目标轮次：清除目标轮次及之后的所有选择
     const updatedRounds = wizardState.rounds.slice(0, targetRoundIndex + 1).map((round, idx) => {
@@ -2930,34 +3382,52 @@ function App() {
       }
       return round
     })
+    const targetRoundContext = updatedRounds[targetRoundIndex]?.context || {}
+    const restoredTopResult = buildTopResultFromRaw(targetRoundContext.top_result)
+    const restoredExistenceInfo = buildExistenceInfoFromRaw(targetRoundContext.existence_info)
 
-    setMessages(prev => prev.map(msg => {
+    setMessages(prev => prev.flatMap((msg, index) => {
+      if (
+        wizardIndex >= 0 &&
+        index > wizardIndex &&
+        msg.type === 'results' &&
+        (!msg.relatedWizardId || msg.relatedWizardId === wizardId)
+      ) {
+        return []
+      }
       if (msg.id === wizardId) {
-        return {
+        return [{
           ...msg,
           wizardState: {
             ...wizardState,
             rounds: updatedRounds,
-            currentRoundIndex: targetRoundIndex
+            currentRoundIndex: targetRoundIndex,
+            status: 'active' as const,
+            topResult: restoredTopResult,
+            existenceInfo: restoredExistenceInfo,
           }
-        }
+        }]
       }
-      return msg
+      return [msg]
     }))
 
-    // 通知后端回退（发送特殊的回退请求）
-    // 这里我们发送一个带有回退标记的澄清选择
-    // 后端需要处理 clarify_back 操作
-    await sendChatMessage(
-      searchState.query || wizardState.originalQuery,
-      `__BACK_TO_ROUND_${targetRoundIndex}__`,
-      wizardState.rounds[targetRoundIndex]?.facet
-    )
+    if (removedResultIds.length > 0) {
+      setResultPages(prev => {
+        const next = { ...prev }
+        removedResultIds.forEach(id => {
+          delete next[id]
+        })
+        return next
+      })
+    }
   }
 
   // 处理推荐问题点击
   const handleSuggestionClick = async (suggestion: SuggestedQuestion, sourceMessageId?: string) => {
     if (isLoading || !suggestion.query) return
+
+    // 推荐问题会开启新一轮，先归档旧路径和旧按钮，避免历史上下文可回退
+    cleanupOngoingState()
 
     // 点击后立即隐藏该条消息下的推荐，避免回点历史推荐造成上下文混乱
     if (sourceMessageId) {
@@ -3196,20 +3666,20 @@ function App() {
           msg.lifecycle !== 'completed') {
         return { ...msg, lifecycle: 'archived' as const }
       }
-      // 将活跃的 wizard 标记为 archived
-      if (msg.type === 'clarify_wizard' && msg.wizardState?.status === 'active') {
+      // 新一轮开始后，将 wizard（含已完成路径）归档，避免历史路径跨上下文回退
+      if (msg.type === 'clarify_wizard' && msg.wizardState && msg.wizardState.status !== 'archived') {
         return {
           ...msg,
           wizardState: { ...msg.wizardState, status: 'archived' as const }
         }
       }
-      if (msg.type === 'repair_followup' && msg.repairFollowupState && ['active', 'submitting'].includes(msg.repairFollowupState.status)) {
+      if (msg.type === 'repair_followup' && msg.repairFollowupState && msg.repairFollowupState.status !== 'archived') {
         return {
           ...msg,
           repairFollowupState: { ...msg.repairFollowupState, status: 'archived' as const }
         }
       }
-      if (msg.type === 'ask_user_form' && msg.askUserV2State && ['active', 'submitting'].includes(msg.askUserV2State.status)) {
+      if (msg.type === 'ask_user_form' && msg.askUserV2State && msg.askUserV2State.status !== 'archived') {
         return {
           ...msg,
           askUserV2State: { ...msg.askUserV2State, status: 'archived' as const }
@@ -3500,10 +3970,12 @@ function App() {
                   <h1>CRS 智能汽修助手</h1>
                 </div>
               </div>
-              <button className="new-search-btn" onClick={handleNewSearch}>
-                <Plus size={16} />
-                新搜索
-              </button>
+              <div className="header-actions">
+                <button className="new-search-btn" onClick={handleNewSearch}>
+                  <Plus size={16} />
+                  新搜索
+                </button>
+              </div>
             </div>
           </div>
         </header>
@@ -3583,15 +4055,37 @@ function App() {
           <div className="messages-list">
             {messages.map((message, index) => {
               const businessChange = getBusinessChange(index)
+              const hasNewerUserTurn = latestUserMessageIndex > index
 
               // clarify_intent / clarify_business 完成后完全不渲染（含 badge）
               if ((message.type === 'clarify_intent' || message.type === 'clarify_business') && message.lifecycle === 'completed') {
                 return null
               }
 
-              // 交互消息被归档后隐藏（用户开始新一轮对话，避免旧按钮造成上下文混乱）
+              // 交互消息被归档后隐藏（用户开始新一轮对话，避免旧按钮/旧路径造成上下文混乱）
               if (['clarify_intent', 'clarify_business', 'clarify', 'ecu_selection'].includes(message.type) &&
                   message.lifecycle === 'archived') {
+                return null
+              }
+
+              if (
+                message.type === 'clarify_wizard' &&
+                (message.wizardState?.status === 'archived' || hasNewerUserTurn)
+              ) {
+                return null
+              }
+
+              if (
+                message.type === 'repair_followup' &&
+                (message.repairFollowupState?.status === 'archived' || hasNewerUserTurn)
+              ) {
+                return null
+              }
+
+              if (
+                message.type === 'ask_user_form' &&
+                (message.askUserV2State?.status === 'archived' || hasNewerUserTurn)
+              ) {
                 return null
               }
 
@@ -3750,11 +4244,12 @@ function App() {
                 )}
 
                 {message.type === 'results' && message.results && (() => {
+                  const orderedResults = message.results
                   const currentPage = resultPages[message.id] || 0
-                  const totalPages = Math.ceil(message.results.length / RESULTS_PER_PAGE)
+                  const totalPages = Math.max(1, Math.ceil(orderedResults.length / RESULTS_PER_PAGE))
                   const startIdx = currentPage * RESULTS_PER_PAGE
                   const endIdx = startIdx + RESULTS_PER_PAGE
-                  const currentResults = message.results.slice(startIdx, endIdx)
+                  const currentResults = orderedResults.slice(startIdx, endIdx)
                   const hasPagination = totalPages > 1
 
                   return (
@@ -3776,74 +4271,47 @@ function App() {
                     </div>
                     <div className="results-list">
                       {currentResults.map((result, idx) => {
+                        const resultRank = startIdx + idx + 1
                         const tagItems = renderTags(result.tags)
+                        const topHits = Array.isArray(result.body_search?.top_hits)
+                          ? result.body_search.top_hits.filter((hit): hit is CircuitBodyBestHit => Boolean(hit?.hit_id))
+                          : []
+                        const circuitHits = topHits.length > 0
+                          ? topHits
+                          : (result.body_search?.status === 'hit' && result.body_search.best_hit ? [result.body_search.best_hit] : [])
+                        const hasCircuitHits = result.body_search?.status === 'hit' && circuitHits.length > 0
+                        const compactedCircuitHits = compactCircuitHits(circuitHits)
+                        const visibleCircuitHits = compactedCircuitHits.visibleHits
+                        const hiddenCircuitHitCount = compactedCircuitHits.hiddenHitCount + (result.body_search?.more_hits_count || 0)
+                        const expandedHitKey = expandedCircuitHitByMessage[message.id]
+                        const isCircuitHitExpanded = Boolean(
+                          hasCircuitHits && visibleCircuitHits.some((hit) => (
+                            `${message.id}:${result.file_id}:${hit.candidate_id || hit.hit_id || hit.page_index}` === expandedHitKey
+                          ))
+                        )
 
                         return (
                           <div
                             key={result.file_id}
-                            className="result-item result-item-clickable"
+                            className={`result-item${hasCircuitHits ? ' result-item-body-hit' : ' result-item-clickable'}${isCircuitHitExpanded ? ' result-item-body-hit-expanded' : ''}`}
                             style={{ animationDelay: `${idx * 0.05}s` }}
-                            onClick={async () => {
-                              // 共轨之家外部资料：按需获取文件链接
-                              if (result.ggzj_sn) {
-                                try {
-                                  const { getGgzjFileUrl } = await import('@/services/api')
-                                  const fileUrlResp = await getGgzjFileUrl({
-                                    sn: result.ggzj_sn,
-                                    data_type: result.ggzj_data_type || 2,
-                                    file_no: result.ggzj_file_no || null,
-                                    file_type: result.ggzj_file_type || null,
-                                  })
-                                  if (fileUrlResp.url) {
-                                    const token = generateId()
-                                    setViewerDoc({
-                                      title: result.title,
-                                      picFolderUrl: fileUrlResp.url,
-                                      token,
-                                      urlType: fileUrlResp.url_type
-                                    })
-                                  } else {
-                                    const notification: Notification = {
-                                      id: Date.now().toString(),
-                                      type: 'warning',
-                                      title: '无法访问',
-                                      message: fileUrlResp.message || '该文档暂无在线访问链接',
-                                      timestamp: new Date()
-                                    }
-                                    setNotifications(prev => [...prev, notification])
-                                  }
-                                } catch {
-                                  const notification: Notification = {
-                                    id: Date.now().toString(),
-                                    type: 'error',
-                                    title: '获取链接失败',
-                                    message: '获取文件链接时出错，请稍后重试',
-                                    timestamp: new Date()
-                                  }
-                                  setNotifications(prev => [...prev, notification])
-                                }
-                              } else if (result.pic_folder_url) {
-                                const token = generateId()
-                                setViewerDoc({
-                                  title: result.title,
-                                  picFolderUrl: result.pic_folder_url,
-                                  token
-                                })
-                              } else {
-                                const notification: Notification = {
-                                  id: Date.now().toString(),
-                                  type: 'warning',
-                                  title: '无法访问',
-                                  message: '该文档暂无在线访问链接',
-                                  timestamp: new Date()
-                                }
-                                setNotifications(prev => [...prev, notification])
+                            onClick={() => {
+                              if (!hasCircuitHits) {
+                                openSearchResultDocument(result)
                               }
                             }}
                           >
-                            <div className="result-rank">{startIdx + idx + 1}</div>
+                            <div className="result-rank">{resultRank}</div>
                             <div className="result-content">
-                              <h4 className="result-title">{result.title}</h4>
+                              <div className="result-title-row">
+                                {hasCircuitHits && (
+                                  <span className="result-inline-rank">{resultRank}</span>
+                                )}
+                                <h4 className="result-title">{result.title}</h4>
+                                {hasCircuitHits && resultRank === 1 && (
+                                  <span className="result-primary-badge">最可能</span>
+                                )}
+                              </div>
                               {tagItems.length > 0 && (
                                 <div className="result-tags">
                                   {tagItems.map((tag) => (
@@ -3854,9 +4322,63 @@ function App() {
                                   ))}
                                 </div>
                               )}
+                              {hasCircuitHits && (
+                                <div className="circuit-hit-sublist" onClick={(event) => event.stopPropagation()}>
+                                  <div className="circuit-hit-sublist-header">
+                                    <span>图内命中位置</span>
+                                    <span>
+                                      {compactedCircuitHits.totalCount > visibleCircuitHits.length
+                                        ? `展示 ${visibleCircuitHits.length}/${compactedCircuitHits.totalCount}`
+                                        : `${visibleCircuitHits.length} 处`}
+                                    </span>
+                                  </div>
+                                  {compactedCircuitHits.mergedNearbyCount > 0 && (
+                                    <div className="circuit-hit-sublist-note">
+                                      已收起 {compactedCircuitHits.mergedNearbyCount} 个相近位置
+                                    </div>
+                                  )}
+                                  {visibleCircuitHits.map((hit, hitIndex) => {
+                                    const circuitHitKey = `${message.id}:${result.file_id}:${hit.candidate_id || hit.hit_id || hit.page_index}`
+                                    const isHitExpanded = expandedHitKey === circuitHitKey
+                                    return (
+                                      <CircuitBodyHitPanel
+                                        key={circuitHitKey}
+                                        bodySearch={result.body_search}
+                                        hit={hit}
+                                        expanded={isHitExpanded}
+                                        rank={hitIndex + 1}
+                                        isPrimary={hitIndex === 0}
+                                        resolveDocumentAccess={async () => {
+                                          return resolveSearchResultDocumentAccessForPreview(result)
+                                        }}
+                                        onToggle={() => {
+                                          setExpandedCircuitHitByMessage(prev => ({
+                                            ...prev,
+                                            [message.id]: isHitExpanded ? null : circuitHitKey,
+                                          }))
+                                        }}
+                                        onOpenDocument={() => openSearchResultDocument(result, hit)}
+                                      />
+                                    )
+                                  })}
+                                  {hiddenCircuitHitCount > 0 ? (
+                                    <button
+                                      type="button"
+                                      className="circuit-hit-more"
+                                      onClick={(event) => {
+                                        event.preventDefault()
+                                        event.stopPropagation()
+                                        openSearchResultDocument(result, visibleCircuitHits[0] || circuitHits[0])
+                                      }}
+                                    >
+                                      还有 {hiddenCircuitHitCount} 处命中，进入文档内查看
+                                    </button>
+                                  ) : null}
+                                </div>
+                              )}
                             </div>
                             <div className="result-view-btn">
-                              <span>查看</span>
+                              <span>{hasCircuitHits ? '位置' : '查看'}</span>
                               <ChevronRight size={16} strokeWidth={2.5} />
                             </div>
                           </div>
@@ -4001,6 +4523,7 @@ function App() {
                                     key={v}
                                     className="suggestion-chip"
                                     onClick={async () => {
+                                      cleanupOngoingState()
                                       addMessage({ type: 'user', content: v })
                                       await sendChatMessage(v)
                                     }}
@@ -4243,6 +4766,31 @@ function App() {
         </div>
       </main>
 
+      {frontendRuntimeConfig?.webview_debug_enabled && !viewerDoc && !showReportViewer && (
+        <button
+          type="button"
+          className="webview-debug-fab"
+          style={{
+            left: `${webviewDebugFabPosition.x}px`,
+            top: `${webviewDebugFabPosition.y}px`,
+          }}
+          onPointerDown={handleWebviewDebugFabPointerDown}
+          onPointerMove={handleWebviewDebugFabPointerMove}
+          onPointerUp={handleWebviewDebugFabPointerUp}
+          onPointerCancel={handleWebviewDebugFabPointerCancel}
+          onKeyDown={(event) => {
+            if (event.key === 'Enter' || event.key === ' ') {
+              event.preventDefault()
+              openWebviewDebugDocument()
+            }
+          }}
+          aria-label="打开 WebView 图内搜索调试"
+          title="WebView 图内搜索调试"
+        >
+          <FileText size={20} />
+        </button>
+      )}
+
       {/* Input Area */}
       <footer className="input-container">
         <div className="input-inner">
@@ -4323,17 +4871,6 @@ function App() {
               )}
             </div>
           </form>
-          <div className="input-hint">
-            {voiceError ? (
-              <span className="voice-error">{voiceError}</span>
-            ) : !isSecureContext ? (
-              <span className="voice-warning">语音输入需要HTTPS安全连接</span>
-            ) : (
-              <>
-                {speechSupported ? '按住麦克风说话 • ' : ''}按 Enter 发送
-              </>
-            )}
-          </div>
         </div>
       </footer>
 
@@ -4344,6 +4881,8 @@ function App() {
           title={viewerDoc.title}
           picFolderUrl={viewerDoc.picFolderUrl}
           urlType={viewerDoc.urlType}
+          initialPage={viewerDoc.initialPage}
+          circuitSearch={viewerDoc.circuitSearch}
           closeToken={viewerDoc.token}
           onClose={(token) => {
             if (!viewerDoc || (token && token !== viewerDoc.token)) return

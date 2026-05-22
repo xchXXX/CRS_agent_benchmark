@@ -6,6 +6,7 @@ import sys
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from doc_search_bench.user_model_defaults import (
+    DEFAULT_BENCHMARK_USER_MODEL,
     apply_backend_llm_env_defaults,
     _normalize_backend_model,
     resolve_user_model_defaults,
@@ -40,6 +41,19 @@ def test_resolve_user_model_defaults_falls_back_to_backend_agent_model(monkeypat
 
     assert resolved.model == "openrouter:google/gemini-3.1-flash-lite-preview"
     assert resolved.provider is None
+
+
+def test_resolve_user_model_defaults_falls_back_to_builtin_openrouter_model(monkeypatch):
+    monkeypatch.setattr(
+        "doc_search_bench.user_model_defaults.load_backend_env",
+        lambda: {},
+    )
+
+    resolved = resolve_user_model_defaults()
+
+    assert resolved.model == DEFAULT_BENCHMARK_USER_MODEL
+    assert resolved.provider is None
+    assert resolved.source == "benchmark_or_builtin_fallback"
 
 
 def test_normalize_backend_model_promotes_vendor_shorthand_to_openrouter_when_key_exists():

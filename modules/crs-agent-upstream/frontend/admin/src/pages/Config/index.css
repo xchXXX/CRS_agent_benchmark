@@ -7,3 +7,19 @@
   background: #1a1f2e;
   border: 1px solid rgba(255, 255, 255, 0.08);
 }
+
+.config-card-content {
+  width: 100%;
+}
+
+.external-service-panel {
+  width: 100%;
+}
+
+.external-service-tabs > .ant-tabs-nav {
+  margin-bottom: 16px;
+}
+
+.external-service-tabs .ant-tabs-tab {
+  padding: 8px 14px;
+}

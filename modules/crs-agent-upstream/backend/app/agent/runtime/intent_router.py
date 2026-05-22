@@ -87,13 +87,8 @@ class RequestIntentRouter:
         "电路图",
         "线路图",
         "线束图",
-        "针脚定义",
         "针脚图",
-        "引脚定义",
         "引脚图",
-        "接插件定义",
-        "保险丝盒定义",
-        "保险盒定义",
         "原理图",
         "手册",
         "维修手册",
@@ -105,7 +100,26 @@ class RequestIntentRouter:
     }
     DOC_ACTION_KEYWORDS = {"搜索", "查找", "帮我找", "找一下", "搜一下", "帮我搜", "查一下"}
     DOC_TARGET_HINTS = {"资料", "文档", "手册", "图纸", "电路图", "线路图", "原理图", "说明书"}
-    DOC_REQUEST_SUFFIXES = {"图", "资料", "文档", "手册", "文件", "图纸"}
+    DOC_BODY_SCOPE_HINTS = {
+        "里面",
+        "里边",
+        "内部",
+        "图内",
+        "图里",
+        "图中",
+        "图上",
+        "文档内",
+        "文档里",
+        "文档中",
+        "资料内",
+        "资料里",
+        "资料中",
+        "pdf内",
+        "pdf里",
+        "PDF内",
+        "PDF里",
+    }
+    DOC_BODY_LOOKUP_HINTS = {"找", "查", "搜", "定位", "位置", "在哪", "在哪里", "哪一页", "第几页"}
     ECU_DATA_MATERIAL_KEYWORDS = {
         "电脑版数据",
         "电脑数据",
@@ -219,6 +233,9 @@ class RequestIntentRouter:
             return IntentDecision(intent=RoutedIntent.GENERAL_CHAT, reason="empty_message_default", source="default")
 
         parsed_fault_code = self._parse_fault_code(text)
+        high_confidence = self._route_high_confidence_rule(text=text, parsed_fault_code=parsed_fault_code)
+        if high_confidence is not None:
+            return high_confidence
 
         llm_decision = await self._route_with_llm(text=text, parsed_fault_code=parsed_fault_code)
         if llm_decision is not None:
@@ -236,7 +253,19 @@ class RequestIntentRouter:
             return IntentDecision(intent=RoutedIntent.GENERAL_CHAT, reason="empty_message_default", source="default")
 
         parsed_fault_code = self._parse_fault_code(text)
+        high_confidence = self._route_high_confidence_rule(text=text, parsed_fault_code=parsed_fault_code)
+        if high_confidence is not None:
+            return high_confidence
         return self._route_fallback(text=text, parsed_fault_code=parsed_fault_code)
+
+    def route_high_confidence(self, message: str) -> IntentDecision | None:
+        text = (message or "").strip()
+        if not text:
+            return None
+        return self._route_high_confidence_rule(
+            text=text,
+            parsed_fault_code=self._parse_fault_code(text),
+        )
 
     def _route_explicit_mode(self, *, message: str, mode: str | None) -> IntentDecision | None:
         normalized_mode = (mode or "auto").strip().lower()
@@ -376,6 +405,10 @@ class RequestIntentRouter:
         return self._config_service.get(key, default)
 
     def _route_fallback(self, *, text: str, parsed_fault_code: str | None) -> IntentDecision:
+        high_confidence = self._route_high_confidence_rule(text=text, parsed_fault_code=parsed_fault_code)
+        if high_confidence is not None:
+            return high_confidence
+
         if self._looks_like_pin_definition_doc_search(text):
             return IntentDecision(
                 intent=RoutedIntent.DOC_SEARCH,
@@ -428,17 +461,24 @@ class RequestIntentRouter:
 
         return IntentDecision(intent=RoutedIntent.GENERAL_CHAT, reason="default_general_chat", source="fallback_rule")
 
+    def _route_high_confidence_rule(self, *, text: str, parsed_fault_code: str | None) -> IntentDecision | None:
+        if self._looks_like_doc_body_search(text):
+            return IntentDecision(
+                intent=RoutedIntent.DOC_SEARCH,
+                reason="doc_body_search_material",
+                source="fallback_rule",
+                normalized_fault_code=parsed_fault_code,
+                confidence=0.98,
+            )
+        return None
+
     def _diagnosis_intent(self) -> RoutedIntent:
         if self._diagnosis_enabled_provider():
             return RoutedIntent.FAULT_DIAGNOSIS
         return RoutedIntent.FAULT_DIAGNOSIS_LLM
 
     def _looks_like_doc_search(self, text: str) -> bool:
-        if (
-            any(keyword in text for keyword in self.PIN_DOC_KEYWORDS)
-            and self._extract_pin_token(text)
-            and not self._looks_like_pin_definition_document_request(text)
-        ):
+        if any(keyword in text for keyword in self.META_FIND_GUIDE_KEYWORDS):
             return False
 
         if any(keyword in text for keyword in self.DOC_MATERIAL_KEYWORDS):
@@ -447,6 +487,18 @@ class RequestIntentRouter:
         has_action = any(keyword in text for keyword in self.DOC_ACTION_KEYWORDS)
         has_doc_target = any(keyword in text for keyword in self.DOC_TARGET_HINTS)
         return has_action and has_doc_target
+
+    def _looks_like_doc_body_search(self, text: str) -> bool:
+        normalized = (text or "").strip()
+        if not normalized:
+            return False
+        if any(keyword in normalized for keyword in self.META_FIND_GUIDE_KEYWORDS):
+            return False
+        if not any(keyword in normalized for keyword in self.DOC_MATERIAL_KEYWORDS):
+            return False
+        has_scope = any(keyword in normalized for keyword in self.DOC_BODY_SCOPE_HINTS)
+        has_lookup = any(keyword in normalized for keyword in self.DOC_BODY_LOOKUP_HINTS)
+        return has_scope and has_lookup
 
     def _looks_like_ecu_data_doc_search(self, text: str) -> bool:
         normalized = (text or "").strip()
@@ -480,6 +532,9 @@ class RequestIntentRouter:
         )
 
     def _looks_like_general_chat(self, text: str) -> bool:
+        if any(keyword in text for keyword in self.META_FIND_GUIDE_KEYWORDS):
+            return True
+
         if any(keyword in text for keyword in self.GENERAL_CHAT_KEYWORDS):
             return True
 
@@ -488,8 +543,6 @@ class RequestIntentRouter:
     def _looks_like_param_query(self, text: str) -> bool:
         lowered = text.lower()
         if any(keyword in text for keyword in self.PIN_DOC_KEYWORDS):
-            if self._looks_like_pin_definition_document_request(text):
-                return False
             if self._extract_pin_token(text):
                 return True
             if any(keyword in text for keyword in self.PARAM_EXACT_HINTS):
@@ -511,8 +564,6 @@ class RequestIntentRouter:
         lowered = text.lower()
         if not any(keyword in text for keyword in self.PIN_DOC_KEYWORDS):
             return False
-        if self._looks_like_pin_definition_document_request(text):
-            return True
         if self._extract_pin_token(text):
             return False
         if any(keyword in text for keyword in self.PARAM_EXACT_HINTS):
@@ -520,21 +571,6 @@ class RequestIntentRouter:
         if "canh" in lowered or "canl" in lowered:
             return False
         return True
-
-    def _looks_like_pin_definition_document_request(self, text: str) -> bool:
-        if not any(keyword in text for keyword in self.PIN_DOC_KEYWORDS):
-            return False
-        if any(keyword in text for keyword in self.PARAM_EXACT_HINTS):
-            return False
-
-        compact = re.sub(r"\s+", "", text or "")
-        for keyword in self.PIN_DOC_KEYWORDS:
-            if keyword not in compact:
-                continue
-            suffix = compact.split(keyword, 1)[1][:2]
-            if any(suffix.startswith(item) for item in self.DOC_REQUEST_SUFFIXES):
-                return True
-        return False
 
     @staticmethod
     def _extract_pin_token(text: str) -> str | None:

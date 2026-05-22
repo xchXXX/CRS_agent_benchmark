@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client'
 import App from './App'
 import './styles/index.css'
 import { checkTokenOnStartup } from './utils/tokenValidator'
+import { setupDebugConsole } from './utils/debugConsole'
 
 // 启动应用
 async function startApp() {
@@ -17,6 +18,7 @@ async function startApp() {
 
   // Token 有效或不在 APP 环境中，正常启动应用
   console.log('[App] Token 校验通过，启动应用')
+  void setupDebugConsole()
   ReactDOM.createRoot(document.getElementById('root')!).render(
     <React.StrictMode>
       <App />

@@ -184,6 +184,74 @@ export const getFilePreview = async (
   })
 }
 
+export interface CircuitViewerPageInfo {
+  page_index: number
+  page_number: number
+  width_px: number
+  height_px: number
+}
+
+export interface CircuitViewerMetadata {
+  pdf_id: string
+  filename: string
+  keyword: string
+  initial_hit_id?: string
+  initial_page_index: number
+  initial_page_number: number
+  initial_highlight_boxes_px?: number[][]
+  total_pages: number
+  pages: CircuitViewerPageInfo[]
+  has_result_json?: boolean
+  has_source_pdf_url?: boolean
+}
+
+export interface CircuitViewerHit {
+  hit_id: string
+  page_index: number
+  page_number: number
+  bbox_px: [number, number, number, number]
+  points?: string
+  matched_text: string
+  context?: string
+  reading_order?: number
+  element_index?: number
+  char_start?: number
+}
+
+export interface CircuitViewerSearchResponse {
+  keyword: string
+  pdf_id?: string
+  initial_hit_id?: string
+  total_matches: number
+  positioned_match_count: number
+  truncated: boolean
+  results: CircuitViewerHit[]
+  page_summary: Array<{ page_index: number; page_number: number; match_count: number }>
+}
+
+export const getCircuitViewerMetadata = async (
+  token: string,
+  signal?: AbortSignal
+): Promise<CircuitViewerMetadata> => {
+  return api.get(`/circuit-body-search/viewer/${encodeURIComponent(token)}/metadata`, { signal })
+}
+
+export const searchCircuitViewer = async (
+  token: string,
+  keyword: string,
+  signal?: AbortSignal
+): Promise<CircuitViewerSearchResponse> => {
+  return api.post(
+    `/circuit-body-search/viewer/${encodeURIComponent(token)}/search`,
+    { keyword, limit: 200 },
+    { signal }
+  )
+}
+
+export const getCircuitViewerPageImageUrl = (token: string, pageIndex: number): string => (
+  `/chat/api/circuit-body-search/viewer/${encodeURIComponent(token)}/page/${pageIndex}/image`
+)
+
 /**
  * 获取系统统计
  */

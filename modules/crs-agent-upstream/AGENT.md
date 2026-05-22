@@ -51,10 +51,12 @@
 
 我的电脑已经有 Redis 和 Mysql ，Python，Java 等环境，你无需自己重新安装
 
+请注意，你要哪个架构师的角度出发设计优秀的架构和文件职责，避免一个文件中出现过多的内容，违反单一职责，修改的时候可以计划，但是尽量少分 phase，你自己需要完成一步一步的改进，而不是让人一步一步的确认
+
 Mysql：账户：root 密码：@20040824
 
 遇到需要 LLM 的地方请使用 openrouter：
 
-OPENROUTER_API_KEY=<your-openrouter-api-key>
+OPENROUTER_API_KEY=YOUR_OPENROUTER_API_KEY
 
 OPENROUTER_BASE_URL=https://openrouter.ai/api/v1

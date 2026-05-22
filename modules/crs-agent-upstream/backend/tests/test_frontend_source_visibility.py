@@ -14,12 +14,28 @@ from app.schemas.chat import ChatResponse
 
 
 class FakeConfigService:
-    def __init__(self, enabled: bool):
+    def __init__(
+        self,
+        enabled: bool,
+        *,
+        eruda_enabled: bool = False,
+        webview_debug_enabled: bool = False,
+    ):
         self._enabled = enabled
+        self._eruda_enabled = eruda_enabled
+        self._webview_debug_enabled = webview_debug_enabled
 
     def get(self, key: str, default=None):
         if key == "frontend_source_display_enabled":
             return self._enabled
+        if key == "frontend_eruda_enabled":
+            return self._eruda_enabled
+        if key == "frontend_webview_debug_enabled":
+            return self._webview_debug_enabled
+        if key == "frontend_webview_debug_url":
+            return default
+        if key == "frontend_webview_debug_pdf_id":
+            return default
         return default
 
 
@@ -55,14 +71,25 @@ class StaticResponseAgentService:
         return True
 
 
-def build_runtime_deps(tmp_path, *, source_display_enabled: bool, repair_knowledge_service=None):
+def build_runtime_deps(
+    tmp_path,
+    *,
+    source_display_enabled: bool,
+    eruda_enabled: bool = False,
+    webview_debug_enabled: bool = False,
+    repair_knowledge_service=None,
+):
     return AgentRuntimeDeps(
         tool_registry=build_default_tool_registry(),
         message_history_store=MessageHistoryStore(base_dir=str(tmp_path / "history")),
         deferred_state_store=DeferredStateStore(base_dir=str(tmp_path / "deferred")),
         mem0_store=Mem0Store(),
         tracer=LoopTracer(),
-        config_service=FakeConfigService(source_display_enabled),
+        config_service=FakeConfigService(
+            source_display_enabled,
+            eruda_enabled=eruda_enabled,
+            webview_debug_enabled=webview_debug_enabled,
+        ),
         repair_knowledge_service=repair_knowledge_service,
     )
 
@@ -203,3 +230,50 @@ def test_source_detail_endpoint_respects_visibility_switch(tmp_path):
     assert shown.status_code == 200
     assert shown.json()["success"] is True
     assert shown.json()["data"]["title"] == "内部维修经验"
+
+
+def test_frontend_runtime_config_exposes_eruda_switch(tmp_path):
+    app = create_app()
+
+    with TestClient(app) as client:
+        app.state.runtime_deps = build_runtime_deps(
+            tmp_path,
+            source_display_enabled=False,
+            eruda_enabled=False,
+        )
+        disabled = client.get("/chat/api/frontend/runtime-config")
+
+        app.state.runtime_deps = build_runtime_deps(
+            tmp_path,
+            source_display_enabled=False,
+            eruda_enabled=True,
+        )
+        enabled = client.get("/chat/api/frontend/runtime-config")
+
+    assert disabled.status_code == 200
+    disabled_body = disabled.json()
+    assert disabled_body["eruda_enabled"] is False
+    assert disabled_body["webview_debug_enabled"] is False
+    assert disabled_body["webview_debug_viewer_token"] == ""
+    assert enabled.status_code == 200
+    enabled_body = enabled.json()
+    assert enabled_body["eruda_enabled"] is True
+    assert enabled_body["webview_debug_enabled"] is False
+
+
+def test_frontend_runtime_config_exposes_webview_debug_switch(tmp_path):
+    app = create_app()
+
+    with TestClient(app) as client:
+        app.state.runtime_deps = build_runtime_deps(
+            tmp_path,
+            source_display_enabled=False,
+            webview_debug_enabled=True,
+        )
+        response = client.get("/chat/api/frontend/runtime-config")
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["webview_debug_enabled"] is True
+    assert body["webview_debug_url"]
+    assert body["webview_debug_viewer_token"]

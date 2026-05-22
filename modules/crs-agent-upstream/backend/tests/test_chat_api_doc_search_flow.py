@@ -1,5 +1,3 @@
-from types import SimpleNamespace
-
 from fastapi.testclient import TestClient
 from pydantic_ai.messages import ModelMessage, ModelRequest, ModelResponse, TextPart, ToolCallPart, ToolReturnPart
 from pydantic_ai.models.function import AgentInfo, FunctionModel
@@ -10,7 +8,7 @@ from app.agent.memory.message_history_store import MessageHistoryStore
 from app.agent.observability.tracer import LoopTracer
 from app.agent.runtime.deps import AgentRuntimeDeps
 from app.agent.runtime.factory import AgentFactory
-from app.agent.runtime.service import AgentLoopService, DocSearchExecutedQuery
+from app.agent.runtime.service import AgentLoopService
 from app.agent.tools.registry import build_default_tool_registry
 from app.core.config import Settings
 from app.legacy.services.clarify_service import ClarifyDecision
@@ -20,6 +18,14 @@ from app.main import create_app
 class FakeSession:
     def close(self):
         return None
+
+
+class FakeConfigService:
+    def __init__(self, values=None):
+        self._values = dict(values or {})
+
+    def get(self, key, default=None):
+        return self._values.get(key, default)
 
 
 class FakeAmbiguousSearchEngine:
@@ -189,78 +195,6 @@ class FakeDirectQuerySearchEngine:
         }
 
 
-class FakeRuleVariantSearchEngine:
-    queries: list[str] = []
-
-    def __init__(self, _db):
-        pass
-
-    def search(self, query: str, top_k: int = 20, lexical_top_k: int = 200, use_vector: bool = False):
-        assert use_vector is False
-        self.__class__.queries.append(query)
-        if query == "云内带计量单元2线 板子资料":
-            return {
-                "query": query,
-                "results": [
-                    {
-                        "file_id": "variant_hit",
-                        "filename": "云内发动机电脑板计量单元2线资料",
-                        "brand": "云内",
-                        "series": "德威",
-                        "score": 0.74,
-                    }
-                ],
-                "preprocessing": {"entities": {"supplier": ["云内"]}},
-                "search_method": "lexical_only",
-                "search_time_ms": 5.0,
-            }
-        return {
-            "query": query,
-            "results": [],
-            "preprocessing": {"entities": {"supplier": ["云内"]}},
-            "search_method": "lexical_only",
-            "search_time_ms": 4.0,
-        }
-
-
-class FakeStrongHitInvalidatedSearchEngine:
-    queries: list[str] = []
-
-    def __init__(self, _db):
-        pass
-
-    def search(self, query: str, top_k: int = 20, lexical_top_k: int = 200, use_vector: bool = False):
-        assert use_vector is False
-        self.__class__.queries.append(query)
-        if "三一55C挖掘机电路图" in query or "三一 55C 挖掘机电路图" in query:
-            return {
-                "query": query,
-                "results": [
-                    {
-                        "file_id": "sy55c",
-                        "filename": "三一SY55C挖掘机电路图",
-                        "brand": "三一",
-                        "model": "SY55C",
-                        "doc_types": ["电路图"],
-                        "score": 0.79,
-                    }
-                ],
-                "preprocessing": {
-                    "entities": {"brand": ["三一"], "model": ["SY55C"], "doc_type": ["电路图"]},
-                    "query_tokens": ["SY55C", "电路图"],
-                },
-                "search_method": "lexical_only",
-                "search_time_ms": 6.0,
-            }
-        return {
-            "query": query,
-            "results": [],
-            "preprocessing": {"entities": {"brand": ["三一"]}},
-            "search_method": "lexical_only",
-            "search_time_ms": 4.0,
-        }
-
-
 class FakeFallbackImageCodeSearchEngine:
     queries: list[str] = []
 
@@ -379,114 +313,6 @@ class FakeSensitiveExistenceValidator:
         )
 
 
-def test_doc_search_image_hint_queries_prioritize_supplier_doc_type():
-    queries = AgentLoopService._extract_doc_search_image_hint_queries(
-        [
-            {
-                "scene": "document_hint",
-                "summary": "Vagon 控制板，华夏龙晖 ECU，图号 L0100220129A0",
-                "visible_text": ["Vagon", "A6352", "J0604", "华夏龙晖", "L0100220129A0"],
-                "suggested_queries": [
-                    "ECU FT15R501 独悬 技术文档",
-                    "华夏龙晖 VA2001035 零件号对应车型",
-                    "ECU图号: L0100220129A0",
-                ],
-            }
-        ]
-    )
-
-    assert queries[:3] == (
-        "ECU FT15R501 独悬 技术文档",
-        "华夏龙晖 VA2001035 零件号对应车型",
-        "ECU图号: L0100220129A0",
-    )
-    assert "华夏龙晖 ECU电路图" in queries[:6]
-    assert any(query.startswith("华夏龙晖") for query in queries)
-
-
-def test_doc_search_rule_variants_keep_precise_entity_combinations():
-    queries = AgentLoopService._build_doc_search_rule_query_variants(
-        query="老师，请问三一55C挖机电路图有嘛",
-        active_deps=SimpleNamespace(dimension_service=None),
-    )
-
-    query_texts = [item.query for item in queries]
-    assert "三一55C挖掘机电路图" in query_texts
-    assert "三一 SY55C 电路图" in query_texts
-    assert len(query_texts) <= 20
-
-
-def test_doc_search_image_hint_queries_distribute_code_doc_type_queries():
-    queries = AgentLoopService._extract_doc_search_image_hint_queries(
-        [
-            {
-                "scene": "document_hint",
-                "summary": "东风康明斯 / dCi 电脑板资料，VA2000Q VA20015 FT15R501",
-                "visible_text": ["东风康明斯 / dCi", "VA2000Q", "VA20015", "FT15R501"],
-                "suggested_queries": [
-                    "东风康明斯 / dCi",
-                    "东风康明斯 / dCi 电脑板资料",
-                ],
-            }
-        ]
-    )
-
-    assert "VA2000Q ECU电路图" in queries
-    assert "VA20015 ECU电路图" in queries
-    assert "FT15R501 ECU电路图" in queries
-
-
-def test_doc_search_image_hint_queries_use_vehicle_doc_type_for_vehicle_identity():
-    queries = AgentLoopService._extract_doc_search_image_hint_queries(
-        [
-            {
-                "scene": "vehicle_identity",
-                "summary": "中国重型汽车集团有限公司 制造 品牌 HOWO 发动机型号 WD615.62",
-                "visible_text": ["CNHTC", "品牌 HOWO", "WD615.62"],
-                "suggested_queries": [],
-            }
-        ]
-    )
-
-    assert "中国重汽 豪沃 整车电路图" in queries[:4]
-    assert "中国重汽 WD615 整车电路图" in queries
-
-
-def test_doc_search_merge_ranking_prefers_results_matching_all_code_tokens():
-    merged = AgentLoopService._merge_doc_search_envelopes(
-        [
-            (
-                DocSearchExecutedQuery(query="D760 CM2670 整车图", confidence=1.0),
-                {
-                    "status": "ok",
-                    "data": {
-                        "query": "D760 CM2670 整车图",
-                        "results": [
-                            {
-                                "file_id": "cm_only",
-                                "filename": "东风天龙D320_KFLS_整车电路图【CM2670】【国六】",
-                                "score": 0.90,
-                            },
-                            {
-                                "file_id": "both_codes",
-                                "filename": "天龙旗舰KX_H02B_D760_整车电路图【ETC7C、CM2670、武当三号】【国六】",
-                                "score": 0.76,
-                            },
-                        ],
-                        "preprocessing": {"entities": {"ecu": ["CM2670"], "platform": ["D760"]}},
-                        "search_method": "lexical_only",
-                        "search_time_ms": 4.0,
-                    },
-                },
-            )
-        ],
-        primary_query="D760 CM2670 整车图",
-    )
-
-    assert merged["status"] == "ok"
-    assert [item["file_id"] for item in merged["data"]["results"][:2]] == ["both_codes", "cm_only"]
-
-
 def build_doc_search_deps(
     tmp_path,
     search_engine_factory,
@@ -505,6 +331,7 @@ def build_doc_search_deps(
         db_session_factory=lambda: FakeSession(),
         search_engine_factory=search_engine_factory,
         clarify_service=clarify_service or FakeClarifyService(),
+        config_service=FakeConfigService({"agent_model": "test", "openrouter_clarify_model": "test"}),
         dimension_service=dimension_service,
         existence_validator=existence_validator,
         hard_constraint_validator=hard_constraint_validator,
@@ -653,11 +480,20 @@ def test_chat_api_doc_search_uses_planned_queries_and_deduplicates_results(tmp_p
 
     FakePlannedSearchEngine.queries = []
 
-    async def fake_plan(self, *, query: str, image_evidence: str = "", known_slots: str = ""):
+    async def fake_plan(
+        self,
+        *,
+        query: str,
+        image_evidence: str = "",
+        known_slots: str = "",
+        input_mode: str = "text",
+    ):
         assert "云内" in query
         assert "图片证据" not in query
         assert image_evidence or known_slots
+        assert input_mode == "text_image"
         return DocSearchQueryPlan(
+            input_mode=input_mode,
             primary_query="云内 ECU电路图 计量单元 两线",
             queries=[
                 DocSearchPlannedQuery(query="云内 ECU电路图 计量单元 两线", confidence=0.92),
@@ -719,8 +555,16 @@ def test_chat_api_doc_search_appends_image_code_hint_queries(tmp_path, monkeypat
 
     FakePlannedSearchEngine.queries = []
 
-    async def fake_plan(self, *, query: str, image_evidence: str = "", known_slots: str = ""):
+    async def fake_plan(
+        self,
+        *,
+        query: str,
+        image_evidence: str = "",
+        known_slots: str = "",
+        input_mode: str = "text",
+    ):
         return DocSearchQueryPlan(
+            input_mode=input_mode,
             primary_query="云内 ECU电路图 计量单元 两线",
             queries=[
                 DocSearchPlannedQuery(query="云内 ECU电路图 计量单元 两线", confidence=0.92),
@@ -775,8 +619,16 @@ def test_chat_api_doc_search_uses_later_image_code_hits_when_primary_query_misse
 
     FakeFallbackImageCodeSearchEngine.queries = []
 
-    async def fake_plan(self, *, query: str, image_evidence: str = "", known_slots: str = ""):
+    async def fake_plan(
+        self,
+        *,
+        query: str,
+        image_evidence: str = "",
+        known_slots: str = "",
+        input_mode: str = "text",
+    ):
         return DocSearchQueryPlan(
+            input_mode=input_mode,
             primary_query="云内 ECU电路图 计量单元 两线",
             queries=[DocSearchPlannedQuery(query="云内 ECU电路图 计量单元 两线", confidence=0.92)],
             rationale="先试主资料类型搜索。",
@@ -828,8 +680,16 @@ def test_chat_api_doc_search_revalidates_merged_results_with_precise_image_query
 
     FakePreprocessingSensitiveSearchEngine.queries = []
 
-    async def fake_plan(self, *, query: str, image_evidence: str = "", known_slots: str = ""):
+    async def fake_plan(
+        self,
+        *,
+        query: str,
+        image_evidence: str = "",
+        known_slots: str = "",
+        input_mode: str = "text",
+    ):
         return DocSearchQueryPlan(
+            input_mode=input_mode,
             primary_query="云内 ECU电路图 计量单元 两线",
             queries=[DocSearchPlannedQuery(query="云内 ECU电路图 计量单元 两线", confidence=0.92)],
             rationale="先试资料类型，再回退到图片识别到的型号词。",
@@ -880,15 +740,31 @@ def test_chat_api_doc_search_revalidates_merged_results_with_precise_image_query
     assert [item["file_id"] for item in body["content"]["results"]] == ["mdd01_hit"]
 
 
-def test_chat_api_doc_search_without_images_uses_rule_query_variants_without_llm(tmp_path, monkeypatch):
+def test_chat_api_doc_search_without_images_uses_text_mode_planner_fallback(tmp_path, monkeypatch):
     from app.agent.domain.doc_search.query_planner import PydanticAIDocSearchQueryPlanner
 
     FakeDirectQuerySearchEngine.queries = []
+    planner_calls = []
 
-    async def unexpected_plan(self, *, query: str, image_evidence: str = "", known_slots: str = ""):
-        raise AssertionError("planner should not run without image evidence")
+    async def fake_plan(
+        self,
+        *,
+        query: str,
+        image_evidence: str = "",
+        known_slots: str = "",
+        input_mode: str = "text",
+    ):
+        planner_calls.append(
+            {
+                "query": query,
+                "image_evidence": image_evidence,
+                "known_slots": known_slots,
+                "input_mode": input_mode,
+            }
+        )
+        return None
 
-    monkeypatch.setattr(PydanticAIDocSearchQueryPlanner, "plan", unexpected_plan)
+    monkeypatch.setattr(PydanticAIDocSearchQueryPlanner, "plan", fake_plan)
 
     deps = build_doc_search_deps(tmp_path, FakeDirectQuerySearchEngine, clarify_service=FakeClarifyService())
     factory = build_unreachable_factory()
@@ -909,117 +785,14 @@ def test_chat_api_doc_search_without_images_uses_rule_query_variants_without_llm
     body = response.json()
     assert body["type"] == "documents"
     assert body["business"] == "DOC_SEARCH"
-    assert FakeDirectQuerySearchEngine.queries[0] == "帮我找云内带计量单元2线的板子资料"
-    assert "云内带计量单元2线 板子资料" in FakeDirectQuerySearchEngine.queries
+    assert planner_calls == [
+        {
+            "query": "帮我找云内带计量单元2线的板子资料",
+            "image_evidence": "",
+            "known_slots": "",
+            "input_mode": "text",
+        }
+    ]
+    assert FakeDirectQuerySearchEngine.queries == ["帮我找云内带计量单元2线的板子资料"]
     assert body["content"]["query"] == "帮我找云内带计量单元2线的板子资料"
-    assert [item["query"] for item in body["content"]["planned_queries"]] == FakeDirectQuerySearchEngine.queries
-
-
-def test_chat_api_doc_search_rule_variant_can_supply_first_round_hit(tmp_path, monkeypatch):
-    from app.agent.domain.doc_search.query_planner import PydanticAIDocSearchQueryPlanner
-
-    FakeRuleVariantSearchEngine.queries = []
-
-    async def unexpected_plan(self, *, query: str, image_evidence: str = "", known_slots: str = ""):
-        raise AssertionError("planner should not run without image evidence")
-
-    monkeypatch.setattr(PydanticAIDocSearchQueryPlanner, "plan", unexpected_plan)
-
-    deps = build_doc_search_deps(tmp_path, FakeRuleVariantSearchEngine, clarify_service=FakeClarifyService())
-    factory = build_unreachable_factory()
-    app = create_app()
-
-    with TestClient(app) as client:
-        _install_test_runtime(app, deps, factory)
-        response = client.post(
-            "/chat/completions",
-            json={
-                "message": "帮我找云内带计量单元2线的板子资料",
-                "mode": "auto",
-            },
-            headers={"x-app-token": "test-token"},
-        )
-
-    assert response.status_code == 200
-    body = response.json()
-    assert body["type"] == "documents"
-    assert "云内带计量单元2线 板子资料" in FakeRuleVariantSearchEngine.queries
-    assert [item["file_id"] for item in body["content"]["results"]] == ["variant_hit"]
-
-
-def test_search_api_uses_rule_query_variants_for_initial_candidates(tmp_path):
-    FakeRuleVariantSearchEngine.queries = []
-
-    deps = build_doc_search_deps(tmp_path, FakeRuleVariantSearchEngine, clarify_service=FakeClarifyService())
-    factory = build_unreachable_factory()
-    app = create_app()
-
-    with TestClient(app) as client:
-        _install_test_runtime(app, deps, factory)
-        response = client.post(
-            "/search",
-            json={
-                "query": "帮我找云内带计量单元2线的板子资料",
-                "limit": 20,
-            },
-            headers={"x-app-token": "test-token"},
-        )
-
-    assert response.status_code == 200
-    body = response.json()
-    assert "云内带计量单元2线 板子资料" in FakeRuleVariantSearchEngine.queries
-    assert [item["file_id"] for item in body["results"]] == ["variant_hit"]
-    assert [item["query"] for item in body["stats"]["debug_info"]["planned_queries"]] == FakeRuleVariantSearchEngine.queries
-
-
-def test_chat_api_doc_search_keeps_strong_raw_candidates_when_preprocessing_overfilters(tmp_path):
-    FakeStrongHitInvalidatedSearchEngine.queries = []
-
-    deps = build_doc_search_deps(
-        tmp_path,
-        FakeStrongHitInvalidatedSearchEngine,
-        clarify_service=FakeClarifyService(),
-        hard_constraint_validator=FakeHardConstraintValidator(),
-    )
-    factory = build_unreachable_factory()
-    app = create_app()
-
-    with TestClient(app) as client:
-        _install_test_runtime(app, deps, factory)
-        response = client.post(
-            "/chat/completions",
-            json={"message": "老师，请问三一55C挖机电路图有嘛"},
-            headers={"x-app-token": "test-token"},
-        )
-
-    assert response.status_code == 200
-    body = response.json()
-    assert body["type"] == "documents"
-    assert "三一55C挖掘机电路图" in FakeStrongHitInvalidatedSearchEngine.queries
-    assert [item["file_id"] for item in body["content"]["results"]] == ["sy55c"]
-
-
-def test_search_api_keeps_strong_raw_candidates_when_preprocessing_overfilters(tmp_path):
-    FakeStrongHitInvalidatedSearchEngine.queries = []
-
-    deps = build_doc_search_deps(
-        tmp_path,
-        FakeStrongHitInvalidatedSearchEngine,
-        clarify_service=FakeClarifyService(),
-        hard_constraint_validator=FakeHardConstraintValidator(),
-    )
-    factory = build_unreachable_factory()
-    app = create_app()
-
-    with TestClient(app) as client:
-        _install_test_runtime(app, deps, factory)
-        response = client.post(
-            "/search",
-            json={"query": "老师，请问三一55C挖机电路图有嘛", "limit": 20},
-            headers={"x-app-token": "test-token"},
-        )
-
-    assert response.status_code == 200
-    body = response.json()
-    assert "三一55C挖掘机电路图" in FakeStrongHitInvalidatedSearchEngine.queries
-    assert [item["file_id"] for item in body["results"]] == ["sy55c"]
+    assert body["content"].get("planned_queries") in (None, [])

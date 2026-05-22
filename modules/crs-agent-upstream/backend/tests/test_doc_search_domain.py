@@ -98,6 +98,72 @@ class FakeInvalidSearchEngine:
         }
 
 
+class ExactTopTitleSearchEngine:
+    TITLE = "青岛解放_中联自卸搅拌车_车身电线束图(3724045-DM853)【博世系统】"
+
+    def __init__(self, _db):
+        pass
+
+    def search(self, query: str, top_k: int = 20, lexical_top_k: int = 200, use_vector: bool = False):
+        assert use_vector is False
+        return {
+            "query": query,
+            "results": [
+                {
+                    "file_id": "exact_1",
+                    "filename": self.TITLE,
+                    "brand": "青岛解放",
+                    "series": "中联自卸搅拌车",
+                    "doc_types": ["车身电线束图"],
+                    "score": 0.99,
+                },
+                {
+                    "file_id": "near_1",
+                    "filename": f"{self.TITLE}_补充说明",
+                    "brand": "青岛解放",
+                    "series": "中联自卸搅拌车",
+                    "doc_types": ["车身电线束图"],
+                    "score": 0.98,
+                },
+                {
+                    "file_id": "near_2",
+                    "filename": "青岛解放_中联自卸搅拌车_整车电路图",
+                    "brand": "青岛解放",
+                    "series": "中联自卸搅拌车",
+                    "doc_types": ["整车电路图"],
+                    "score": 0.92,
+                },
+                {
+                    "file_id": "near_3",
+                    "filename": "青岛解放_中联自卸搅拌车_底盘电线束图",
+                    "brand": "青岛解放",
+                    "series": "中联自卸搅拌车",
+                    "doc_types": ["底盘电线束图"],
+                    "score": 0.90,
+                },
+                {
+                    "file_id": "near_4",
+                    "filename": "青岛解放_中联自卸搅拌车_上装控制器线束图",
+                    "brand": "青岛解放",
+                    "series": "中联自卸搅拌车",
+                    "doc_types": ["上装控制器线束图"],
+                    "score": 0.88,
+                },
+                {
+                    "file_id": "near_5",
+                    "filename": "青岛解放_中联自卸搅拌车_车身电线束图",
+                    "brand": "青岛解放",
+                    "series": "中联自卸搅拌车",
+                    "doc_types": ["车身电线束图"],
+                    "score": 0.86,
+                },
+            ],
+            "preprocessing": {"entities": {"brand": ["青岛解放"], "series": ["中联自卸搅拌车"]}},
+            "search_method": "lexical_only",
+            "search_time_ms": 10.0,
+        }
+
+
 class FakeClarifyService:
     def _get_facet_raw_value(self, result, facet):
         return result.get(facet)
@@ -298,6 +364,28 @@ def test_doc_search_service_analyzes_ambiguity():
     assert analysis.context is not None
     assert analysis.context.message == "找到 6 个相关结果。请选择车型系列："
     assert analysis.context.query == "东风电路图"
+
+
+def test_doc_search_service_returns_exact_top_title_without_clarify():
+    service = build_service(ExactTopTitleSearchEngine)
+
+    result = service.execute(DocSearchRequest(query=ExactTopTitleSearchEngine.TITLE, top_k=20))
+
+    assert result.total == 1
+    assert len(result.results) == 1
+    assert result.results[0]["file_id"] == "exact_1"
+
+    analysis = asyncio.run(
+        service.analyze_ambiguity(
+            results=result.results,
+            preprocessing=result.preprocessing,
+            existing_filters=result.applied_filters,
+            query=result.original_query,
+            validity=result.validity.model_dump(mode="json"),
+        )
+    )
+
+    assert analysis.need_clarify is False
 
 
 class AutoFilterSearchEngine:
@@ -1407,6 +1495,7 @@ def test_doc_search_query_planner_builds_multiple_search_like_queries(monkeypatc
             FakeAgent.last_prompt = user_prompt
             return types.SimpleNamespace(
                 output=DocSearchQueryPlan(
+                    input_mode="text_image",
                     primary_query="云内 ECU电路图 计量单元 两线",
                     queries=[
                         DocSearchPlannedQuery(
@@ -1425,6 +1514,8 @@ def test_doc_search_query_planner_builds_multiple_search_like_queries(monkeypatc
                             confidence=0.72,
                         ),
                     ],
+                    body_keyword="计量单元",
+                    body_keyword_confidence=0.86,
                     rationale="优先围绕品牌、ECU和资料类型组合搜索词。",
                 )
             )
@@ -1445,6 +1536,7 @@ def test_doc_search_query_planner_builds_multiple_search_like_queries(monkeypatc
             query="这个板子是哪个，带计量单元2线的云内",
             image_evidence="场景=document_hint；摘要=图片中疑似 ECU 板卡；建议查询=云内 ECU电路图；云内 电脑板针脚定义",
             known_slots="品牌=云内；部件=ECU",
+            input_mode="text_image",
         )
     )
 
@@ -1455,6 +1547,11 @@ def test_doc_search_query_planner_builds_multiple_search_like_queries(monkeypatc
         "云内 电脑板针脚定义 计量单元",
         "云内 发动机电路图 ECU",
     ]
+    assert plan.input_mode == "text_image"
+    assert plan.body_keyword == "计量单元"
+    assert plan.body_keyword_confidence == 0.86
     assert FakeAgent.last_model == "openrouter:google/gemini-3.1-flash-lite-preview"
+    assert "输入模式" in FakeAgent.last_prompt
+    assert "text_image" in FakeAgent.last_prompt
     assert "这个板子是哪个" in FakeAgent.last_prompt
     assert "图片证据摘要" in FakeAgent.last_prompt

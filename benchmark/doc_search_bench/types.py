@@ -41,6 +41,24 @@ class UserProfile:
     notes: str | None = None
 
 
+RegionBox = tuple[float, float, float, float]
+
+
+@dataclass(frozen=True)
+class AcceptedRegionGroup:
+    group_id: str | None = None
+    page_number: int | None = None
+    label: str | None = None
+    boxes_norm: list[RegionBox] = field(default_factory=list)
+    match_mode: str = "any_box"
+
+
+@dataclass(frozen=True)
+class RegionPageBoxes:
+    page_number: int | None = None
+    boxes: list[RegionBox] = field(default_factory=list)
+
+
 @dataclass(frozen=True)
 class TargetDocumentTruth:
     file_id: str | None = None
@@ -49,6 +67,8 @@ class TargetDocumentTruth:
     facets: dict[str, str] = field(default_factory=dict)
     accepted_pages: list[int] = field(default_factory=list)
     accepted_page_ranges: list[tuple[int, int]] = field(default_factory=list)
+    locator_keywords: list[str] = field(default_factory=list)
+    accepted_region_groups: list[AcceptedRegionGroup] = field(default_factory=list)
 
 
 @dataclass(frozen=True)
@@ -132,6 +152,22 @@ class PredictedDocument:
     doc_path: str
     score: float | None = None
     page_numbers: list[int] = field(default_factory=list)
+    body_search: dict[str, Any] = field(default_factory=dict)
+    body_search_status: str | None = None
+    body_search_best_page: int | None = None
+    body_search_top_pages: list[int] = field(default_factory=list)
+    body_search_viewer_token_present: bool | None = None
+    body_search_preview_present: bool | None = None
+    locator_status: str | None = None
+    locator_best_page: int | None = None
+    locator_top_pages: list[int] = field(default_factory=list)
+    locator_viewer_token_present: bool | None = None
+    locator_preview_present: bool | None = None
+    coord_predicted_page_numbers: list[int] = field(default_factory=list)
+    coord_predicted_boxes_px: list[RegionPageBoxes] = field(default_factory=list)
+    coord_predicted_boxes_norm: list[RegionPageBoxes] = field(default_factory=list)
+    coord_viewer_token: str | None = None
+    coord_metadata_present: bool | None = None
 
 
 @dataclass
@@ -158,6 +194,22 @@ class PredictionRecord:
     top_k_documents: list[PredictedDocument] = field(default_factory=list)
     predicted_pages: list[int] = field(default_factory=list)
     page_confidence: float | None = None
+    locator_source: str | None = None
+    body_search_status: str | None = None
+    body_search_best_page: int | None = None
+    body_search_top_pages: list[int] = field(default_factory=list)
+    body_search_viewer_token_present: bool | None = None
+    body_search_preview_present: bool | None = None
+    locator_status: str | None = None
+    locator_best_page: int | None = None
+    locator_top_pages: list[int] = field(default_factory=list)
+    locator_viewer_token_present: bool | None = None
+    locator_preview_present: bool | None = None
+    coord_predicted_page_numbers: list[int] = field(default_factory=list)
+    coord_predicted_boxes_px: list[RegionPageBoxes] = field(default_factory=list)
+    coord_predicted_boxes_norm: list[RegionPageBoxes] = field(default_factory=list)
+    coord_viewer_token: str | None = None
+    coord_metadata_present: bool | None = None
 
 
 @dataclass
@@ -228,6 +280,29 @@ class MetricsRecord:
     exact_page_hit: bool | None = None
     page_range_overlap_hit: bool | None = None
     min_page_distance: int | None = None
+    locator_source: str | None = None
+    locator_status: str | None = None
+    locator_best_page: int | None = None
+    locator_top_pages: list[int] = field(default_factory=list)
+    locator_hit_at_1: bool | None = None
+    locator_hit_at_k: bool | None = None
+    locator_exact_page_hit: bool | None = None
+    locator_range_overlap_hit: bool | None = None
+    locator_min_page_distance: int | None = None
+    locator_viewer_token_present: bool | None = None
+    locator_preview_present: bool | None = None
+    locator_eligible: bool | None = None
+    locator_document_level_failure: str | None = None
+    document_hit: bool | None = None
+    document_hit_eligible: bool | None = None
+    document_level_failure: str | None = None
+    coord_eligible: bool | None = None
+    coord_hit: bool | None = None
+    coord_hit_page_numbers: list[int] = field(default_factory=list)
+    coord_hit_group_ids: list[str] = field(default_factory=list)
+    coord_failure_reason: str | None = None
+    coord_metadata_present: bool | None = None
+    coord_viewer_token_present: bool | None = None
 
 
 @dataclass
@@ -286,6 +361,10 @@ class TaskMetadataRecord:
     target_doc_count: int = 0
     target_doc_ids: list[str] = field(default_factory=list)
     target_doc_titles: list[str] = field(default_factory=list)
+    locator_keywords: list[str] = field(default_factory=list)
+    accepted_region_groups: list[AcceptedRegionGroup] = field(default_factory=list)
+    coord_gold_page_numbers: list[int] = field(default_factory=list)
+    coord_gold_group_ids: list[str] = field(default_factory=list)
     target_match_mode: str = "any_of"
 
 
@@ -424,6 +503,95 @@ def _parse_string_mapping(raw_value: object) -> dict[str, str]:
             continue
         normalized[normalized_key] = normalized_value
     return normalized
+
+
+def _parse_region_boxes(raw_value: object) -> list[RegionBox]:
+    if not isinstance(raw_value, list):
+        return []
+    boxes: list[RegionBox] = []
+    for item in raw_value:
+        if not isinstance(item, (list, tuple)) or len(item) != 4:
+            continue
+        try:
+            x1 = float(item[0])
+            y1 = float(item[1])
+            x2 = float(item[2])
+            y2 = float(item[3])
+        except (TypeError, ValueError):
+            continue
+        boxes.append((x1, y1, x2, y2))
+    return boxes
+
+
+def _parse_accepted_region_group(raw_value: object) -> AcceptedRegionGroup | None:
+    if not isinstance(raw_value, dict):
+        return None
+    page_number_raw = raw_value.get("page_number")
+    page_number: int | None = None
+    try:
+        if page_number_raw is not None and not isinstance(page_number_raw, bool):
+            page_number = int(page_number_raw)
+    except (TypeError, ValueError):
+        page_number = None
+    match_mode = _parse_optional_text(raw_value.get("match_mode")) or "any_box"
+    return AcceptedRegionGroup(
+        group_id=_parse_optional_text(raw_value.get("group_id")),
+        page_number=page_number,
+        label=_parse_optional_text(raw_value.get("label")),
+        boxes_norm=_parse_region_boxes(raw_value.get("boxes_norm")),
+        match_mode=match_mode,
+    )
+
+
+def _parse_accepted_region_groups(raw_value: object) -> list[AcceptedRegionGroup]:
+    if not isinstance(raw_value, list):
+        return []
+    groups: list[AcceptedRegionGroup] = []
+    for item in raw_value:
+        group = _parse_accepted_region_group(item)
+        if group is not None:
+            groups.append(group)
+    return groups
+
+
+def _collect_locator_keywords(target_docs: list[TargetDocumentTruth]) -> list[str]:
+    keywords: list[str] = []
+    for target_doc in target_docs:
+        keywords.extend(target_doc.locator_keywords)
+    return _dedupe_strings(keywords)
+
+
+def _collect_accepted_region_groups(target_docs: list[TargetDocumentTruth]) -> list[AcceptedRegionGroup]:
+    groups: list[AcceptedRegionGroup] = []
+    for target_doc in target_docs:
+        groups.extend(target_doc.accepted_region_groups)
+    return groups
+
+
+def _collect_coord_gold_page_numbers(region_groups: list[AcceptedRegionGroup]) -> list[int]:
+    pages: list[int] = []
+    seen: set[int] = set()
+    for group in region_groups:
+        if group.page_number is None or group.page_number in seen:
+            continue
+        seen.add(group.page_number)
+        pages.append(group.page_number)
+    return pages
+
+
+def _collect_coord_gold_group_ids(region_groups: list[AcceptedRegionGroup]) -> list[str]:
+    group_ids: list[str] = []
+    seen: set[str] = set()
+    for group in region_groups:
+        group_id = _parse_optional_text(group.group_id)
+        if group_id is None:
+            continue
+        lowered = group_id.casefold()
+        if lowered in seen:
+            continue
+        seen.add(lowered)
+        group_ids.append(group_id)
+    return group_ids
 
 
 def parse_stop_tokens(raw_value: object) -> list[str]:
@@ -587,6 +755,8 @@ def parse_target_document_truth(raw_value: object) -> TargetDocumentTruth | None
         facets=_parse_string_mapping(raw_value.get("facets")),
         accepted_pages=accepted_pages,
         accepted_page_ranges=parse_page_ranges(raw_value.get("accepted_page_ranges")),
+        locator_keywords=_parse_string_list(raw_value.get("locator_keywords")),
+        accepted_region_groups=_parse_accepted_region_groups(raw_value.get("accepted_region_groups")),
     )
 
 
@@ -878,6 +1048,10 @@ def build_case_run_result(task: TaskCase, run_id: str, *, attempt_index: int = 1
     target_docs = list(task.target_docs) if task.target_docs else ([task.target_doc] if task.target_doc else [])
     target_doc_ids = [doc.file_id for doc in target_docs if isinstance(doc.file_id, str) and doc.file_id.strip()]
     target_doc_titles = [doc.title for doc in target_docs if isinstance(doc.title, str) and doc.title.strip()]
+    locator_keywords = _collect_locator_keywords(target_docs)
+    accepted_region_groups = _collect_accepted_region_groups(target_docs)
+    coord_gold_page_numbers = _collect_coord_gold_page_numbers(accepted_region_groups)
+    coord_gold_group_ids = _collect_coord_gold_group_ids(accepted_region_groups)
     return CaseRunResult(
         case_id=task.case_id,
         attempt_index=attempt_index,
@@ -934,6 +1108,10 @@ def build_case_run_result(task: TaskCase, run_id: str, *, attempt_index: int = 1
             target_doc_count=len(target_docs),
             target_doc_ids=target_doc_ids,
             target_doc_titles=target_doc_titles,
+            locator_keywords=locator_keywords,
+            accepted_region_groups=accepted_region_groups,
+            coord_gold_page_numbers=coord_gold_page_numbers,
+            coord_gold_group_ids=coord_gold_group_ids,
             target_match_mode=task.target_match_mode,
         ),
     )

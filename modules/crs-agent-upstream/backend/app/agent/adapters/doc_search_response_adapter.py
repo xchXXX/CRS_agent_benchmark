@@ -40,26 +40,27 @@ class DocSearchResponseAdapter:
         raw_results = search_data.get("results") or []
         formatted_results: list[dict[str, Any]] = []
         for item in raw_results:
-            formatted_results.append(
-                {
-                    "file_id": item.get("file_id"),
-                    "filename": item.get("filename") or item.get("title"),
-                    "physical_path": item.get("physical_path") or item.get("path"),
-                    "file_type": item.get("file_type"),
-                    "brand": item.get("brand"),
-                    "series": item.get("series"),
-                    "model": item.get("model"),
-                    "hierarchy_full": item.get("hierarchy_full"),
-                    "score": item.get("score"),
-                    "ref_file_id": item.get("ref_file_id"),
-                    "parent_id": item.get("parent_id"),
-                    "pic_folder_url": item.get("pic_folder_url"),
-                    "ggzj_sn": item.get("ggzj_sn"),
-                    "ggzj_data_type": item.get("ggzj_data_type"),
-                    "ggzj_file_no": item.get("ggzj_file_no"),
-                    "ggzj_file_type": item.get("ggzj_file_type"),
-                }
-            )
+            formatted = {
+                "file_id": item.get("file_id"),
+                "filename": item.get("filename") or item.get("title"),
+                "physical_path": item.get("physical_path") or item.get("path"),
+                "file_type": item.get("file_type"),
+                "brand": item.get("brand"),
+                "series": item.get("series"),
+                "model": item.get("model"),
+                "hierarchy_full": item.get("hierarchy_full"),
+                "score": item.get("score"),
+                "ref_file_id": item.get("ref_file_id"),
+                "parent_id": item.get("parent_id"),
+                "pic_folder_url": item.get("pic_folder_url"),
+                "ggzj_sn": item.get("ggzj_sn"),
+                "ggzj_data_type": item.get("ggzj_data_type"),
+                "ggzj_file_no": item.get("ggzj_file_no"),
+                "ggzj_file_type": item.get("ggzj_file_type"),
+            }
+            if item.get("body_search") is not None:
+                formatted["body_search"] = item.get("body_search")
+            formatted_results.append(formatted)
 
         total_hits = int(search_data.get("total") or len(raw_results))
         returned_count = len(formatted_results)
@@ -76,6 +77,7 @@ class DocSearchResponseAdapter:
             "summary": summary,
             "planned_queries": search_data.get("planned_queries") or [],
             "query_plan_rationale": search_data.get("query_plan_rationale") or "",
+            "body_keyword": search_data.get("body_keyword") or search_data.get("circuit_body_keyword") or "",
         }
 
     @staticmethod
@@ -165,12 +167,15 @@ class DocSearchResponseAdapter:
         return {
             "query": search_data.get("query") or search_data.get("original_query") or "",
             "original_query": search_data.get("original_query") or search_data.get("query") or "",
+            "original_user_query": search_data.get("original_user_query") or "",
             "results": search_data.get("results") or [],
             "preprocessing": search_data.get("preprocessing"),
             "search_method": search_data.get("search_method"),
             "search_time_ms": search_data.get("search_time_ms"),
             "planned_queries": search_data.get("planned_queries") or [],
             "query_plan_rationale": search_data.get("query_plan_rationale") or "",
+            "body_keyword": search_data.get("body_keyword") or "",
+            "circuit_body_keyword": search_data.get("circuit_body_keyword") or "",
         }
 
     @staticmethod

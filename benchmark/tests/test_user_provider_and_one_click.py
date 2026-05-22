@@ -12,11 +12,13 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 import run as benchmark_run
 from doc_search_bench import user as user_module
 from doc_search_bench.user import (
+    DEFAULT_USER_MODEL,
     UserSimulationProviderError,
     _CompletionClientBundle,
     _completion,
     _resolve_completion_target,
 )
+from doc_search_bench.user_model_defaults import DEFAULT_BENCHMARK_USER_MODEL
 
 
 def test_resolve_completion_target_infers_openrouter_provider():
@@ -163,6 +165,35 @@ def test_build_benchmark_command_omits_empty_user_provider_and_keeps_filters():
     assert cmd.count("--case-id") == 1
     assert "real_world_wecom_train" in cmd
     assert "real_train_0003" in cmd
+
+
+def test_parse_one_click_args_defaults_user_model_to_openrouter(monkeypatch):
+    monkeypatch.setattr(
+        benchmark_run,
+        "resolve_user_model_defaults",
+        lambda: SimpleNamespace(model=DEFAULT_BENCHMARK_USER_MODEL, provider=None),
+    )
+
+    args, remaining = benchmark_run._parse_one_click_args([])
+
+    assert remaining == []
+    assert args.user_model == DEFAULT_BENCHMARK_USER_MODEL
+    assert args.user_provider is None
+
+
+def test_load_user_default_model_uses_openrouter(monkeypatch):
+    class DummyUserEnv:
+        def __init__(self, *, model, provider):
+            self.model = model
+            self.provider = provider
+
+    monkeypatch.setattr(user_module, "LLMUserSimulationEnv", DummyUserEnv)
+
+    env = user_module.load_user("llm")
+
+    assert isinstance(env, DummyUserEnv)
+    assert env.model == DEFAULT_USER_MODEL
+    assert env.provider is None
 
 
 def test_extract_json_object_ignores_leading_litellm_noise():

@@ -22,7 +22,7 @@ DEFAULT_INTENT_ROUTER_SYSTEM_PROMPT = """
 - 维修问答
 - 故障现象排查
 - 原理解释
-- 位置识别
+- 位置识别（但用户明确说“在某份电路图/文档/资料里面找某部件或关键词的位置”时，应先走 `doc_search`）
 - 操作指导
 - 方法咨询
 - “怎么找 / 如何找到 / 怎样才能找到某资料或数据”这类问题
@@ -31,6 +31,7 @@ DEFAULT_INTENT_ROUTER_SYSTEM_PROMPT = """
 - 不要因为出现“资料”“数据”“针脚定义”等字样，就直接判成 `doc_search` 或 `param_query`。要先判断用户是在要“资料本体”，还是在问方法、位置、原理、排查思路。
 - “怎么找 / 如何找到 / 怎样才能找到某资料、数据、程序、电脑版数据”属于方法咨询，优先判为 `general_chat`，不是 `doc_search`。
 - “模块/仪表/整车/系统/ECU 的针脚定义资料、引脚图、线束图、接线图”更像 `doc_search`。
+- “找某车型电路图里面某部件/模块/线路/关键词的位置”属于先检索资料并做文档内部搜索，应判为 `doc_search`，不是维修问答里的泛化位置识别。
 - “K46 针脚定义”“CANH 在哪个针脚”“开路电压多少”这类更像 `param_query`。
 - 如果用户问的是某个 ECU/source clue 下的针脚定义或某个具体针脚的定义，即使缺少 ECU 或缺少具体针脚，也应先判为 `param_query`，让参数查询工作流继续澄清缺失槽位。
 - 开放式排查问题，例如“J1939 通讯故障怎么排查”“起动机启动不了怎么办”“雷沃挖机检测口在哪里”，都应优先判为 `general_chat`。
@@ -50,6 +51,7 @@ DEFAULT_INTENT_ROUTER_SYSTEM_PROMPT = """
 - “针脚 1.19 定义是什么” -> `param_query`
 - “WISE1OA 的 1.19 针脚定义是什么” -> `param_query`
 - “仪表显示器针脚定义” -> `doc_search`
+- “找东风天锦整车电路图里面BCM的位置” -> `doc_search`
 - “P0251 故障诊断” -> `fault_diagnosis`
 - “3916” -> `fault_diagnosis`
 - “J1939 通讯故障怎么排查” -> `general_chat`

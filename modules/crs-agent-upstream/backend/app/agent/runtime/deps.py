@@ -39,6 +39,10 @@ class AgentRuntimeDeps:
     fault_code_parser: Any = None
     repair_knowledge_service: Any = None
     parameter_query_service: Any = None
+    circuit_body_search_enhancer: Any = None
+    circuit_body_search_client: Any = None
+    circuit_body_preview_token_codec: Any = None
+    circuit_body_preview_renderer: Any = None
     app_token: str | None = None
     user_id: int | None = None
     request_session_id: str | None = None
@@ -90,6 +94,14 @@ class AgentRuntimeDeps:
             )
         try:
             from app.agent.domain.doc_search.llm_smart import PydanticAIDocSearchLLMClarifyService
+            from app.agent.domain.circuit_body_search import (
+                CircuitBodyPreviewRenderer,
+                CircuitBodyPreviewTokenCodec,
+                CircuitBodySearchEnhancer,
+                PydanticAICircuitBodyHitReranker,
+            )
+            from app.agent.domain.circuit_body_search.config import CircuitBodySearchConfigProvider
+            from app.agent.domain.circuit_body_search.search_client import CircuitBodySearchClient
             from app.legacy.models.database import get_session_local
             from app.legacy.services.clarify_service import ClarifyService
             from app.legacy.services.config_service import config_service
@@ -120,6 +132,21 @@ class AgentRuntimeDeps:
             deps.diagnosis_client = get_diagnosis_client()
             deps.ecu_service = get_ecu_service()
             deps.fault_code_parser = get_fault_code_parser()
+            circuit_body_config_provider = CircuitBodySearchConfigProvider(config_service=config_service)
+            deps.circuit_body_preview_token_codec = CircuitBodyPreviewTokenCodec()
+            deps.circuit_body_preview_renderer = CircuitBodyPreviewRenderer(
+                config_provider=circuit_body_config_provider,
+            )
+            deps.circuit_body_search_client = CircuitBodySearchClient(
+                config_provider=circuit_body_config_provider,
+            )
+            deps.circuit_body_search_enhancer = CircuitBodySearchEnhancer(
+                config_service=config_service,
+                config_provider=circuit_body_config_provider,
+                search_client=deps.circuit_body_search_client,
+                hit_reranker=PydanticAICircuitBodyHitReranker(config_service=config_service),
+                preview_token_codec=deps.circuit_body_preview_token_codec,
+            )
         except Exception:
             deps.tracer.trace(
                 event_type="legacy_bootstrap_unavailable",

@@ -210,6 +210,13 @@ class BenchmarkRuntimeLogger:
             if page_hit is False:
                 return "页码命中失败"
             return "页码判定完成"
+        if event == "定位判定完成":
+            locator_hit = payload.get("locator_hit_at_k")
+            if locator_hit is True:
+                return "定位命中通过"
+            if locator_hit is False:
+                return "定位命中失败"
+            return "定位判定完成"
         if event == "轨迹分析完成":
             return "轨迹分析确认最终命中" if payload.get("final_hit") else "轨迹分析确认最终未命中"
         if event == "尝试完成":

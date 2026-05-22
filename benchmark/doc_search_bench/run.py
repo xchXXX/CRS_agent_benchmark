@@ -13,8 +13,10 @@ from .envs.doc_search.rules import BENCHMARK_SLUG, DEFAULT_TIMEOUT_MS, DEFAULT_T
 from .envs.doc_search.tasks_dev import TASK_SUITES as DEV_TASK_SUITES
 from .envs.doc_search.tasks_test import TASK_SUITES as TEST_TASK_SUITES
 from .envs.doc_search.tasks_train import TASK_SUITES as TRAIN_TASK_SUITES
+from .judges.coord import aggregate_coord_reports, judge_coord
 from .judges.failure import summarize_failures
 from .judges.file import aggregate_file_reports
+from .judges.locator import aggregate_locator_reports, judge_locator
 from .judges.page import aggregate_page_reports
 from .runtime_prep import (
     DEFAULT_DOC_SEARCH_WARMUP_TIMEOUT_MS,
@@ -291,6 +293,14 @@ def _best_target_rank(metrics: Any) -> int | None:
     return _coerce_int(getattr(metrics, "best_target_rank", None))
 
 
+def _build_task_lookup(suites: list[TaskSuite]) -> dict[tuple[str, str, str], Any]:
+    task_lookup: dict[tuple[str, str, str], Any] = {}
+    for suite in suites:
+        for case in suite.cases:
+            task_lookup[(suite.split, suite.suite_id, case.case_id)] = case
+    return task_lookup
+
+
 def _partial_target_hit(metrics: Any, task_metadata: Any) -> bool:
     matched_count = _matched_target_count(metrics)
     if matched_count is None or matched_count <= 0:
@@ -311,7 +321,11 @@ def _full_target_hit(metrics: Any, task_metadata: Any) -> bool:
     return bool(target_doc_count > 0 and matched_count is not None and matched_count >= target_doc_count)
 
 
-def build_case_rollups(case_results: list[CaseRunResult]) -> list[dict[str, Any]]:
+def build_case_rollups(
+    case_results: list[CaseRunResult],
+    *,
+    task_lookup: dict[tuple[str, str, str], Any] | None = None,
+) -> list[dict[str, Any]]:
     grouped_results: dict[tuple[str, str, str], list[CaseRunResult]] = defaultdict(list)
     for item in case_results:
         grouped_results[(item.split, item.suite_id, item.case_id)].append(item)
@@ -320,6 +334,9 @@ def build_case_rollups(case_results: list[CaseRunResult]) -> list[dict[str, Any]
     for group_key in sorted(grouped_results):
         attempts = sorted(grouped_results[group_key], key=lambda item: item.attempt_index)
         sample = attempts[0]
+        sample_task = task_lookup.get(group_key) if task_lookup else None
+        if sample_task is None:
+            sample_task = sample.task_metadata
         attempt_count = len(attempts)
         sample_target_doc_count = _target_doc_count(sample.task_metadata)
         sample_target_match_mode = _target_match_mode(sample.task_metadata)
@@ -331,6 +348,10 @@ def build_case_rollups(case_results: list[CaseRunResult]) -> list[dict[str, Any]
         hit_at_1_count = sum(1 for item in attempts if item.metrics.hit_at_1)
         hit_at_3_count = sum(1 for item in attempts if item.metrics.hit_at_3)
         mrr_total = sum(item.metrics.mrr for item in attempts)
+        locator_outcomes = [judge_locator(sample_task, item) for item in attempts]
+        locator_eligible_attempts = [item for item in locator_outcomes if item["eligible"]]
+        coord_outcomes = [judge_coord(sample_task, item) for item in attempts]
+        coord_eligible_attempts = [item for item in coord_outcomes if item["eligible"]]
         negative_pass_attempt_count = (
             sum(1 for item in attempts if "NOISE_FALSE_POSITIVE" not in item.validation.blocking_failures)
             if not is_positive
@@ -349,6 +370,15 @@ def build_case_rollups(case_results: list[CaseRunResult]) -> list[dict[str, Any]
             for item in page_eligible_attempts
             if item.metrics.min_page_distance is not None
         ]
+        locator_eligible_attempt_count = len(locator_eligible_attempts)
+        locator_min_page_distances = [
+            item["locator_min_page_distance"]
+            for item in locator_eligible_attempts
+            if item["locator_min_page_distance"] is not None
+        ]
+        coord_eligible_attempt_count = len(coord_eligible_attempts)
+        coord_doc_hit_attempts = [item for item in coord_eligible_attempts if item["doc_hit"]]
+        coord_page_hit_attempts = [item for item in coord_eligible_attempts if item["page_hit"]]
 
         blocking_counter: Counter[str] = Counter()
         warning_counter: Counter[str] = Counter()
@@ -356,6 +386,8 @@ def build_case_rollups(case_results: list[CaseRunResult]) -> list[dict[str, Any]
         stop_reason_counter: Counter[str] = Counter()
         final_status_counter: Counter[str] = Counter()
         failure_reason_counter: Counter[str] = Counter()
+        locator_blocking_counter: Counter[str] = Counter()
+        coord_failure_counter: Counter[str] = Counter()
         attempt_summaries: list[dict[str, Any]] = []
         capability_gap_attempt_count = 0
         turn_count_total = 0
@@ -371,6 +403,8 @@ def build_case_rollups(case_results: list[CaseRunResult]) -> list[dict[str, Any]
         best_target_ranks: list[int] = []
 
         for item in attempts:
+            locator_outcome = judge_locator(sample_task, item)
+            coord_outcome = judge_coord(sample_task, item)
             blocking = list(item.validation.blocking_failures or [])
             warnings = list(item.validation.warnings or [])
             capability_gaps = list(item.workflow.capability_gaps or [])
@@ -385,6 +419,12 @@ def build_case_rollups(case_results: list[CaseRunResult]) -> list[dict[str, Any]
                 warning_counter[str(code)] += 1
             for gap in capability_gaps:
                 capability_gap_counter[str(gap)] += 1
+            locator_blocking_failure = str(locator_outcome.get("locator_blocking_failure") or "").strip()
+            if locator_blocking_failure:
+                locator_blocking_counter[locator_blocking_failure] += 1
+            coord_failure_reason = str(coord_outcome.get("coord_failure_reason") or "").strip()
+            if coord_failure_reason:
+                coord_failure_counter[coord_failure_reason] += 1
             if stop_reason:
                 stop_reason_counter[stop_reason] += 1
             if final_status:
@@ -434,6 +474,29 @@ def build_case_rollups(case_results: list[CaseRunResult]) -> list[dict[str, Any]
                     "target_coverage_rate": target_coverage_rate,
                     "all_targets_hit": _all_targets_hit(item.metrics),
                     "best_target_rank": best_target_rank,
+                    "locator_eligible": locator_outcome["eligible"],
+                    "locator_source": locator_outcome["locator_source"],
+                    "locator_status": locator_outcome["locator_status"],
+                    "locator_best_page": locator_outcome["locator_best_page"],
+                    "locator_top_pages": locator_outcome["locator_top_pages"],
+                    "locator_hit_at_1": locator_outcome["locator_hit_at_1"],
+                    "locator_hit_at_k": locator_outcome["locator_hit_at_k"],
+                    "locator_exact_page_hit": locator_outcome["locator_exact_page_hit"],
+                    "locator_range_overlap_hit": locator_outcome["locator_range_overlap_hit"],
+                    "locator_min_page_distance": locator_outcome["locator_min_page_distance"],
+                    "locator_document_level_failure": locator_outcome["document_level_failure"],
+                    "locator_blocking_failure": locator_outcome["locator_blocking_failure"],
+                    "locator_warnings": locator_outcome["warnings"],
+                    "coord_eligible": coord_outcome["eligible"],
+                    "coord_gate_open": coord_outcome["coord_gate_open"],
+                    "coord_hit": coord_outcome["coord_hit"],
+                    "coord_status": coord_outcome["coord_status"],
+                    "coord_hit_page_numbers": coord_outcome["coord_hit_page_numbers"],
+                    "coord_hit_group_ids": coord_outcome["coord_hit_group_ids"],
+                    "coord_predicted_boxes_norm": coord_outcome["coord_predicted_boxes_norm"],
+                    "coord_failure_reason": coord_outcome["coord_failure_reason"],
+                    "coord_viewer_token_present": coord_outcome["coord_viewer_token_present"],
+                    "coord_metadata_present": coord_outcome["coord_metadata_present"],
                 }
             )
 
@@ -496,6 +559,51 @@ def build_case_rollups(case_results: list[CaseRunResult]) -> list[dict[str, Any]
                     if min_page_distances
                     else None
                 ),
+                "locator_eligible_attempt_count": locator_eligible_attempt_count,
+                "locator_hit_at_1_rate": _rate(
+                    sum(1 for item in locator_eligible_attempts if item["locator_hit_at_1"]),
+                    locator_eligible_attempt_count,
+                ),
+                "locator_hit_at_k_rate": _rate(
+                    sum(1 for item in locator_eligible_attempts if item["locator_hit_at_k"]),
+                    locator_eligible_attempt_count,
+                ),
+                "locator_exact_page_hit_rate": _rate(
+                    sum(1 for item in locator_eligible_attempts if item["locator_exact_page_hit"]),
+                    locator_eligible_attempt_count,
+                ),
+                "locator_range_overlap_hit_rate": _rate(
+                    sum(1 for item in locator_eligible_attempts if item["locator_range_overlap_hit"]),
+                    locator_eligible_attempt_count,
+                ),
+                "locator_avg_min_page_distance": (
+                    round(sum(locator_min_page_distances) / len(locator_min_page_distances), 6)
+                    if locator_min_page_distances
+                    else None
+                ),
+                "locator_body_search_missing_count": sum(
+                    1 for item in locator_outcomes if item["document_level_failure"] == "BODY_SEARCH_MISSING"
+                ),
+                "locator_page_miss_count": sum(
+                    1 for item in locator_outcomes if item["document_level_failure"] == "LOCATOR_PAGE_MISS"
+                ),
+                "locator_blocking_failure_counts": _sorted_counts(locator_blocking_counter),
+                "coord_eligible_attempt_count": coord_eligible_attempt_count,
+                "coord_doc_hit_attempt_count": len(coord_doc_hit_attempts),
+                "coord_page_hit_attempt_count": len(coord_page_hit_attempts),
+                "coord_hit_rate": _rate(
+                    sum(1 for item in coord_eligible_attempts if item["coord_hit"]),
+                    coord_eligible_attempt_count,
+                ),
+                "coord_hit_given_doc_hit_rate": _rate(
+                    sum(1 for item in coord_doc_hit_attempts if item["coord_hit"]),
+                    len(coord_doc_hit_attempts),
+                ),
+                "coord_hit_given_page_hit_rate": _rate(
+                    sum(1 for item in coord_page_hit_attempts if item["coord_hit"]),
+                    len(coord_page_hit_attempts),
+                ),
+                "coord_failure_reason_counts": _sorted_counts(coord_failure_counter),
                 "final_hit_attempt_count": final_hit_attempt_count,
                 "partial_target_hit_attempt_count": partial_target_hit_attempt_count,
                 "full_target_hit_attempt_count": full_target_hit_attempt_count,
@@ -686,6 +794,84 @@ def aggregate_case_rollup_page(case_rollups: list[dict[str, Any]]) -> dict[str, 
     }
 
 
+def aggregate_case_rollup_locator(case_rollups: list[dict[str, Any]]) -> dict[str, Any]:
+    total_cases = len(case_rollups)
+    eligible_rollups = [item for item in case_rollups if item["locator_eligible_attempt_count"] > 0]
+    eligible_cases = len(eligible_rollups)
+    if eligible_cases == 0:
+        return {
+            "count_basis": "unique_case",
+            "total_cases": total_cases,
+            "eligible_cases": 0,
+            "locator_hit_at_1_rate": None,
+            "locator_hit_at_k_rate": None,
+            "locator_exact_page_hit_rate": None,
+            "locator_range_overlap_hit_rate": None,
+            "locator_avg_min_page_distance": None,
+            "locator_body_search_missing_count": 0,
+            "locator_page_miss_count": 0,
+            "locator_blocking_failure_counts": {},
+        }
+
+    distances = [
+        item["locator_avg_min_page_distance"] for item in eligible_rollups if item["locator_avg_min_page_distance"] is not None
+    ]
+    blocking_counter: Counter[str] = Counter()
+    for item in eligible_rollups:
+        for code, count in (item.get("locator_blocking_failure_counts") or {}).items():
+            blocking_counter[str(code)] += int(count)
+    return {
+        "count_basis": "unique_case",
+        "total_cases": total_cases,
+        "eligible_cases": eligible_cases,
+        "locator_hit_at_1_rate": _rate(sum(item["locator_hit_at_1_rate"] or 0.0 for item in eligible_rollups), eligible_cases),
+        "locator_hit_at_k_rate": _rate(sum(item["locator_hit_at_k_rate"] or 0.0 for item in eligible_rollups), eligible_cases),
+        "locator_exact_page_hit_rate": _rate(
+            sum(item["locator_exact_page_hit_rate"] or 0.0 for item in eligible_rollups),
+            eligible_cases,
+        ),
+        "locator_range_overlap_hit_rate": _rate(
+            sum(item["locator_range_overlap_hit_rate"] or 0.0 for item in eligible_rollups),
+            eligible_cases,
+        ),
+        "locator_avg_min_page_distance": round(sum(distances) / len(distances), 6) if distances else None,
+        "locator_body_search_missing_count": sum(
+            int(item["locator_body_search_missing_count"] or 0) for item in eligible_rollups
+        ),
+        "locator_page_miss_count": sum(int(item["locator_page_miss_count"] or 0) for item in eligible_rollups),
+        "locator_blocking_failure_counts": _sorted_counts(blocking_counter),
+    }
+
+
+def aggregate_case_rollup_coord(case_rollups: list[dict[str, Any]]) -> dict[str, Any]:
+    total_cases = len(case_rollups)
+    eligible_rollups = [item for item in case_rollups if item["coord_eligible_attempt_count"] > 0]
+    eligible_cases = len(eligible_rollups)
+    doc_hit_rollups = [item for item in eligible_rollups if int(item["coord_doc_hit_attempt_count"] or 0) > 0]
+    page_hit_rollups = [item for item in eligible_rollups if int(item["coord_page_hit_attempt_count"] or 0) > 0]
+    failure_counter: Counter[str] = Counter()
+    for item in eligible_rollups:
+        for code, count in (item.get("coord_failure_reason_counts") or {}).items():
+            failure_counter[str(code)] += int(count)
+    return {
+        "count_basis": "unique_case",
+        "total_cases": total_cases,
+        "eligible_cases": eligible_cases,
+        "doc_hit_cases": len(doc_hit_rollups),
+        "page_hit_cases": len(page_hit_rollups),
+        "coord_hit_rate": _rate(sum(item["coord_hit_rate"] or 0.0 for item in eligible_rollups), eligible_cases),
+        "coord_hit_given_doc_hit_rate": _rate(
+            sum(item["coord_hit_given_doc_hit_rate"] or 0.0 for item in doc_hit_rollups),
+            len(doc_hit_rollups),
+        ),
+        "coord_hit_given_page_hit_rate": _rate(
+            sum(item["coord_hit_given_page_hit_rate"] or 0.0 for item in page_hit_rollups),
+            len(page_hit_rollups),
+        ),
+        "coord_failure_reason_counts": _sorted_counts(failure_counter),
+    }
+
+
 def aggregate_attempt_performance(case_results: list[CaseRunResult]) -> dict[str, Any]:
     latencies = [float(item.execution.duration_ms) for item in case_results if item.execution.duration_ms is not None]
     return {
@@ -709,6 +895,8 @@ def build_dimension_summary(
     *,
     file_summary: dict[str, Any],
     page_summary: dict[str, Any],
+    locator_summary: dict[str, Any],
+    coord_summary: dict[str, Any],
     efficiency_summary: dict[str, Any],
     performance_summary: dict[str, Any],
 ) -> dict[str, Any]:
@@ -730,6 +918,21 @@ def build_dimension_summary(
             "shadow": {
                 "gold_page_hit_at_1": page_summary.get("page_hit_at_1_rate"),
                 "gold_page_hit_at_k": page_summary.get("page_hit_at_k_rate"),
+            },
+        },
+        "locator": {
+            "shadow": {
+                "locator_hit_at_1": locator_summary.get("locator_hit_at_1_rate"),
+                "locator_hit_at_k": locator_summary.get("locator_hit_at_k_rate"),
+                "locator_exact_page_hit": locator_summary.get("locator_exact_page_hit_rate"),
+                "locator_range_overlap_hit": locator_summary.get("locator_range_overlap_hit_rate"),
+            },
+        },
+        "coord": {
+            "shadow": {
+                "coord_hit": coord_summary.get("coord_hit_rate"),
+                "coord_hit_given_doc_hit": coord_summary.get("coord_hit_given_doc_hit_rate"),
+                "coord_hit_given_page_hit": coord_summary.get("coord_hit_given_page_hit_rate"),
             },
         },
         "interaction_efficiency": {
@@ -856,7 +1059,8 @@ def build_actual_report(
     suites: list[TaskSuite],
     case_results: list[CaseRunResult],
 ) -> dict[str, Any]:
-    case_rollups = build_case_rollups(case_results)
+    task_lookup = _build_task_lookup(suites)
+    case_rollups = build_case_rollups(case_results, task_lookup=task_lookup)
     return {
         "benchmark_slug": BENCHMARK_SLUG,
         "run_id": run_id,
@@ -872,7 +1076,7 @@ def build_actual_report(
         "suite_ids": [suite.suite_id for suite in suites],
         "unique_case_count": len(case_rollups),
         "attempt_count": len(case_results),
-        "case_count": len(case_results),
+        "case_count": len(case_rollups),
         "case_rollups": case_rollups,
         "cases": [case.to_dict() for case in case_results],
     }
@@ -901,22 +1105,32 @@ def build_score_report(
         min(threshold_by_suite.values()) if threshold_by_suite else 1.0
     )
 
+    task_lookup = _build_task_lookup(suites)
     suite_results_map: dict[str, list[CaseRunResult]] = defaultdict(list)
     for item in case_results:
         suite_results_map[item.suite_id].append(item)
 
-    case_rollups = build_case_rollups(case_results)
+    case_rollups = build_case_rollups(case_results, task_lookup=task_lookup)
     suite_summaries = []
     for suite in suites:
         suite_case_results = suite_results_map.get(suite.suite_id, [])
-        suite_case_rollups = build_case_rollups(suite_case_results)
+        suite_case_rollups = build_case_rollups(
+            suite_case_results,
+            task_lookup=task_lookup,
+        )
         suite_attempt_efficiency = aggregate_attempt_efficiency(suite_case_results)
         suite_case_efficiency = aggregate_case_rollup_efficiency(suite_case_rollups)
         suite_attempt_performance = aggregate_attempt_performance(suite_case_results)
         suite_case_performance = aggregate_case_rollup_performance(suite_case_rollups)
+        suite_attempt_locator = aggregate_locator_reports(suite_case_results)
+        suite_case_locator = aggregate_case_rollup_locator(suite_case_rollups)
+        suite_attempt_coord = aggregate_coord_reports(suite_case_results, task_lookup=task_lookup)
+        suite_case_coord = aggregate_case_rollup_coord(suite_case_rollups)
         attempt_level_summary = {
             "file": aggregate_file_reports(suite_case_results, threshold_by_suite[suite.suite_id]),
             "page": aggregate_page_reports(suite_case_results),
+            "locator": suite_attempt_locator,
+            "coord": suite_attempt_coord,
             "efficiency": suite_attempt_efficiency,
             "performance": suite_attempt_performance,
             "failures": summarize_failures(suite_case_results),
@@ -924,6 +1138,8 @@ def build_score_report(
         case_level_summary = {
             "file": aggregate_case_rollup_files(suite_case_rollups, threshold_by_suite[suite.suite_id]),
             "page": aggregate_case_rollup_page(suite_case_rollups),
+            "locator": suite_case_locator,
+            "coord": suite_case_coord,
             "efficiency": suite_case_efficiency,
             "performance": suite_case_performance,
             "failures": aggregate_case_rollup_failures(suite_case_rollups),
@@ -942,7 +1158,7 @@ def build_score_report(
                 "legacy_source_split": suite.legacy_source_split,
                 "attempt_count": len(suite_case_results),
                 "unique_case_count": len(suite_case_rollups),
-                "case_count": len(suite_case_results),
+                "case_count": len(suite_case_rollups),
                 "threshold": threshold_by_suite[suite.suite_id],
                 "official_gate": suite_official_gate,
                 "attempt_level": attempt_level_summary,
@@ -951,18 +1167,24 @@ def build_score_report(
                     "attempt_level": build_dimension_summary(
                         file_summary=attempt_level_summary["file"],
                         page_summary=attempt_level_summary["page"],
+                        locator_summary=attempt_level_summary["locator"],
+                        coord_summary=attempt_level_summary["coord"],
                         efficiency_summary=attempt_level_summary["efficiency"],
                         performance_summary=attempt_level_summary["performance"],
                     ),
                     "case_level": build_dimension_summary(
                         file_summary=case_level_summary["file"],
                         page_summary=case_level_summary["page"],
+                        locator_summary=case_level_summary["locator"],
+                        coord_summary=case_level_summary["coord"],
                         efficiency_summary=case_level_summary["efficiency"],
                         performance_summary=case_level_summary["performance"],
                     ),
                 },
                 "file": attempt_level_summary["file"],
                 "page": attempt_level_summary["page"],
+                "locator": attempt_level_summary["locator"],
+                "coord": attempt_level_summary["coord"],
                 "efficiency": attempt_level_summary["efficiency"],
                 "performance": attempt_level_summary["performance"],
                 "failures": attempt_level_summary["failures"],
@@ -973,9 +1195,15 @@ def build_score_report(
     case_efficiency = aggregate_case_rollup_efficiency(case_rollups)
     attempt_performance = aggregate_attempt_performance(case_results)
     case_performance = aggregate_case_rollup_performance(case_rollups)
+    attempt_locator = aggregate_locator_reports(case_results)
+    case_locator = aggregate_case_rollup_locator(case_rollups)
+    attempt_coord = aggregate_coord_reports(case_results, task_lookup=task_lookup)
+    case_coord = aggregate_case_rollup_coord(case_rollups)
     attempt_level_summary = {
         "file": aggregate_file_reports(case_results, threshold),
         "page": aggregate_page_reports(case_results),
+        "locator": attempt_locator,
+        "coord": attempt_coord,
         "efficiency": attempt_efficiency,
         "performance": attempt_performance,
         "failures": summarize_failures(case_results),
@@ -983,6 +1211,8 @@ def build_score_report(
     case_level_summary = {
         "file": aggregate_case_rollup_files(case_rollups, threshold),
         "page": aggregate_case_rollup_page(case_rollups),
+        "locator": case_locator,
+        "coord": case_coord,
         "efficiency": case_efficiency,
         "performance": case_performance,
         "failures": aggregate_case_rollup_failures(case_rollups),
@@ -1008,7 +1238,7 @@ def build_score_report(
         "max_attempts_per_case": max_attempts_per_case,
         "unique_case_count": len(case_rollups),
         "attempt_count": len(case_results),
-        "case_count": len(case_results),
+        "case_count": len(case_rollups),
         "threshold": threshold,
         "official_gate": official_gate,
         "suite_summaries": suite_summaries,
@@ -1021,18 +1251,24 @@ def build_score_report(
                 "attempt_level": build_dimension_summary(
                     file_summary=attempt_level_summary["file"],
                     page_summary=attempt_level_summary["page"],
+                    locator_summary=attempt_level_summary["locator"],
+                    coord_summary=attempt_level_summary["coord"],
                     efficiency_summary=attempt_level_summary["efficiency"],
                     performance_summary=attempt_level_summary["performance"],
                 ),
                 "case_level": build_dimension_summary(
                     file_summary=case_level_summary["file"],
                     page_summary=case_level_summary["page"],
+                    locator_summary=case_level_summary["locator"],
+                    coord_summary=case_level_summary["coord"],
                     efficiency_summary=case_level_summary["efficiency"],
                     performance_summary=case_level_summary["performance"],
                 ),
             },
             "file": attempt_level_summary["file"],
             "page": attempt_level_summary["page"],
+            "locator": attempt_level_summary["locator"],
+            "coord": attempt_level_summary["coord"],
             "efficiency": attempt_level_summary["efficiency"],
             "performance": attempt_level_summary["performance"],
             "failures": attempt_level_summary["failures"],
@@ -1236,6 +1472,17 @@ def main() -> int:
                 ("actual", str(actual_path)),
                 ("score", str(score_path)),
                 ("runtime_log", runtime_log_path),
+            ],
+        )
+        env.runtime_logger.emit(
+            "定位判定完成",
+            context=[("run_id", run_id), ("split", args.split)],
+            result=[
+                ("locator_hit_at_k_rate", score_report["summary"]["locator"].get("locator_hit_at_k_rate")),
+                ("locator_hit_at_1_rate", score_report["summary"]["locator"].get("locator_hit_at_1_rate")),
+                ("locator_page_miss_count", score_report["summary"]["locator"].get("locator_page_miss_count")),
+                ("body_search_missing_count", score_report["summary"]["locator"].get("locator_body_search_missing_count")),
+                ("coord_hit_rate", score_report["summary"]["coord"].get("coord_hit_rate")),
             ],
         )
 

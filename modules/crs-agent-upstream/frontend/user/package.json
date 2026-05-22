@@ -13,6 +13,7 @@
     "@tanstack/react-query": "^5.12.2",
     "ali-oss": "^6.23.0",
     "axios": "^1.6.2",
+    "eruda": "^3.4.3",
     "lucide-react": "^0.575.0",
     "marked": "^15.0.12",
     "react": "^18.2.0",

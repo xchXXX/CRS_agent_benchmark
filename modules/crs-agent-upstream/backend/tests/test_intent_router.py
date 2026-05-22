@@ -24,16 +24,6 @@ def test_router_fallback_keeps_explicit_pin_definition_query_as_param_query():
     assert decision.source == "fallback_rule"
 
 
-def test_router_fallback_routes_pin_definition_diagram_with_vehicle_model_to_doc_search():
-    router = RequestIntentRouter()
-
-    decision = router.route("老师，麻烦帮忙找下国六红岩杰狮H6 BCM的针脚定义图")
-
-    assert decision.intent == RoutedIntent.DOC_SEARCH
-    assert decision.reason == "pin_definition_doc_material"
-    assert decision.source == "fallback_rule"
-
-
 def test_router_fallback_keeps_canh_pin_query_as_param_query():
     router = RequestIntentRouter()
 
@@ -42,6 +32,32 @@ def test_router_fallback_keeps_canh_pin_query_as_param_query():
     assert decision.intent == RoutedIntent.PARAM_QUERY
     assert decision.reason == "parameter_query_keywords"
     assert decision.source == "fallback_rule"
+
+
+def test_router_routes_doc_body_location_search_before_llm(monkeypatch):
+    router = RequestIntentRouter(model_override="fake-model")
+
+    class UnexpectedAgent:
+        async def run(self, *, user_prompt):
+            raise AssertionError("high-confidence doc body search should not call LLM router")
+
+    monkeypatch.setattr(router, "_get_agent", lambda **kwargs: UnexpectedAgent())
+
+    decision = asyncio.run(router.route_async("找东风天锦整车电路图里面BCM的位置"))
+
+    assert decision.intent == RoutedIntent.DOC_SEARCH
+    assert decision.reason == "doc_body_search_material"
+    assert decision.source == "fallback_rule"
+    assert decision.confidence == 0.98
+
+
+def test_router_keeps_how_to_find_doc_body_location_as_general_chat():
+    router = RequestIntentRouter()
+
+    decision = router.route("怎么找东风天锦整车电路图里面BCM的位置")
+
+    assert decision.intent == RoutedIntent.GENERAL_CHAT
+    assert decision.reason == "general_question_keywords"
 
 
 def test_router_async_prefers_llm_for_ecu_data_material_query(monkeypatch):

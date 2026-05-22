@@ -9,6 +9,11 @@
 export interface SearchResult {
   doc_id: string
   file_id: string
+  pic_folder_url?: string
+  ggzj_sn?: number
+  ggzj_data_type?: number
+  ggzj_file_no?: string | null
+  ggzj_file_type?: string | null
   title: string
   path: string
   tags: {
@@ -27,6 +32,56 @@ export interface SearchResult {
   }
   score: number
   explain: string[]
+  body_search?: {
+    status?: string
+    pdf_id?: string
+    keyword?: string
+    source_pdf_url?: string
+    viewer_token?: string
+    viewer_url_type?: string
+    raw_hit_count?: number
+    page_hit_count?: number
+    region_candidate_count?: number
+    display_hit_count?: number
+    more_hits_count?: number
+    best_hit?: {
+      hit_id: string
+      candidate_id?: string
+      page_index: number
+      page_number: number
+      matched_text?: string
+      snippet?: string
+      context?: string
+      nearby_ocr_text?: string
+      highlight_boxes_px?: number[][]
+      source_hit_ids?: string[]
+      display_rank?: number
+      score?: number
+      confidence?: 'high' | 'medium' | 'low'
+      reason?: string
+      viewer_token?: string
+      preview_image_url?: string
+    }
+    top_hits?: Array<{
+      hit_id: string
+      candidate_id?: string
+      page_index: number
+      page_number: number
+      matched_text?: string
+      snippet?: string
+      context?: string
+      nearby_ocr_text?: string
+      highlight_boxes_px?: number[][]
+      source_hit_ids?: string[]
+      display_rank?: number
+      score?: number
+      confidence?: 'high' | 'medium' | 'low'
+      reason?: string
+      viewer_token?: string
+      preview_image_url?: string
+    }>
+    rerank_source?: string
+  }
 }
 
 export interface ClarifyOption {

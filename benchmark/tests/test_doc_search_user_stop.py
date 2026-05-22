@@ -9,9 +9,10 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from doc_search_bench.chat_export.render_first_attempt_review_html import build_html
 from doc_search_bench.envs.doc_search.adapters import AdapterResult
-from doc_search_bench.envs.doc_search.env import DocSearchBenchmarkEnv
+from doc_search_bench.envs.doc_search.env import DocSearchBenchmarkEnv, ResolvedAskUserOption
 from doc_search_bench.judges.trace import build_trace_analysis
 from doc_search_bench.types import (
+    BenchmarkTurnRecord,
     RunConfig,
     TaskCase,
     UserProfile,
@@ -319,6 +320,66 @@ def test_generate_persona_user_decision_uses_json_mode_for_openrouter(monkeypatc
 
     assert captured["extra_kwargs"]["response_format"] == {"type": "json_object"}
     assert captured["extra_kwargs"]["temperature"] == 0
+
+
+def test_request_structured_decision_maps_ask_user_card_context_without_legacy_field(monkeypatch: pytest.MonkeyPatch, tmp_path: Path):
+    env = DocSearchBenchmarkEnv(config=build_config(tmp_path), benchmark_root=tmp_path, run_id="run-context")
+    task = build_task()
+    result = build_case_run_result(task, "run-context")
+    turn = BenchmarkTurnRecord(
+        turn_index=1,
+        request_kind="initial_message",
+        response_body={
+            "type": "ask_user",
+            "content": {
+                "tool_call_id": "tool-ctx-1",
+                "question": "请选择控制器：",
+                "options": [
+                    {"key": "MD1CE", "label": "MD1CE", "selection_payload": {"filters": {"ecu": "MD1CE"}}},
+                    {"key": "other", "label": "其他", "selection_payload": {"filters": {}}},
+                ],
+                "context": {
+                    "message": "找到 41 个相关结果。请选择控制器：",
+                    "query": "博世878云内的电脑板供电模块有吗。",
+                    "card_type": "ask_form_v2",
+                    "scene": "doc_search",
+                    "form": {
+                        "title": "资料筛选条件",
+                        "description": "先确认最接近的筛选项，再继续搜索。",
+                    },
+                },
+            },
+        },
+        response_type="ask_user",
+        tool_call_id="tool-ctx-1",
+        ask_user_question="请选择控制器：",
+    )
+    options = [
+        ResolvedAskUserOption(key="MD1CE", label="MD1CE", description=None, selection_payload={"filters": {"ecu": "MD1CE"}}),
+        ResolvedAskUserOption(key="other", label="其他", description=None, selection_payload={"filters": {}}),
+    ]
+    captured: dict[str, object] = {}
+
+    def fake_generate_structured_user_decision(**kwargs):
+        captured.update(kwargs)
+        return StructuredUserDecision(
+            decision_kind="choose_option",
+            selected_option_key="other",
+            selected_option_label="其他",
+            evidence={"supports": ["电脑板", "供电模块"]},
+            reason="用户缺少更具体控制器信息",
+        )
+
+    monkeypatch.setattr("doc_search_bench.envs.doc_search.env.generate_structured_user_decision", fake_generate_structured_user_decision)
+
+    decision = env.request_structured_decision(task=task, result=result, turn=turn, options=options)
+
+    assert decision.selected_option_key == "other"
+    context = captured["context"]
+    assert isinstance(context, AskUserDecisionContext)
+    assert context.ask_user_context["message"] == "找到 41 个相关结果。请选择控制器："
+    assert context.ask_user_context["card_type"] == "ask_form_v2"
+    assert context.ask_user_context["visible_card_summary"] == "找到 41 个相关结果。请选择控制器："
 
 
 def test_run_chat_case_supports_user_simulation_stop(monkeypatch: pytest.MonkeyPatch, tmp_path: Path):

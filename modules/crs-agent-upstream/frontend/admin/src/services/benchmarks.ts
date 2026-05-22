@@ -102,6 +102,7 @@ function downloadReportFromDetail(runId: string, detail: BenchmarkRunDetailRespo
     if (typeof value === 'object') return JSON.stringify(value)
     return String(value)
   }
+  const hasRank = (value: unknown) => value !== undefined && value !== null && value !== ''
   const resultStatus = (item: BenchmarkPrediction) => {
     const caseSnapshot = caseById.get(item.case_id) || {}
     const goldAnswerable = caseSnapshot?.gold?.answerable
@@ -114,7 +115,7 @@ function downloadReportFromDetail(runId: string, detail: BenchmarkRunDetailRespo
         : '无资料误召回'
     }
     if (item.best_rank_in_top_k ?? item.best_rank) return '主榜命中'
-    if (item.best_rank_full !== undefined && item.best_rank_full !== null && item.best_rank_full !== '') return '主榜外召回'
+    if (hasRank(item.best_rank_full)) return '主榜外召回'
     return '未召回'
   }
   const statusStyle = (status: string) => {

@@ -71,6 +71,10 @@ class Settings(BaseSettings):
     case_context_max_serialized_bytes: int = 40960
     case_context_prompt_max_chars: int = 1800
     frontend_source_display_enabled: bool = False
+    frontend_eruda_enabled: bool = False
+    frontend_webview_debug_enabled: bool = False
+    frontend_webview_debug_url: str = "https://mft-static.51gonggui.com/pdf-loader/index.html#/?page=2&file=https://mft-static.51gonggui.com/wps/file/img/%E5%85%B1%E8%BD%A8%E5%8E%9F%E5%88%9B_%E4%BA%94%E5%8D%81%E9%93%83_2017_C&E_6WG1_ECU_%E7%94%B5%E8%B7%AF%E5%9B%BE30653"
+    frontend_webview_debug_pdf_id: str = "30653"
 
     # Parameter query
     param_query_enabled: bool = True
@@ -102,6 +106,20 @@ class Settings(BaseSettings):
     diagnosis_timeout: int = 30
     diagnosis_image_timeout: int = 60
     diagnosis_ecu_cache_ttl: int = 300
+
+    # Circuit diagram body search service
+    circuit_diagram_body_search_enabled: bool = True
+    circuit_diagram_body_search_url: str = "http://218.244.159.222/api/search"
+    circuit_diagram_body_search_timeout: int = 10
+    circuit_diagram_body_search_pg_host: str = "139.196.163.235"
+    circuit_diagram_body_search_pg_port: int = 15432
+    circuit_diagram_body_search_pg_database: str = "pdf_ai"
+    circuit_diagram_body_search_pg_user: str = "pdf_ai"
+    circuit_diagram_body_search_pg_password: str = ""
+    circuit_diagram_body_search_pg_connect_timeout: int = 5
+    circuit_diagram_body_preview_token_ttl_seconds: int = 86400
+    circuit_diagram_body_preview_result_base_dir: str = ""
+    circuit_diagram_body_preview_pdf_timeout: int = 15
 
     # Aliyun speech
     aliyun_speech_enabled: bool = False

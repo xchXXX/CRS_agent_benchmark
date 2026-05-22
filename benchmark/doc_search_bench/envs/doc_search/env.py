@@ -8,11 +8,13 @@ from time import perf_counter
 from typing import Any
 
 from ..base import BaseBenchmarkEnv
+from ...judges.coord import judge_coord
 from ...judges.contract import judge_contract
 from ...judges.file import judge_file
-from ...judges.page import judge_page
+from ...judges.locator import judge_locator
+from ...judges.page import _matches_target_document, judge_page
 from ...judges.trace import build_trace_analysis
-from ...types import BenchmarkTurnRecord, CaseRunResult, PredictedDocument, TaskCase, build_case_run_result
+from ...types import BenchmarkTurnRecord, CaseRunResult, PredictedDocument, RegionPageBoxes, TaskCase, build_case_run_result
 from ...user import (
     AskUserDecisionContext,
     AskUserOption,
@@ -46,25 +48,516 @@ def now_iso() -> str:
     return datetime.now(timezone.utc).isoformat()
 
 
-def extract_page_numbers(item: dict[str, Any]) -> list[int]:
+def _append_unique_page(pages: list[int], seen: set[int], raw_value: Any) -> None:
+    if raw_value is None or isinstance(raw_value, bool):
+        return
+    try:
+        page = int(raw_value)
+    except (TypeError, ValueError):
+        return
+    if page in seen:
+        return
+    seen.add(page)
+    pages.append(page)
+
+
+def _has_present_value(raw_value: Any) -> bool:
+    if isinstance(raw_value, str):
+        return bool(raw_value.strip())
+    return raw_value not in (None, False)
+
+
+def extract_body_search(item: dict[str, Any]) -> dict[str, Any]:
+    body_search = item.get("body_search")
+    if isinstance(body_search, dict):
+        return body_search
+    return {}
+
+
+def extract_body_search_page_numbers(body_search: dict[str, Any]) -> list[int]:
     pages: list[int] = []
+    seen: set[int] = set()
+    best_hit = body_search.get("best_hit")
+    if isinstance(best_hit, dict):
+        _append_unique_page(pages, seen, best_hit.get("page_number"))
+    top_hits = body_search.get("top_hits")
+    if isinstance(top_hits, list):
+        for hit in top_hits:
+            if not isinstance(hit, dict):
+                continue
+            _append_unique_page(pages, seen, hit.get("page_number"))
+    return pages
+
+
+def _body_search_preview_present(body_search: dict[str, Any]) -> bool:
+    if _has_present_value(body_search.get("preview_image_url")):
+        return True
+    if _has_present_value(body_search.get("preview_url")):
+        return True
+    if _has_present_value(body_search.get("preview")):
+        return True
+    best_hit = body_search.get("best_hit")
+    if isinstance(best_hit, dict):
+        if _has_present_value(best_hit.get("preview_image_url")):
+            return True
+        if _has_present_value(best_hit.get("preview_url")):
+            return True
+        if _has_present_value(best_hit.get("preview")):
+            return True
+    top_hits = body_search.get("top_hits")
+    if isinstance(top_hits, list):
+        for hit in top_hits:
+            if not isinstance(hit, dict):
+                continue
+            if _has_present_value(hit.get("preview_image_url")):
+                return True
+            if _has_present_value(hit.get("preview_url")):
+                return True
+            if _has_present_value(hit.get("preview")):
+                return True
+    return False
+
+
+def summarize_body_search(body_search: dict[str, Any]) -> dict[str, Any]:
+    status = str(body_search.get("status") or "").strip() or None
+    best_page: int | None = None
+    top_pages: list[int] = []
+    seen_pages: set[int] = set()
+    viewer_token_present = _has_present_value(body_search.get("viewer_token"))
+    preview_present = _body_search_preview_present(body_search)
+
+    best_hit = body_search.get("best_hit")
+    if isinstance(best_hit, dict):
+        viewer_token_present = viewer_token_present or _has_present_value(best_hit.get("viewer_token"))
+        if not preview_present:
+            preview_present = _body_search_preview_present({"best_hit": best_hit})
+        best_page = safe_int(best_hit.get("page_number"))
+        if best_page is not None:
+            seen_pages.add(best_page)
+            top_pages.append(best_page)
+
+    top_hits = body_search.get("top_hits")
+    if isinstance(top_hits, list):
+        for hit in top_hits:
+            if not isinstance(hit, dict):
+                continue
+            viewer_token_present = viewer_token_present or _has_present_value(hit.get("viewer_token"))
+            if not preview_present:
+                preview_present = _has_present_value(hit.get("preview_image_url")) or _has_present_value(hit.get("preview_url")) or _has_present_value(hit.get("preview"))
+            page = safe_int(hit.get("page_number"))
+            if page is None or page in seen_pages:
+                continue
+            seen_pages.add(page)
+            top_pages.append(page)
+
+    if best_page is None and top_pages:
+        best_page = top_pages[0]
+
+    return {
+        "body_search_status": status,
+        "body_search_best_page": best_page,
+        "body_search_top_pages": top_pages,
+        "body_search_viewer_token_present": viewer_token_present,
+        "body_search_preview_present": preview_present,
+        "locator_status": status,
+        "locator_best_page": best_page,
+        "locator_top_pages": list(top_pages),
+        "locator_viewer_token_present": viewer_token_present,
+        "locator_preview_present": preview_present,
+    }
+
+
+def _coerce_region_box(raw_value: Any) -> tuple[float, float, float, float] | None:
+    if not isinstance(raw_value, (list, tuple)) or len(raw_value) != 4:
+        return None
+    try:
+        return (
+            float(raw_value[0]),
+            float(raw_value[1]),
+            float(raw_value[2]),
+            float(raw_value[3]),
+        )
+    except (TypeError, ValueError):
+        return None
+
+
+def _extract_region_boxes(raw_value: Any) -> list[tuple[float, float, float, float]]:
+    if not isinstance(raw_value, list):
+        return []
+    boxes: list[tuple[float, float, float, float]] = []
+    seen: set[tuple[float, float, float, float]] = set()
+    for item in raw_value:
+        box = _coerce_region_box(item)
+        if box is None or box in seen:
+            continue
+        seen.add(box)
+        boxes.append(box)
+    return boxes
+
+
+def _first_present_text(*raw_values: Any) -> str | None:
+    for raw_value in raw_values:
+        if isinstance(raw_value, str) and raw_value.strip():
+            return raw_value.strip()
+    return None
+
+
+def _resolve_metadata_dimensions(raw_value: Any, *, page_number: int | None) -> tuple[float, float] | None:
+    if not isinstance(raw_value, dict):
+        return None
+    width = safe_float(raw_value.get("width_px"))
+    height = safe_float(raw_value.get("height_px"))
+    if width is None or height is None:
+        width = safe_float(raw_value.get("rendered_width_px"))
+        height = safe_float(raw_value.get("rendered_height_px"))
+    if width is not None and height is not None and width > 0 and height > 0:
+        return width, height
+
+    pages = raw_value.get("pages")
+    if isinstance(pages, list):
+        matched_page: dict[str, Any] | None = None
+        fallback_page: dict[str, Any] | None = pages[0] if len(pages) == 1 and isinstance(pages[0], dict) else None
+        for page in pages:
+            if not isinstance(page, dict):
+                continue
+            candidate_page_number = safe_int(page.get("page_number"))
+            candidate_page_index = safe_int(page.get("page_index"))
+            if page_number is not None and candidate_page_number == page_number:
+                matched_page = page
+                break
+            if page_number is not None and candidate_page_number is None and candidate_page_index == page_number - 1:
+                matched_page = page
+                break
+        resolved = _resolve_metadata_dimensions(matched_page or fallback_page, page_number=page_number)
+        if resolved is not None:
+            return resolved
+    return None
+
+
+def _resolve_hit_metadata_dimensions(
+    body_search: dict[str, Any],
+    hit: dict[str, Any],
+    *,
+    page_number: int | None,
+) -> tuple[float, float] | None:
+    for candidate in (
+        hit.get("metadata"),
+        hit.get("page_metadata"),
+        hit.get("viewer_metadata"),
+        body_search.get("metadata"),
+        body_search.get("viewer_metadata"),
+    ):
+        resolved = _resolve_metadata_dimensions(candidate, page_number=page_number)
+        if resolved is not None:
+            return resolved
+    return None
+
+
+def _normalize_region_box(
+    box: tuple[float, float, float, float],
+    *,
+    width_px: float,
+    height_px: float,
+) -> tuple[float, float, float, float] | None:
+    if width_px <= 0 or height_px <= 0:
+        return None
+    return (
+        round(min(max(box[0] / width_px, 0.0), 1.0), 6),
+        round(min(max(box[1] / height_px, 0.0), 1.0), 6),
+        round(min(max(box[2] / width_px, 0.0), 1.0), 6),
+        round(min(max(box[3] / height_px, 0.0), 1.0), 6),
+    )
+
+
+def summarize_coord_prediction(body_search: dict[str, Any]) -> dict[str, Any]:
+    coord_predicted_page_numbers: list[int] = []
+    seen_pages: set[int] = set()
+    boxes_px_by_page: dict[int, list[tuple[float, float, float, float]]] = {}
+    boxes_norm_by_page: dict[int, list[tuple[float, float, float, float]]] = {}
+    seen_px_by_page: dict[int, set[tuple[float, float, float, float]]] = {}
+    seen_norm_by_page: dict[int, set[tuple[float, float, float, float]]] = {}
+    saw_coord_boxes = False
+    metadata_present: bool | None = None
+    viewer_token = _first_present_text(body_search.get("viewer_token"))
+
+    hits: list[dict[str, Any]] = []
+    best_hit = body_search.get("best_hit")
+    if isinstance(best_hit, dict):
+        hits.append(best_hit)
+    top_hits = body_search.get("top_hits")
+    if isinstance(top_hits, list):
+        hits.extend(hit for hit in top_hits if isinstance(hit, dict))
+
+    for hit in hits:
+        if viewer_token is None:
+            viewer_token = _first_present_text(hit.get("viewer_token"))
+        page_number = safe_int(hit.get("page_number"))
+        boxes_px = _extract_region_boxes(hit.get("highlight_boxes_px"))
+        if page_number is None or not boxes_px:
+            continue
+        saw_coord_boxes = True
+        if page_number not in seen_pages:
+            seen_pages.add(page_number)
+            coord_predicted_page_numbers.append(page_number)
+        page_boxes_px = boxes_px_by_page.setdefault(page_number, [])
+        seen_px = seen_px_by_page.setdefault(page_number, set())
+        for box in boxes_px:
+            if box in seen_px:
+                continue
+            seen_px.add(box)
+            page_boxes_px.append(box)
+
+        dimensions = _resolve_hit_metadata_dimensions(body_search, hit, page_number=page_number)
+        if dimensions is None:
+            if metadata_present is None:
+                metadata_present = False
+            continue
+        metadata_present = True
+        width_px, height_px = dimensions
+        page_boxes_norm = boxes_norm_by_page.setdefault(page_number, [])
+        seen_norm = seen_norm_by_page.setdefault(page_number, set())
+        for box in boxes_px:
+            normalized_box = _normalize_region_box(box, width_px=width_px, height_px=height_px)
+            if normalized_box is None or normalized_box in seen_norm:
+                continue
+            seen_norm.add(normalized_box)
+            page_boxes_norm.append(normalized_box)
+
+    return {
+        "coord_predicted_page_numbers": coord_predicted_page_numbers,
+        "coord_predicted_boxes_px": [
+            RegionPageBoxes(page_number=page_number, boxes=list(boxes_px_by_page.get(page_number, [])))
+            for page_number in coord_predicted_page_numbers
+            if boxes_px_by_page.get(page_number)
+        ],
+        "coord_predicted_boxes_norm": [
+            RegionPageBoxes(page_number=page_number, boxes=list(boxes_norm_by_page.get(page_number, [])))
+            for page_number in coord_predicted_page_numbers
+            if boxes_norm_by_page.get(page_number)
+        ],
+        "coord_viewer_token": viewer_token,
+        "coord_metadata_present": metadata_present if saw_coord_boxes else None,
+        "coord_viewer_token_present": bool(viewer_token) if saw_coord_boxes or viewer_token is not None else None,
+    }
+
+
+def extract_page_numbers(item: dict[str, Any]) -> list[int]:
+    body_search = extract_body_search(item)
+    if body_search:
+        return extract_body_search_page_numbers(body_search)
+
+    pages: list[int] = []
+    seen: set[int] = set()
     for key in ("page", "page_no", "page_num", "page_number", "page_numbers", "pages"):
         value = item.get(key)
-        if isinstance(value, int):
-            pages.append(value)
-        elif isinstance(value, list):
+        if isinstance(value, list):
             for member in value:
-                if isinstance(member, int):
-                    pages.append(member)
-        elif isinstance(value, str) and value.isdigit():
-            pages.append(int(value))
-    unique_pages: list[int] = []
-    seen = set()
-    for page in pages:
-        if page not in seen:
-            seen.add(page)
-            unique_pages.append(page)
-    return unique_pages
+                _append_unique_page(pages, seen, member)
+            continue
+        _append_unique_page(pages, seen, value)
+    return pages
+
+
+def normalize_locator_prediction(
+    raw_results: list[dict[str, Any]],
+) -> dict[str, Any]:
+    saw_body_search = False
+    status_fallback: str | None = None
+    best_page_fallback: int | None = None
+    locator_status: str | None = None
+    locator_best_page: int | None = None
+    locator_top_pages: list[int] = []
+    body_search_status: str | None = None
+    body_search_best_page: int | None = None
+    body_search_top_pages: list[int] = []
+    seen_top_pages: set[int] = set()
+    viewer_token_present = False
+    preview_present = False
+    coord_predicted_page_numbers: list[int] = []
+    seen_coord_pages: set[int] = set()
+    coord_boxes_px_by_page: dict[int, list[tuple[float, float, float, float]]] = {}
+    coord_boxes_norm_by_page: dict[int, list[tuple[float, float, float, float]]] = {}
+    coord_boxes_px_seen: dict[int, set[tuple[float, float, float, float]]] = {}
+    coord_boxes_norm_seen: dict[int, set[tuple[float, float, float, float]]] = {}
+    coord_viewer_token: str | None = None
+    saw_coord_boxes = False
+    coord_metadata_present: bool | None = None
+    for item in raw_results:
+        body_search = extract_body_search(item)
+        if not body_search:
+            continue
+        saw_body_search = True
+
+        summary = summarize_body_search(body_search)
+        coord_summary = summarize_coord_prediction(body_search)
+        status = summary.get("body_search_status")
+        best_page = safe_int(summary.get("body_search_best_page"))
+        top_pages = summary.get("body_search_top_pages") if isinstance(summary.get("body_search_top_pages"), list) else []
+
+        if status_fallback is None and status is not None:
+            status_fallback = status
+        if status == "hit":
+            locator_status = "hit"
+        elif locator_status is None and status is not None:
+            locator_status = status
+
+        if body_search_status is None and status is not None:
+            body_search_status = status
+        elif body_search_status != "hit" and status == "hit":
+            body_search_status = "hit"
+
+        viewer_token_present = viewer_token_present or bool(summary.get("body_search_viewer_token_present"))
+        preview_present = preview_present or bool(summary.get("body_search_preview_present"))
+        if coord_viewer_token is None:
+            coord_viewer_token = _first_present_text(coord_summary.get("coord_viewer_token"))
+
+        if best_page_fallback is None and best_page is not None:
+            best_page_fallback = best_page
+        if locator_best_page is None and status == "hit" and best_page is not None:
+            locator_best_page = best_page
+        if body_search_best_page is None and best_page is not None:
+            body_search_best_page = best_page
+        elif body_search_best_page is None and isinstance(top_pages, list) and top_pages:
+            body_search_best_page = safe_int(top_pages[0])
+
+        if isinstance(top_pages, list):
+            for page in top_pages:
+                if isinstance(page, int) and page not in body_search_top_pages:
+                    body_search_top_pages.append(page)
+
+        for page in extract_body_search_page_numbers(body_search):
+            if page in seen_top_pages:
+                continue
+            seen_top_pages.add(page)
+            locator_top_pages.append(page)
+
+        coord_pages = coord_summary.get("coord_predicted_page_numbers")
+        if isinstance(coord_pages, list) and coord_pages:
+            saw_coord_boxes = True
+            for page in coord_pages:
+                if not isinstance(page, int) or page in seen_coord_pages:
+                    continue
+                seen_coord_pages.add(page)
+                coord_predicted_page_numbers.append(page)
+        coord_metadata = coord_summary.get("coord_metadata_present")
+        if coord_metadata is True:
+            coord_metadata_present = True
+        elif coord_metadata_present is None and coord_metadata is False:
+            coord_metadata_present = False
+
+        for field_name, target_map, target_seen in (
+            ("coord_predicted_boxes_px", coord_boxes_px_by_page, coord_boxes_px_seen),
+            ("coord_predicted_boxes_norm", coord_boxes_norm_by_page, coord_boxes_norm_seen),
+        ):
+            raw_page_boxes = coord_summary.get(field_name)
+            if not isinstance(raw_page_boxes, list):
+                continue
+            for page_boxes in raw_page_boxes:
+                page_number = safe_int(getattr(page_boxes, "page_number", None))
+                boxes = getattr(page_boxes, "boxes", None)
+                if page_number is None or not isinstance(boxes, list):
+                    continue
+                target_boxes = target_map.setdefault(page_number, [])
+                seen_boxes = target_seen.setdefault(page_number, set())
+                for box in boxes:
+                    if not isinstance(box, tuple) or len(box) != 4 or box in seen_boxes:
+                        continue
+                    seen_boxes.add(box)
+                    target_boxes.append(box)
+
+    if locator_status is None:
+        locator_status = status_fallback
+    if locator_best_page is None:
+        locator_best_page = best_page_fallback
+    if body_search_status is None:
+        body_search_status = status_fallback
+    if body_search_best_page is None:
+        body_search_best_page = best_page_fallback
+    if not body_search_top_pages:
+        body_search_top_pages = list(locator_top_pages)
+
+    return {
+        "locator_source": "body_search" if saw_body_search else None,
+        "body_search_status": body_search_status,
+        "body_search_best_page": body_search_best_page,
+        "body_search_top_pages": body_search_top_pages,
+        "body_search_viewer_token_present": viewer_token_present if saw_body_search else None,
+        "body_search_preview_present": preview_present if saw_body_search else None,
+        "locator_status": locator_status,
+        "locator_best_page": locator_best_page,
+        "locator_top_pages": locator_top_pages,
+        "locator_viewer_token_present": viewer_token_present if saw_body_search else None,
+        "locator_preview_present": preview_present if saw_body_search else None,
+        "coord_predicted_page_numbers": coord_predicted_page_numbers,
+        "coord_predicted_boxes_px": [
+            RegionPageBoxes(page_number=page_number, boxes=list(coord_boxes_px_by_page.get(page_number, [])))
+            for page_number in coord_predicted_page_numbers
+            if coord_boxes_px_by_page.get(page_number)
+        ],
+        "coord_predicted_boxes_norm": [
+            RegionPageBoxes(page_number=page_number, boxes=list(coord_boxes_norm_by_page.get(page_number, [])))
+            for page_number in coord_predicted_page_numbers
+            if coord_boxes_norm_by_page.get(page_number)
+        ],
+        "coord_viewer_token": coord_viewer_token,
+        "coord_metadata_present": coord_metadata_present if saw_coord_boxes else None,
+        "coord_viewer_token_present": bool(coord_viewer_token) if saw_body_search else None,
+    }
+
+
+def _filter_locator_source_results(
+    raw_results: list[dict[str, Any]],
+    docs: list[PredictedDocument],
+    *,
+    target_docs: list[Any] | None = None,
+    matched_titles: list[str] | None = None,
+) -> tuple[list[dict[str, Any]], list[int]]:
+    if not raw_results or not docs:
+        return raw_results, list(range(len(raw_results)))
+
+    has_target_doc_filters = bool(target_docs)
+    if target_docs:
+        matched_indexes: list[int] = []
+        for index, doc in enumerate(docs):
+            doc_payload = getattr(doc, "__dict__", {})
+            if any(_matches_target_document(doc_payload, target) for target in target_docs):
+                matched_indexes.append(index)
+        if matched_indexes:
+            valid_indexes = [index for index in matched_indexes if 0 <= index < len(raw_results)]
+            return [raw_results[index] for index in valid_indexes], valid_indexes
+
+    normalized_targets = {str(title).strip().lower() for title in (matched_titles or []) if str(title).strip()}
+    has_title_filters = bool(normalized_targets)
+    if not normalized_targets:
+        if has_target_doc_filters:
+            return [], []
+        return raw_results, list(range(len(raw_results)))
+
+    exact_indexes: list[int] = []
+    fuzzy_indexes: list[int] = []
+    for index, doc in enumerate(docs):
+        title = str(getattr(doc, "doc_title", "") or "").strip().lower()
+        doc_path = str(getattr(doc, "doc_path", "") or "").strip().lower()
+        if title in normalized_targets or doc_path in normalized_targets:
+            exact_indexes.append(index)
+            continue
+        if any(
+            target
+            and (
+                (title and (target in title or title in target))
+                or (doc_path and (target in doc_path or doc_path in target))
+            )
+            for target in normalized_targets
+        ):
+            fuzzy_indexes.append(index)
+
+    selected_indexes = exact_indexes or fuzzy_indexes
+    if selected_indexes:
+        valid_indexes = [index for index in selected_indexes if 0 <= index < len(raw_results)]
+        return [raw_results[index] for index in valid_indexes], valid_indexes
+    if has_target_doc_filters or has_title_filters:
+        return [], []
+    return raw_results, list(range(len(raw_results)))
 
 
 def clip_text(value: str | None, *, limit: int = 160) -> str | None:
@@ -149,6 +642,18 @@ def build_visible_card_summary(ask_user_payload: dict[str, Any] | None) -> str |
         if item and item not in deduped:
             deduped.append(item)
     return "\n".join(deduped).strip() or None
+
+
+def build_decision_ask_user_context(ask_user_payload: dict[str, Any] | None) -> dict[str, Any]:
+    if not isinstance(ask_user_payload, dict):
+        return {}
+
+    context = ask_user_payload.get("context")
+    normalized_context = dict(context) if isinstance(context, dict) else {}
+    visible_card_summary = build_visible_card_summary(ask_user_payload)
+    if visible_card_summary:
+        normalized_context["visible_card_summary"] = visible_card_summary
+    return normalized_context
 
 
 def summarize_document_titles(docs: list[PredictedDocument], *, limit: int = 3) -> str | None:
@@ -363,10 +868,91 @@ def resolve_doc_path(item: dict[str, Any]) -> str:
     )
 
 
-def normalize_documents(track: str, body: dict[str, Any]) -> tuple[str, list[PredictedDocument], list[int], float | None]:
+def _build_predicted_document(item: dict[str, Any], *, rank: int) -> PredictedDocument:
+    body_search = extract_body_search(item)
+    summary = summarize_body_search(body_search) if body_search else {}
+    coord_summary = summarize_coord_prediction(body_search) if body_search else {}
+    return PredictedDocument(
+        rank=rank,
+        doc_title=resolve_doc_title(item),
+        doc_path=resolve_doc_path(item),
+        score=float(item["score"]) if isinstance(item.get("score"), (int, float)) else None,
+        page_numbers=extract_page_numbers(item),
+        body_search=dict(body_search),
+        body_search_status=summary.get("body_search_status") if body_search else None,
+        body_search_best_page=safe_int(summary.get("body_search_best_page")) if body_search else None,
+        body_search_top_pages=[
+            page for page in summary.get("body_search_top_pages", []) if isinstance(page, int)
+        ] if body_search else [],
+        body_search_viewer_token_present=(
+            bool(summary.get("body_search_viewer_token_present")) if body_search else None
+        ),
+        body_search_preview_present=(
+            bool(summary.get("body_search_preview_present")) if body_search else None
+        ),
+        locator_status=summary.get("locator_status") if body_search else None,
+        locator_best_page=safe_int(summary.get("locator_best_page")) if body_search else None,
+        locator_top_pages=[
+            page for page in summary.get("locator_top_pages", []) if isinstance(page, int)
+        ] if body_search else [],
+        locator_viewer_token_present=(
+            bool(summary.get("locator_viewer_token_present")) if body_search else None
+        ),
+        locator_preview_present=(
+            bool(summary.get("locator_preview_present")) if body_search else None
+        ),
+        coord_predicted_page_numbers=[
+            page
+            for page in coord_summary.get("coord_predicted_page_numbers", [])
+            if isinstance(page, int)
+        ] if body_search else [],
+        coord_predicted_boxes_px=(
+            list(coord_summary.get("coord_predicted_boxes_px", []))
+            if isinstance(coord_summary.get("coord_predicted_boxes_px"), list)
+            else []
+        ),
+        coord_predicted_boxes_norm=(
+            list(coord_summary.get("coord_predicted_boxes_norm", []))
+            if isinstance(coord_summary.get("coord_predicted_boxes_norm"), list)
+            else []
+        ),
+        coord_viewer_token=(
+            str(coord_summary.get("coord_viewer_token"))
+            if isinstance(coord_summary.get("coord_viewer_token"), str) and str(coord_summary.get("coord_viewer_token")).strip()
+            else None
+        ),
+        coord_metadata_present=(
+            bool(coord_summary.get("coord_metadata_present"))
+            if coord_summary.get("coord_metadata_present") is not None
+            else None
+        ),
+    )
+
+
+def normalize_documents(
+    track: str,
+    body: dict[str, Any],
+    *,
+    target_docs: list[Any] | None = None,
+    matched_titles: list[str] | None = None,
+) -> tuple[str, list[PredictedDocument], list[int], float | None, dict[str, Any]]:
     docs: list[PredictedDocument] = []
     predicted_pages: list[int] = []
     page_confidence: float | None = None
+    locator_summary: dict[str, Any] = {
+        "locator_source": None,
+        "locator_status": None,
+        "locator_best_page": None,
+        "locator_top_pages": [],
+        "locator_viewer_token_present": None,
+        "locator_preview_present": None,
+        "coord_predicted_page_numbers": [],
+        "coord_predicted_boxes_px": [],
+        "coord_predicted_boxes_norm": [],
+        "coord_viewer_token": None,
+        "coord_metadata_present": None,
+        "coord_viewer_token_present": None,
+    }
 
     if track == "search_api":
         raw_results = body.get("results") or []
@@ -374,17 +960,22 @@ def normalize_documents(track: str, body: dict[str, Any]) -> tuple[str, list[Pre
         for idx, item in enumerate(raw_results, start=1):
             if not isinstance(item, dict):
                 continue
-            page_numbers = extract_page_numbers(item)
-            docs.append(
-                PredictedDocument(
-                    rank=idx,
-                    doc_title=resolve_doc_title(item),
-                    doc_path=resolve_doc_path(item),
-                    score=float(item["score"]) if isinstance(item.get("score"), (int, float)) else None,
-                    page_numbers=page_numbers,
-                )
-            )
-            predicted_pages.extend(page_numbers)
+            doc = _build_predicted_document(item, rank=idx)
+            docs.append(doc)
+            predicted_pages.extend(doc.page_numbers)
+        locator_results = [item for item in raw_results if isinstance(item, dict)]
+        filtered_locator_results, matched_indexes = _filter_locator_source_results(
+            locator_results,
+            docs,
+            target_docs=target_docs,
+            matched_titles=matched_titles,
+        )
+        if target_docs or matched_titles:
+            predicted_pages = []
+            for index in matched_indexes:
+                if 0 <= index < len(docs):
+                    predicted_pages.extend(docs[index].page_numbers)
+        locator_summary = normalize_locator_prediction(filtered_locator_results)
     else:
         response_type = str(body.get("type") or "")
         content = body.get("content") if isinstance(body.get("content"), dict) else {}
@@ -394,21 +985,26 @@ def normalize_documents(track: str, body: dict[str, Any]) -> tuple[str, list[Pre
         for idx, item in enumerate(raw_results, start=1):
             if not isinstance(item, dict):
                 continue
-            page_numbers = extract_page_numbers(item)
-            docs.append(
-                PredictedDocument(
-                    rank=idx,
-                    doc_title=resolve_doc_title(item),
-                    doc_path=resolve_doc_path(item),
-                    score=float(item["score"]) if isinstance(item.get("score"), (int, float)) else None,
-                    page_numbers=page_numbers,
-                )
-            )
-            predicted_pages.extend(page_numbers)
+            doc = _build_predicted_document(item, rank=idx)
+            docs.append(doc)
+            predicted_pages.extend(doc.page_numbers)
         if isinstance(content.get("page_confidence"), (int, float)):
             page_confidence = float(content["page_confidence"])
         elif isinstance(body.get("page_confidence"), (int, float)):
             page_confidence = float(body["page_confidence"])
+        locator_results = [item for item in raw_results if isinstance(item, dict)]
+        filtered_locator_results, matched_indexes = _filter_locator_source_results(
+            locator_results,
+            docs,
+            target_docs=target_docs,
+            matched_titles=matched_titles,
+        )
+        if target_docs or matched_titles:
+            predicted_pages = []
+            for index in matched_indexes:
+                if 0 <= index < len(docs):
+                    predicted_pages.extend(docs[index].page_numbers)
+        locator_summary = normalize_locator_prediction(filtered_locator_results)
 
     deduped_pages: list[int] = []
     seen = set()
@@ -416,7 +1012,89 @@ def normalize_documents(track: str, body: dict[str, Any]) -> tuple[str, list[Pre
         if page not in seen:
             seen.add(page)
             deduped_pages.append(page)
-    return response_type, docs, deduped_pages, page_confidence
+    if locator_summary["locator_source"] == "body_search":
+        deduped_pages = list(locator_summary["locator_top_pages"])
+    return response_type, docs, deduped_pages, page_confidence, locator_summary
+
+
+def apply_locator_prediction(result: CaseRunResult, locator_summary: dict[str, Any]) -> None:
+    result.prediction.locator_source = (
+        str(locator_summary.get("locator_source"))
+        if locator_summary.get("locator_source") is not None
+        else None
+    )
+    result.prediction.body_search_status = (
+        str(locator_summary.get("body_search_status"))
+        if locator_summary.get("body_search_status") is not None
+        else None
+    )
+    result.prediction.body_search_best_page = safe_int(locator_summary.get("body_search_best_page"))
+    result.prediction.body_search_top_pages = [
+        page
+        for page in locator_summary.get("body_search_top_pages", [])
+        if isinstance(page, int)
+    ] if isinstance(locator_summary.get("body_search_top_pages"), list) else []
+    result.prediction.body_search_viewer_token_present = (
+        bool(locator_summary.get("body_search_viewer_token_present"))
+        if locator_summary.get("body_search_viewer_token_present") is not None
+        else None
+    )
+    result.prediction.body_search_preview_present = (
+        bool(locator_summary.get("body_search_preview_present"))
+        if locator_summary.get("body_search_preview_present") is not None
+        else None
+    )
+    result.prediction.locator_status = (
+        str(locator_summary.get("locator_status"))
+        if locator_summary.get("locator_status") is not None
+        else None
+    )
+    result.prediction.locator_best_page = safe_int(locator_summary.get("locator_best_page"))
+    result.prediction.locator_top_pages = [
+        page
+        for page in locator_summary.get("locator_top_pages", [])
+        if isinstance(page, int)
+    ] if isinstance(locator_summary.get("locator_top_pages"), list) else []
+    result.prediction.locator_viewer_token_present = (
+        bool(locator_summary.get("locator_viewer_token_present"))
+        if locator_summary.get("locator_viewer_token_present") is not None
+        else None
+    )
+    result.prediction.locator_preview_present = (
+        bool(locator_summary.get("locator_preview_present"))
+        if locator_summary.get("locator_preview_present") is not None
+        else None
+    )
+    result.prediction.coord_predicted_page_numbers = [
+        page
+        for page in locator_summary.get("coord_predicted_page_numbers", [])
+        if isinstance(page, int)
+    ] if isinstance(locator_summary.get("coord_predicted_page_numbers"), list) else []
+    result.prediction.coord_predicted_boxes_px = (
+        list(locator_summary.get("coord_predicted_boxes_px", []))
+        if isinstance(locator_summary.get("coord_predicted_boxes_px"), list)
+        else []
+    )
+    result.prediction.coord_predicted_boxes_norm = (
+        list(locator_summary.get("coord_predicted_boxes_norm", []))
+        if isinstance(locator_summary.get("coord_predicted_boxes_norm"), list)
+        else []
+    )
+    result.prediction.coord_viewer_token = (
+        str(locator_summary.get("coord_viewer_token"))
+        if isinstance(locator_summary.get("coord_viewer_token"), str)
+        and str(locator_summary.get("coord_viewer_token")).strip()
+        else None
+    )
+    result.prediction.coord_metadata_present = (
+        bool(locator_summary.get("coord_metadata_present"))
+        if locator_summary.get("coord_metadata_present") is not None
+        else None
+    )
+    result.metrics.coord_metadata_present = result.prediction.coord_metadata_present
+    result.metrics.coord_viewer_token_present = (
+        bool(result.prediction.coord_viewer_token) if result.prediction.coord_viewer_token is not None else None
+    )
 
 
 def extract_ask_user_payload(body: dict[str, Any] | None) -> dict[str, Any]:
@@ -666,7 +1344,7 @@ class DocSearchBenchmarkEnv(BaseBenchmarkEnv):
         body = adapter_result.raw_body if isinstance(adapter_result.raw_body, dict) else None
         response_type = str(body.get("type") or "") if body else ""
         if body and not response_type:
-            response_type, _, _, _ = normalize_documents(benchmark_track, body)
+            response_type, _, _, _, _ = normalize_documents(benchmark_track, body)
         if adapter_result.error_message and not response_type:
             response_type = "error"
         ask_user = extract_ask_user_payload(body)
@@ -852,7 +1530,12 @@ class DocSearchBenchmarkEnv(BaseBenchmarkEnv):
                 if option_summary:
                     detail_parts.append(f"候选项={option_summary}")
         elif response_type == "documents" and isinstance(turn.response_body, dict):
-            _, docs, predicted_pages, _ = normalize_documents(task.benchmark_track, turn.response_body)
+            _, docs, predicted_pages, _, locator_summary = normalize_documents(
+                task.benchmark_track,
+                turn.response_body,
+                target_docs=list(getattr(task, "target_docs", None) or ([] if getattr(task, "target_doc", None) is None else [task.target_doc])),
+                matched_titles=list(getattr(task, "accepted_titles", None) or []),
+            )
             detail_parts.append(f"文档数={len(docs)}")
             doc_summary = summarize_document_titles(docs)
             if doc_summary:
@@ -860,6 +1543,8 @@ class DocSearchBenchmarkEnv(BaseBenchmarkEnv):
             page_summary = summarize_int_list(predicted_pages)
             if page_summary:
                 detail_parts.append(f"页码={page_summary}")
+            if locator_summary.get("locator_status"):
+                detail_parts.append(f"定位状态={locator_summary['locator_status']}")
         elif response_type == "message":
             message_text = clip_text(assistant_text, limit=180)
             if message_text:
@@ -947,9 +1632,11 @@ class DocSearchBenchmarkEnv(BaseBenchmarkEnv):
         adapter_result: AdapterResult,
     ) -> None:
         body = adapter_result.raw_body or {}
-        response_type, docs, predicted_pages, page_confidence = normalize_documents(
+        response_type, docs, predicted_pages, page_confidence, locator_summary = normalize_documents(
             task.benchmark_track,
             body,
+            target_docs=list(getattr(task, "target_docs", None) or ([] if getattr(task, "target_doc", None) is None else [task.target_doc])),
+            matched_titles=list(getattr(task, "accepted_titles", None) or []),
         )
         result.response.response_type = response_type
         result.response.final_status = "error_http" if adapter_result.error_message else (
@@ -964,6 +1651,7 @@ class DocSearchBenchmarkEnv(BaseBenchmarkEnv):
         result.prediction.top_k_documents = docs
         result.prediction.predicted_pages = predicted_pages
         result.prediction.page_confidence = page_confidence
+        apply_locator_prediction(result, locator_summary)
         result.workflow.stop_reason = response_type or "error"
         result.workflow.conversation_completed = True
         self.refresh_workflow_counters(result)
@@ -993,7 +1681,7 @@ class DocSearchBenchmarkEnv(BaseBenchmarkEnv):
             scenario=task.user_simulation_config.scenario,
             initial_user_message=task.initial_user_message or task.question_text,
             user_profile=task.user_profile,
-            visible_card_summary=build_visible_card_summary(ask_user_payload),
+            ask_user_context=build_decision_ask_user_context(ask_user_payload),
         )
         def trace_hook(event: str, payload: dict[str, Any]) -> None:
             self.log_user_decision_trace(task, result, turn, event, payload)
@@ -1037,9 +1725,11 @@ class DocSearchBenchmarkEnv(BaseBenchmarkEnv):
             return
 
         body = adapter_result.raw_body or {}
-        response_type, docs, predicted_pages, page_confidence = normalize_documents(
+        response_type, docs, predicted_pages, page_confidence, locator_summary = normalize_documents(
             task.benchmark_track,
             body,
+            target_docs=list(getattr(task, "target_docs", None) or ([] if getattr(task, "target_doc", None) is None else [task.target_doc])),
+            matched_titles=list(getattr(task, "accepted_titles", None) or []),
         )
         result.response.response_type = response_type
         result.response.final_status = "success_documents" if docs else "success_message"
@@ -1047,6 +1737,7 @@ class DocSearchBenchmarkEnv(BaseBenchmarkEnv):
         result.prediction.top_k_documents = docs
         result.prediction.predicted_pages = predicted_pages
         result.prediction.page_confidence = page_confidence
+        apply_locator_prediction(result, locator_summary)
         result.workflow.stop_reason = response_type
 
     def run_chat_case(self, task: TaskCase, result: CaseRunResult) -> None:
@@ -1618,6 +2309,99 @@ class DocSearchBenchmarkEnv(BaseBenchmarkEnv):
                 else None
             ),
             payload={"page_hit_at_k": page_outcome["page_hit_at_k"]},
+        )
+
+        locator_outcome = judge_locator(task, result)
+        result.metrics.locator_hit_at_1 = locator_outcome["locator_hit_at_1"]
+        result.metrics.locator_hit_at_k = locator_outcome["locator_hit_at_k"]
+        result.metrics.locator_exact_page_hit = locator_outcome["locator_exact_page_hit"]
+        result.metrics.locator_range_overlap_hit = locator_outcome["locator_range_overlap_hit"]
+        result.metrics.locator_min_page_distance = locator_outcome["locator_min_page_distance"]
+        result.metrics.locator_source = locator_outcome["locator_source"]
+        result.metrics.locator_status = locator_outcome["locator_status"]
+        result.metrics.locator_best_page = locator_outcome["locator_best_page"]
+        result.metrics.locator_top_pages = list(locator_outcome["locator_top_pages"])
+        result.metrics.locator_viewer_token_present = result.prediction.locator_viewer_token_present
+        result.metrics.locator_preview_present = result.prediction.locator_preview_present
+        result.metrics.locator_eligible = locator_outcome["eligible"]
+        result.metrics.locator_document_level_failure = locator_outcome["document_level_failure"]
+        result.metrics.document_hit = locator_outcome["document_hit"]
+        result.metrics.document_hit_eligible = locator_outcome["document_hit_eligible"]
+        result.metrics.document_level_failure = locator_outcome["document_level_failure"]
+        result.validation.warnings.extend(locator_outcome["warnings"])
+        self.log_case_event(
+            task,
+            result,
+            "定位判定完成",
+            result_fields=[
+                ("locator_hit_at_1", locator_outcome["locator_hit_at_1"]),
+                ("locator_hit_at_k", locator_outcome["locator_hit_at_k"]),
+                ("exact_page_hit", locator_outcome["locator_exact_page_hit"]),
+                ("range_overlap_hit", locator_outcome["locator_range_overlap_hit"]),
+                ("best_page", locator_outcome["locator_best_page"]),
+            ],
+            detail="；".join(
+                part
+                for part in [
+                    (
+                        f"告警={summarize_codes(locator_outcome['warnings'])}"
+                        if summarize_codes(locator_outcome["warnings"])
+                        else ""
+                    ),
+                    (
+                        f"失败={locator_outcome['document_level_failure']}"
+                        if locator_outcome["document_level_failure"]
+                        else ""
+                    ),
+                ]
+                if part
+            ) or None,
+            payload={
+                "locator_hit_at_k": locator_outcome["locator_hit_at_k"],
+                "document_level_failure": locator_outcome["document_level_failure"],
+            },
+        )
+
+        coord_outcome = judge_coord(task, result)
+        result.metrics.coord_eligible = coord_outcome["eligible"]
+        result.metrics.coord_hit = coord_outcome["coord_hit"]
+        result.metrics.coord_hit_page_numbers = list(coord_outcome["coord_hit_page_numbers"])
+        result.metrics.coord_hit_group_ids = list(coord_outcome["coord_hit_group_ids"])
+        result.metrics.coord_failure_reason = coord_outcome["coord_failure_reason"]
+        result.metrics.coord_metadata_present = coord_outcome["coord_metadata_present"]
+        result.metrics.coord_viewer_token_present = coord_outcome["coord_viewer_token_present"]
+        result.validation.warnings.extend(coord_outcome["warnings"])
+        self.log_case_event(
+            task,
+            result,
+            "坐标判定完成",
+            result_fields=[
+                ("coord_eligible", coord_outcome["eligible"]),
+                ("coord_hit", coord_outcome["coord_hit"]),
+                ("coord_failure_reason", coord_outcome["coord_failure_reason"]),
+                ("coord_hit_pages", coord_outcome["coord_hit_page_numbers"]),
+                ("coord_hit_groups", coord_outcome["coord_hit_group_ids"]),
+            ],
+            detail="；".join(
+                part
+                for part in [
+                    (
+                        f"告警={summarize_codes(coord_outcome['warnings'])}"
+                        if summarize_codes(coord_outcome["warnings"])
+                        else ""
+                    ),
+                    (
+                        f"metadata_present={coord_outcome['coord_metadata_present']}"
+                        if coord_outcome["coord_metadata_present"] is not None
+                        else ""
+                    ),
+                ]
+                if part
+            ) or None,
+            payload={
+                "coord_hit": coord_outcome["coord_hit"],
+                "coord_failure_reason": coord_outcome["coord_failure_reason"],
+            },
         )
 
         result.validation.blocking_failures = sorted(set(result.validation.blocking_failures))

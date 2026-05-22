@@ -150,7 +150,7 @@ export default function ClarifyWizard({
     )
   }
 
-  // 完成状态：可折叠摘要
+  // 完成状态：展示摘要，并允许从最终结果回退到任一已选步骤
   if (status === 'completed') {
     return (
       <div className="clarify-wizard clarify-wizard--completed" onClick={onExpand}>
@@ -159,9 +159,26 @@ export default function ClarifyWizard({
           <div className="wizard-completed-content">
             <span className="wizard-completed-query">{originalQuery}</span>
             {rounds.length > 0 && (
-              <span className="wizard-completed-path">
-                {rounds.map(r => r.selectedLabel || r.selected).join(' → ')}
-              </span>
+              <div className="wizard-completed-path-list">
+                {rounds.map((round, idx) => (
+                  <div key={round.id} className="wizard-completed-step">
+                    {idx > 0 && <span className="wizard-breadcrumb-arrow">→</span>}
+                    <span className="wizard-breadcrumb-value">{round.selectedLabel || round.selected}</span>
+                    <button
+                      type="button"
+                      className="wizard-breadcrumb-remove"
+                      onClick={(event) => {
+                        event.stopPropagation()
+                        handleBack(idx)
+                      }}
+                      disabled={isLoading}
+                      title="回退到此步骤"
+                    >
+                      <X size={14} />
+                    </button>
+                  </div>
+                ))}
+              </div>
             )}
           </div>
           {resultsCount !== undefined && (
@@ -184,6 +201,7 @@ export default function ClarifyWizard({
               <span className="wizard-breadcrumb-arrow">→</span>
               <span className="wizard-breadcrumb-value">{round.selectedLabel || round.selected}</span>
               <button
+                type="button"
                 className="wizard-breadcrumb-remove"
                 onClick={() => handleBack(idx)}
                 disabled={isLoading}

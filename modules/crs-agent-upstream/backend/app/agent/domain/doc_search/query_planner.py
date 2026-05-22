@@ -38,6 +38,7 @@ class PydanticAIDocSearchQueryPlanner:
         query: str,
         image_evidence: str = "",
         known_slots: str = "",
+        input_mode: str = "text",
     ) -> DocSearchQueryPlan | None:
         raw_model = self._model_override
         if raw_model is None:
@@ -50,6 +51,7 @@ class PydanticAIDocSearchQueryPlanner:
             return None
 
         prompt = DOC_SEARCH_QUERY_PLANNER_PROMPT.format(
+            input_mode=(input_mode or "").strip() or "text",
             query=(query or "").strip() or "无",
             image_evidence=(image_evidence or "").strip() or "无",
             known_slots=(known_slots or "").strip() or "无",
@@ -109,9 +111,18 @@ class PydanticAIDocSearchQueryPlanner:
         if not normalized_queries:
             return None
 
+        body_keyword = str(parsed_plan.body_keyword or "").strip()
+        try:
+            body_keyword_confidence = float(parsed_plan.body_keyword_confidence or 0.0)
+        except (TypeError, ValueError):
+            body_keyword_confidence = 0.0
+
         return DocSearchQueryPlan(
+            input_mode=str(parsed_plan.input_mode or input_mode or "text").strip(),
             primary_query=normalized_queries[0].query,
             queries=normalized_queries[:6],
+            body_keyword=body_keyword,
+            body_keyword_confidence=min(max(body_keyword_confidence, 0.0), 1.0),
             rationale=str(parsed_plan.rationale or "").strip(),
         )
 

@@ -1,271 +1,125 @@
 # benchmark 多轮运行器合同
 
-> 文档口径提示：
-> 本文保留历史阶段编号，用于说明既有多轮运行器合同。
-> 当前 `doc_search` 真实项目模糊用户模拟施工，统一以
-> [doc_search真实项目模糊用户模拟施工方案](../implement/engineering/doc_search真实项目模糊用户模拟施工方案.md)
-> 与
-> [doc_search模糊用户模拟阶段总览与文档口径说明](../implement/engineering/doc_search模糊用户模拟阶段总览与文档口径说明.md)
-> 为准；若本文与其冲突，以后两者为准。
->
-> 实现同步（2026-05-15）：
-> 当前运行器已经正常消费 `stop`，并把它记录为
-> `final_status = stopped_by_user_simulation` / `stop_reason = user_simulation_stop`，
-> 不再把 `stop` 视为非法决策。
-
 ## 1. 文档目的
 
-本文冻结阶段 5 的 benchmark 多轮运行器合同。这里的“多轮运行器”指 benchmark 侧真正驱动 `/chat/completions` 会话闭环的执行层。
+本文冻结多轮运行器如何在真实会话结束后，把文档命中、页命中与坐标命中所需的事实稳定落盘。
 
-在“多目标文档 benchmark”第一阶段中，本文还负责冻结：
+## 2. 运行器输入边界
 
-- 运行器如何承接 `target_docs`
-- 运行器如何在结果中写回多目标评测字段
-- 运行器与 V1 / V2 样本兼容的输入输出边界
-
-## 2. 阶段 5 目标
-
-阶段 5 只负责把以下闭环真实跑起来：
-
-1. 发送首轮请求
-2. 收到 `ask_user`
-3. 调用 AI 模拟用户做结构化决策
-4. 若决策为选项选择，则发送恢复轮请求
-5. 直到进入终态，或因为协议能力不足而停止
-
-## 3. 运行器输入
-
-运行器至少消费以下输入：
+运行器继续消费：
 
 - `TaskCase.initial_user_message`
 - `TaskCase.request_context`
 - `TaskCase.max_turns`
 - `TaskCase.case_repeat_count`
 - `TaskCase.user_simulation_config`
-- `RunConfig.user_strategy`
-- `RunConfig.user_model`
-- `RunConfig.user_provider`
 - `TaskCase.target_docs`
 - `TaskCase.target_match_mode`
 
-冻结结论：
+坐标真值只来自样本装配结果：
 
-- 首轮消息继续固定使用 `task.initial_user_message`
-- `ask_user` 轮不消费 `initial_message`
-- `ask_user` 轮若收到 `stop`，按合法用户模拟早停处理
-- 多目标真值不参与会话驱动决策，只参与运行结束后的 judge 与报告收口
+- `target_docs[i].accepted_region_groups`
 
-### 3.1 V1 / V2 兼容输入规则
+运行器不负责生产 gold，不负责审核 gold。
 
-运行器输入层必须兼容 V1 / V2 两类样本合同。
+## 3. 运行器输出边界
 
-冻结规则如下：
+当最终响应为 `documents` 且文档结果带 `body_search` 时，运行器必须把以下信息落入标准结果：
 
-1. 若 `TaskCase` 已提供 `target_docs`，运行器直接消费 V2 主真值
-2. 若 `TaskCase` 未提供 `target_docs`，允许由上游装载层按 V1 规则回退构造单元素 `target_docs`
-3. 运行器不得在执行层重新发明另一套多目标回退逻辑
-4. 运行器内部读取到的真值结构必须统一为：
-   - `target_docs`
-   - `target_match_mode`
+- 页级字段
+  - `locator_status`
+  - `locator_best_page`
+  - `locator_top_pages`
+- 坐标级字段
+  - `coord_predicted_page_numbers`
+  - `coord_predicted_boxes_px`
+  - `coord_predicted_boxes_norm`
+  - `coord_viewer_token`
+  - `coord_metadata_present`
 
-这样可以确保：
+## 4. 与后端字段的映射
 
-- 会话执行层不再区分“原始 V1 样本”与“原始 V2 样本”
-- 评测、报告、review 的消费输入保持单一路径
+运行器只消费现有返回：
 
-## 4. 运行器执行单元
+- `content.results[i].body_search.status`
+- `content.results[i].body_search.best_hit.page_number`
+- `content.results[i].body_search.best_hit.highlight_boxes_px`
+- `content.results[i].body_search.top_hits[].page_number`
+- `content.results[i].body_search.top_hits[].highlight_boxes_px`
+- `content.results[i].body_search.viewer_token`
 
-### 4.1 attempt
+如果能从 viewer 链路获取页元数据，运行器至少需要：
 
-同一 case 的一次完整执行记为一个 `attempt`。
+- 用这些元数据完成 `highlight_boxes_px -> boxes_norm` 归一化
+- 在标准结果中保留 `coord_metadata_present`
 
-冻结结论：
+## 5. 运行器对三层 gate 的职责
 
-- 同一 case 要完整重跑 `case_repeat_count` 次
-- 当前默认完整重跑 5 次
-- 每次完整重跑都必须新开会话
-- 不允许复用上一次重跑的 `session_id`
+### 5.1 文档层
 
-### 4.2 turn
+继续落盘文件召回事实，不变。
 
-一次请求加一次响应记为一个 `turn`。
+### 5.2 页层
 
-`request_kind` 当前只允许两类：
+继续落盘定位页事实，不变。
 
-- `initial_message`
-- `ask_user_resume`
+补充约束：
 
-## 5. ask_user 决策消费范围
+- 运行时先基于 `target_docs/accepted_titles` 解析目标文档结果
+- 再只从这些目标文档结果提取页码事实
 
-当前真实协议下，阶段 5 运行器实际消费三类 AI 决策：
+### 5.3 坐标层
 
-- `choose_option`
-- `declare_rollback_intent`
-- `stop`
+新增职责：
 
-其余决策处理方式：
+- 从目标文档结果提取坐标框
+- 从 viewer metadata 恢复页尺寸
+- 把像素框归一化后落盘
 
-- `initial_message`
-  - 视为 `invalid_user_decision`
+运行器只负责“把事实写全”，不在这里做最终通过判断。
 
-## 6. 真实选项归一化
+## 6. attempt 结果必带字段
 
-运行器必须从真实响应中归一化出可消费选项。
+每次 attempt 至少必须带出：
 
-允许读取的真实来源：
+- `prediction.locator_source`
+- `prediction.locator_status`
+- `prediction.locator_best_page`
+- `prediction.locator_top_pages`
+- `prediction.locator_viewer_token_present`
+- `prediction.locator_preview_present`
+- `prediction.coord_predicted_page_numbers`
+- `prediction.coord_predicted_boxes_px`
+- `prediction.coord_predicted_boxes_norm`
+- `prediction.coord_viewer_token`
+- `prediction.coord_metadata_present`
+- `metrics.locator_hit_at_1`
+- `metrics.locator_hit_at_k`
+- `metrics.coord_eligible`
+- `metrics.coord_hit`
+- `metrics.coord_failure_reason`
 
-- `ask_user.options`
-- `clarify_options`
+## 7. 失败语义
 
-每个归一化后的选项至少包含：
+运行器链路需要为后续 judge 保留以下失败上下文：
 
-- `key`
-- `label`
-- `description`
-- `selection_payload`
+- 文档未命中
+- 页未命中
+- `body_search` 缺失
+- metadata 缺失
+- 坐标框缺失
 
-恢复轮实际提交时必须回传：
+这些事实必须能在 attempt 结果中被推导出来。
 
-- `session_id`
-- `ask_user_answer.tool_call_id`
-- `ask_user_answer.answer`
-- `ask_user_answer.metadata.selection_payload`
+## 8. V1 / V2 兼容
 
-## 7. 停止原因
+兼容规则不变：
 
-阶段 5 冻结以下停止原因：
+1. 若 `TaskCase.target_docs` 已存在，直接消费。
+2. 若不存在，允许由装配层回退构造。
+3. 运行器内部只消费统一后的结构。
 
-- `documents`
-- `message`
-- `error`
-- `max_turns_exceeded`
-- `rollback_unsupported`
-- `user_simulation_stop`
-- `invalid_user_decision`
-- `missing_session_id`
-- `missing_tool_call_id`
-- `missing_selection_payload`
+坐标补充规则：
 
-## 8. 撤回类场景口径
-
-当前代码真源下，一旦 AI 用户在 `ask_user` 轮表达撤回意图：
-
-- 本次完整重跑立即停止
-- 不再继续发送恢复轮请求
-- 当前轮写入：
-  - `user_decision_kind = declare_rollback_intent`
-  - `rollback_supported = false`
-  - `rollback_target_round`
-  - `capability_gap`
-- `workflow.capability_gaps` 追加能力缺口说明
-
-当前固定能力缺口文案：
-
-- `当前新版 ask_user 主线暂不支持撤回上一轮，请重新发起查询。`
-
-## 8.1 合法早停口径
-
-当前代码真源下，一旦 AI 用户在 `ask_user` 轮返回 `stop`：
-
-- 本次 attempt 立即停止
-- 不再继续发送恢复轮请求
-- 当前轮记录：
-  - `user_decision_kind = stop`
-  - `user_stop_reason_code`
-  - `user_decision_evidence`
-- `workflow` 记录：
-  - `stopped_by_user_simulation = true`
-  - `simulation_stop_count`
-- `response.final_status = stopped_by_user_simulation`
-- `workflow.stop_reason = user_simulation_stop`
-
-## 9. 结果落盘要求
-
-每次 attempt 都必须完整落盘：
-
-- `workflow.turns`
-- `workflow.messages`
-- `workflow.stop_reason`
-- `workflow.stopped_by_user_simulation`
-- `workflow.simulation_stop_count`
-- `artifacts.raw_response_paths`
-
-多目标第一阶段额外要求：
-
-- attempt 结果必须带出 `target_match_mode`
-- attempt 结果必须带出 `target_doc_count`
-- attempt 结果必须带出 `target_doc_ids`
-- attempt 结果必须带出 `target_doc_titles`
-- attempt 结果必须带出 `matched_targets`
-- attempt 结果必须带出 `missed_targets`
-- attempt 结果必须带出 `matched_target_count`
-- attempt 结果必须带出 `target_coverage_rate`
-- attempt 结果必须带出 `all_targets_hit`
-- attempt 结果必须带出 `best_target_rank`
-
-冻结说明：
-
-- 上述字段属于标准报告与聚合收口的正式输入
-- 运行器可以不在会话中直接使用这些字段，但必须保证它们在 attempt 终态中可被落盘
-- 旧 `target_doc_title / target_doc_file_id` 若保留，只能作为首个目标快照兼容字段
-
-### 9.1 case rollup 与汇总收口要求
-
-多目标 case 进入 `case_rollup`、suite summary 与 review 收口时，运行器链路至少要保留以下事实：
-
-- 当前 case 的 `target_match_mode`
-- 当前 case 的合法目标总数
-- 当前 attempt 实际命中的目标集合
-- 当前 attempt 未命中的目标集合
-- 当前 attempt 的最佳命中 rank
-
-冻结目的：
-
-- 让后续聚合逻辑能区分“命中过任一目标”与“命中过全部目标”
-- 让 `all_of` case 的稳定性分析有正式输入
-
-### 9.2 页码真值的阶段性要求
-
-多目标第一阶段中，运行器链路只要求承接目标维度页码真值结构，不要求把页码判定升级为新的 official gate。
-
-冻结规则：
-
-- 目标维度页码真值位置固定为 `target_docs[i].accepted_pages / accepted_page_ranges`
-- case 级页码字段只允许作为 V1 兼容输入
-- 页码结果当前仍按 `shadow` 收口
-- 不允许在本阶段把多目标页码结果接入正式通过线
-
-原始响应文件必须至少按以下维度区分，避免覆盖：
-
-- `case_id`
-- `attempt_index`
-- `turn_index`
-- `request_kind`
-
-## 10. 阶段 5 代码映射
-
-- `benchmark/doc_search_bench/envs/base.py`
-  - attempt 级调度
-- `benchmark/doc_search_bench/envs/doc_search/env.py`
-  - 多轮运行器主循环
-- `benchmark/doc_search_bench/envs/doc_search/adapters.py`
-  - 首轮与恢复轮请求构造
-- `benchmark/doc_search_bench/user.py`
-  - AI 结构化决策调用
-- `benchmark/doc_search_bench/run.py`
-  - 运行参数入口
-
-## 11. ask_user 轮数验收补充口径
-
-当 `TaskCase.required_ask_user_rounds > 0` 时，运行器与评测层必须把它视为正式验收约束，而不是观察性 warning。
-
-冻结规则：
-- 若 `benchmark_track != search_api`
-- 且 `required_ask_user_rounds > 0`
-- 且本次 attempt 的 `workflow.ask_user_rounds < required_ask_user_rounds`
-- 则该 attempt 进入正式阻断失败 `ASK_USER_ROUNDS_INSUFFICIENT`
-
-该规则的目的不是要求固定脚本路径，而是确认：
-- benchmark 的确接入了真实后端的 `ask_user`
-- case 的确经过了真实澄清轮
-- 没有把 chat case 退化成“直接返回 documents/message 的伪单轮”
+- 若样本没有 `accepted_region_groups`，运行器仍可落盘坐标输出，但后续 judge 应视为 `coord_eligible=false`
+- 不允许在运行器里发明新的 case 级坐标真值字段

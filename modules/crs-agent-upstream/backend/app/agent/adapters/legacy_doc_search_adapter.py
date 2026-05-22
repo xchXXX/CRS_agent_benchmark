@@ -70,6 +70,7 @@ class LegacyDocSearchAdapter:
 
         doc_request = DocSearchRequest(
             query=query,
+            original_query=query,
             filters=filters or {},
             top_k=top_k,
             selection_payload=selection_payload or {},
@@ -118,6 +119,7 @@ class LegacyDocSearchAdapter:
     ) -> dict:
         doc_request = DocSearchRequest(
             query=query,
+            original_query=snapshot.get("original_user_query") or snapshot.get("original_query") or query,
             filters=filters or {},
             top_k=top_k,
             selection_payload=selection_payload or {},
@@ -157,6 +159,7 @@ class LegacyDocSearchAdapter:
 
         doc_request = DocSearchRequest(
             query=query,
+            original_query=query,
             filters={},
             top_k=top_k,
             selection_payload={},

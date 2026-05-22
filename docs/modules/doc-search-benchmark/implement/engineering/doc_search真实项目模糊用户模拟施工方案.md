@@ -45,6 +45,13 @@
 - `benchmark/doc_search_bench/envs/doc_search/adapters.py`
 - `benchmark/doc_search_bench/types.py`
 
+当前默认模型口径补充：
+
+- 用户模拟默认模型优先跟随后端 `clarify_model / agent_model`
+- 若后端未提供可解析默认值，benchmark 内建兜底固定为 `openrouter:deepseek/deepseek-chat-v3-0324`
+- `one-click` 只要未显式传 `--user-model`，也必须沿用同一默认链路
+- 不再允许因为缺少 `OPENAI_API_KEY` 而隐式回退到 `gpt-4o`
+
 ### 2.2 当前主线的真实约束
 
 按当前最新 benchmark 与协议文档，主线约束是：
