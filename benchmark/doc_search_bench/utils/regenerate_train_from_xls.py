@@ -180,14 +180,14 @@ class GeneratedCaseSpec:
 def build_target_docs(
     accepted_titles: list[str],
     preferred_title: str | None,
-    target_doc: dict[str, Any] | None,
+    base_target_doc: dict[str, Any] | None,
     *,
     accepted_pages: list[int] | None = None,
     accepted_page_ranges: list[list[int]] | None = None,
 ) -> list[dict[str, Any]]:
     accepted_pages = list(accepted_pages or [])
     accepted_page_ranges = list(accepted_page_ranges or [])
-    base_doc = dict(target_doc or {})
+    base_doc = dict(base_target_doc or {})
     base_facets = dict(base_doc.get("facets") or {})
 
     target_docs: list[dict[str, Any]] = []
@@ -559,21 +559,18 @@ def build_positive_suite(
             "top_k": 10,
             "source_file": SOURCE_FILE,
             "page_goal_mode": "disabled",
-            "accepted_pages": [],
-            "accepted_page_ranges": [],
-            "target_doc": {
-                "file_id": row.file_id or row.title,
-                "title": row.title,
-                "facets": {},
-            },
             "required_ask_user_rounds": required_ask_user_rounds,
         }
         gold_case["target_docs"] = build_target_docs(
             gold_case["accepted_titles"],
             gold_case["preferred_title"],
-            gold_case["target_doc"],
-            accepted_pages=gold_case["accepted_pages"],
-            accepted_page_ranges=gold_case["accepted_page_ranges"],
+            {
+                "file_id": row.file_id or row.title,
+                "title": row.title,
+                "facets": {},
+            },
+            accepted_pages=[],
+            accepted_page_ranges=[],
         )
         gold_cases.append(gold_case)
 
@@ -735,14 +732,6 @@ def build_negative_suite(
             "expected_response_type": "message_or_empty",
             "top_k": 10,
             "page_goal_mode": "disabled",
-            "accepted_pages": [],
-            "accepted_page_ranges": [],
-            "target_doc": {
-                "file_id": None,
-                "title": None,
-                "doc_path": None,
-                "facets": {},
-            },
             "required_ask_user_rounds": 1,
         }
         gold_case["target_docs"] = []

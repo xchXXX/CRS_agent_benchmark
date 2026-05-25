@@ -34,8 +34,8 @@
 正式输入：
 
 - `prediction.predicted_pages`
-- `accepted_pages`
-- `accepted_page_ranges`
+- `target_docs[*].accepted_pages`
+- `target_docs[*].accepted_page_ranges`
 
 ### 3.3 坐标命中定位统计
 

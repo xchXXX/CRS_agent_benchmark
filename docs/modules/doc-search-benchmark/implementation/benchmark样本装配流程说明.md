@@ -27,6 +27,7 @@
 - `initial_user_message`
 - `user_simulation_config`
 - `user_profile`
+- `question_type`
 
 ## 4. gold 负责什么
 
@@ -103,15 +104,33 @@
 - `coord_gold_page_numbers`
 - `coord_gold_group_ids`
 
-## 8. 兼容策略
+## 8. 当前装配约束
 
-兼容期内：
+当前正式约束：
 
 - 老样本没有 `accepted_region_groups` 也能运行
 - 此类样本只是不具备坐标判分资格
 - 不允许从运行时坐标输出反推生成 gold
+- gold 不再读取 `target_doc`
+- gold 不再读取 case 级 `accepted_pages / accepted_page_ranges`
+- 页级与坐标级真值统一按 `target_docs[*]` 主结构维护
+- `question_type` 允许继续保留为稳定任务标签，当前 train 合同口径统一为 `找资料`
 
-## 9. 代码映射
+## 9. review 页面展示口径
+
+round case review 页面当前应展示：
+
+- `user_profile.goal`
+- `user_profile.persona`
+- `known_items`
+- `uncertain_items`
+
+其中：
+
+- `persona` 用于标识“每个用户的类型”
+- 若样本未提供 `persona`，页面允许展示为空，但不反推生成默认类型
+
+## 10. 代码映射
 
 - `benchmark/doc_search_bench/types.py`
   - 样本解析与运行时装配
@@ -119,8 +138,12 @@
   - 训练集样本生成
 - `benchmark/doc_search_bench/envs/doc_search/data/`
   - 样本目录
+- `benchmark/doc_search_bench/chat_export/render_first_attempt_review_html.py`
+  - round case review HTML 渲染入口
+- `benchmark/doc_search_bench/chat_export/render_case_review_html.py`
+  - 标准 case review HTML 渲染入口
 
-## 10. 完成标准
+## 11. 完成标准
 
 满足以下条件即可视为装配链路完成：
 

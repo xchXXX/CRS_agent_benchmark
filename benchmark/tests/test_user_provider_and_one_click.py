@@ -267,6 +267,7 @@ def test_build_child_env_inherits_proxy_and_model_overrides(monkeypatch):
 
     env = benchmark_run._build_child_env(
         proxy_url="http://127.0.0.1:7897",
+        mysql_env={},
         model_defaults={
             "agent_model": "openrouter:deepseek/deepseek-chat-v3-0324",
             "openrouter_clarify_model": "openrouter:deepseek/deepseek-chat-v3-0324",
@@ -305,6 +306,7 @@ def test_start_backend_injects_runtime_model_env(monkeypatch, tmp_path: Path):
         image_model="qwen/qwen3-vl-32b-instruct",
         image_max_images=8,
         proxy_url="http://127.0.0.1:7897",
+        mysql_env={},
         model_defaults={
             "agent_model": "openrouter:deepseek/deepseek-chat-v3-0324",
             "openrouter_clarify_model": "openrouter:deepseek/deepseek-chat-v3-0324",
@@ -326,6 +328,129 @@ def test_start_backend_injects_runtime_model_env(monkeypatch, tmp_path: Path):
     assert env["CRS_IMAGE_EVIDENCE_MODEL"] == "qwen/qwen3-vl-32b-instruct"
     assert env["HTTPS_PROXY"] == "http://127.0.0.1:7897"
     assert env["ALL_PROXY"] == "http://127.0.0.1:7897"
+
+
+def test_read_repo_mysql_config_reads_client_credentials(tmp_path: Path):
+    mysql_root = tmp_path / ".local" / "mysql"
+    mysql_root.mkdir(parents=True)
+    basedir = mysql_root / "mysql-8.0.45-winx64"
+    (basedir / "bin").mkdir(parents=True)
+    defaults_file = mysql_root / "my.ini"
+    defaults_file.write_text(
+        "[mysqld]\n"
+        f"basedir={basedir.as_posix()}\n"
+        "port=3307\n"
+        "bind-address=127.0.0.1\n"
+        "[client]\n"
+        "user=root\n"
+        "password=secret123\n"
+        "host=127.0.0.1\n"
+        "port=3307\n",
+        encoding="utf-8",
+    )
+
+    result = benchmark_run._read_repo_mysql_config(repo_root=tmp_path)
+
+    assert result["ok"] is True
+    assert result["host"] == "127.0.0.1"
+    assert result["port"] == 3307
+    assert result["client_user"] == "root"
+    assert result["client_password"] == "secret123"
+    assert result["client_host"] == "127.0.0.1"
+    assert result["client_port"] == 3307
+
+
+def test_build_child_env_injects_mysql_env_overrides():
+    env = benchmark_run._build_child_env(
+        proxy_url="http://127.0.0.1:7897",
+        mysql_env={
+            "CRS_MYSQL_USER": "root",
+            "CRS_MYSQL_PASSWORD": "secret123",
+            "CRS_MYSQL_HOST": "127.0.0.1",
+            "CRS_MYSQL_PORT": "3306",
+        },
+        model_defaults={
+            "agent_model": "openrouter:deepseek/deepseek-chat-v3-0324",
+            "openrouter_clarify_model": "openrouter:deepseek/deepseek-chat-v3-0324",
+            "intent_router_model": "openrouter:deepseek/deepseek-chat-v3-0324",
+            "coding_engine_model": "openrouter:deepseek/deepseek-chat-v3-0324",
+        },
+    )
+
+    assert env["CRS_MYSQL_USER"] == "root"
+    assert env["CRS_MYSQL_PASSWORD"] == "secret123"
+    assert env["CRS_MYSQL_HOST"] == "127.0.0.1"
+    assert env["CRS_MYSQL_PORT"] == "3306"
+
+
+def test_repo_mysql_env_overrides_fall_back_to_backend_env_when_client_section_missing(
+    monkeypatch,
+):
+    monkeypatch.setattr(
+        benchmark_run,
+        "load_backend_env",
+        lambda: {
+            "CRS_MYSQL_USER": "root",
+            "CRS_MYSQL_PASSWORD": "backend-secret",
+            "CRS_MYSQL_HOST": "127.0.0.1",
+            "CRS_MYSQL_PORT": "3306",
+            "CRS_MYSQL_DATABASE": "crs_agent",
+        },
+    )
+
+    env = benchmark_run._repo_mysql_env_overrides(
+        {
+            "ok": True,
+            "host": "127.0.0.1",
+            "port": 3306,
+            "client_user": None,
+            "client_password": None,
+            "client_host": None,
+            "client_port": None,
+        }
+    )
+
+    assert env["CRS_MYSQL_USER"] == "root"
+    assert env["CRS_MYSQL_PASSWORD"] == "backend-secret"
+    assert env["CRS_MYSQL_HOST"] == "127.0.0.1"
+    assert env["CRS_MYSQL_PORT"] == "3306"
+    assert env["CRS_MYSQL_DATABASE"] == "crs_agent"
+
+
+def test_repo_mysql_env_overrides_fall_back_to_env_example_when_runtime_env_missing(
+    monkeypatch,
+    tmp_path: Path,
+):
+    backend_dir = tmp_path / "modules" / "crs-agent-upstream" / "backend"
+    backend_dir.mkdir(parents=True)
+    (backend_dir / ".env.example").write_text(
+        "CRS_MYSQL_HOST=127.0.0.1\n"
+        "CRS_MYSQL_PORT=3307\n"
+        "CRS_MYSQL_USER=root\n"
+        "CRS_MYSQL_PASSWORD=example-secret\n"
+        "CRS_MYSQL_DATABASE=crs_agent\n",
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(benchmark_run, "load_backend_env", lambda: {})
+
+    env = benchmark_run._repo_mysql_env_overrides(
+        {
+            "ok": True,
+            "host": "127.0.0.1",
+            "port": 3307,
+            "client_user": None,
+            "client_password": None,
+            "client_host": None,
+            "client_port": None,
+        },
+        repo_root=tmp_path,
+    )
+
+    assert env["CRS_MYSQL_USER"] == "root"
+    assert env["CRS_MYSQL_PASSWORD"] == "example-secret"
+    assert env["CRS_MYSQL_HOST"] == "127.0.0.1"
+    assert env["CRS_MYSQL_PORT"] == "3307"
+    assert env["CRS_MYSQL_DATABASE"] == "crs_agent"
 
 
 def test_make_one_click_run_id_has_expected_prefix():

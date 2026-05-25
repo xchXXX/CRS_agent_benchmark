@@ -12,15 +12,16 @@
 4. 本地 MySQL 未就绪时自动尝试启动仓库自带 `.local/mysql/.../mysqld.exe`
 5. 运行前检查 `.local/benchmark_app_token.txt` 是否存在且非空
 6. 运行前检查 backend `.env/.env.runtime` 中 OpenRouter 配置是否可用
-7. 运行前先走代理直连 OpenRouter 做一次 TLS/HTTP 预检
-8. 用户模拟阶段强制使用 fresh client，不复用长生命周期兼容客户端
-9. 用户模拟阶段显式加长超时
-10. 用户模拟阶段对 `SSL EOF`、超时、连接中断等传输类异常做自动重试
-11. backend 与 benchmark 子进程统一继承同一套代理和模型环境
-12. 每次 one-click 都有独立日志目录，避免后续运行覆盖前一次证据
-13. image probe 使用轻量化固定提示，不再直接拿复杂真实 case 问题做探测
-14. 正式 `/chat/completions-with-images` 请求也带传输级重试，不再因单次图文超时直接掉成 `error_http`
-15. 每轮 benchmark 跑完后会自动导出一份 `round_case_review.html` 到对应 `benchmark/reports/runs/<run_id>/` 目录
+7. 运行前优先从 `.local/mysql/my.ini` 的 `[client]` 段同步本地 MySQL 连接凭据；缺失时回退读取 backend `.env/.env.runtime/.env.example` 中的 `CRS_MYSQL_*`
+8. 运行前先走代理直连 OpenRouter 做一次 TLS/HTTP 预检
+9. 用户模拟阶段强制使用 fresh client，不复用长生命周期兼容客户端
+10. 用户模拟阶段显式加长超时
+11. 用户模拟阶段对 `SSL EOF`、超时、连接中断等传输类异常做自动重试
+12. backend 与 benchmark 子进程统一继承同一套代理、模型和本地 MySQL 环境
+13. 每次 one-click 都有独立日志目录，避免后续运行覆盖前一次证据
+14. image probe 使用轻量化固定提示，不再直接拿复杂真实 case 问题做探测
+15. 正式 `/chat/completions-with-images` 请求也带传输级重试，不再因单次图文超时直接掉成 `error_http`
+16. 每轮 benchmark 跑完后会自动导出一份 `round_case_review.html` 到对应 `benchmark/reports/runs/<run_id>/` 目录
 
 ## 2. 这次真正修了什么
 
@@ -33,9 +34,12 @@
 
 1. `run.py --one-click` 启动前先做 `proxy listener probe`
 2. 启动前再做 `mysql_prepare`，确认 `127.0.0.1:3306` 已监听；未监听则尝试拉起仓库自带 `mysqld`
-3. 如本轮配置会用到 OpenRouter，再做 `openrouter transport preflight`
-4. 只有预检通过才真正启动 backend / benchmark
-5. image probe 调用图文接口时：
+3. 优先从 `.local/mysql/my.ini` 的 `[client]` 段读取 `user/password/host/port`
+4. 若 `[client]` 缺字段，则回退读取 backend `.env/.env.runtime/.env.example` 中的 `CRS_MYSQL_HOST/PORT/USER/PASSWORD/DATABASE`
+5. 把最终解析出的本地 MySQL 凭据注入当前 one-click 进程和 backend 子进程
+6. 如本轮配置会用到 OpenRouter，再做 `openrouter transport preflight`
+7. 只有预检通过才真正启动 backend / benchmark
+7. image probe 调用图文接口时：
    - 固定只带 1 张图片
    - 使用轻量探测提示，目标只验证图文入口可用
    - 复用现有 backend 时也按 `probe_retries` 重试
@@ -116,11 +120,16 @@ python benchmark\run.py `
 
 1. SakuraCat 安装路径默认是 `C:\Vpn\SakuraCat\SakuraCat.exe`
 2. 仓库自带 `.local/mysql/my.ini` 与 `basedir/bin/mysqld.exe` 存在且可启动
-3. `.local/benchmark_app_token.txt` 已生成
-4. backend `.env` / `.env.runtime` 中的 OpenRouter key 可用
-5. 若你在国内环境，`openrouter.ai` 必须被代理接管，建议全局代理或强规则代理
+3. `.local/mysql/my.ini` 的 `[client]` 段如已配置本地 MySQL 登录凭据，会优先采用；至少建议填写：
+   - `user=root`
+   - `password=你的本地密码`
+   - 如端口不是 `3306`，同步填写 `port=...`
+4. 如果 `[client]` 没填全，backend `.env` / `.env.runtime` / `.env.example` 中必须存在完整的 `CRS_MYSQL_*`
+5. `.local/benchmark_app_token.txt` 已生成
+6. backend `.env` / `.env.runtime` 中的 OpenRouter key 可用
+7. 若你在国内环境，`openrouter.ai` 必须被代理接管，建议全局代理或强规则代理
 
-其中 1-4 现在都会由 `run.py --one-click` 自动检查；代理未就绪时会先尝试自动启动 SakuraCat，MySQL 未监听时会先尝试启动仓库自带 `mysqld`。
+其中 1-5 现在都会由 `run.py --one-click` 自动检查；代理未就绪时会先尝试自动启动 SakuraCat，MySQL 未监听时会先尝试启动仓库自带 `mysqld`。
 
 ## 6. 输出里新增要看的字段
 

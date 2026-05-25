@@ -22,8 +22,6 @@
 - `question_text`
 - `question_images`
 - `accepted_titles`
-- `accepted_pages`
-- `accepted_page_ranges`
 - `target_docs`
 - `target_match_mode`
 - `interaction_mode`
@@ -127,6 +125,11 @@
 - `accepted_region_groups`
 - `coord_gold_page_numbers`
 - `coord_gold_group_ids`
+
+说明：
+
+- `TaskCase.accepted_pages / accepted_page_ranges` 在当前阶段只作为运行时从 `target_docs[*]` 聚合出的汇总视图
+- 它们不再对应 gold case 顶层输入字段
 
 ## 8. 术语映射
 

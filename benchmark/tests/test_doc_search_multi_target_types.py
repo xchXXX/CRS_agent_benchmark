@@ -61,42 +61,6 @@ def _build_base_task() -> TaskCase:
         initial_user_message="帮我找一下相关资料",
     )
 
-
-def test_merge_suite_from_paths_keeps_v1_single_target_contract(tmp_path: Path):
-    fixture_path = tmp_path / "fixture.v1.json"
-    gold_path = tmp_path / "gold.v1.json"
-    _write_json(fixture_path, _build_base_fixture())
-    _write_json(
-        gold_path,
-        {
-            "acceptance_threshold": 1.0,
-            "cases": [
-                {
-                    "case_id": "multi_target_case_001",
-                    "accepted_titles": ["资料A"],
-                    "target_doc": {
-                        "file_id": "doc-a",
-                        "title": "资料A",
-                        "doc_path": "/docs/doc-a.pdf",
-                    },
-                }
-            ],
-        },
-    )
-
-    suite = merge_suite_from_paths(split="dev", fixture_path=fixture_path, gold_path=gold_path)
-
-    assert len(suite.cases) == 1
-    task = suite.cases[0]
-    assert task.accepted_titles == ["资料A"]
-    assert task.target_doc == TargetDocumentTruth(
-        file_id="doc-a",
-        title="资料A",
-        doc_path="/docs/doc-a.pdf",
-        facets={},
-    )
-
-
 def test_merge_suite_from_paths_loads_v2_multi_target_truth_and_derives_titles(tmp_path: Path):
     fixture_path = tmp_path / "fixture.v2.json"
     gold_path = tmp_path / "gold.v2.json"

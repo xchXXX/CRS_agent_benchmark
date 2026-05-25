@@ -140,10 +140,7 @@ def _resolve_truth(task, result) -> tuple[list[int], list[tuple[int, int]]]:
     accepted_ranges = _normalize_page_ranges(getattr(result.task_metadata, "accepted_page_ranges", None))
     if accepted_pages or accepted_ranges:
         return accepted_pages, accepted_ranges
-    return (
-        _normalize_page_numbers(getattr(task, "accepted_pages", None)),
-        _normalize_page_ranges(getattr(task, "accepted_page_ranges", None)),
-    )
+    return [], []
 
 
 def _extract_top_pages(locator_payload: dict[str, Any]) -> list[int]:

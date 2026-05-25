@@ -612,6 +612,10 @@ def render_case_panel(
           <div>{html_text(case_type)}</div>
         </div>
         <div class="summary-item">
+          <div class="section-kicker">用户类型</div>
+          <div>{html_text(profile.get('persona') or '')}</div>
+        </div>
+        <div class="summary-item">
           <div class="section-kicker">用户目标</div>
           <div>{html_text(profile.get('goal') or '')}</div>
         </div>

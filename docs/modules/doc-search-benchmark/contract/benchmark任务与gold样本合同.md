@@ -184,23 +184,26 @@
 - 坐标真值标到 `accepted_region_groups`
 - 一段文字被拆分时放进同一个 group
 
-## 9. V1 / V2 兼容
+## 9. 废弃字段
 
-兼容期内仍允许存在：
+当前 gold 主结构已经切换完成，以下字段不再允许出现在 gold case 中：
 
 - `target_doc`
-- `accepted_titles`
-- `preferred_title`
 - case 级 `accepted_pages`
 - case 级 `accepted_page_ranges`
 
-但这些只作为兼容入口，不再是长期正式主真值。
+以下字段仍允许保留，但语义不属于页级/坐标级真值入口：
+
+- `accepted_titles`
+- `preferred_title`
+- `question_type`
 
 冻结规则：
 
-1. 若存在 `target_docs`，优先按 `target_docs` 读取。
-2. 若不存在 `target_docs`，允许从 `target_doc` 回退构造单元素 `target_docs`。
-3. 若目标文档级存在 `accepted_region_groups`，不得再回退到 case 级伪坐标字段。
+1. gold 真值只从 `target_docs[*]` 读取。
+2. 页级真值只从 `target_docs[*].accepted_pages / accepted_page_ranges` 读取。
+3. 坐标级真值只从 `target_docs[*].accepted_region_groups` 读取。
+4. `question_type` 当前可继续保留为稳定业务标签；`doc_search` 训练集现阶段统一使用 `找资料`，不作为页级/坐标级判定真值。
 
 ## 10. 真值与运行时字段边界
 

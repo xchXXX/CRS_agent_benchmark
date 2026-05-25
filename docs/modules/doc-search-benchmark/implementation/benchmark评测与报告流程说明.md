@@ -155,6 +155,13 @@ locator 判定负责：
 
 它们当前仍然指向尝试级汇总结果。
 
+补充说明：
+
+- `benchmark/doc_search_bench/chat_export/render_case_review_html.py` 的人工审阅页应直接消费实际运行结果
+- 审阅页字段统一中文化
+- 页级与坐标级在审阅页中只保留“标准答案 vs 实际返回”的摘要视图
+- 详细内部字段仅允许放在折叠的原始返回区，不作为主视图默认展开
+
 ## 6. case级稳定性汇总
 
 `case_level` 的实现分两步：

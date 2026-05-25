@@ -19,18 +19,6 @@
       "top_k": 10,
       "question_type": "找资料",
       "page_goal_mode": "disabled",
-      "accepted_pages": [],
-      "accepted_page_ranges": [],
-      "target_doc": {
-        "file_id": "【推荐】国方MDD01【81/40针】",
-        "title": "【推荐】国方MDD01【81/40针】",
-        "facets": {
-          "board_family": "MDD01",
-          "engine_brand": "云内",
-          "connector": "81/40针",
-          "doc_type": "电路图"
-        }
-      },
       "target_match_mode": "any_of",
       "target_docs": [
         {
@@ -59,18 +47,6 @@
       "top_k": 10,
       "question_type": "找资料",
       "page_goal_mode": "disabled",
-      "accepted_pages": [],
-      "accepted_page_ranges": [],
-      "target_doc": {
-        "file_id": "现代_150LC-9挖掘机_液压电脑板针脚定义",
-        "title": "现代_150LC-9挖掘机_液压电脑板针脚定义",
-        "facets": {
-          "brand": "现代",
-          "model": "150LC-9",
-          "component": "液压电脑板",
-          "doc_type": "针脚定义"
-        }
-      },
       "target_match_mode": "any_of",
       "target_docs": [
         {
@@ -100,16 +76,6 @@
       "top_k": 10,
       "question_type": "找资料",
       "page_goal_mode": "disabled",
-      "accepted_pages": [],
-      "accepted_page_ranges": [],
-      "target_doc": {
-        "file_id": "【推荐】华夏龙晖73针_ECU电路图",
-        "title": "【推荐】华夏龙晖73针_ECU电路图",
-        "facets": {
-          "board_family": "华夏龙晖73针",
-          "doc_type": "ECU电路图"
-        }
-      },
       "target_match_mode": "any_of",
       "target_docs": [
         {

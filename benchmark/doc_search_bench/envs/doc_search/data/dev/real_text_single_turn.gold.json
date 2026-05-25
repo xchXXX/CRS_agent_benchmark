@@ -19,18 +19,6 @@
       "top_k": 10,
       "question_type": "找资料",
       "page_goal_mode": "disabled",
-      "accepted_pages": [],
-      "accepted_page_ranges": [],
-      "target_doc": {
-        "file_id": "三一_SY55_SY60_SY65_SY75-9挖掘机_仪表显示器针脚定义",
-        "title": "三一_SY55_SY60_SY65_SY75-9挖掘机_仪表显示器针脚定义",
-        "facets": {
-          "brand": "三一",
-          "series": "SY",
-          "model": "55C",
-          "doc_type": "仪表针脚图"
-        }
-      },
       "target_match_mode": "any_of",
       "target_docs": [
         {

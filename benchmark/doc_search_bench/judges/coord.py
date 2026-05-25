@@ -82,11 +82,7 @@ def _rect_overlap(pred_box: list[float], gold_box: list[float]) -> bool:
 
 
 def _target_docs(task) -> list[Any]:
-    target_docs = list(getattr(task, "target_docs", None) or [])
-    if target_docs:
-        return target_docs
-    target_doc = getattr(task, "target_doc", None)
-    return [target_doc] if target_doc is not None else []
+    return list(getattr(task, "target_docs", None) or [])
 
 
 def _matched_coord_targets(task, result) -> list[Any]:

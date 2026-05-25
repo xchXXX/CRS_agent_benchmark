@@ -172,11 +172,6 @@ def _resolve_page_truth(task, result) -> tuple[list[int], list[tuple[int, int]],
         if pages or ranges:
             return pages, ranges, "single_target_fallback"
 
-    accepted_pages = _normalize_page_numbers(getattr(task, "accepted_pages", None))
-    accepted_ranges = _normalize_page_ranges(getattr(task, "accepted_page_ranges", None))
-    if accepted_pages or accepted_ranges:
-        return accepted_pages, accepted_ranges, "case_fallback"
-
     return [], [], "unresolved"
 
 

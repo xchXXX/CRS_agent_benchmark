@@ -87,7 +87,7 @@
       "interaction_mode": "multi_turn",
       "max_turns": 8,
       "case_repeat_count": 3,
-      "initial_user_message": "重汽汕德卡G7驾驶室升降这部分，想找对应的整车电路图。",
+      "initial_user_message": "重汽汕德卡G7这份整车电路图里，想看远程油门使能开关这块。",
       "user_simulation_config": {
         "driver": "ai",
         "scenario": "normal",
@@ -236,7 +236,7 @@
       "interaction_mode": "multi_turn",
       "max_turns": 8,
       "case_repeat_count": 3,
-      "initial_user_message": "这个电脑板有嘛，福田。",
+      "initial_user_message": "福田这个电脑板资料有吗，想看里面水箱扇继电器这块。",
       "user_simulation_config": {
         "driver": "ai",
         "scenario": "cooperative_vague",
@@ -734,7 +734,7 @@
       "interaction_mode": "multi_turn",
       "max_turns": 8,
       "case_repeat_count": 3,
-      "initial_user_message": "这个车的资料有吗。",
+      "initial_user_message": "这个车的资料有吗，想看线束图里挂车ABS接口这块。",
       "user_simulation_config": {
         "driver": "ai",
         "scenario": "image_parsing_required",

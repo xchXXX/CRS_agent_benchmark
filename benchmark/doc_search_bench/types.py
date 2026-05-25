@@ -110,7 +110,6 @@ class TaskCase:
     legacy_source_split: str | None = None
     legacy_source_layer: str | None = None
     user_profile: UserProfile | None = None
-    target_doc: TargetDocumentTruth | None = None
     target_docs: list[TargetDocumentTruth] = field(default_factory=list)
     target_match_mode: str = "any_of"
     metadata: dict[str, Any] = field(default_factory=dict)
@@ -568,6 +567,30 @@ def _collect_accepted_region_groups(target_docs: list[TargetDocumentTruth]) -> l
     return groups
 
 
+def _collect_accepted_pages(target_docs: list[TargetDocumentTruth]) -> list[int]:
+    pages: list[int] = []
+    seen: set[int] = set()
+    for target_doc in target_docs:
+        for page in target_doc.accepted_pages:
+            if page in seen:
+                continue
+            seen.add(page)
+            pages.append(page)
+    return pages
+
+
+def _collect_accepted_page_ranges(target_docs: list[TargetDocumentTruth]) -> list[tuple[int, int]]:
+    ranges: list[tuple[int, int]] = []
+    seen: set[tuple[int, int]] = set()
+    for target_doc in target_docs:
+        for page_range in target_doc.accepted_page_ranges:
+            if page_range in seen:
+                continue
+            seen.add(page_range)
+            ranges.append(page_range)
+    return ranges
+
+
 def _collect_coord_gold_page_numbers(region_groups: list[AcceptedRegionGroup]) -> list[int]:
     pages: list[int] = []
     seen: set[int] = set()
@@ -893,23 +916,9 @@ def merge_suite_from_paths(
             legacy_source_split=legacy_source_split,
         )
         target_docs = parse_target_document_truths(gold_case.get("target_docs"))
-        target_doc = parse_target_document_truth(gold_case.get("target_doc"))
-        if target_docs:
-            accepted_titles = derive_accepted_titles(gold_case.get("accepted_titles"), target_docs=target_docs)
-            if target_doc is None:
-                target_doc = target_docs[0]
-        else:
-            accepted_titles = derive_accepted_titles(gold_case.get("accepted_titles"), target_docs=[])
-            if target_doc is not None:
-                target_docs = [target_doc]
-                accepted_titles = derive_accepted_titles(accepted_titles, target_docs=target_docs)
-        accepted_pages = []
-        for item in gold_case.get("accepted_pages", []):
-            try:
-                accepted_pages.append(int(item))
-            except (TypeError, ValueError):
-                continue
-        accepted_ranges = parse_page_ranges(gold_case.get("accepted_page_ranges"))
+        accepted_titles = derive_accepted_titles(gold_case.get("accepted_titles"), target_docs=target_docs)
+        accepted_pages = _collect_accepted_pages(target_docs)
+        accepted_ranges = _collect_accepted_page_ranges(target_docs)
         interaction_mode = infer_interaction_mode(
             fixture_case.get("interaction_mode") or gold_case.get("interaction_mode"),
             layer=layer,
@@ -1023,7 +1032,6 @@ def merge_suite_from_paths(
                     else str(gold_case.get("layer") or "")
                 ),
                 user_profile=user_profile,
-                target_doc=target_doc,
                 target_docs=target_docs,
                 target_match_mode=infer_target_match_mode(gold_case.get("target_match_mode")),
                 metadata={
@@ -1045,7 +1053,7 @@ def merge_suite_from_paths(
 
 
 def build_case_run_result(task: TaskCase, run_id: str, *, attempt_index: int = 1) -> CaseRunResult:
-    target_docs = list(task.target_docs) if task.target_docs else ([task.target_doc] if task.target_doc else [])
+    target_docs = list(task.target_docs)
     target_doc_ids = [doc.file_id for doc in target_docs if isinstance(doc.file_id, str) and doc.file_id.strip()]
     target_doc_titles = [doc.title for doc in target_docs if isinstance(doc.title, str) and doc.title.strip()]
     locator_keywords = _collect_locator_keywords(target_docs)
@@ -1103,8 +1111,8 @@ def build_case_run_result(task: TaskCase, run_id: str, *, attempt_index: int = 1
             user_profile_goal=task.user_profile.goal if task.user_profile else None,
             user_profile_known_items=resolve_known_items(task.user_profile),
             user_profile_uncertain_items=resolve_uncertain_items(task.user_profile),
-            target_doc_file_id=task.target_doc.file_id if task.target_doc else None,
-            target_doc_title=task.target_doc.title if task.target_doc else None,
+            target_doc_file_id=target_doc_ids[0] if target_doc_ids else None,
+            target_doc_title=target_doc_titles[0] if target_doc_titles else None,
             target_doc_count=len(target_docs),
             target_doc_ids=target_doc_ids,
             target_doc_titles=target_doc_titles,

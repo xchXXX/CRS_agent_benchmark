@@ -277,6 +277,13 @@ def _read_repo_mysql_config(*, repo_root: Path | None = None) -> dict[str, Any]:
         port = DEFAULT_MYSQL_PORT
     basedir_raw = str(parser.get("mysqld", "basedir", fallback="") or "").strip()
     basedir = Path(basedir_raw.replace("\\", "/")).resolve() if basedir_raw else None
+    client_user = str(parser.get("client", "user", fallback="") or "").strip() or None
+    client_password = str(parser.get("client", "password", fallback="") or "").strip() or None
+    client_host = str(parser.get("client", "host", fallback="") or "").strip() or None
+    try:
+        client_port = int(parser.get("client", "port", fallback="0") or 0) or None
+    except ValueError:
+        client_port = None
     run_dir = mysql_root / "run"
     stdout_log_path = run_dir / "mysqld.stdout.log"
     stderr_log_path = run_dir / "mysqld.stderr.log"
@@ -290,6 +297,10 @@ def _read_repo_mysql_config(*, repo_root: Path | None = None) -> dict[str, Any]:
         "port": port,
         "basedir": str(basedir) if basedir is not None else None,
         "mysqld_path": str(mysqld_path) if mysqld_path is not None else None,
+        "client_user": client_user,
+        "client_password": client_password,
+        "client_host": client_host,
+        "client_port": client_port,
         "run_dir": str(run_dir),
         "stdout_log_path": str(stdout_log_path),
         "stderr_log_path": str(stderr_log_path),
@@ -495,9 +506,100 @@ def _user_stability_env_overrides() -> dict[str, str]:
     }
 
 
-def _build_child_env(*, proxy_url: str, model_defaults: dict[str, str]) -> dict[str, str]:
+def _load_backend_mysql_defaults(*, repo_root: Path | None = None) -> dict[str, str]:
+    backend_env = load_backend_env()
+    values = {
+        "CRS_MYSQL_HOST": str(backend_env.get("CRS_MYSQL_HOST") or "").strip(),
+        "CRS_MYSQL_PORT": str(backend_env.get("CRS_MYSQL_PORT") or "").strip(),
+        "CRS_MYSQL_USER": str(backend_env.get("CRS_MYSQL_USER") or "").strip(),
+        "CRS_MYSQL_PASSWORD": str(backend_env.get("CRS_MYSQL_PASSWORD") or "").strip(),
+        "CRS_MYSQL_DATABASE": str(backend_env.get("CRS_MYSQL_DATABASE") or "").strip(),
+    }
+    if all(values.values()):
+        return values
+
+    resolved_repo_root = (repo_root or _repo_root()).resolve()
+    backend_example = resolved_repo_root / "modules" / "crs-agent-upstream" / "backend" / ".env.example"
+    if not backend_example.exists():
+        return {key: value for key, value in values.items() if value}
+
+    parser_values: dict[str, str] = {}
+    for raw_line in backend_example.read_text(encoding="utf-8").splitlines():
+        line = raw_line.strip()
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+        key, _, raw_value = line.partition("=")
+        env_key = key.strip()
+        env_value = raw_value.strip()
+        if not env_key or env_key not in values or not env_value:
+            continue
+        if len(env_value) >= 2 and env_value[0] == env_value[-1] and env_value[0] in {"'", '"'}:
+            env_value = env_value[1:-1]
+        parser_values.setdefault(env_key, env_value)
+
+    merged = dict(values)
+    for key, value in parser_values.items():
+        if not merged.get(key):
+            merged[key] = value
+    return {key: value for key, value in merged.items() if value}
+
+
+def _repo_mysql_env_overrides(mysql_config: dict[str, Any] | None, *, repo_root: Path | None = None) -> dict[str, str]:
+    if not isinstance(mysql_config, dict):
+        mysql_config = {}
+    backend_defaults = _load_backend_mysql_defaults(repo_root=repo_root)
+    user = str(mysql_config.get("client_user") or backend_defaults.get("CRS_MYSQL_USER") or "").strip()
+    password = str(mysql_config.get("client_password") or backend_defaults.get("CRS_MYSQL_PASSWORD") or "").strip()
+    host = str(
+        mysql_config.get("client_host")
+        or backend_defaults.get("CRS_MYSQL_HOST")
+        or mysql_config.get("host")
+        or ""
+    ).strip()
+    port = (
+        mysql_config.get("client_port")
+        or backend_defaults.get("CRS_MYSQL_PORT")
+        or mysql_config.get("port")
+    )
+    database = str(backend_defaults.get("CRS_MYSQL_DATABASE") or "").strip()
+    overrides: dict[str, str] = {}
+    if user:
+        overrides["CRS_MYSQL_USER"] = user
+    if password:
+        overrides["CRS_MYSQL_PASSWORD"] = password
+    if host:
+        overrides["CRS_MYSQL_HOST"] = host
+    if port not in (None, ""):
+        overrides["CRS_MYSQL_PORT"] = str(port)
+    if database:
+        overrides["CRS_MYSQL_DATABASE"] = database
+    return overrides
+
+
+def _apply_env_overrides_temporarily(overrides: dict[str, str]):
+    previous = {key: os.environ.get(key) for key in overrides}
+
+    class _EnvOverrideContext:
+        def __enter__(self):
+            for key, value in overrides.items():
+                os.environ[key] = value
+            return self
+
+        def __exit__(self, exc_type, exc, tb):
+            for key, old_value in previous.items():
+                if old_value is None:
+                    os.environ.pop(key, None)
+                else:
+                    os.environ[key] = old_value
+            return False
+
+    return _EnvOverrideContext()
+
+
+def _build_child_env(*, proxy_url: str, mysql_env: dict[str, str], model_defaults: dict[str, str]) -> dict[str, str]:
     env = os.environ.copy()
     env.update(_proxy_env_overrides(proxy_url))
+    env.update(mysql_env)
     env.update(_backend_model_env_overrides(model_defaults))
     env.update(_user_stability_env_overrides())
     return env
@@ -986,11 +1088,12 @@ def _start_backend(
     image_model: str,
     image_max_images: int,
     proxy_url: str,
+    mysql_env: dict[str, str],
     model_defaults: dict[str, str],
     stdout_log_path: Path,
     stderr_log_path: Path,
 ) -> subprocess.Popen:
-    env = _build_child_env(proxy_url=proxy_url, model_defaults=model_defaults)
+    env = _build_child_env(proxy_url=proxy_url, mysql_env=mysql_env, model_defaults=model_defaults)
     env["CRS_IMAGE_EVIDENCE_MODEL"] = image_model
     env["CRS_IMAGE_EVIDENCE_MAX_IMAGES"] = str(image_max_images)
     stdout_log_path.parent.mkdir(parents=True, exist_ok=True)
@@ -1303,8 +1406,6 @@ def _run_one_click(args: argparse.Namespace) -> int:
         )
         return 2
 
-    child_env = _build_child_env(proxy_url=args.proxy_url, model_defaults=model_defaults)
-
     redis_prepare = ensure_local_redis_running()
     if not bool(redis_prepare.get("ready")):
         print(
@@ -1333,6 +1434,9 @@ def _run_one_click(args: argparse.Namespace) -> int:
             )
         )
         return 2
+    mysql_config = _read_repo_mysql_config(repo_root=repo_root)
+    mysql_env = _repo_mysql_env_overrides(mysql_config, repo_root=repo_root)
+    child_env = _build_child_env(proxy_url=args.proxy_url, mysql_env=mysql_env, model_defaults=model_defaults)
 
     probe_target = _resolve_probe_target(
         repo_root=repo_root,
@@ -1370,10 +1474,11 @@ def _run_one_click(args: argparse.Namespace) -> int:
     reused_existing_backend = False
     existing_backend_fallback = False
     managed_backend_port: int | None = None
-    synced_backend_models = _sync_backend_model_configs(
-        backend_dir=backend_dir,
-        model_defaults=model_defaults,
-    )
+    with _apply_env_overrides_temporarily(mysql_env):
+        synced_backend_models = _sync_backend_model_configs(
+            backend_dir=backend_dir,
+            model_defaults=model_defaults,
+        )
     proxy_probe = _probe_proxy_listener(str(args.proxy_url))
     openrouter_preflight: dict[str, Any] | None = None
     if _requires_openrouter_transport(model_defaults=model_defaults, args=args):
@@ -1410,7 +1515,8 @@ def _run_one_click(args: argparse.Namespace) -> int:
         existing_backend_ready = _wait_health(base_url=base_url, timeout_seconds=2.0)
         if existing_backend_ready:
             reused_existing_backend = True
-            refresh_token = _forge_admin_refresh_token(backend_dir=backend_dir)
+            with _apply_env_overrides_temporarily(mysql_env):
+                refresh_token = _forge_admin_refresh_token(backend_dir=backend_dir)
             _refresh_backend_config_cache(base_url=base_url, app_token=refresh_token)
             selected_model = "existing_backend"
             existing_probe = {
@@ -1484,6 +1590,7 @@ def _run_one_click(args: argparse.Namespace) -> int:
                     image_model=model_name,
                     image_max_images=args.image_max_images,
                     proxy_url=args.proxy_url,
+                    mysql_env=mysql_env,
                     model_defaults=model_defaults,
                     stdout_log_path=one_click_log_dir / f"backend-probe-{model_name.replace('/', '_')}.stdout.log",
                     stderr_log_path=one_click_log_dir / f"backend-probe-{model_name.replace('/', '_')}.stderr.log",

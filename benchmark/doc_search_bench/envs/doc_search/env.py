@@ -1533,7 +1533,7 @@ class DocSearchBenchmarkEnv(BaseBenchmarkEnv):
             _, docs, predicted_pages, _, locator_summary = normalize_documents(
                 task.benchmark_track,
                 turn.response_body,
-                target_docs=list(getattr(task, "target_docs", None) or ([] if getattr(task, "target_doc", None) is None else [task.target_doc])),
+                target_docs=list(getattr(task, "target_docs", None) or []),
                 matched_titles=list(getattr(task, "accepted_titles", None) or []),
             )
             detail_parts.append(f"文档数={len(docs)}")
@@ -1635,7 +1635,7 @@ class DocSearchBenchmarkEnv(BaseBenchmarkEnv):
         response_type, docs, predicted_pages, page_confidence, locator_summary = normalize_documents(
             task.benchmark_track,
             body,
-            target_docs=list(getattr(task, "target_docs", None) or ([] if getattr(task, "target_doc", None) is None else [task.target_doc])),
+            target_docs=list(getattr(task, "target_docs", None) or []),
             matched_titles=list(getattr(task, "accepted_titles", None) or []),
         )
         result.response.response_type = response_type
@@ -1728,7 +1728,7 @@ class DocSearchBenchmarkEnv(BaseBenchmarkEnv):
         response_type, docs, predicted_pages, page_confidence, locator_summary = normalize_documents(
             task.benchmark_track,
             body,
-            target_docs=list(getattr(task, "target_docs", None) or ([] if getattr(task, "target_doc", None) is None else [task.target_doc])),
+            target_docs=list(getattr(task, "target_docs", None) or []),
             matched_titles=list(getattr(task, "accepted_titles", None) or []),
         )
         result.response.response_type = response_type

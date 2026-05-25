@@ -116,16 +116,15 @@
 
 ### 6.2 兼容策略
 
-兼容期内继续允许旧字段存在：
+当前保留但不属于页级/坐标级主真值的字段：
 
 - `accepted_titles`
 - `preferred_title`
-- `target_doc`
 
-兼容读取策略建议如下：
+当前读取策略冻结如下：
 
-1. 若存在 `target_docs`，优先按 V2 读取
-2. 若不存在 `target_docs`，则从 `target_doc + accepted_titles` 回退构造单元素 `target_docs`
+1. gold 只按 `target_docs` 读取正式真值
+2. 不再从 `target_doc + accepted_titles` 回退构造单元素 `target_docs`
 3. 若未显式提供 `target_match_mode`，默认使用 `any_of`
 
 ### 6.3 fixture 侧变化
@@ -145,9 +144,9 @@
 - `target_docs: list[TargetDocumentTruth]`
 - `target_match_mode: str`
 
-兼容期内：
+当前阶段：
 
-- `target_doc` 可暂时保留，但只作为兼容入口，不再作为主真值字段
+- `target_doc` 已从 gold 主结构中废弃
 
 ### 7.2 TaskMetadataRecord
 
@@ -276,10 +275,13 @@ review 页面不能再只显示：
 
 必须升级为：
 
-- 目标文档列表
-- 实际命中文档列表
-- 漏召回目标列表
-- 当前 case 的 `target_match_mode`
+- 中文字段名
+- 标准答案文档
+- 实际返回文档
+- 页级结果摘要
+- 坐标级结果摘要
+- 聊天轨迹
+- 原始返回
 
 ## 11. 运行链路改造
 
@@ -300,8 +302,8 @@ review 页面不能再只显示：
 
 ### 12.1 阶段 A：双格式兼容
 
-- 先让 benchmark 内核同时支持 V1 与 V2
-- 不立即迁移全部样本
+- 该阶段已结束
+- benchmark 内核不再以 `target_doc` 为 gold 真值入口
 
 ### 12.2 阶段 B：先迁移 train / dev
 
@@ -314,7 +316,8 @@ review 页面不能再只显示：
 
 ### 12.4 阶段 D：清理旧主路径
 
-- 待全部样本稳定后，再逐步废弃以 `target_doc` 为中心的主逻辑
+- 旧 gold 主路径已切除
+- `target_doc` 不再作为样本合同入口
 
 ## 13. 风险与控制
 
@@ -322,13 +325,13 @@ review 页面不能再只显示：
 
 - 只改数据结构，不改 judge 语义，导致“看起来支持多目标，实际仍按单目标判分”
 - 文件命中与页码真值绑定错位
-- 旧样本失去兼容能力
+- 旧样本若仍带 `target_doc` 或 case 级页字段，将不再满足当前合同
 - report 与 review 仍按单目标展示，导致人工复盘混乱
 
 ### 13.2 控制措施
 
 - 先冻结 `target_match_mode`
-- 先实现 V1/V2 双读
+- 不再保留 V1/V2 双读
 - 页码继续 shadow，避免一次性扩大变更面
 - report / HTML review 与 judge 同步改造，不允许只改一半
 

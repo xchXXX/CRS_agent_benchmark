@@ -42,25 +42,6 @@ def _build_task() -> TaskCase:
         initial_user_message="帮我定位这份资料的页码",
         top_k=5,
         page_goal_mode="shadow",
-        accepted_pages=[12],
-        accepted_page_ranges=[(12, 13)],
-        target_doc=TargetDocumentTruth(
-            file_id="doc-a",
-            title="资料A",
-            doc_path="/docs/a.pdf",
-            facets={"brand": "东风", "doc_type": "电路图"},
-            accepted_pages=[12],
-            accepted_page_ranges=[(12, 13)],
-            accepted_region_groups=[
-                AcceptedRegionGroup(
-                    group_id="region_001",
-                    page_number=12,
-                    label="油门踏板",
-                    boxes_norm=[(0.1, 0.2, 0.3, 0.4)],
-                    match_mode="any_box",
-                )
-            ],
-        ),
         target_docs=[
             TargetDocumentTruth(
                 file_id="doc-a",
@@ -118,10 +99,6 @@ def test_merge_suite_from_paths_uses_accepted_pages_as_unique_locator_truth_and_
             "cases": [
                 {
                     "case_id": "locator_case_001",
-                    "accepted_pages": [12],
-                    "accepted_page_ranges": [[12, 13]],
-                    "accepted_locator_pages": [99],
-                    "accepted_locator_page_ranges": [[99, 100]],
                     "target_docs": [
                         {
                             "file_id": "doc-a",
@@ -157,10 +134,9 @@ def test_merge_suite_from_paths_uses_accepted_pages_as_unique_locator_truth_and_
     suite = merge_suite_from_paths(split="dev", fixture_path=fixture_path, gold_path=gold_path)
     task = suite.cases[0]
 
-    assert task.accepted_pages == [12]
-    assert task.accepted_page_ranges == [(12, 13)]
     assert task.page_goal_mode == "shadow"
-    assert task.target_doc == TargetDocumentTruth(
+    assert len(task.target_docs) == 1
+    assert task.target_docs[0] == TargetDocumentTruth(
         file_id="doc-a",
         title="资料A",
         doc_path="/docs/a.pdf",
@@ -180,6 +156,8 @@ def test_merge_suite_from_paths_uses_accepted_pages_as_unique_locator_truth_and_
             )
         ],
     )
+    assert task.accepted_pages == [12]
+    assert task.accepted_page_ranges == [(12, 13)]
     result = build_case_run_result(task, "run-locator")
     assert result.task_metadata.accepted_region_groups == [
         AcceptedRegionGroup(
@@ -197,20 +175,20 @@ def test_merge_suite_from_paths_uses_accepted_pages_as_unique_locator_truth_and_
     assert result.task_metadata.coord_gold_group_ids == ["region_001"]
 
 
-def test_merge_suite_from_paths_keeps_legacy_samples_compatible_when_region_groups_are_absent(
+def test_merge_suite_from_paths_allows_target_docs_without_region_groups(
     tmp_path: Path,
 ):
-    fixture_path = tmp_path / "fixture_legacy.json"
-    gold_path = tmp_path / "gold_legacy.json"
+    fixture_path = tmp_path / "fixture_no_region_groups.json"
+    gold_path = tmp_path / "gold_no_region_groups.json"
     _write_json(
         fixture_path,
         {
-            "suite_id": "suite_locator_legacy",
+            "suite_id": "suite_locator_no_region_groups",
             "layer": "component",
             "source_files": ["source.json"],
             "cases": [
                 {
-                    "case_id": "locator_case_legacy_001",
+                    "case_id": "locator_case_no_region_groups_001",
                     "input_modality": "text",
                     "question_text": "帮我找资料",
                     "question_images": [],
@@ -230,8 +208,7 @@ def test_merge_suite_from_paths_keeps_legacy_samples_compatible_when_region_grou
             "acceptance_threshold": 1.0,
             "cases": [
                 {
-                    "case_id": "locator_case_legacy_001",
-                    "accepted_pages": [7],
+                    "case_id": "locator_case_no_region_groups_001",
                     "target_docs": [
                         {
                             "file_id": "doc-legacy",
@@ -249,8 +226,8 @@ def test_merge_suite_from_paths_keeps_legacy_samples_compatible_when_region_grou
     task = suite.cases[0]
     result = build_case_run_result(task, "run-legacy")
 
-    assert task.target_doc is not None
-    assert task.target_doc.accepted_region_groups == []
+    assert len(task.target_docs) == 1
+    assert task.target_docs[0].accepted_region_groups == []
     assert result.task_metadata.accepted_region_groups == []
     assert result.task_metadata.coord_gold_page_numbers == []
     assert result.task_metadata.coord_gold_group_ids == []

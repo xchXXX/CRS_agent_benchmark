@@ -30,5 +30,7 @@ def test_selected_train_cases_are_mocked_as_multi_target():
         assert case["target_match_mode"] == "any_of"
         assert len(case["accepted_titles"]) >= 2
         assert len(case["target_docs"]) >= 2
-        assert case["preferred_title"] == case["target_doc"]["title"]
+        assert "target_doc" not in case
+        target_titles = [doc["title"] for doc in case["target_docs"] if doc.get("title")]
+        assert case["preferred_title"] in target_titles
         assert case["preferred_title"] in case["accepted_titles"]

@@ -23,6 +23,9 @@ def test_all_gold_cases_have_v2_target_docs_contract():
             target_docs = case.get("target_docs")
             assert isinstance(target_docs, list), path.as_posix()
             assert case.get("target_match_mode") in {"any_of", "all_of"}, path.as_posix()
+            assert "target_doc" not in case, path.as_posix()
+            assert "accepted_pages" not in case, path.as_posix()
+            assert "accepted_page_ranges" not in case, path.as_posix()
 
             accepted_titles = case.get("accepted_titles", [])
             assert isinstance(accepted_titles, list), path.as_posix()
@@ -42,20 +45,12 @@ def test_all_gold_cases_have_v2_target_docs_contract():
             if preferred_title is not None:
                 assert preferred_title in target_titles, path.as_posix()
 
-            target_doc = case.get("target_doc") or {}
-            target_doc_title = target_doc.get("title")
-            if target_doc_title:
-                assert target_doc_title in accepted_title_set, path.as_posix()
-                assert target_doc_title in target_title_set, path.as_posix()
-
             target_file_ids = {
                 doc.get("file_id")
                 for doc in target_docs
                 if isinstance(doc.get("file_id"), str) and doc.get("file_id")
             }
-            target_doc_file_id = target_doc.get("file_id")
-            if target_doc_file_id:
-                assert target_doc_file_id in target_file_ids, path.as_posix()
+            assert target_file_ids, path.as_posix()
 
             for doc in target_docs:
                 assert "accepted_pages" in doc, path.as_posix()

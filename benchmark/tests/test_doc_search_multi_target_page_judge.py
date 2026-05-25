@@ -53,7 +53,7 @@ def _build_result(task: TaskCase, *, predicted_pages: list[int], predicted_title
 
 
 def test_judge_page_prefers_matched_target_truth_over_case_level_truth():
-    task = _build_task(accepted_pages=[99])
+    task = _build_task()
     object.__setattr__(
         task,
         "target_docs",
@@ -76,7 +76,7 @@ def test_judge_page_prefers_matched_target_truth_over_case_level_truth():
 
 
 def test_judge_page_prefers_single_target_truth_over_case_level_truth():
-    task = _build_task(accepted_pages=[99])
+    task = _build_task()
     object.__setattr__(
         task,
         "target_docs",
@@ -97,7 +97,7 @@ def test_judge_page_prefers_single_target_truth_over_case_level_truth():
 
 
 def test_judge_page_can_infer_target_truth_from_predicted_documents():
-    task = _build_task(accepted_pages=[99])
+    task = _build_task()
     object.__setattr__(
         task,
         "target_docs",
@@ -137,8 +137,8 @@ def test_judge_page_uses_single_target_fallback_when_case_pages_are_missing():
     assert report["exact_page_hit"] is True
 
 
-def test_judge_page_falls_back_to_case_truth_when_target_cannot_be_located():
-    task = _build_task(accepted_pages=[5])
+def test_judge_page_returns_unresolved_when_multi_target_truth_cannot_be_located():
+    task = _build_task()
     object.__setattr__(
         task,
         "target_docs",
@@ -151,22 +151,33 @@ def test_judge_page_falls_back_to_case_truth_when_target_cannot_be_located():
 
     report = judge_page(task, result)
 
-    assert report["eligible"] is True
-    assert report["truth_source"] == "case_fallback"
-    assert report["page_hit_at_1"] is True
-    assert report["page_hit_at_k"] is True
-    assert report["exact_page_hit"] is True
+    assert report["eligible"] is False
+    assert report["truth_source"] == "unresolved"
+    assert report["page_hit_at_1"] is None
+    assert report["page_hit_at_k"] is None
+    assert report["exact_page_hit"] is None
 
 
-def test_judge_page_keeps_v1_case_level_truth_compatibility():
-    task = _build_task(accepted_page_ranges=[(10, 12)])
-    object.__setattr__(task, "accepted_titles", ["Legacy Doc"])
+def test_judge_page_uses_single_target_range_truth_without_case_level_fallback():
+    task = _build_task()
+    object.__setattr__(
+        task,
+        "target_docs",
+        [
+            TargetDocumentTruth(
+                file_id="doc-legacy",
+                title="Legacy Doc",
+                doc_path="/docs/legacy.pdf",
+                accepted_page_ranges=[(10, 12)],
+            )
+        ],
+    )
     result = _build_result(task, predicted_pages=[11], predicted_titles=["Legacy Doc"])
 
     report = judge_page(task, result)
 
     assert report["eligible"] is True
-    assert report["truth_source"] == "case_fallback"
+    assert report["truth_source"] == "matched_target_docs"
     assert report["page_hit_at_1"] is True
     assert report["page_hit_at_k"] is True
     assert report["exact_page_hit"] is False
